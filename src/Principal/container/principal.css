@@ -1,0 +1,20 @@
+.ant-input-affix-wrapper > input.ant-input {
+	padding: 0;
+	border: none;
+	outline: none;
+	text-align-last: center;
+	color: green;
+	font-size: x-large;
+	font-weight: bold;
+}
+
+.ant-card-body {
+	padding: 5px;
+}
+.ant-input-affix-wrapper > input.ant-input {
+	font-size: xx-large;
+}
+
+.borrar {
+	color: "#c5221f";
+}
