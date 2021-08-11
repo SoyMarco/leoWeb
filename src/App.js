@@ -17,10 +17,15 @@ function App() {
 	// const { SubMenu } = Menu;
 	const onCollapse = () => {
 		setcollapsed(!collapsed);
+		document.querySelector("#inputPrecio").select();
 	};
 	const handleModalCorte = () => {
+		if (modalCorte === false) {
+			document.querySelector("#inputPrecio").select();
+		}
 		setmodalCorte(!modalCorte);
 	};
+
 	return (
 		<div>
 			<Layout

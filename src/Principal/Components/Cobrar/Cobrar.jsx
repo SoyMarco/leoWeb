@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Input, Form, Button, Row } from "antd";
-import { FaMoneyBillWave } from "react-icons/fa";
+import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
 import Imprimir from "../Imprimir/Imprimir";
 import "./cobrar.css";
@@ -15,8 +15,11 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, listaCompras }) => {
 		efectivo: 0,
 	});
 	useEffect(() => {
-		OnValuesChange();
-	}, [totalTotal]);
+		if (modalCobrar === true) {
+			OnValuesChange();
+			document.querySelector("#cobrarEfectivo").select();
+		}
+	}, [modalCobrar]);
 
 	const OnValuesChange = () => {
 		let valores = form.getFieldsValue();
@@ -123,7 +126,12 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, listaCompras }) => {
 							]}
 							className="labelCobrar"
 						>
-							<Input className="inputCobrar" type="number"></Input>
+							<Input
+								id="cobrarEfectivo"
+								className="inputCobrar"
+								type="number"
+								prefix={<FaMoneyBillWave />}
+							></Input>
 						</Form.Item>
 						<Form.Item
 							label="Tarjeta"
@@ -136,7 +144,11 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, listaCompras }) => {
 							]}
 							className="labelCobrar"
 						>
-							<Input className="inputCobrar" type="number"></Input>
+							<Input
+								className="inputCobrar"
+								type="number"
+								prefix={<FaCreditCard />}
+							></Input>
 						</Form.Item>
 						<Form.Item
 							label="A cuenta"
@@ -149,7 +161,11 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, listaCompras }) => {
 							]}
 							className="labelCobrar"
 						>
-							<Input className="inputCobrar" type="number"></Input>
+							<Input
+								className="inputCobrar"
+								type="number"
+								prefix={<FaStoreAlt />}
+							></Input>
 						</Form.Item>
 					</Form>
 				</div>
@@ -161,13 +177,13 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, listaCompras }) => {
 										"font-weight": "bold",
 										"font-size": "40px",
 										color: "#35B009",
-										margin: 0,
+										margin: "-20px 0 0 0",
 								  }
 								: {
 										"font-weight": "bold",
 										"font-size": "40px",
 										color: "red",
-										margin: 0,
+										margin: "-20px 0 0 0",
 								  }
 						}
 					>
