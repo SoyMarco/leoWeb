@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Layout, Menu } from "antd";
-
 import { Avatar } from "antd";
 import "antd/dist/antd.css";
 import Principal from "./Principal/container/Principal";
@@ -9,15 +8,19 @@ import { FaCashRegister } from "react-icons/fa";
 import "./App.css";
 import "material-design-icons-iconfont";
 import LogoLeo from "./assets/png/logo.png";
-// import {  } from "material-ui-icons";
+import Corte from "./Corte/Container/Corte";
+
 function App() {
 	const [collapsed, setcollapsed] = useState(false);
+	const [modalCorte, setmodalCorte] = useState(false);
 	const { Header, Content, Footer, Sider } = Layout;
-	const { SubMenu } = Menu;
+	// const { SubMenu } = Menu;
 	const onCollapse = () => {
 		setcollapsed(!collapsed);
 	};
-
+	const handleModalCorte = () => {
+		setmodalCorte(!modalCorte);
+	};
 	return (
 		<div>
 			<Layout
@@ -46,7 +49,11 @@ function App() {
 							Vender
 						</Menu.Item>
 
-						<Menu.Item key="3" icon={<FaCashRegister />}>
+						<Menu.Item
+							key="3"
+							icon={<FaCashRegister />}
+							onClick={handleModalCorte}
+						>
 							Corte
 						</Menu.Item>
 					</Menu>
@@ -68,6 +75,10 @@ function App() {
 					</Footer>
 				</Layout>
 			</Layout>
+			<Corte
+				modalCorte={modalCorte}
+				handleModalCorte={handleModalCorte}
+			></Corte>
 		</div>
 	);
 }

@@ -1,26 +1,40 @@
-import React, { useState } from "react";
-import { Card, Table, Tooltip, Input, Button } from "antd";
-
+import React, { useState, useEffect } from "react";
 import {
-	EditOutlined,
-	EllipsisOutlined,
-	SettingOutlined,
-	DollarOutlined,
-	DeleteOutlined,
-} from "@ant-design/icons";
+	Card,
+	Table,
+	Tooltip,
+	Input,
+	Button,
+	Popconfirm,
+	Result,
+	Form,
+	Row,
+} from "antd";
 import { AiFillDollarCircle } from "react-icons/ai";
-import { BiDollar } from "react-icons/bi";
 import { MdDelete } from "react-icons/md";
-
+import { SmileOutlined, PlusOutlined, MinusOutlined } from "@ant-design/icons";
+import Cobrar from "../Components/Cobrar/Cobrar";
 import "./principal.css";
-const inputPrecio = <Input />;
 
 function Principal() {
-	const { Search } = Input;
+	const [modalCobrar, setmodalCobrar] = useState(false);
 	const [selectedRowKeys, setselectedRowKeys] = useState(["1"]);
-
+	const [precio, setprecio] = useState({
+		precio: null,
+	});
+	const [form] = Form.useForm();
+	const [idArticulo, setidArticulo] = useState(0);
+	const [listaCompras, setlistaCompras] = useState([]);
+	const [totalTotal, settotalTotal] = useState(0);
+	useEffect(() => {
+		selectLastRow();
+		let sum = 0;
+		for (let i = 0; i < listaCompras.length; i++) {
+			sum += listaCompras[i].totalArticulo;
+		}
+		settotalTotal(sum);
+	}, [listaCompras]);
 	const onSelectChange = (selectedRowKeys) => {
-		console.log("selectedRowKeys changed: ", selectedRowKeys);
 		setselectedRowKeys([]);
 		// setselectedRowKeys(selectedRowKeys);
 	};
@@ -29,9 +43,212 @@ function Principal() {
 		onChange: onSelectChange,
 	};
 	const click = (record, rowIndex) => {
-		console.log(record, rowIndex);
+		console.log(record);
 		setselectedRowKeys([record.key]);
+		// addArticulo(record, rowIndex);
 	};
+
+	const pressKeyPrecio = (e) => {
+		if (e.keyCode === 13) {
+			pressEnter();
+		}
+	};
+	const handlePrecio = (e) => {
+		setprecio({
+			precio: e.target.value,
+		});
+	};
+	const selectLastRow = () => {
+		let ultimoArray = listaCompras.length;
+		if (ultimoArray) setselectedRowKeys([listaCompras[ultimoArray - 1].key]);
+	};
+	const eliminarProducto = (item) => {
+		let i = listaCompras.indexOf(item);
+		if (i !== -1) {
+			let algo = listaCompras.splice(i, 1);
+			setlistaCompras(listaCompras.filter((item) => item.algo !== algo));
+		}
+		// this.focusPrecio();
+		selectLastRow();
+	};
+	const pressEnter = () => {
+		if (precio.precio > 0) {
+			setlistaCompras([
+				...listaCompras,
+				{
+					key: idArticulo + 1,
+					nombre: "Articulo",
+					precio: Math.round(precio.precio * 100) / 100,
+					cantidad: 1,
+					apartado: 0,
+					refApartado: 0,
+					totalArticulo: Math.round(precio.precio * 100) / 100,
+				},
+			]);
+			setprecio({ precio: null });
+			// 	this.dialog = 0;
+			setidArticulo(idArticulo + 1);
+			// 	console.log(data);
+			// 	this.unaPrueba();
+			// } else if (!this.precio && this.cantidadAtirulos > 0) {
+			// 	this.abrirCobrar();
+			// } else {
+			// 	this.precio = "";
+		} else if (listaCompras.length > 0) {
+			console.log("holaaaaa");
+			setmodalCobrar(!modalCobrar);
+		}
+	};
+	const addArticulo = (record) => {
+		const currentShopList = [...listaCompras];
+		const shopItem = currentShopList.find((item) => item.key === record.key);
+		shopItem.cantidad = shopItem.cantidad + 1;
+		shopItem.totalArticulo = shopItem.cantidad * shopItem.precio;
+		const newShopList = [...currentShopList];
+		setlistaCompras(newShopList);
+	};
+	const removeArticulo = (record) => {
+		const currentShopList = [...listaCompras];
+		const shopItem = currentShopList.find((item) => item.key === record.key);
+		if (shopItem.cantidad > 1) {
+			shopItem.cantidad = shopItem.cantidad - 1;
+			shopItem.totalArticulo = shopItem.cantidad * shopItem.precio;
+			const newShopList = [...currentShopList];
+			setlistaCompras(newShopList);
+		} else if (shopItem.cantidad === 1) {
+			eliminarProducto(record);
+		}
+	};
+	const columns = [
+		{
+			title: "ID",
+			dataIndex: "key",
+			key: "key",
+			sorter: (a, b) => b.key - a.key,
+			defaultSortOrder: "ascend",
+			width: "60px",
+		},
+		{
+			title: "Producto",
+			dataIndex: "nombre",
+			key: "nombre",
+			width: "90px",
+		},
+		{
+			title: "Precio",
+			dataIndex: "precio",
+			key: "precio",
+			ellipsis: true,
+			render: (precio) => (
+				<h3
+					style={{
+						"text-align-last": "right",
+						"font-weight": "revert",
+						"font-size": "large",
+					}}
+				>
+					${precio}
+				</h3>
+			),
+		},
+		{
+			title: "Cantidad",
+			dataIndex: "cantidad",
+			key: "cantidad",
+			render: (cantidad, record) => (
+				<Row justify="space-around">
+					<Button
+						type="primary"
+						shape="circle"
+						icon={<MinusOutlined />}
+						size="small"
+						onClick={() => removeArticulo(record)}
+					></Button>
+					<h3
+						style={{
+							"text-align-last": "center",
+							"font-weight": "revert",
+							// "font-size": "x-large",
+						}}
+					>
+						{cantidad}
+					</h3>
+					<Button
+						type="primary"
+						shape="circle"
+						icon={<PlusOutlined />}
+						size="small"
+						onClick={() => addArticulo(record)}
+					></Button>
+				</Row>
+			),
+		},
+		{
+			title: "Apartado",
+			dataIndex: "apartado",
+			key: "apartado",
+			ellipsis: {
+				showTitle: false,
+			},
+			width: "90px",
+			render: (address) => (
+				<Tooltip placement="topLeft" title={address}>
+					{address}
+				</Tooltip>
+			),
+		},
+		{
+			title: "Referencia",
+			dataIndex: "refApartado",
+			key: "refApartado",
+			ellipsis: {
+				showTitle: false,
+			},
+			width: "90px",
+			render: (address) => (
+				<Tooltip placement="topLeft" title={address}>
+					{address}
+				</Tooltip>
+			),
+		},
+		{
+			title: "Total",
+			dataIndex: "totalArticulo",
+			key: "totalArticulo",
+			ellipsis: {
+				showTitle: false,
+			},
+			render: (totalArticulo, record) => (
+				<h3
+					style={{
+						"text-align-last": "right",
+						color: "green",
+						"font-weight": "revert",
+						"font-size": "large",
+					}}
+				>
+					${totalArticulo}
+				</h3>
+			),
+		},
+		{
+			title: "Borrar",
+			dataIndex: "key",
+			key: "key",
+			width: "60px",
+			render: (key, record) => (
+				<div style={{ "text-align-last": "center" }}>
+					<Button
+						shape="circle"
+						icon={<MdDelete style={{ color: "#c5221f" }} size="25px" />}
+						// size="large"
+						onClick={() => eliminarProducto(record)}
+					></Button>
+				</div>
+			),
+		},
+	];
+
 	return (
 		<>
 			<Card
@@ -43,9 +260,8 @@ function Principal() {
 							"font-weight": "bold",
 							"margin-top": "-5px",
 						}}
-						onClick={click}
 					>
-						Productos: {data.length ?? 0}
+						Productos: {listaCompras.length ?? 0}
 					</h1>,
 					<></>,
 					<h1
@@ -55,8 +271,9 @@ function Principal() {
 							"font-weight": "bold",
 							"margin-top": "-20px",
 						}}
+						onClick={pressEnter}
 					>
-						$540,515.00
+						${totalTotal}
 					</h1>,
 				]}
 			>
@@ -68,183 +285,74 @@ function Principal() {
 						"border-radius": "25px 5px 0 0",
 					}}
 				>
+					{/* Ingresar Precio */}
 					<Input
 						prefix={<AiFillDollarCircle />}
 						style={{
 							color: "green",
 							fontSize: 30,
-							"font-size": "xx-large",
+							"font-size": "x-large",
 							"font-weight": "bold",
 							"border-radius": "50px",
 							"max-width": "60%",
+							padding: "0 0 0 0px",
+							border: "0 0 0 0",
 						}}
+						onKeyUp={pressKeyPrecio}
+						value={precio.precio}
+						onChange={handlePrecio}
 					/>
 				</div>
-				<Table
-					columns={columns}
-					dataSource={data}
-					pagination={false}
-					bordered
-					scroll={{ y: 400 }}
-					style={{
-						height: "430px",
-						"border-radius": "10px",
-						"box-shadow": "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
-						margin: "10px",
-					}}
-					rowSelection={rowSelection}
-					size="small"
-					onRow={(record, rowIndex) => {
-						return {
-							onClick: (e) => {
-								click(record, rowIndex);
-							}, // click row
-						};
-					}}
-				/>
+				<Form form={form} component={false}>
+					<Table
+						columns={columns}
+						dataSource={listaCompras}
+						pagination={false}
+						bordered
+						scroll={{ y: 300 }}
+						style={{
+							height: "330px",
+							"border-radius": "10px",
+							"box-shadow": "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
+							margin: "10px",
+						}}
+						rowSelection={rowSelection}
+						size="small"
+						onRow={(record, rowIndex) => {
+							return {
+								onClick: (e) => {
+									click(record, rowIndex);
+								}, // click row
+							};
+						}}
+						locale={{
+							emptyText: (
+								<Result
+									icon={<SmileOutlined />}
+									// status="500"
+									subTitle="Agrega productos"
+								/>
+							),
+						}}
+					/>
+				</Form>
 			</Card>
+
+			<Cobrar
+				modalCobrar={modalCobrar}
+				setmodalCobrar={setmodalCobrar}
+				totalTotal={totalTotal}
+				listaCompras={listaCompras}
+			></Cobrar>
 		</>
 	);
 }
 
 export default Principal;
-
-const columns = [
-	{
-		title: "ID",
-		dataIndex: "key",
-		key: "key",
-	},
-	{
-		title: "Producto",
-		dataIndex: "producto",
-		key: "producto",
-	},
-	{
-		title: "Precio",
-		dataIndex: "precio",
-		key: "precio",
-		ellipsis: true,
-		render: (precio) => (
-			<h3 style={{ "text-align-last": "right" }}>{precio}</h3>
-		),
-	},
-	{
-		title: "Cantidad",
-		dataIndex: "precio",
-		key: "precio",
-		render: (cantidad) => (
-			<h3 style={{ "text-align-last": "center" }}>{cantidad}</h3>
-		),
-	},
-	{
-		title: "Apartado",
-		dataIndex: "precio",
-		key: "precio",
-		ellipsis: {
-			showTitle: false,
-		},
-
-		render: (address) => (
-			<Tooltip placement="topLeft" title={address}>
-				{address}
-			</Tooltip>
-		),
-	},
-	{
-		title: "Referencia",
-		dataIndex: "precio",
-		key: "precio",
-		ellipsis: {
-			showTitle: false,
-		},
-
-		render: (address) => (
-			<Tooltip placement="topLeft" title={address}>
-				{address}
-			</Tooltip>
-		),
-	},
-	{
-		title: "Total",
-		dataIndex: "precio",
-		key: "precio",
-		ellipsis: {
-			showTitle: false,
-		},
-		render: (precio) => (
-			<h3 style={{ "text-align-last": "right", color: "green" }}>{precio}</h3>
-		),
-	},
-	{
-		title: "Borrar",
-		dataIndex: "key",
-		key: "key",
-		render: (key) => (
-			<div style={{ "text-align-last": "center" }}>
-				<Button
-					shape="circle"
-					icon={<MdDelete style={{ color: "#c5221f" }} size="30px" />}
-					size="large"
-				></Button>
-			</div>
-		),
-	},
-];
-
-const data = [
-	{
-		key: "1",
-		producto: "John Brown",
-		precio: "$100,985.50",
-		address: "New York No. 1 Lake Park, New York No. 1 Lake Park",
-	},
-	{
-		key: "2",
-		producto: "Jim Green",
-		precio: 42,
-		address: "London No. 2 Lake Park, London No. 2 Lake Park",
-	},
-	{
-		key: "3",
-		producto: "Joe Black",
-		precio: 32,
-		address: "Sidney No. 1 Lake Park, Sidney No. 1 Lake Park",
-	},
-	{
-		key: "4",
-		producto: "John Brown",
-		precio: 32,
-		address: "New York No. 1 Lake Park, New York No. 1 Lake Park",
-	},
-	{
-		key: "5",
-		producto: "Jim Green",
-		precio: 42,
-		address: "London No. 2 Lake Park, London No. 2 Lake Park",
-	},
-	{
-		key: "6",
-		producto: "Joe Black",
-		precio: 32,
-		address: "Sidney No. 1 Lake Park, Sidney No. 1 Lake Park",
-	},
-	{
-		key: "7",
-		producto: "John Brown",
-		precio: 32,
-		address: "New York No. 1 Lake Park, New York No. 1 Lake Park",
-	},
-	{
-		key: "8",
-		producto: "Jim Green",
-		precio: 42,
-		address: "London No. 2 Lake Park, London No. 2 Lake Park",
-	},
-	{
-		key: "9",
-		producto: "Joe Black",
-		precio: 32,
-		address: "Sidney No. 1 Lake Park, Sidney No. 1 Lake Park",
-	},
-];
+// idArray: idArticulo + 1,
+// 					nombre: "Articulo",
+// 					precio: Math.round(precio.precio * 100) / 100,
+// 					cantidad: 1,
+// 					apartado: 0,
+// 					refApartado: 0,
+// 					totalArticulo: 0,

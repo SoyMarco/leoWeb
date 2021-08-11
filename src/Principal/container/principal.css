@@ -4,15 +4,20 @@
 	outline: none;
 	text-align-last: center;
 	color: green;
+	border-radius: 50px;
 	font-size: x-large;
 	font-weight: bold;
+	padding-left: 20px;
 }
-
+.ant-input-affix-wrapper > input.ant-input:focus {
+	background: linear-gradient(14deg, #ffffff, #bdddf8);
+	box-shadow: 13px 13px 35px #8aaecc, -13px -13px 35px #d0ffff;
+}
 .ant-card-body {
 	padding: 5px;
 }
 .ant-input-affix-wrapper > input.ant-input {
-	font-size: xx-large;
+	font-size: x-large;
 }
 
 .borrar {
