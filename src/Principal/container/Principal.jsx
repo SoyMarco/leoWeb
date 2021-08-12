@@ -1,15 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import {
-	Card,
-	Table,
-	Tooltip,
-	Input,
-	Button,
-	Popconfirm,
-	Result,
-	Form,
-	Row,
-} from "antd";
+import { Card, Table, Tooltip, Input, Button, Result, Form, Row } from "antd";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { MdDelete } from "react-icons/md";
 import { SmileOutlined, PlusOutlined, MinusOutlined } from "@ant-design/icons";
@@ -19,7 +10,7 @@ import "./principal.css";
 
 function Principal() {
 	const [modalCobrar, setmodalCobrar] = useState(false);
-	const [selectedRowKeys, setselectedRowKeys] = useState("1");
+	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [precio, setprecio] = useState({
 		precio: null,
 	});
@@ -27,22 +18,50 @@ function Principal() {
 	const [idArticulo, setidArticulo] = useState(0);
 	const [listaCompras, setlistaCompras] = useState([]);
 	const [totalTotal, settotalTotal] = useState(0);
+	const [totalProductos, settotalProductos] = useState(0);
 	const [stateRecord, setstateRecord] = useState(null);
+	const initialState = () => {
+		setmodalCobrar(false);
+		setselectedRowKeys(0);
+		setprecio({
+			precio: null,
+		});
+		setidArticulo(0);
+		setlistaCompras([]);
+		settotalTotal(0);
+		settotalProductos(0);
+		setstateRecord(null);
+	};
 	useEffect(() => {
 		selectInputPrecio();
 	}, []);
 
 	useEffect(() => {
 		selectLastRow();
+	}, [listaCompras.length]);
+
+	useEffect(() => {
+		if (modalCobrar === false) {
+			document.querySelector("#inputPrecio").select();
+		}
+	}, [modalCobrar]);
+
+	useEffect(() => {
+		// selectLastRow();
 		let sum = 0;
+		let sumProd = 0;
 		for (let i = 0; i < listaCompras.length; i++) {
 			sum += listaCompras[i].totalArticulo;
+			sumProd += listaCompras[i].cantidad;
 		}
 		settotalTotal(sum);
+		settotalProductos(sumProd);
 	}, [listaCompras]);
+
 	useEffect(() => {
 		setstateRecord({ key: selectedRowKeys[0] });
 	}, [selectedRowKeys]);
+
 	const onSelectChange = (selectedRowKeys) => {
 		setselectedRowKeys([]);
 		// setselectedRowKeys(selectedRowKeys);
@@ -59,14 +78,17 @@ function Principal() {
 		onChange: onSelectChange,
 	};
 	const click = (record, rowIndex) => {
-		console.log(record);
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
+		selectInputPrecio();
 		// addArticulo(record, rowIndex);
 	};
 
 	const pressKeyPrecio = (e) => {
 		if (e.keyCode === 13) {
+			pressEnter();
+		}
+		if (e.keyCode === 123) {
 			pressEnter();
 		}
 		if (e.keyCode === 107) {
@@ -77,6 +99,26 @@ function Principal() {
 		if (e.keyCode === 109) {
 			if (stateRecord) {
 				removeArticulo(stateRecord);
+			}
+		}
+		if (e.keyCode === 46) {
+			if (stateRecord) {
+				removeArticulo(stateRecord);
+			}
+		}
+		if (e.keyCode === 38) {
+			if (listaCompras.length > 1) {
+				let max = listaCompras.length;
+				if (selectedRowKeys[0] < max) {
+					setselectedRowKeys([selectedRowKeys[0] + 1]);
+				}
+			}
+		}
+		if (e.keyCode === 40) {
+			if (listaCompras.length > 1) {
+				if (selectedRowKeys[0] > 1) {
+					setselectedRowKeys([selectedRowKeys[0] - 1]);
+				}
 			}
 		}
 	};
@@ -94,11 +136,15 @@ function Principal() {
 	const eliminarProducto = (item) => {
 		let i = listaCompras.indexOf(item);
 		if (i !== -1) {
-			let algo = listaCompras.splice(i, 1);
-			setlistaCompras(listaCompras.filter((item) => item.algo !== algo));
+			let key = listaCompras.splice(i, 1);
+			setlistaCompras(listaCompras.filter((item) => item.key !== key));
+			selectLastRow();
+		} else if (item.key > 0) {
+			let key = item.key;
+			setlistaCompras(listaCompras.filter((item) => item.key !== key));
+			selectLastRow();
 		}
 		// this.focusPrecio();
-		selectLastRow();
 	};
 	const pressEnter = () => {
 		if (precio.precio > 0) {
@@ -118,36 +164,39 @@ function Principal() {
 			// 	this.dialog = 0;
 			setidArticulo(idArticulo + 1);
 
-			// 	console.log(data);
 			// 	this.unaPrueba();
 			// } else if (!this.precio && this.cantidadAtirulos > 0) {
 			// 	this.abrirCobrar();
 			// } else {
 			// 	this.precio = "";
 		} else if (listaCompras.length > 0) {
-			setmodalCobrar(!modalCobrar);
+			setmodalCobrar(true);
 		}
 	};
+
 	const addArticulo = (record) => {
-		console.log("record", record);
-		const currentShopList = [...listaCompras];
-		const shopItem = currentShopList.find((item) => item.key === record.key);
-		shopItem.cantidad = shopItem.cantidad + 1;
-		shopItem.totalArticulo = shopItem.cantidad * shopItem.precio;
-		const newShopList = [...currentShopList];
-		setlistaCompras(newShopList);
-	};
-	const removeArticulo = (record) => {
-		const currentShopList = [...listaCompras];
-		const shopItem = currentShopList.find((item) => item.key === record.key);
-		console.log("shopItem.cantidad ", shopItem.cantidad);
-		if (shopItem.cantidad > 1) {
-			shopItem.cantidad = shopItem.cantidad - 1;
+		if (listaCompras.length > 0) {
+			const currentShopList = [...listaCompras];
+			const shopItem = currentShopList.find((item) => item.key === record.key);
+			shopItem.cantidad = shopItem.cantidad + 1;
 			shopItem.totalArticulo = shopItem.cantidad * shopItem.precio;
 			const newShopList = [...currentShopList];
 			setlistaCompras(newShopList);
-		} else if (shopItem.cantidad === 1) {
-			eliminarProducto(record);
+		}
+	};
+	const removeArticulo = (record) => {
+		if (listaCompras.length > 0) {
+			const currentShopList = [...listaCompras];
+			const shopItem = currentShopList.find((item) => item.key === record.key);
+
+			if (shopItem.cantidad > 1) {
+				shopItem.cantidad = shopItem.cantidad - 1;
+				shopItem.totalArticulo = shopItem.cantidad * shopItem.precio;
+				const newShopList = [...currentShopList];
+				setlistaCompras(newShopList);
+			} else if (shopItem.cantidad === 1) {
+				eliminarProducto(record);
+			}
 		}
 	};
 	const columns = [
@@ -173,9 +222,9 @@ function Principal() {
 			render: (precio) => (
 				<h3
 					style={{
-						"text-align-last": "right",
-						"font-weight": "revert",
-						"font-size": "large",
+						textAlignLast: "right",
+						fontWeight: "revert",
+						fontSize: "large",
 					}}
 				>
 					${precio}
@@ -197,9 +246,9 @@ function Principal() {
 					></Button>
 					<h3
 						style={{
-							"text-align-last": "center",
-							"font-weight": "revert",
-							// "font-size": "x-large",
+							textAlignLast: "center",
+							fontWeight: "revert",
+							// fontSize: "x-large",
 						}}
 					>
 						{cantidad}
@@ -252,10 +301,10 @@ function Principal() {
 			render: (totalArticulo, record) => (
 				<h3
 					style={{
-						"text-align-last": "right",
+						textAlignLast: "right",
 						color: "green",
-						"font-weight": "revert",
-						"font-size": "large",
+						fontWeight: "revert",
+						fontSize: "large",
 					}}
 				>
 					${totalArticulo}
@@ -268,7 +317,7 @@ function Principal() {
 			key: "key",
 			width: "60px",
 			render: (key, record) => (
-				<div style={{ "text-align-last": "center" }}>
+				<div style={{ textAlignLast: "center" }}>
 					<Button
 						shape="circle"
 						icon={<MdDelete style={{ color: "#c5221f" }} size="25px" />}
@@ -287,20 +336,20 @@ function Principal() {
 					<h1
 						style={{
 							color: "darkblue",
-							"font-size": "xx-large",
-							"font-weight": "bold",
-							"margin-top": "-5px",
+							fontSize: "xx-large",
+							fontWeight: "bold",
+							marginTop: "-5px",
 						}}
 					>
-						Productos: {listaCompras.length ?? 0}
+						Productos: {totalProductos ?? 0}
 					</h1>,
 					<></>,
 					<h1
 						style={{
 							color: "green",
-							"font-size": "xxx-large",
-							"font-weight": "bold",
-							"margin-top": "-20px",
+							fontSize: "xxx-large",
+							fontWeight: "bold",
+							marginTop: "-20px",
 						}}
 						onClick={pressEnter}
 					>
@@ -311,9 +360,9 @@ function Principal() {
 				<div
 					style={{
 						background: "linear-gradient(#0000a6, #000066)",
-						"text-align-last": "center",
+						textAlignLast: "center",
 						padding: "7px",
-						"border-radius": "25px 5px 0 0",
+						borderRadius: "25px 5px 0 0",
 					}}
 				>
 					{/* Ingresar Precio */}
@@ -322,11 +371,11 @@ function Principal() {
 						prefix={<AiFillDollarCircle />}
 						style={{
 							color: "green",
-							fontSize: 30,
-							"font-size": "x-large",
-							"font-weight": "bold",
-							"border-radius": "50px",
-							"max-width": "60%",
+							// fontSize: 30,
+							fontSize: "x-large",
+							fontWeight: "bold",
+							borderRadius: "50px",
+							maxWidth: "60%",
 							padding: "0 0 0 0px",
 							border: "0 0 0 0",
 						}}
@@ -345,8 +394,8 @@ function Principal() {
 						scroll={{ y: 300 }}
 						style={{
 							height: "330px",
-							"border-radius": "10px",
-							"box-shadow": "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
+							borderRadius: "10px",
+							boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
 							margin: "10px",
 						}}
 						rowSelection={rowSelection}
@@ -355,7 +404,7 @@ function Principal() {
 							return {
 								onClick: (e) => {
 									click(record, rowIndex);
-								}, // click row
+								},
 							};
 						}}
 						locale={{
@@ -370,13 +419,15 @@ function Principal() {
 					/>
 				</Form>
 			</Card>
-
-			<Cobrar
-				modalCobrar={modalCobrar}
-				setmodalCobrar={setmodalCobrar}
-				totalTotal={totalTotal}
-				listaCompras={listaCompras}
-			></Cobrar>
+			{modalCobrar ? (
+				<Cobrar
+					modalCobrar={modalCobrar}
+					setmodalCobrar={setmodalCobrar}
+					totalTotal={totalTotal}
+					listaCompras={listaCompras}
+					initialState={initialState}
+				></Cobrar>
+			) : null}
 		</>
 	);
 }

@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React /* useState */ from "react";
 import { Modal, Button } from "antd";
 import "./corte.css";
 import { FaCashRegister } from "react-icons/fa";
 
 const Corte = ({ modalCorte, handleModalCorte }) => {
-	const [state, setstate] = useState("hola");
+	// const [state, setstate] = useState("hola");
 	return (
 		<Modal
 			title={
@@ -24,9 +24,7 @@ const Corte = ({ modalCorte, handleModalCorte }) => {
 					Cancelar
 				</Button>,
 			]}
-		>
-			<h1>{state}</h1>
-		</Modal>
+		></Modal>
 	);
 };
 
