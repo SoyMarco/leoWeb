@@ -1,0 +1,8 @@
+.ant-layout-sider-trigger {
+	background: linear-gradient(#0000a6, #000066);
+}
+
+.ant-layout-sider-children {
+	background: white;
+	z-index: -1;
+}

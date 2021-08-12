@@ -17,7 +17,6 @@ const Cobrar = ({
 	listaCompras,
 	initialState,
 }) => {
-	const [mutateLOGIN, { data: dataLOGIN, loading, error }] = useMutation(LOGIN);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);
 	const [imprimir, setimprimir] = useState(false);
@@ -27,9 +26,7 @@ const Cobrar = ({
 		tarjeta: 0,
 		efectivo: 0,
 	});
-	if (dataLOGIN) {
-		console.log(dataLOGIN);
-	}
+
 	useEffect(() => {
 		if (modalCobrar === true) {
 			form.setFieldsValue({ efectivo: totalTotal });
@@ -104,15 +101,6 @@ const Cobrar = ({
 
 	//Guardar y/o Imprimir VENTA CON GraphQL
 	const savePrintNewV = async (keyF) => {
-		console.log("mutateLOGIN");
-		mutateLOGIN({
-			variables: {
-				input: {
-					name: "marco",
-					password: "123456",
-				},
-			},
-		});
 		/* 	await guardarVenta();
 			// if (keyF === "F1") {
 			// 	folio = await dataVenta.registerVenta.folio;

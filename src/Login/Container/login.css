@@ -1,0 +1,23 @@
+#cardLogin {
+	padding: 0px;
+	max-width: 539px;
+	height: 300px;
+	box-shadow: 17px 17px 32px #929292, -17px -17px 32px #ffffff;
+	border-radius: 25px 5px 25px 5px;
+}
+
+#inputLogin {
+	padding: 0;
+	border: none;
+	outline: none;
+	text-align-last: center;
+	color: #000085;
+	border-radius: 50px;
+	font-size: x-large;
+	font-weight: bold;
+	padding-left: 20px;
+}
+
+#nameLogo {
+	color: white;
+}

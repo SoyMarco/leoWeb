@@ -3,6 +3,7 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+// import client from "./config/apollo";
 
 const client = new ApolloClient({
 	uri: "http://localhost:4000/",
@@ -11,9 +12,7 @@ const client = new ApolloClient({
 
 ReactDOM.render(
 	<ApolloProvider client={client}>
-		<React.StrictMode>
-			<App />
-		</React.StrictMode>
+		<App />
 	</ApolloProvider>,
 	document.getElementById("root")
 );
