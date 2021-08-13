@@ -5,17 +5,34 @@ import AuthContext from "./context/AuthContext";
 import NavToken from "./Routes/NavToken";
 import { getToken, decodeToken, removeToken } from "./Utils/token";
 import Login from "./Login/Container/Login";
+import { openNotification } from "./Utils/openNotification";
 function App() {
 	const [auth, setAuth] = useState(undefined);
 
 	useEffect(() => {
-		const token = getToken();
-		if (!token) {
-			setAuth(null);
-		} else {
-			setAuth(decodeToken(token));
-		}
+		timeLogout();
 	}, []);
+
+	const timeLogout = () => {
+		const token = getToken();
+		if (token) {
+			try {
+				let dataToken = decodeToken(token);
+				let timeNow = Math.round(Date.now() / 1000);
+				console.log("datatimeToken", dataToken.exp, timeNow);
+				if (dataToken.exp > timeNow) {
+					setAuth(dataToken);
+				} else {
+					openNotification("error", "Tu sesión expiro. Vuelve a ingresar");
+					logout();
+				}
+			} catch (error) {
+				setAuth(null);
+			}
+		} else {
+			setAuth(null);
+		}
+	};
 
 	const logout = () => {
 		removeToken();
@@ -40,7 +57,7 @@ function App() {
 	return (
 		<>
 			<AuthContext.Provider value={authData}>
-				{auth ? <NavToken /> : <Login />}
+				{auth ? <NavToken setAuth /> : <Login />}
 			</AuthContext.Provider>
 		</>
 	);

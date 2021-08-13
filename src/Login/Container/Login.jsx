@@ -1,5 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Card, Form, Button, Input, Layout, Row } from "antd";
+import {
+	Card,
+	Form,
+	Button,
+	Input,
+	Layout,
+	Row,
+	Switch,
+	Menu,
+	Avatar,
+} from "antd";
+import LogoLeo from "../../assets/png/logo.png";
+
 import { /* useQuery, gql, */ useMutation } from "@apollo/client";
 import { LOGIN } from "../../graphql/user";
 import { FaUserAlt } from "react-icons/fa";
@@ -33,7 +45,6 @@ const Login = () => {
 				let dataToken = await decodeToken(token);
 				setUser(dataToken);
 				openNotification("success", `Bienvenido ${dataToken.name}`);
-				console.log(dataToken);
 			}
 		} catch (error) {
 			openNotification("error", "Error en Usuario o Contraseña");
@@ -48,12 +59,56 @@ const Login = () => {
 		<>
 			<Layout>
 				<Header
-					style={{ background: "linear-gradient(#0000A6,#000066,#000058)" }}
+					style={{
+						background: "linear-gradient(#0000A6,#000066,#000058)",
+						margin: 0,
+						height: "50px",
+						color: "white",
+						padding: 0,
+					}}
 				>
-					<Row>
-						<img src={Logo} style={{ maxHeight: 40, margin: 10 }} />
-						<h1 id="nameLogo">Bazar Leo</h1>
-					</Row>
+					<Menu
+						mode="horizontal"
+						defaultSelectedKeys={["2"]}
+						style={{
+							background: "transparent",
+							margin: "-10px 0 0 0",
+							// height: "50px",
+							color: "white",
+							width: "100%",
+						}}
+					>
+						<Menu.Item
+							key="1"
+							style={{
+								background: "transparent",
+								margin: 0,
+								color: "white",
+							}}
+							icon={<Avatar src={LogoLeo} size="large" />}
+						>
+							Bazar Leo
+						</Menu.Item>
+						<Menu.Item key="2"></Menu.Item>
+						<Menu.Item key="3"></Menu.Item>
+						<Menu.Item
+							key="3"
+							style={{
+								display: "flex",
+								flexDirection: "column",
+								float: "right",
+								marginLeft: "auto",
+							}}
+						>
+							<Switch
+								style={{
+									background: "red",
+									// boxShadow: "5px 5px 19px #b3b3b3, -5px -5px 19px #ffffff",
+								}}
+								// onChange={logoutApp}
+							></Switch>
+						</Menu.Item>
+					</Menu>
 				</Header>
 				<div
 					style={{
