@@ -292,105 +292,107 @@ const Corte = ({ modalCorte, handleModalCorte }) => {
 		},
 	];
 	return (
-		<Form form={form} component={false}>
-			<Table
-				columns={colVentas}
-				dataSource={listaCompras}
-				pagination={false}
-				bordered
-				scroll={{ y: 300 }}
-				style={{
-					height: "330px",
-					borderRadius: "10px",
-					boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
-					margin: "10px",
-				}}
-				rowSelection={rowSelection}
-				size="small"
-				onRow={(record, rowIndex) => {
-					return {
-						onClick: (e) => {
-							click(record, rowIndex);
-						},
-					};
-				}}
-				locale={{
-					emptyText: (
-						<Result
-							icon={<SmileOutlined />}
-							// status="500"
-							subTitle="Agrega productos"
-						/>
-					),
-				}}
-			/>
+		<>
+			<Form form={form} component={false}>
+				<Table
+					columns={colVentas}
+					dataSource={listaCompras}
+					pagination={false}
+					bordered
+					scroll={{ y: 300 }}
+					style={{
+						height: "330px",
+						borderRadius: "10px",
+						boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
+						margin: "10px",
+					}}
+					rowSelection={rowSelection}
+					size="small"
+					onRow={(record, rowIndex) => {
+						return {
+							onClick: (e) => {
+								click(record, rowIndex);
+							},
+						};
+					}}
+					locale={{
+						emptyText: (
+							<Result
+								icon={<SmileOutlined />}
+								// status="500"
+								subTitle="Agrega productos"
+							/>
+						),
+					}}
+				/>
 
-			{/* PRODUCTOS */}
-			<Table
-				columns={colProductos}
-				dataSource={listaCompras}
-				pagination={false}
-				bordered
-				scroll={{ y: 300 }}
-				style={{
-					height: "330px",
-					borderRadius: "10px",
-					boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
-					margin: "10px",
-				}}
-				rowSelection={rowSelection}
-				size="small"
-				onRow={(record, rowIndex) => {
-					return {
-						onClick: (e) => {
-							click(record, rowIndex);
-						},
-					};
-				}}
-				locale={{
-					emptyText: (
-						<Result
-							icon={<SmileOutlined />}
-							// status="500"
-							subTitle="Agrega productos"
-						/>
-					),
-				}}
-			/>
+				{/* PRODUCTOS */}
+				<Table
+					columns={colProductos}
+					dataSource={listaCompras}
+					pagination={false}
+					bordered
+					scroll={{ y: 300 }}
+					style={{
+						height: "330px",
+						borderRadius: "10px",
+						boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
+						margin: "10px",
+					}}
+					rowSelection={rowSelection}
+					size="small"
+					onRow={(record, rowIndex) => {
+						return {
+							onClick: (e) => {
+								click(record, rowIndex);
+							},
+						};
+					}}
+					locale={{
+						emptyText: (
+							<Result
+								icon={<SmileOutlined />}
+								// status="500"
+								subTitle="Agrega productos"
+							/>
+						),
+					}}
+				/>
 
-			{/* TOTALES */}
-			<Table
-				columns={colTotales}
-				dataSource={listaCompras}
-				pagination={false}
-				bordered
-				scroll={{ y: 300 }}
-				style={{
-					height: "330px",
-					borderRadius: "10px",
-					boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
-					margin: "10px",
-				}}
-				rowSelection={rowSelection}
-				size="small"
-				onRow={(record, rowIndex) => {
-					return {
-						onClick: (e) => {
-							click(record, rowIndex);
-						},
-					};
-				}}
-				locale={{
-					emptyText: (
-						<Result
-							icon={<SmileOutlined />}
-							// status="500"
-							subTitle="Agrega productos"
-						/>
-					),
-				}}
-			/>
-		</Form>
+				{/* TOTALES */}
+				<Table
+					columns={colTotales}
+					dataSource={listaCompras}
+					pagination={false}
+					bordered
+					scroll={{ y: 300 }}
+					style={{
+						height: "330px",
+						borderRadius: "10px",
+						boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
+						margin: "10px",
+					}}
+					rowSelection={rowSelection}
+					size="small"
+					onRow={(record, rowIndex) => {
+						return {
+							onClick: (e) => {
+								click(record, rowIndex);
+							},
+						};
+					}}
+					locale={{
+						emptyText: (
+							<Result
+								icon={<SmileOutlined />}
+								// status="500"
+								subTitle="Agrega productos"
+							/>
+						),
+					}}
+				/>
+			</Form>
+		</>
 	);
 };
 

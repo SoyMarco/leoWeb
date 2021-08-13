@@ -2,13 +2,17 @@
 import React, { useState, useEffect } from "react";
 import { Card, Table, Tooltip, Input, Button, Result, Form, Row } from "antd";
 import { AiFillDollarCircle } from "react-icons/ai";
-import { MdDelete } from "react-icons/md";
+import { MdDelete, MdLocalGroceryStore } from "react-icons/md";
 import { SmileOutlined, PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import Cobrar from "../Components/Cobrar/Cobrar";
 import { keyBlock } from "../../Utils";
+import { useLocation } from "react-router-dom";
 import "./principal.css";
+import { UrlFrontend } from "../../config/apollo";
 
 function Principal() {
+	const Location = useLocation();
+	const [titleWeb, settitleWeb] = useState("Leo Web");
 	const [modalCobrar, setmodalCobrar] = useState(false);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [precio, setprecio] = useState({
@@ -32,10 +36,20 @@ function Principal() {
 		settotalProductos(0);
 		setstateRecord(null);
 	};
+	/* Cambiar titulo de pagina */
+	useEffect(() => {
+		if (Location.pathname === "/") {
+			settitleWeb(`CUENTA: $${totalTotal}`);
+		} else {
+			let title = Location.pathname;
+			title = title.toUpperCase();
+			title = title.replace(/^./, "");
+			settitleWeb(title);
+		}
+	}, [Location, totalTotal]);
 	useEffect(() => {
 		selectInputPrecio();
 	}, []);
-
 	useEffect(() => {
 		selectLastRow();
 	}, [listaCompras.length]);
@@ -94,7 +108,7 @@ function Principal() {
 		}
 		// F6 abrir ventana
 		if (e.keyCode === 117) {
-			window.open("http://localhost:3000/");
+			window.open(UrlFrontend);
 		}
 		if (e.keyCode === 107) {
 			if (stateRecord) {
@@ -336,6 +350,8 @@ function Principal() {
 
 	return (
 		<>
+			<title>{titleWeb}</title>
+
 			<Card
 				actions={[
 					<h1
@@ -346,7 +362,7 @@ function Principal() {
 							marginTop: "-5px",
 						}}
 					>
-						Productos: {totalProductos ?? 0}
+						{totalProductos ? `Productos: ${totalProductos}` : null}
 					</h1>,
 					<></>,
 					<h1
@@ -358,7 +374,7 @@ function Principal() {
 						}}
 						onClick={pressEnter}
 					>
-						${totalTotal}
+						{totalProductos ? `$ ${totalTotal}` : null}
 					</h1>,
 				]}
 			>
@@ -415,7 +431,11 @@ function Principal() {
 						locale={{
 							emptyText: (
 								<Result
-									icon={<SmileOutlined />}
+									icon={
+										<MdLocalGroceryStore
+											style={{ color: "blue", fontSize: "xxx-large" }}
+										/>
+									}
 									// status="500"
 									subTitle="Agrega productos"
 								/>

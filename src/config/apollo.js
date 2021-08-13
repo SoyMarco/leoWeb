@@ -4,9 +4,12 @@ import { setContext } from "apollo-link-context";
 import { getToken } from "../Utils/token";
 
 /* LOCAL */
-const httpLik = createUploadLink({
+export const UrlBackend = {
 	uri: "http://localhost:4000/",
-});
+};
+export const UrlFrontend = "http://localhost:3000/";
+
+const httpLik = createUploadLink(UrlBackend.uri);
 
 /* HEROKU */
 /*  const httpLik = createUploadLink({

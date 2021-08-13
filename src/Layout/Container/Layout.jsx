@@ -1,17 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Layout, Menu, Switch, Popconfirm } from "antd";
 import { Avatar } from "antd";
 import "antd/dist/antd.css";
 import Principal from "../../Principal/container/Principal";
 import { MdLocalGroceryStore } from "react-icons/md";
-import { FaCashRegister, FaUserAstronaut } from "react-icons/fa";
+import {
+	FaCashRegister,
+	FaUserAstronaut,
+	FaWindowRestore,
+} from "react-icons/fa";
 import "./layout.css";
 import "material-design-icons-iconfont";
 import LogoLeo from "../../assets/png/logo.png";
 import Corte from "../../Corte/Container/Corte";
 import { openNotification } from "../../Utils/openNotification";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation, Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import { UrlFrontend } from "../../config/apollo";
 
 function LayoutForm({ children }) {
 	const [collapsed, setcollapsed] = useState(true);
@@ -19,8 +24,21 @@ function LayoutForm({ children }) {
 	const { logout } = useAuth();
 	const [swtichstate, setswtichstate] = useState(true);
 	const [currentMenu, setcurrentMenu] = useState(1);
+	const [titleWeb, settitleWeb] = useState(null);
 	const history = useHistory();
 	const Location = useLocation();
+
+	/* Cambiar titulo de pagina */
+	useEffect(() => {
+		if (Location.pathname === "/") {
+			settitleWeb(null);
+		} else {
+			let title = Location.pathname;
+			title = title.toUpperCase();
+			title = title.replace(/^./, "");
+			settitleWeb(title);
+		}
+	}, [Location]);
 
 	// const { SubMenu } = Menu;
 	const onCollapse = () => {
@@ -42,7 +60,8 @@ function LayoutForm({ children }) {
 		setcurrentMenu(e.key);
 	};
 	return (
-		<div>
+		<>
+			{titleWeb ? <title>{titleWeb}</title> : null}
 			<Layout
 				style={{
 					minHeight: "100vh",
@@ -155,30 +174,54 @@ function LayoutForm({ children }) {
 						>
 							<Menu.Item
 								key="1"
-								icon={<MdLocalGroceryStore />}
+								icon={
+									<Link
+										to={{
+											pathname: `/`,
+										}}
+									>
+										<MdLocalGroceryStore style={{ color: "darkblue" }} />
+									</Link>
+								}
 								onClick={() => history.push("/")}
 							>
 								Cuenta
 							</Menu.Item>
 							<Menu.Item
 								key="2"
-								icon={<FaCashRegister />}
+								icon={
+									<Link
+										to={{
+											pathname: `/corte`,
+										}}
+									>
+										<FaCashRegister style={{ color: "darkblue" }} />
+									</Link>
+								}
 								onClick={() => history.push("/corte")}
 							>
 								Corte
 							</Menu.Item>
+							<Menu.Item
+								key="3"
+								icon={<FaWindowRestore style={{ color: "darkblue" }} />}
+								onClick={() => window.open(UrlFrontend)}
+							>
+								Nueva ventana
+							</Menu.Item>
 						</Menu>
 					</Sider>
 					<Layout>
-						{/* Contenido de ventanas */}
+						{/* CONTENIDO DE VENTAS */}
 						<Content style={{ margin: "0 16px" }}>{children}</Content>
+
 						<Footer style={{ textAlign: "center" }}>
 							Creado por MarcoASR ©2021
 						</Footer>
 					</Layout>
 				</Layout>
 			</Layout>
-		</div>
+		</>
 	);
 }
 
