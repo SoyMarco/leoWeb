@@ -6,8 +6,10 @@ import { SaveFilled, PrinterFilled } from "@ant-design/icons";
 import Imprimir from "../Imprimir/Imprimir";
 import { openNotification } from "../../../Utils/openNotification";
 import { keyBlock } from "../../../Utils";
-import { useQuery, gql, useMutation } from "@apollo/client";
-import { LOGIN } from "../../../graphql/user";
+import { useMutation } from "@apollo/client";
+import { REGISTER_VENTA } from "../../../graphql/venta";
+import useAuth from "../../../hooks/useAuth";
+
 import "./cobrar.css";
 
 const Cobrar = ({
@@ -17,16 +19,19 @@ const Cobrar = ({
 	listaCompras,
 	initialState,
 }) => {
+	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);
 	const [imprimir, setimprimir] = useState(false);
 	const [btnLoading, setbtnLoading] = useState(false);
+	const [folio, setfolio] = useState(0);
 	const [dinero, setdinero] = useState({
 		aCuenta: 0,
 		tarjeta: 0,
 		efectivo: 0,
 	});
-
+	const { auth } = useAuth();
+	console.log(auth);
 	useEffect(() => {
 		if (modalCobrar === true) {
 			form.setFieldsValue({ efectivo: totalTotal });
@@ -35,16 +40,10 @@ const Cobrar = ({
 		}
 	}, [modalCobrar]);
 
-	const imprimirVenta = () => {
-		if (cambio >= 0) {
-			setimprimir(true);
-		}
-	};
-
 	const pressKeyPrecio = (e) => {
 		// Enter
 		if (e.keyCode === 13) {
-			imprimirVenta();
+			savePrintNewV("F1");
 		}
 		// E
 		if (e.keyCode === 69) {
@@ -101,54 +100,42 @@ const Cobrar = ({
 
 	//Guardar y/o Imprimir VENTA CON GraphQL
 	const savePrintNewV = async (keyF) => {
-		/* 	await guardarVenta();
-			// if (keyF === "F1") {
-			// 	folio = await dataVenta.registerVenta.folio;
-			// 	await abrirImprimir();
-			// 	btnLoading = false;
-			// } else if (keyF === "F2") {
-			openNotification("success", "Venta guardada con exito");
-			initialState();
-			// }
-		}; */
-	};
-	const guardarVenta = async () => {
-		// let efectivo = parseFloat(dinero.efectivo);
-		// let tarjeta = parseFloat(dinero.tarjeta);
-		// let aCuenta = parseFloat(dinero.aCuenta);
-		// let total = parseFloat(totalTotal);
+		let efectivo = parseFloat(dinero.efectivo);
+		let tarjeta = parseFloat(dinero.tarjeta);
+		let aCuenta = parseFloat(dinero.aCuenta);
+		let total = parseFloat(totalTotal);
 		if (cambio >= 0) {
 			setbtnLoading(true);
-			// const { data, loading, error } = await $apollo.mutate({
-			// 	// Query Mutation
-			// 	mutation: gql`
-			// 		mutation registerVenta($input: VentaInput) {
-			// 			registerVenta(input: $input) {
-			// 				id
-			// 				folio
-			// 			}
-			// 		}
-			// 	`,
-			// 	// Parameters
-			// 	variables: {
-			// 		input: {
-			// 			productos: productos,
-			// 			vendedor: $store.state.usuario.name,
-			// 			folio: 1,
-			// 			total: total,
-			// 			efectivo: efectivo,
-			// 			tarjeta: tarjeta,
-			// 			aCuenta: aCuenta,
-			// 			pagoCon: 0,
-			// 			referencia: "",
-			// 			notas: "",
-			// 		},
-			// 	},
-			// });
-			// if (data) {
-			// 	console.log(data);
-			// 	dataVenta = await data;
-			// }
+			try {
+				const { data } = await mutateREGISTER_VENTA({
+					variables: {
+						input: {
+							productos: listaCompras,
+							vendedor: auth.name,
+							folio: 1,
+							total: total,
+							efectivo: efectivo,
+							tarjeta: tarjeta,
+							aCuenta: aCuenta,
+							pagoCon: 0,
+							referencia: "",
+							notas: "",
+						},
+					},
+				});
+				if (data) {
+					console.log(data);
+					if (keyF === "F1") {
+						setfolio(data.registerVenta.folio);
+						setimprimir(true);
+					} else if (keyF === "F2") {
+						openNotification("success", "Venta guardada con exito");
+						initialState();
+					}
+				}
+			} catch (error) {
+				openNotification("error", error);
+			}
 		}
 	};
 
@@ -163,6 +150,8 @@ const Cobrar = ({
 					dinero={dinero}
 					listaCompras={listaCompras}
 					setmodalCobrar={setmodalCobrar}
+					folio={folio}
+					auth={auth}
 				/>
 			) : null}
 			<Modal
@@ -186,7 +175,7 @@ const Cobrar = ({
 							}}
 							// loading={loading}
 							// disabled={cambio < 0}
-							onClick={() => imprimirVenta()}
+							onClick={() => savePrintNewV("F1")}
 							icon={<PrinterFilled />}
 							loading={btnLoading}
 						>
@@ -201,7 +190,7 @@ const Cobrar = ({
 							}}
 							// loading={loading}
 							// disabled={cambio < 0}
-							onClick={() => imprimirVenta()}
+							onClick={() => savePrintNewV("F2")}
 							icon={<SaveFilled />}
 							loading={btnLoading}
 						>

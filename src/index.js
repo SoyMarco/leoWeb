@@ -2,13 +2,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-// import client from "./config/apollo";
+import {
+	/* ApolloClient, InMemoryCache, */ ApolloProvider,
+} from "@apollo/client";
+import client from "./config/apollo";
 
-const client = new ApolloClient({
-	uri: "http://localhost:4000/",
-	cache: new InMemoryCache(),
-});
+// const client = new ApolloClient({
+// 	uri: "http://localhost:4000/",
+// 	cache: new InMemoryCache(),
+// });
 
 ReactDOM.render(
 	<ApolloProvider client={client}>

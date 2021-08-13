@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import moment from "moment";
 import "moment/locale/es-us";
 import { Modal } from "antd";
@@ -11,15 +11,15 @@ const Imprimir = ({
 	setimprimir,
 	dinero,
 	listaCompras,
-	setmodalCobrar,
+	folio,
+	auth,
 }) => {
 	const { aCuenta, tarjeta, efectivo } = dinero;
-	const [fecha, setfecha] = useState(0);
 	useEffect(() => {
-		setfecha(moment().format("lll"));
-
 		if (imprimir === true) {
-			crearPDF();
+			setTimeout(() => {
+				crearPDF();
+			}, 100);
 		}
 	}, [imprimir]);
 
@@ -47,15 +47,15 @@ const Imprimir = ({
 					<span style={{ "padding-left": "0px" }}>ROPA Y ACCESORIOS</span>
 					<br />
 					<span>
-						{fecha} <br />
+						{moment().format("lll")} <br />
 					</span>
 					{/* <!-- VENDEDOR --> */}
-					<span>{`Vendedor: Marco Antonio`}</span>
+					<span>{`Vendedor: ${auth.name.toUpperCase()}`}</span>
 					<br />
 
 					{/* <!-- TICKET --> */}
 					<span>
-						Ticket: 9999999
+						{`Ticket: ${folio}`}
 						<br />
 					</span>
 
@@ -68,7 +68,9 @@ const Imprimir = ({
 								<tr>
 									<td>{item.nombre}</td>
 									<td>
-										<h3 className="finalTicket">${item.precio}</h3>
+										<h3 className={item.cantidad > 1 ? null : "finalTicket"}>
+											${item.precio}
+										</h3>
 									</td>
 								</tr>
 								{item.cantidad > 1 ? (
