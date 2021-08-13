@@ -59,7 +59,7 @@ function Principal() {
 	}, [listaCompras]);
 
 	useEffect(() => {
-		setstateRecord({ idArray: selectedRowKeys[0] });
+		setstateRecord({ key: selectedRowKeys[0] });
 	}, [selectedRowKeys]);
 
 	const onSelectChange = (selectedRowKeys) => {
@@ -78,7 +78,8 @@ function Principal() {
 		onChange: onSelectChange,
 	};
 	const click = (record, rowIndex) => {
-		setselectedRowKeys([record.idArray]);
+		console.log(record);
+		setselectedRowKeys([record.key]);
 		setstateRecord(record);
 		selectInputPrecio();
 		// addArticulo(record, rowIndex);
@@ -90,6 +91,10 @@ function Principal() {
 		}
 		if (e.keyCode === 123) {
 			pressEnter();
+		}
+		// F6 abrir ventana
+		if (e.keyCode === 117) {
+			window.open("http://localhost:3000/");
 		}
 		if (e.keyCode === 107) {
 			if (stateRecord) {
@@ -130,18 +135,18 @@ function Principal() {
 	const selectLastRow = () => {
 		let ultimoArray = listaCompras.length;
 		if (ultimoArray) {
-			setselectedRowKeys([listaCompras[ultimoArray - 1].idArray]);
+			setselectedRowKeys([listaCompras[ultimoArray - 1].key]);
 		}
 	};
 	const eliminarProducto = (item) => {
 		let i = listaCompras.indexOf(item);
 		if (i !== -1) {
-			let idArray = listaCompras.splice(i, 1);
-			setlistaCompras(listaCompras.filter((item) => item.idArray !== idArray));
+			let key = listaCompras.splice(i, 1);
+			setlistaCompras(listaCompras.filter((item) => item.key !== key));
 			selectLastRow();
-		} else if (item.idArray > 0) {
-			let idArray = item.idArray;
-			setlistaCompras(listaCompras.filter((item) => item.idArray !== idArray));
+		} else if (item.key > 0) {
+			let key = item.key;
+			setlistaCompras(listaCompras.filter((item) => item.key !== key));
 			selectLastRow();
 		}
 		// this.focusPrecio();
@@ -151,7 +156,7 @@ function Principal() {
 			setlistaCompras([
 				...listaCompras,
 				{
-					idArray: idArticulo + 1,
+					key: idArticulo + 1,
 					nombre: "Articulo",
 					precio: Math.round(precio.precio * 100) / 100,
 					cantidad: 1,
@@ -177,9 +182,7 @@ function Principal() {
 	const addArticulo = (record) => {
 		if (listaCompras.length > 0) {
 			const currentShopList = [...listaCompras];
-			const shopItem = currentShopList.find(
-				(item) => item.idArray === record.idArray
-			);
+			const shopItem = currentShopList.find((item) => item.key === record.key);
 			shopItem.cantidad = shopItem.cantidad + 1;
 			shopItem.totalArticulo = shopItem.cantidad * shopItem.precio;
 			const newShopList = [...currentShopList];
@@ -189,9 +192,7 @@ function Principal() {
 	const removeArticulo = (record) => {
 		if (listaCompras.length > 0) {
 			const currentShopList = [...listaCompras];
-			const shopItem = currentShopList.find(
-				(item) => item.idArray === record.idArray
-			);
+			const shopItem = currentShopList.find((item) => item.key === record.key);
 
 			if (shopItem.cantidad > 1) {
 				shopItem.cantidad = shopItem.cantidad - 1;
@@ -206,9 +207,9 @@ function Principal() {
 	const columns = [
 		{
 			title: "ID",
-			dataIndex: "idArray",
-			key: "idArray",
-			sorter: (a, b) => b.idArray - a.idArray,
+			dataIndex: "key",
+			key: "key",
+			sorter: (a, b) => b.key - a.key,
 			defaultSortOrder: "ascend",
 			width: "60px",
 		},
@@ -317,10 +318,10 @@ function Principal() {
 		},
 		{
 			title: "Borrar",
-			dataIndex: "idArray",
-			key: "idArray",
+			dataIndex: "key",
+			key: "key",
 			width: "60px",
-			render: (idArray, record) => (
+			render: (key, record) => (
 				<div style={{ textAlignLast: "center" }}>
 					<Button
 						shape="circle"
@@ -406,7 +407,7 @@ function Principal() {
 						size="small"
 						onRow={(record, rowIndex) => {
 							return {
-								onClick: (e) => {
+								onClick: () => {
 									click(record, rowIndex);
 								},
 							};
@@ -437,7 +438,7 @@ function Principal() {
 }
 
 export default Principal;
-// idArray: idArticulo + 1,
+// key: idArticulo + 1,
 // 					nombre: "Articulo",
 // 					precio: Math.round(precio.precio * 100) / 100,
 // 					cantidad: 1,

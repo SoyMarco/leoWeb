@@ -9,29 +9,25 @@ import "./layout.css";
 import "material-design-icons-iconfont";
 import LogoLeo from "../../assets/png/logo.png";
 import Corte from "../../Corte/Container/Corte";
-import { getToken, decodeToken, removeToken } from "../../Utils/token";
 import { openNotification } from "../../Utils/openNotification";
-
+import { useHistory, useLocation } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
-function LayoutForm() {
-	const [collapsed, setcollapsed] = useState(false);
-	const [modalCorte, setmodalCorte] = useState(false);
+function LayoutForm({ children }) {
+	const [collapsed, setcollapsed] = useState(true);
 	const { Header, Content, Footer, Sider } = Layout;
 	const { logout } = useAuth();
 	const [swtichstate, setswtichstate] = useState(true);
-	// console.log("@@@@@@@@auth", auth);
+	const [currentMenu, setcurrentMenu] = useState(1);
+	const history = useHistory();
+	const Location = useLocation();
+
 	// const { SubMenu } = Menu;
 	const onCollapse = () => {
 		setcollapsed(!collapsed);
 		document.querySelector("#inputPrecio").select();
 	};
-	const handleModalCorte = () => {
-		if (modalCorte === false) {
-			document.querySelector("#inputPrecio").select();
-		}
-		setmodalCorte(!modalCorte);
-	};
+
 	const logoutApp = () => {
 		setswtichstate(!swtichstate);
 		setTimeout(() => {
@@ -40,6 +36,10 @@ function LayoutForm() {
 		}, 200);
 
 		// setAuth(null);
+	};
+	const handleClick = (e) => {
+		console.log(Location);
+		setcurrentMenu(e.key);
 	};
 	return (
 		<div>
@@ -50,6 +50,7 @@ function LayoutForm() {
 				}}
 				className="site-layout"
 			>
+				{/* HORIZONTAL */}
 				<Header
 					style={{
 						background: "linear-gradient(#0000A6,#000066,#000058)",
@@ -61,7 +62,6 @@ function LayoutForm() {
 				>
 					<Menu
 						mode="horizontal"
-						defaultSelectedKeys={["2"]}
 						style={{
 							background: "transparent",
 							margin: "-10px 0 0 0",
@@ -71,16 +71,18 @@ function LayoutForm() {
 						}}
 					>
 						<Menu.Item
-							key="1"
+							key="header1"
 							style={{
 								background: "transparent",
 								margin: 0,
 								padding: " 0 0 0 20px",
 							}}
+							onClick={() => history.push("/")}
 							icon={<Avatar src={LogoLeo} size="large" />}
 						></Menu.Item>
 						<Menu.Item
-							key="1"
+							key="header2"
+							onClick={() => history.push("/")}
 							style={{
 								padding: 0,
 							}}
@@ -97,7 +99,7 @@ function LayoutForm() {
 							</h1>
 						</Menu.Item>
 						<Menu.Item
-							key="2"
+							key="header3"
 							style={{
 								display: "flex",
 								flexDirection: "column",
@@ -114,10 +116,10 @@ function LayoutForm() {
 								}}
 							/>
 						</Menu.Item>
-						<Menu.Item key="2" style={{ padding: "3px 0 0 15px" }}>
+						<Menu.Item key="header4" style={{ padding: "3px 0 0 15px" }}>
 							<h1 style={{ color: "white", marginRight: 60 }}>Marco</h1>
 						</Menu.Item>
-						<Menu.Item key="3">
+						<Menu.Item key="5">
 							{/* <h1></h1> */}
 							<Popconfirm title="¿Cerrar sesión?" onConfirm={() => logoutApp()}>
 								<Switch
@@ -127,7 +129,7 @@ function LayoutForm() {
 											? {
 													background: "blue",
 													boxShadow:
-														"5px 5px 19px #b3b3b3, -5px -5px 19px #ffffff",
+														"5px 5px 29px #b3b3b3, -5px -5px 29px #ffffff",
 											  }
 											: {
 													background: "red", // boxShadow: "5px 5px 19px #b3b3b3, -5px -5px 19px #ffffff",
@@ -140,37 +142,42 @@ function LayoutForm() {
 						</Menu.Item>
 					</Menu>
 				</Header>
+
+				{/* VERTICAL */}
 				<Layout>
 					<Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
 						<div className="logo" />
-						<Menu defaultSelectedKeys={["2"]} mode="inline">
-							<Menu.Item key="2" icon={<MdLocalGroceryStore />}>
-								Vender
-							</Menu.Item>
-
+						<Menu
+							mode="inline"
+							onClick={handleClick}
+							defaultOpenKeys={["sub1"]}
+							selectedKeys={[currentMenu]}
+						>
 							<Menu.Item
-								key="3"
+								key="1"
+								icon={<MdLocalGroceryStore />}
+								onClick={() => history.push("/")}
+							>
+								Cuenta
+							</Menu.Item>
+							<Menu.Item
+								key="2"
 								icon={<FaCashRegister />}
-								onClick={handleModalCorte}
+								onClick={() => history.push("/corte")}
 							>
 								Corte
 							</Menu.Item>
 						</Menu>
 					</Sider>
 					<Layout>
-						<Content style={{ margin: "0 16px" }}>
-							<Principal />
-						</Content>
+						{/* Contenido de ventanas */}
+						<Content style={{ margin: "0 16px" }}>{children}</Content>
 						<Footer style={{ textAlign: "center" }}>
 							Creado por MarcoASR ©2021
 						</Footer>
 					</Layout>
 				</Layout>
 			</Layout>
-			<Corte
-				modalCorte={modalCorte}
-				handleModalCorte={handleModalCorte}
-			></Corte>
 		</div>
 	);
 }

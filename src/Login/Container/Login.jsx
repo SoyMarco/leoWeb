@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
 	Card,
 	Form,
@@ -25,7 +25,7 @@ const Login = () => {
 	const [name, setname] = useState("");
 	const [password, setpassword] = useState("");
 	const { setUser } = useAuth();
-	const { Header, Content, Footer } = Layout;
+	const { Header, Footer } = Layout;
 	const [form] = Form.useForm();
 
 	const sendLogin = async () => {

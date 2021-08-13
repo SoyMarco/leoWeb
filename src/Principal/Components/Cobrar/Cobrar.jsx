@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import { Modal, Input, Form, Button, Row } from "antd";
+import { Modal, Input, Form, Button, Row, notification } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
+import { RiWifiOffLine } from "react-icons/ri";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
 import Imprimir from "../Imprimir/Imprimir";
 import { openNotification } from "../../../Utils/openNotification";
@@ -31,7 +32,6 @@ const Cobrar = ({
 		efectivo: 0,
 	});
 	const { auth } = useAuth();
-	console.log(auth);
 	useEffect(() => {
 		if (modalCobrar === true) {
 			form.setFieldsValue({ efectivo: totalTotal });
@@ -106,11 +106,24 @@ const Cobrar = ({
 		let total = parseFloat(totalTotal);
 		if (cambio >= 0) {
 			setbtnLoading(true);
+			let listaComprasNew = listaCompras.map((item) => {
+				return {
+					apartado: item.apartado,
+					cantidad: item.cantidad,
+					idArray: item.key,
+					nombre: item.nombre,
+					precio: item.precio,
+					refApartado: item.refApartado,
+					totalArticulo: item.totalArticulo,
+				};
+			});
+
+			console.log(listaComprasNew);
 			try {
 				const { data } = await mutateREGISTER_VENTA({
 					variables: {
 						input: {
-							productos: listaCompras,
+							productos: listaComprasNew,
 							vendedor: auth.name,
 							folio: 1,
 							total: total,
@@ -124,7 +137,6 @@ const Cobrar = ({
 					},
 				});
 				if (data) {
-					console.log(data);
 					if (keyF === "F1") {
 						setfolio(data.registerVenta.folio);
 						setimprimir(true);
@@ -134,7 +146,12 @@ const Cobrar = ({
 					}
 				}
 			} catch (error) {
-				openNotification("error", error);
+				setbtnLoading(false);
+				notification.open({
+					message: "Error de conexión",
+					description: "Intentalo más tarde",
+					icon: <RiWifiOffLine style={{ color: "red" }} />,
+				});
 			}
 		}
 	};
@@ -158,7 +175,7 @@ const Cobrar = ({
 				style={{ top: 25 }}
 				title={
 					<>
-						<FaMoneyBillWave style={{ "margin-right": "10px" }} />
+						<FaMoneyBillWave style={{ marginRight: "10px" }} />
 						Cobrar
 					</>
 				}
@@ -173,6 +190,7 @@ const Cobrar = ({
 								fontWeight: "bold",
 								width: 230,
 							}}
+							shape="round"
 							// loading={loading}
 							// disabled={cambio < 0}
 							onClick={() => savePrintNewV("F1")}
@@ -188,6 +206,7 @@ const Cobrar = ({
 								fontWeight: "bold",
 								width: 230,
 							}}
+							shape="round"
 							// loading={loading}
 							// disabled={cambio < 0}
 							onClick={() => savePrintNewV("F2")}
@@ -199,7 +218,7 @@ const Cobrar = ({
 					</Row>,
 				]}
 			>
-				<div style={{ textAlignLast: "center" }}>
+				<div key="div1" style={{ textAlignLast: "center" }}>
 					<h1
 						style={{
 							fontWeight: "bold",
@@ -211,11 +230,12 @@ const Cobrar = ({
 						Total: ${totalTotal}
 					</h1>
 				</div>
-				<div style={{ textAlignLast: "right" }}>
+				<div key="div2" style={{ textAlignLast: "right" }}>
 					<Form form={form} onValuesChange={OnValuesChange}>
 						<Form.Item
 							label="Efectivo"
 							name="efectivo"
+							key="1"
 							rules={[
 								{
 									required: false,
@@ -228,7 +248,7 @@ const Cobrar = ({
 								id="cobrarEfectivo"
 								className="inputCobrar"
 								type="number"
-								prefix={<FaMoneyBillWave />}
+								prefix={<FaMoneyBillWave style={{ color: "gray" }} />}
 								onKeyUp={pressKeyPrecio}
 								onKeyDown={keyBlock}
 							></Input>
@@ -236,6 +256,7 @@ const Cobrar = ({
 						<Form.Item
 							label="Tarjeta"
 							name="tarjeta"
+							key="2"
 							rules={[
 								{
 									required: false,
@@ -248,7 +269,7 @@ const Cobrar = ({
 								id="cobrarTarjeta"
 								className="inputCobrar"
 								type="number"
-								prefix={<FaCreditCard />}
+								prefix={<FaCreditCard style={{ color: "gray" }} />}
 								onKeyUp={pressKeyPrecio}
 								onKeyDown={keyBlock}
 							></Input>
@@ -256,6 +277,7 @@ const Cobrar = ({
 						<Form.Item
 							label="A cuenta"
 							name="aCuenta"
+							key="3"
 							rules={[
 								{
 									required: false,
@@ -268,14 +290,14 @@ const Cobrar = ({
 								id="cobraraCuenta"
 								className="inputCobrar"
 								type="number"
-								prefix={<FaStoreAlt />}
+								prefix={<FaStoreAlt style={{ color: "gray" }} />}
 								onKeyUp={pressKeyPrecio}
 								onKeyDown={keyBlock}
 							></Input>
 						</Form.Item>
 					</Form>
 				</div>
-				<div style={{ textAlignLast: "center" }}>
+				<div key="div3" style={{ textAlignLast: "center" }}>
 					<h1
 						style={
 							cambio >= 0

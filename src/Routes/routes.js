@@ -1,21 +1,23 @@
 // Layouts
-
 import LayoutForm from "../Layout/Container/Layout";
 
 // Pages
+import Principal from "../Principal/container/Principal";
+import Corte from "../Corte/Container/Corte";
 
 const routes = [
 	{
 		path: "/",
-		component: LayoutForm,
+		layout: LayoutForm,
+		component: Principal,
 		exact: true,
 	},
-	// {
-	// 	path: "/paciente",
-	// 	layout: Basic,
-	// 	component: TablaPacientes,
-	// 	exact: true,
-	// },
+	{
+		path: "/corte",
+		layout: LayoutForm,
+		component: Corte,
+		exact: true,
+	},
 	// {
 	// 	path: "/citas",
 	// 	layout: Basic,

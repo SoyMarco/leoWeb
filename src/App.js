@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useMemo, useEffect } from "react";
 import "./App.css";
 import "material-design-icons-iconfont";
@@ -19,7 +20,6 @@ function App() {
 			try {
 				let dataToken = decodeToken(token);
 				let timeNow = Math.round(Date.now() / 1000);
-				console.log("datatimeToken", dataToken.exp, timeNow);
 				if (dataToken.exp > timeNow) {
 					setAuth(dataToken);
 				} else {
