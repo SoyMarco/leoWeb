@@ -191,7 +191,7 @@ export default function Ventas({
 				<Imprimir imprimir={imprimir} stateRecord={stateRecord} auth={auth} />
 			) : null}
 			<Col xs={24} sm={24} md={14}>
-				<Divider orientation="left">Apartados</Divider>
+				<Divider orientation="left">Ventas</Divider>
 				<Table
 					columns={colVentas}
 					dataSource={getApartados}

@@ -5,6 +5,7 @@ import LayoutForm from "../Layout/Container/Layout";
 import Principal from "../Principal/container/Principal";
 import Corte from "../Corte/Container/Corte";
 import Apartados from "../Apartados/Container/Apartados";
+import Apartado from "../Apartado/Container/Apartado";
 
 const routes = [
 	{
@@ -25,16 +26,16 @@ const routes = [
 		component: Apartados,
 		exact: true,
 	},
+	{
+		path: "/Apartado/:folio",
+		layout: LayoutForm,
+		component: Apartado,
+		exact: true,
+	},
 	// {
 	// 	path: "/:username",
 	// 	layout: Basic,
 	// 	component: User,
-	// 	exact: true,
-	// },
-	// {
-	// 	path: "/p/:username",
-	// 	layout: Basic,
-	// 	component: Paciente,
 	// 	exact: true,
 	// },
 
