@@ -4,6 +4,7 @@ import LayoutForm from "../Layout/Container/Layout";
 // Pages
 import Principal from "../Principal/container/Principal";
 import Corte from "../Corte/Container/Corte";
+import Apartados from "../Apartados/Container/Apartados";
 
 const routes = [
 	{
@@ -18,12 +19,12 @@ const routes = [
 		component: Corte,
 		exact: true,
 	},
-	// {
-	// 	path: "/citas",
-	// 	layout: Basic,
-	// 	component: AddEditCita,
-	// 	exact: true,
-	// },
+	{
+		path: "/apartados",
+		layout: LayoutForm,
+		component: Apartados,
+		exact: true,
+	},
 	// {
 	// 	path: "/:username",
 	// 	layout: Basic,

@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { TablaProductos, TablaTotales, TablaVentas } from "../Components";
-import { SmileOutlined } from "@ant-design/icons";
-import { RiWifiOffLine } from "react-icons/ri";
-import "./corte.css";
+import { TablaProductos, TablaApartados } from "../Components";
 import { Row, Divider, notification } from "antd";
 import { useQuery, gql, useMutation } from "@apollo/client";
-import { GET_VENTAS_DIA } from "../../graphql/venta";
-import "./corte.css";
+import { GET_APARTADOS } from "../../graphql/apartado";
+import { RiWifiOffLine } from "react-icons/ri";
 
-const Corte = () => {
-	let { data, loading, error, refetch } = useQuery(GET_VENTAS_DIA);
-	const [getVentasDia, setgetVentasDia] = useState([]);
+export default function Apartados() {
+	let { data, loading, error, refetch } = useQuery(GET_APARTADOS);
 	const [stateRecord, setstateRecord] = useState(null);
+	const [getApartados, setgetApartados] = useState([]);
 	const [loader, setloader] = useState(false);
+
 	useEffect(() => {
 		refetch();
 	}, []);
@@ -26,19 +24,19 @@ const Corte = () => {
 	}
 	useEffect(() => {
 		if (data) {
-			let { getVentasDia } = data;
-			let listaVentas = getVentasDia.map((item) => {
+			console.log(data);
+			let { getApartados } = data;
+			let listaApartados = getApartados.map((item) => {
 				return { ...item, key: item.folio };
 			});
-			setgetVentasDia(listaVentas);
+			setgetApartados(listaApartados);
 		}
 	}, [data]);
-
 	return (
 		<>
 			<Row>
-				<TablaVentas
-					getVentasDia={getVentasDia}
+				<TablaApartados
+					getApartados={getApartados}
 					loading={loading}
 					loader={loader}
 					setloader={setloader}
@@ -48,14 +46,6 @@ const Corte = () => {
 				/>
 				<TablaProductos stateRecord={stateRecord} loading={loading} />
 			</Row>
-
-			<Divider orientation="left">Total del día</Divider>
-
-			<Row>
-				<TablaTotales getVentasDia={getVentasDia} loading={loading} />
-			</Row>
 		</>
 	);
-};
-
-export default Corte;
+}

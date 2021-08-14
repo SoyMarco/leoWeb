@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Layout, Menu, Switch, Popconfirm } from "antd";
 import { Avatar } from "antd";
 import "antd/dist/antd.css";
-import Principal from "../../Principal/container/Principal";
 import { MdLocalGroceryStore } from "react-icons/md";
 import {
 	FaCashRegister,
@@ -12,11 +11,11 @@ import {
 import "./layout.css";
 import "material-design-icons-iconfont";
 import LogoLeo from "../../assets/png/logo.png";
-import Corte from "../../Corte/Container/Corte";
 import { openNotification } from "../../Utils/openNotification";
 import { useHistory, useLocation, Link } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import { UrlFrontend } from "../../config/apollo";
+import { GiLargeDress } from "react-icons/gi";
 
 function LayoutForm({ children }) {
 	const [collapsed, setcollapsed] = useState(true);
@@ -43,7 +42,10 @@ function LayoutForm({ children }) {
 	// const { SubMenu } = Menu;
 	const onCollapse = () => {
 		setcollapsed(!collapsed);
-		document.querySelector("#inputPrecio").select();
+		let title = Location.pathname;
+		if (title === "/") {
+			document.querySelector("#inputPrecio").select();
+		}
 	};
 
 	const logoutApp = () => {
@@ -56,7 +58,7 @@ function LayoutForm({ children }) {
 		// setAuth(null);
 	};
 	const handleClick = (e) => {
-		console.log(Location);
+		console.log(e);
 		setcurrentMenu(e.key);
 	};
 	return (
@@ -204,6 +206,21 @@ function LayoutForm({ children }) {
 							</Menu.Item>
 							<Menu.Item
 								key="3"
+								icon={
+									<Link
+										to={{
+											pathname: `/apartados`,
+										}}
+									>
+										<GiLargeDress style={{ color: "darkblue" }} />
+									</Link>
+								}
+								onClick={() => history.push("/apartados")}
+							>
+								Apartados
+							</Menu.Item>
+							<Menu.Item
+								key="4"
 								icon={<FaWindowRestore style={{ color: "darkblue" }} />}
 								onClick={() => window.open(UrlFrontend)}
 							>

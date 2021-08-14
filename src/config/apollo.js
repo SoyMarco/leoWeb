@@ -9,7 +9,7 @@ export const UrlBackend = {
 };
 export const UrlFrontend = "http://localhost:3000/";
 
-const httpLik = createUploadLink(UrlBackend.uri);
+const httpLik = createUploadLink(UrlBackend);
 
 /* HEROKU */
 /*  const httpLik = createUploadLink({

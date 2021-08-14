@@ -1,20 +1,25 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import "moment/locale/es-us";
 import { Modal } from "antd";
 import "./imprimir.css";
-const Imprimir = ({
-	imprimir,
-	cambio,
-	totalTotal,
-	setimprimir,
-	dinero,
-	listaCompras,
-	folio,
-	auth,
-}) => {
-	const { aCuenta, tarjeta, efectivo } = dinero;
+const Imprimir = ({ imprimir, stateRecord, auth }) => {
+	const {
+		createAt,
+		aCuenta,
+		tarjeta,
+		efectivo,
+		folio,
+		productos,
+		total: totalTotal,
+	} = stateRecord;
+	const [cambio, setcambio] = useState(0);
+	useEffect(() => {
+		var sumaTodo = efectivo + tarjeta + aCuenta;
+		var resultado = sumaTodo - totalTotal;
+		setcambio(resultado);
+	}, [totalTotal]);
 	useEffect(() => {
 		if (imprimir === true) {
 			setTimeout(() => {
@@ -22,7 +27,10 @@ const Imprimir = ({
 			}, 100);
 		}
 	}, [imprimir]);
-
+	const pasarAFecha = (item) => {
+		let fecha = moment.unix(item / 1000).format("lll");
+		return fecha;
+	};
 	const crearPDF = () => {
 		let contenido = document.getElementById("tickets").innerHTML;
 		let contenidoOriginal = document.body.innerHTML;
@@ -47,7 +55,7 @@ const Imprimir = ({
 					<span style={{ "padding-left": "0px" }}>ROPA Y ACCESORIOS</span>
 					<br />
 					<span>
-						{moment().format("lll")} <br />
+						{pasarAFecha(createAt)} <br />
 					</span>
 					{/* <!-- VENDEDOR --> */}
 					<span>{`Vendedor: ${auth.name.toUpperCase()}`}</span>
@@ -62,7 +70,7 @@ const Imprimir = ({
 					{/* <!-- TABLA DE PRODUCTOS --> */}
 
 					<h2 className="sutituloTicket">Productos</h2>
-					{listaCompras.map((item) => {
+					{productos.map((item) => {
 						return (
 							<table key="item.id" className="productos">
 								<tr>
@@ -115,7 +123,7 @@ const Imprimir = ({
 					{/* <!-- CAMBIO --> */}
 					<row className="cambio">
 						<h3>Cambio: </h3>
-						<h2>${cambio}</h2>
+						<h1>${cambio}</h1>
 					</row>
 				</div>
 			</Modal>

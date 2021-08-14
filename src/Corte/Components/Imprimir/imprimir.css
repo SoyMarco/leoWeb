@@ -1,0 +1,51 @@
+.finalTicket {
+	display: flex;
+	align-items: center;
+	place-content: flex-end;
+	padding: 0px;
+	max-width: 190px;
+	font-family: "Roboto", sans-serif;
+}
+
+.cambio {
+	display: flex;
+	align-items: center;
+	place-content: flex-end;
+	padding-bottom: 15px;
+	max-width: 190px;
+	font-family: "Roboto", sans-serif;
+	font-weight: bold;
+}
+.sutituloTicket {
+	text-align-last: center;
+	padding: 10px;
+	max-width: 190px;
+	font-family: "Roboto", sans-serif;
+}
+.productos {
+	padding-bottom: 0px;
+	text-indent: initial;
+	border-bottom: 0.5px solid black;
+	border-top: 0.25px solid black;
+	width: 190px;
+	font-family: "Roboto", sans-serif;
+}
+.productos td {
+	padding: 0.2em 0.8em;
+	text-align: left;
+	padding-bottom: 0px;
+	padding-top: 0px;
+	font-family: "Roboto", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin-top: 0;
+	margin-bottom: 0;
+	color: rgba(0, 0, 0, 0.85);
+	font-weight: 500;
+}

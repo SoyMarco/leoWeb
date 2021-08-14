@@ -1,17 +1,18 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { Modal, Input, Form, Button, Row, notification } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
-import { RiWifiOffLine } from "react-icons/ri";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
 import Imprimir from "../Imprimir/Imprimir";
-import { openNotification } from "../../../Utils/openNotification";
+import {
+	openNotification,
+	errorConection,
+} from "../../../Utils/openNotification";
 import { keyBlock } from "../../../Utils";
 import { useMutation } from "@apollo/client";
 import { REGISTER_VENTA } from "../../../graphql/venta";
 import useAuth from "../../../hooks/useAuth";
 
-import "./cobrar.css";
+// import "./cobrar.css";
 
 const Cobrar = ({
 	modalCobrar,
@@ -147,11 +148,7 @@ const Cobrar = ({
 				}
 			} catch (error) {
 				setbtnLoading(false);
-				notification.open({
-					message: "Error de conexión",
-					description: "Intentalo más tarde",
-					icon: <RiWifiOffLine style={{ color: "red" }} />,
-				});
+				errorConection();
 			}
 		}
 	};
