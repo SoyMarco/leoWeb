@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { TablaProductos, TablaApartados } from "../Components";
 import { Row, Divider, notification } from "antd";
 import { useQuery, gql, useMutation } from "@apollo/client";
-import { GET_APARTADOS } from "../../graphql/apartado";
+import { GET_APARTADOS } from "graphql/apartado";
 import { RiWifiOffLine } from "react-icons/ri";
 
-export default function Apartados() {
+export default function Apartado() {
 	let { data, loading, error, refetch } = useQuery(GET_APARTADOS);
 	const [stateRecord, setstateRecord] = useState(null);
 	const [getApartados, setgetApartados] = useState([]);

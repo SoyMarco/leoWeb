@@ -10,14 +10,14 @@ import {
 	Menu,
 	Avatar,
 } from "antd";
-import LogoLeo from "../../assets/png/logo.png";
+import LogoLeo from "assets/png/logo.png";
 import { /* useQuery, gql, */ useMutation } from "@apollo/client";
-import { LOGIN } from "../../graphql/user";
+import { LOGIN } from "graphql/user";
 import { FaUserAlt } from "react-icons/fa";
 import { RiShieldUserFill, RiLockPasswordFill } from "react-icons/ri";
-import { openNotification } from "../../Utils/openNotification";
-import { setToken, decodeToken } from "../../Utils/token";
-import useAuth from "../../hooks/useAuth";
+import { openNotification } from "Utils/openNotification";
+import { setToken, decodeToken } from "Utils/token";
+import useAuth from "hooks/useAuth";
 import "./login.css";
 
 const Login = () => {

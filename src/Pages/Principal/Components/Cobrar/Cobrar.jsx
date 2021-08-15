@@ -3,14 +3,11 @@ import { Modal, Input, Form, Button, Row, notification } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
 import Imprimir from "../Imprimir/Imprimir";
-import {
-	openNotification,
-	errorConection,
-} from "../../../Utils/openNotification";
-import { keyBlock } from "../../../Utils";
+import { openNotification, errorConection } from "Utils/openNotification";
+import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
-import { REGISTER_VENTA } from "../../../graphql/venta";
-import useAuth from "../../../hooks/useAuth";
+import { REGISTER_VENTA } from "graphql/venta";
+import useAuth from "hooks/useAuth";
 
 // import "./cobrar.css";
 

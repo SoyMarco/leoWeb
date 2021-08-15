@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { openNotification, errorConection } from "../../Utils/openNotification";
-import { CANCELAR_VENTA } from "../../graphql/venta";
+import { openNotification, errorConection } from "Utils/openNotification";
+import { CANCELAR_VENTA } from "graphql/venta";
 import { MdLocalGroceryStore } from "react-icons/md";
 import { GoFileSymlinkDirectory } from "react-icons/go";
 import { AiFillPrinter } from "react-icons/ai";
 import { useMutation } from "@apollo/client";
 import Imprimir from "./Imprimir/Imprimir";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "hooks/useAuth";
 import moment from "moment";
 import {
 	Table,
@@ -191,7 +191,7 @@ export default function Ventas({
 				<Imprimir imprimir={imprimir} stateRecord={stateRecord} auth={auth} />
 			) : null}
 			<Col xs={24} sm={24} md={14}>
-				<Divider orientation="left">Apartados</Divider>
+				<Divider orientation="left">Ventas</Divider>
 				<Table
 					columns={colVentas}
 					dataSource={getApartados}

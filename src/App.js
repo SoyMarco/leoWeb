@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useMemo, useEffect } from "react";
-import "./App.css";
+import "App.css";
 import "material-design-icons-iconfont";
-import AuthContext from "./context/AuthContext";
-import NavToken from "./Routes/NavToken";
-import { getToken, decodeToken, removeToken } from "./Utils/token";
-import Login from "./Login/Container/Login";
-import { openNotification } from "./Utils/openNotification";
+import AuthContext from "context/AuthContext";
+import NavToken from "Routes/NavToken";
+import { getToken, decodeToken, removeToken } from "Utils/token";
+import Login from "Pages/Login/Container/Login";
+import { openNotification } from "Utils/openNotification";
 function App() {
 	const [auth, setAuth] = useState(undefined);
 

@@ -5,10 +5,10 @@ import { AiFillDollarCircle } from "react-icons/ai";
 import { MdDelete, MdLocalGroceryStore } from "react-icons/md";
 import { SmileOutlined, PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import Cobrar from "../Components/Cobrar/Cobrar";
-import { keyBlock } from "../../Utils";
+import { keyBlock } from "Utils";
 import { useLocation } from "react-router-dom";
 import "./principal.css";
-import { UrlFrontend } from "../../config/apollo";
+import { UrlFrontend } from "config/apollo";
 
 function Principal() {
 	const Location = useLocation();

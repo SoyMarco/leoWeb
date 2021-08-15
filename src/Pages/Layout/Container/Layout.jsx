@@ -10,11 +10,11 @@ import {
 } from "react-icons/fa";
 import "./layout.css";
 import "material-design-icons-iconfont";
-import LogoLeo from "../../assets/png/logo.png";
-import { openNotification } from "../../Utils/openNotification";
+import LogoLeo from "assets/png/logo.png";
+import { openNotification } from "Utils/openNotification";
 import { useHistory, useLocation, Link } from "react-router-dom";
-import useAuth from "../../hooks/useAuth";
-import { UrlFrontend } from "../../config/apollo";
+import useAuth from "hooks/useAuth";
+import { UrlFrontend } from "config/apollo";
 import { GiLargeDress } from "react-icons/gi";
 
 function LayoutForm({ children }) {

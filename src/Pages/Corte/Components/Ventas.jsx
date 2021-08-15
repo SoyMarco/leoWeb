@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { openNotification, errorConection } from "../../Utils/openNotification";
-import { CANCELAR_VENTA } from "../../graphql/venta";
+import {
+	openNotification,
+	errorConection,
+} from "../../../Utils/openNotification";
+import { CANCELAR_VENTA } from "../../../graphql/venta";
 import { MdLocalGroceryStore } from "react-icons/md";
 import { AiFillPrinter } from "react-icons/ai";
 import { useMutation } from "@apollo/client";
 import Imprimir from "./Imprimir/Imprimir";
-import useAuth from "../../hooks/useAuth";
+import useAuth from "../../../hooks/useAuth";
 import moment from "moment";
 import {
 	Table,

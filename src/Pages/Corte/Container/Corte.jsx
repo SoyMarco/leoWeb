@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { TablaProductos, TablaApartados } from "../Components";
+import { TablaProductos, TablaTotales, TablaVentas } from "../Components";
+import { SmileOutlined } from "@ant-design/icons";
+import { RiWifiOffLine } from "react-icons/ri";
+import "./corte.css";
 import { Row, Divider, notification } from "antd";
 import { useQuery, gql, useMutation } from "@apollo/client";
-import { GET_APARTADOS } from "../../graphql/apartado";
-import { RiWifiOffLine } from "react-icons/ri";
+import { GET_VENTAS_DIA } from "../../../graphql/venta";
+import "./corte.css";
 
-export default function Apartado() {
-	let { data, loading, error, refetch } = useQuery(GET_APARTADOS);
+const Corte = () => {
+	let { data, loading, error, refetch } = useQuery(GET_VENTAS_DIA);
+	const [getVentasDia, setgetVentasDia] = useState([]);
 	const [stateRecord, setstateRecord] = useState(null);
-	const [getApartados, setgetApartados] = useState([]);
 	const [loader, setloader] = useState(false);
-
 	useEffect(() => {
 		refetch();
 	}, []);
@@ -24,19 +26,19 @@ export default function Apartado() {
 	}
 	useEffect(() => {
 		if (data) {
-			console.log(data);
-			let { getApartados } = data;
-			let listaApartados = getApartados.map((item) => {
+			let { getVentasDia } = data;
+			let listaVentas = getVentasDia.map((item) => {
 				return { ...item, key: item.folio };
 			});
-			setgetApartados(listaApartados);
+			setgetVentasDia(listaVentas);
 		}
 	}, [data]);
+
 	return (
 		<>
 			<Row>
-				<TablaApartados
-					getApartados={getApartados}
+				<TablaVentas
+					getVentasDia={getVentasDia}
 					loading={loading}
 					loader={loader}
 					setloader={setloader}
@@ -46,6 +48,14 @@ export default function Apartado() {
 				/>
 				<TablaProductos stateRecord={stateRecord} loading={loading} />
 			</Row>
+
+			<Divider orientation="left">Total del día</Divider>
+
+			<Row>
+				<TablaTotales getVentasDia={getVentasDia} loading={loading} />
+			</Row>
 		</>
 	);
-}
+};
+
+export default Corte;

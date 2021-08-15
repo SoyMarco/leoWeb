@@ -1,11 +1,12 @@
 // Layouts
-import LayoutForm from "../Layout/Container/Layout";
+import LayoutForm from "Pages/Layout/Container/Layout";
 
 // Pages
-import Principal from "../Principal/container/Principal";
-import Corte from "../Corte/Container/Corte";
-import Apartados from "../Apartados/Container/Apartados";
-import Apartado from "../Apartado/Container/Apartado";
+import Principal from "Pages/Principal/container/Principal";
+import Corte from "Pages/Corte/Container/Corte";
+import Apartados from "Pages/Apartados/Container/Apartados";
+import Apartado from "Pages/Apartado/Container/Apartado";
+import Error from "Pages/Error/Error";
 
 const routes = [
 	{
@@ -32,16 +33,15 @@ const routes = [
 		component: Apartado,
 		exact: true,
 	},
+	{
+		layout: LayoutForm,
+		component: Error,
+	},
 	// {
 	// 	path: "/:username",
 	// 	layout: Basic,
 	// 	component: User,
 	// 	exact: true,
-	// },
-
-	// {
-	// 	layout: LayoutBasic,
-	// 	component: Error404,
 	// },
 ];
 
