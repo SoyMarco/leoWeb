@@ -7,6 +7,7 @@ import Corte from "Pages/Corte/Container/Corte";
 import Apartados from "Pages/Apartados/Container/Apartados";
 import Apartado from "Pages/Apartado/Container/Apartado";
 import Error from "Pages/Error/Error";
+import Prueba from "Pages/prueba";
 
 const routes = [
 	{
@@ -28,9 +29,15 @@ const routes = [
 		exact: true,
 	},
 	{
-		path: "/Apartado/:folio",
+		path: "/apartado/:folio",
 		layout: LayoutForm,
 		component: Apartado,
+		exact: true,
+	},
+	{
+		path: "/prueba",
+		layout: LayoutForm,
+		component: Prueba,
 		exact: true,
 	},
 	{

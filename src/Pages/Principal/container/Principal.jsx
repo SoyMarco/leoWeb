@@ -255,12 +255,12 @@ function Principal() {
 			dataIndex: "cantidad",
 			key: "cantidad",
 			render: (cantidad, record) => (
-				<Row justify="space-around">
+				<Row justify='space-around'>
 					<Button
-						type="primary"
-						shape="circle"
+						type='primary'
+						shape='circle'
 						icon={<MinusOutlined />}
-						size="small"
+						size='small'
 						onClick={() => removeArticulo(record)}
 					></Button>
 					<h3
@@ -273,10 +273,10 @@ function Principal() {
 						{cantidad}
 					</h3>
 					<Button
-						type="primary"
-						shape="circle"
+						type='primary'
+						shape='circle'
 						icon={<PlusOutlined />}
-						size="small"
+						size='small'
 						onClick={() => addArticulo(record)}
 					></Button>
 				</Row>
@@ -291,7 +291,7 @@ function Principal() {
 			},
 			width: "90px",
 			render: (address) => (
-				<Tooltip placement="topLeft" title={address}>
+				<Tooltip placement='topLeft' title={address}>
 					{address}
 				</Tooltip>
 			),
@@ -305,7 +305,7 @@ function Principal() {
 			},
 			width: "90px",
 			render: (address) => (
-				<Tooltip placement="topLeft" title={address}>
+				<Tooltip placement='topLeft' title={address}>
 					{address}
 				</Tooltip>
 			),
@@ -338,8 +338,8 @@ function Principal() {
 			render: (key, record) => (
 				<div style={{ textAlignLast: "center" }}>
 					<Button
-						shape="circle"
-						icon={<MdDelete style={{ color: "#c5221f" }} size="25px" />}
+						shape='circle'
+						icon={<MdDelete style={{ color: "#c5221f" }} size='25px' />}
 						// size="large"
 						onClick={() => eliminarProducto(record)}
 					></Button>
@@ -388,8 +388,8 @@ function Principal() {
 				>
 					{/* Ingresar Precio */}
 					<Input
-						id="inputPrecio"
-						prefix={<AiFillDollarCircle />}
+						id='inputPrecio'
+						prefix={<AiFillDollarCircle style={{ marginLeft: "20px" }} />}
 						style={{
 							color: "green",
 							// fontSize: 30,
@@ -420,7 +420,7 @@ function Principal() {
 							margin: "10px",
 						}}
 						rowSelection={rowSelection}
-						size="small"
+						size='small'
 						onRow={(record, rowIndex) => {
 							return {
 								onClick: () => {
@@ -437,7 +437,7 @@ function Principal() {
 										/>
 									}
 									// status="500"
-									subTitle="Agrega productos"
+									subTitle='Agrega productos'
 								/>
 							),
 						}}

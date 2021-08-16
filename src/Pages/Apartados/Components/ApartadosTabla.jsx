@@ -5,23 +5,15 @@ import {
 } from "../../../Utils/openNotification";
 import { CANCELAR_VENTA } from "../../../graphql/venta";
 import { MdLocalGroceryStore } from "react-icons/md";
-import { GoFileSymlinkDirectory } from "react-icons/go";
+import { FaRegEdit } from "react-icons/fa";
 import { AiFillPrinter } from "react-icons/ai";
 import { useMutation } from "@apollo/client";
 import Imprimir from "./Imprimir/Imprimir";
 import useAuth from "../../../hooks/useAuth";
 import moment from "moment";
-import {
-	Table,
-	Result,
-	Col,
-	Divider,
-	Row,
-	Tooltip,
-	Button,
-	Switch,
-	Popconfirm,
-} from "antd";
+import { Table, Result, Col, Divider, Row, Button, Popconfirm } from "antd";
+import { useHistory } from "react-router-dom";
+
 export default function Ventas({
 	loading,
 	getApartados,
@@ -35,6 +27,8 @@ export default function Ventas({
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const { auth } = useAuth();
 	const [imprimir, setimprimir] = useState(false);
+	const history = useHistory();
+
 	const onSelectChange = (selectedRowKeys) => {
 		setselectedRowKeys([]);
 		// setselectedRowKeys(selectedRowKeys);
@@ -47,6 +41,7 @@ export default function Ventas({
 	const click = (record, rowIndex) => {
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
+		document.querySelector("#inputSearch").select();
 		// addArticulo(record, rowIndex);
 	};
 	const pasarAFecha = (item) => {
@@ -127,7 +122,7 @@ export default function Ventas({
 			key: "vendedor",
 			width: "90px",
 			render: (vendedor, record) => (
-				<Row justify="space-around">
+				<Row justify='space-around'>
 					<h3
 						style={{
 							textAlignLast: "center",
@@ -149,14 +144,14 @@ export default function Ventas({
 			},
 			width: "60px",
 			render: (totalArticulo, record) => (
-				<Row justify="center">
+				<Row justify='center'>
 					<Popconfirm
-						title="¿Deseas reimprimir?"
+						title='¿Deseas reimprimir?'
 						onConfirm={() => setimprimir(true)}
 					>
 						<Button
 							icon={<AiFillPrinter style={{ fontSize: "25px" }} />}
-							shape="circle"
+							shape='circle'
 							style={{ color: "blue" }}
 						/>
 					</Popconfirm>
@@ -164,25 +159,21 @@ export default function Ventas({
 			),
 		},
 		{
-			title: "Abrir",
-			dataIndex: "abrir",
-			key: "abrir",
+			title: "Edit",
+			dataIndex: "Edit",
+			key: "Edit",
 			ellipsis: {
 				showTitle: false,
 			},
 			width: "60px",
-			render: (abrir, record) => (
-				<Row justify="center">
-					<Popconfirm
-						title="¿Deseas reimprimir?"
-						onConfirm={() => setimprimir(true)}
-					>
-						<Button
-							icon={<GoFileSymlinkDirectory style={{ fontSize: "25px" }} />}
-							shape="circle"
-							style={{ color: "blue" }}
-						/>
-					</Popconfirm>
+			render: (Edit, record) => (
+				<Row justify='center'>
+					<Button
+						icon={<FaRegEdit style={{ fontSize: "25px" }} />}
+						shape='circle'
+						style={{ color: "blue" }}
+						onClick={() => history.push(`/apartado/${record.folio}`)}
+					/>
 				</Row>
 			),
 		},
@@ -194,7 +185,7 @@ export default function Ventas({
 				<Imprimir imprimir={imprimir} stateRecord={stateRecord} auth={auth} />
 			) : null}
 			<Col xs={24} sm={24} md={14}>
-				<Divider orientation="left">Apartados</Divider>
+				<Divider orientation='left'>Apartados</Divider>
 				<Table
 					columns={colVentas}
 					dataSource={getApartados}
@@ -209,7 +200,7 @@ export default function Ventas({
 						margin: "10px",
 					}}
 					rowSelection={rowSelection}
-					size="small"
+					size='small'
 					onRow={(record, rowIndex) => {
 						return {
 							onClick: (e) => {
@@ -225,7 +216,7 @@ export default function Ventas({
 										style={{ color: "red", fontSize: "xxx-large" }}
 									/>
 								}
-								subTitle="No se encontraron ventas"
+								subTitle='No se encontraron ventas'
 							/>
 						),
 					}}

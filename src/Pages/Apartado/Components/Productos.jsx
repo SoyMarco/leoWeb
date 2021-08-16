@@ -1,53 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { Table, Result, Col, Divider, Row, Tooltip } from "antd";
-import { SmileOutlined } from "@ant-design/icons";
+import { openNotification, errorConection } from "Utils/openNotification";
+import { CANCELAR_VENTA } from "graphql/venta";
+import { MdLocalGroceryStore } from "react-icons/md";
+import { GoFileSymlinkDirectory } from "react-icons/go";
+import { AiFillPrinter } from "react-icons/ai";
+import { useMutation } from "@apollo/client";
+import Imprimir from "./Imprimir/Imprimir";
+import useAuth from "hooks/useAuth";
 import moment from "moment";
-export default function Productos({ stateRecord, loading }) {
-	const [listaCompras, setlistaCompras] = useState([]);
+import { Table, Result, Col, Divider, Row, Button, Popconfirm } from "antd";
+export default function Ventas({
+	loading,
+	getApartados,
+	refetch,
+	setstateRecord,
+	loader,
+	setloader,
+	stateRecord,
+}) {
+	const [mutateCANCELAR_VENTA] = useMutation(CANCELAR_VENTA);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
-	const [productos, setproductos] = useState([]);
-	const [abonos, setabonos] = useState([]);
-	const [totalProductos, settotalProductos] = useState(0);
-	const [totalAbonos, settotalAbonos] = useState(0);
-	const [totalTotal, settotalTotal] = useState(0);
-
-	const [precio, setprecio] = useState({
-		precio: null,
-	});
-	useEffect(() => {
-		// selectLastRow();
-		let sum = 0;
-		let sumProd = 0;
-		for (let i = 0; i < productos.length; i++) {
-			sum += productos[i].totalArticulo;
-			sumProd += productos[i].cantidad;
-		}
-		settotalTotal(sum);
-		settotalProductos(sumProd);
-
-		let sumAbo = 0;
-		for (let i = 0; i < abonos.length; i++) {
-			sumAbo += abonos[i].abono;
-		}
-		settotalAbonos(sumAbo);
-	}, [productos]);
-	useEffect(() => {
-		if (stateRecord) {
-			let { productos } = stateRecord;
-			let listaProductos = productos.map((item) => {
-				return { ...item, key: item.idArray };
-			});
-			console.log("listaProductos", listaProductos);
-			setproductos(listaProductos);
-			let { abonos } = stateRecord;
-			let listaAbonos = abonos.map((item) => {
-				return { ...item, key: item._id };
-			});
-			console.log("listaAbonos", listaAbonos);
-			setabonos(listaAbonos);
-		}
-	}, [stateRecord]);
-
+	const { auth } = useAuth();
+	const [imprimir, setimprimir] = useState(false);
 	const onSelectChange = (selectedRowKeys) => {
 		setselectedRowKeys([]);
 		// setselectedRowKeys(selectedRowKeys);
@@ -59,92 +33,143 @@ export default function Productos({ stateRecord, loading }) {
 
 	const click = (record, rowIndex) => {
 		setselectedRowKeys([record.key]);
-		// setstateRecord(record);
+		setstateRecord(record);
 		// addArticulo(record, rowIndex);
 	};
 	const pasarAFecha = (item) => {
-		let fecha = moment.unix(item / 1000).format("L");
+		let fecha = moment.unix(item / 1000).format("ll");
 		return fecha;
 	};
-	/* COLUMNAS PRODUCTOS */
-	const colProductos = [
+	const cancelVenta = async (item) => {
+		setloader(true);
+		try {
+			const { data } = await mutateCANCELAR_VENTA({
+				variables: {
+					input: {
+						id: item.id,
+						status: item.cancelado,
+					},
+				},
+			});
+			if (data) {
+				openNotification(
+					"success",
+					`Venta ${item.cancelado ? "recuperada" : "cancelada"} con exito`
+				);
+				refetch();
+				setloader(false);
+			}
+		} catch (error) {
+			setloader(false);
+			errorConection();
+		}
+	};
+	/* COLUMNAS VENTAS */
+	const colVentas = [
 		{
-			title: "ID",
+			title: "Folio",
 			dataIndex: "key",
 			key: "key",
-			width: "35px",
 			sorter: (a, b) => b.key - a.key,
 			defaultSortOrder: "ascend",
-		},
-		{
-			title: "Producto",
-			dataIndex: "nombre",
-			key: "nombre",
-			ellipsis: true,
-
-			render: (nombre) => (
-				<Tooltip placement="topLeft" title={nombre}>
-					{nombre}
-				</Tooltip>
-			),
-		},
-		{
-			title: "Fecha",
-			dataIndex: "createAt",
-			key: "createAt",
-			ellipsis: true,
-			render: (createAt) => <h1>{pasarAFecha(createAt)}</h1>,
-		},
-		{
-			title: "Precio",
-			dataIndex: "precio",
-			key: "precio",
-			ellipsis: true,
-			render: (precio) => (
+			width: "90px",
+			render: (key) => (
 				<h3
 					style={{
-						textAlignLast: "right",
 						fontWeight: "revert",
 						fontSize: "large",
 					}}
 				>
-					${precio}
+					{key}
 				</h3>
 			),
 		},
 		{
-			title: "Cantidad",
-			dataIndex: "cantidad",
-			key: "cantidad",
-			render: (cantidad, record) => (
-				<Row justify="space-around">
+			title: "Cliente",
+			dataIndex: "cliente",
+			key: "cliente",
+			ellipsis: true,
+			render: (cliente) => (
+				<h3
+					style={{
+						fontWeight: "revert",
+						fontSize: "large",
+					}}
+				>
+					{cliente}
+				</h3>
+			),
+		},
+		{
+			title: "Vence",
+			dataIndex: "vence",
+			key: "vence",
+			width: "100px",
+			render: (vence) => <h1>{pasarAFecha(vence)}</h1>,
+		},
+
+		{
+			title: "Vendedor",
+			dataIndex: "vendedor",
+			key: "vendedor",
+			width: "90px",
+			render: (vendedor, record) => (
+				<Row justify='space-around'>
 					<h3
 						style={{
 							textAlignLast: "center",
-							fontWeight: "revert",
+							// fontWeight: "revert",
 							// fontSize: "x-large",
 						}}
 					>
-						x{cantidad}
+						{vendedor}
 					</h3>
 				</Row>
 			),
 		},
 		{
-			title: "Total",
+			title: "Print",
 			dataIndex: "totalArticulo",
 			key: "totalArticulo",
+			ellipsis: {
+				showTitle: false,
+			},
+			width: "60px",
 			render: (totalArticulo, record) => (
-				<Row justify="end">
-					<h3
-						style={{
-							textAlignLast: "end",
-							fontWeight: "revert",
-							// fontSize: "x-large",
-						}}
+				<Row justify='center'>
+					<Popconfirm
+						title='¿Deseas reimprimir?'
+						onConfirm={() => setimprimir(true)}
 					>
-						${totalArticulo}
-					</h3>
+						<Button
+							icon={<AiFillPrinter style={{ fontSize: "25px" }} />}
+							shape='circle'
+							style={{ color: "blue" }}
+						/>
+					</Popconfirm>
+				</Row>
+			),
+		},
+		{
+			title: "Abrir",
+			dataIndex: "abrir",
+			key: "abrir",
+			ellipsis: {
+				showTitle: false,
+			},
+			width: "60px",
+			render: (abrir, record) => (
+				<Row justify='center'>
+					<Popconfirm
+						title='¿Deseas reimprimir?'
+						onConfirm={() => setimprimir(true)}
+					>
+						<Button
+							icon={<GoFileSymlinkDirectory style={{ fontSize: "25px" }} />}
+							shape='circle'
+							style={{ color: "blue" }}
+						/>
+					</Popconfirm>
 				</Row>
 			),
 		},
@@ -152,24 +177,26 @@ export default function Productos({ stateRecord, loading }) {
 
 	return (
 		<>
-			<Col xs={24} sm={24} md={10}>
-				<Divider orientation="left">Productos</Divider>
-				{/* PRODUCTOS */}
+			{imprimir ? (
+				<Imprimir imprimir={imprimir} stateRecord={stateRecord} auth={auth} />
+			) : null}
+			<Col xs={24} sm={24} md={14}>
+				<Divider orientation='left'>Productos</Divider>
 				<Table
-					columns={colProductos}
-					dataSource={productos}
+					columns={colVentas}
+					dataSource={getApartados}
 					pagination={false}
-					loading={loading}
 					bordered
-					scroll={{ y: 300 }}
-					// rowSelection={rowSelection}
-					size="small"
+					loading={loading}
+					scroll={{ y: 350 }}
 					style={{
 						height: "400px",
 						borderRadius: "10px",
 						boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
 						margin: "10px",
 					}}
+					rowSelection={rowSelection}
+					size='small'
 					onRow={(record, rowIndex) => {
 						return {
 							onClick: (e) => {
@@ -180,37 +207,15 @@ export default function Productos({ stateRecord, loading }) {
 					locale={{
 						emptyText: (
 							<Result
-								icon={<SmileOutlined />}
-								// status="500"
-								subTitle="Selecciona un apartado"
+								icon={
+									<MdLocalGroceryStore
+										style={{ color: "red", fontSize: "xxx-large" }}
+									/>
+								}
+								subTitle='No se encontraron ventas'
 							/>
 						),
 					}}
-					footer={() => (
-						<Row justify="space-around">
-							<h1
-								style={{
-									color: "blue",
-									fontSize: "x-large",
-									fontWeight: "bold",
-									marginTop: "10px",
-								}}
-							>
-								Productos: {totalProductos}
-							</h1>
-							<h1
-								style={{
-									color: "green",
-									fontSize: "xx-large",
-									fontWeight: "bold",
-								}}
-							>
-								Resta ${totalTotal - totalAbonos}
-							</h1>
-							{/* <h1>{totalAbonos}</h1>
-							<h1>Resta{totalTotal - totalAbonos}</h1> */}
-						</Row>
-					)}
 				/>
 			</Col>
 		</>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { TablaProductos, TablaApartados } from "../Components";
+import { TablaProductos, TablaAbonos } from "../Components";
 import { Row, Divider, notification } from "antd";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import { GET_APARTADOS } from "graphql/apartado";
@@ -11,9 +11,9 @@ export default function Apartado() {
 	const [getApartados, setgetApartados] = useState([]);
 	const [loader, setloader] = useState(false);
 
-	useEffect(() => {
-		refetch();
-	}, []);
+	const [filter, setfilter] = useState([]);
+
+	useEffect(() => {}, []);
 
 	if (error) {
 		notification.open({
@@ -35,7 +35,7 @@ export default function Apartado() {
 	return (
 		<>
 			<Row>
-				<TablaApartados
+				<TablaProductos
 					getApartados={getApartados}
 					loading={loading}
 					loader={loader}
@@ -44,7 +44,7 @@ export default function Apartado() {
 					setstateRecord={setstateRecord}
 					stateRecord={stateRecord}
 				/>
-				<TablaProductos stateRecord={stateRecord} loading={loading} />
+				<TablaAbonos stateRecord={stateRecord} loading={loading} />
 			</Row>
 		</>
 	);
