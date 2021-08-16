@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { TablaProductos, TablaApartados } from "../Components";
-import { Row, Divider, notification } from "antd";
-import { useQuery, gql, useMutation } from "@apollo/client";
-import { GET_APARTADOS } from "../../../graphql/apartado";
+import { Row, notification } from "antd";
+import { useQuery } from "@apollo/client";
+import { GET_APARTADOS } from "graphql/apartado";
 import { RiWifiOffLine } from "react-icons/ri";
 
 export default function Apartados() {
@@ -13,6 +13,7 @@ export default function Apartados() {
 
 	useEffect(() => {
 		refetch();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	if (error) {
