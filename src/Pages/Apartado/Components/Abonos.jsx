@@ -1,52 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { Table, Result, Col, Divider, Row, Tooltip } from "antd";
+import {
+	Table,
+	Result,
+	Col,
+	Divider,
+	Row,
+	Tooltip,
+	Popconfirm,
+	Button,
+	Switch,
+} from "antd";
+import { AiFillPrinter } from "react-icons/ai";
+
 import { SmileOutlined } from "@ant-design/icons";
 import moment from "moment";
-export default function Productos({ stateRecord, loading }) {
-	const [listaCompras, setlistaCompras] = useState([]);
+export default function Abonos({ abonos, loading, loader, setloader }) {
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
-	const [productos, setproductos] = useState([]);
-	const [abonos, setabonos] = useState([]);
-	const [totalProductos, settotalProductos] = useState(0);
-	const [totalAbonos, settotalAbonos] = useState(0);
-	const [totalTotal, settotalTotal] = useState(0);
-
-	const [precio, setprecio] = useState({
-		precio: null,
-	});
-	useEffect(() => {
-		// selectLastRow();
-		let sum = 0;
-		let sumProd = 0;
-		for (let i = 0; i < productos.length; i++) {
-			sum += productos[i].totalArticulo;
-			sumProd += productos[i].cantidad;
-		}
-		settotalTotal(sum);
-		settotalProductos(sumProd);
-
-		let sumAbo = 0;
-		for (let i = 0; i < abonos.length; i++) {
-			sumAbo += abonos[i].abono;
-		}
-		settotalAbonos(sumAbo);
-	}, [productos]);
-	useEffect(() => {
-		if (stateRecord) {
-			let { productos } = stateRecord;
-			let listaProductos = productos.map((item) => {
-				return { ...item, key: item.idArray };
-			});
-			console.log("listaProductos", listaProductos);
-			setproductos(listaProductos);
-			let { abonos } = stateRecord;
-			let listaAbonos = abonos.map((item) => {
-				return { ...item, key: item._id };
-			});
-			console.log("listaAbonos", listaAbonos);
-			setabonos(listaAbonos);
-		}
-	}, [stateRecord]);
 
 	const onSelectChange = (selectedRowKeys) => {
 		setselectedRowKeys([]);
@@ -66,85 +35,108 @@ export default function Productos({ stateRecord, loading }) {
 		let fecha = moment.unix(item / 1000).format("L");
 		return fecha;
 	};
-	/* COLUMNAS PRODUCTOS */
-	const colProductos = [
+	/* COLUMNAS ABONOS */
+	const colAbonos = [
 		{
 			title: "ID",
-			dataIndex: "key",
-			key: "key",
-			width: "35px",
-			sorter: (a, b) => b.key - a.key,
-			defaultSortOrder: "ascend",
+			dataIndex: "_id",
+			key: "_id",
+			width: "0px",
+			ellipsis: true,
 		},
 		{
-			title: "Producto",
-			dataIndex: "nombre",
-			key: "nombre",
+			title: "Vendedor",
+			dataIndex: "vendedor",
+			key: "vendedor",
 			ellipsis: true,
-
-			render: (nombre) => (
-				<Tooltip placement='topLeft' title={nombre}>
-					{nombre}
-				</Tooltip>
+			render: (vendedor) => (
+				<h3
+					style={{
+						fontWeight: "revert",
+						fontSize: "large",
+					}}
+				>
+					{vendedor}
+				</h3>
 			),
 		},
 		{
 			title: "Fecha",
 			dataIndex: "createAt",
 			key: "createAt",
-			ellipsis: true,
+			width: "100px",
+			sorter: (a, b) => b._id - a._id,
+			defaultSortOrder: "ascend",
 			render: (createAt) => <h1>{pasarAFecha(createAt)}</h1>,
 		},
+
 		{
-			title: "Precio",
-			dataIndex: "precio",
-			key: "precio",
-			ellipsis: true,
-			render: (precio) => (
-				<h3
-					style={{
-						textAlignLast: "right",
-						fontWeight: "revert",
-						fontSize: "large",
-					}}
-				>
-					${precio}
-				</h3>
-			),
-		},
-		{
-			title: "Cantidad",
-			dataIndex: "cantidad",
-			key: "cantidad",
-			render: (cantidad, record) => (
+			title: "Abono",
+			dataIndex: "abono",
+			key: "abono",
+			width: "90px",
+			render: (abono, record) => (
 				<Row justify='space-around'>
 					<h3
 						style={{
 							textAlignLast: "center",
-							fontWeight: "revert",
+							// fontWeight: "revert",
 							// fontSize: "x-large",
 						}}
 					>
-						x{cantidad}
+						${abono}
 					</h3>
 				</Row>
 			),
 		},
+		// {
+		// 	title: "Print",
+		// 	dataIndex: "totalArticulo",
+		// 	key: "totalArticulo",
+		// 	ellipsis: {
+		// 		showTitle: false,
+		// 	},
+		// 	width: "60px",
+		// 	render: (totalArticulo, record) => (
+		// 		<Row justify='center'>
+		// 			<Popconfirm
+		// 				title='¿Deseas reimprimir?'
+		// 				onConfirm={() => console.log(record)}
+		// 			>
+		// 				<Button
+		// 					icon={<AiFillPrinter style={{ fontSize: "25px" }} />}
+		// 					shape='circle'
+		// 					style={{ color: "blue" }}
+		// 				/>
+		// 			</Popconfirm>
+		// 		</Row>
+		// 	),
+		// },
 		{
-			title: "Total",
-			dataIndex: "totalArticulo",
-			key: "totalArticulo",
-			render: (totalArticulo, record) => (
-				<Row justify='end'>
-					<h3
-						style={{
-							textAlignLast: "end",
-							fontWeight: "revert",
-							// fontSize: "x-large",
-						}}
+			title: "Activo",
+			dataIndex: "idArray",
+			key: "idArray",
+			ellipsis: {
+				showTitle: false,
+			},
+			width: "60px",
+			render: (idArray, record) => (
+				<Row justify='center'>
+					<Popconfirm
+						title='¿Cancelar Venta?'
+						onConfirm={() => /* cancelVenta(record) */ console.log(record)}
 					>
-						${totalArticulo}
-					</h3>
+						<Switch
+							loading={loader}
+							checked={record.cancelado}
+							size='small'
+							style={
+								record.cancelado.status === true
+									? { background: "limegreen", marginTop: "5px" }
+									: { background: "red", marginTop: "5px" }
+							}
+						/>
+					</Popconfirm>
 				</Row>
 			),
 		},
@@ -156,8 +148,8 @@ export default function Productos({ stateRecord, loading }) {
 				<Divider orientation='left'>Abonos</Divider>
 				{/* PRODUCTOS */}
 				<Table
-					columns={colProductos}
-					dataSource={productos}
+					columns={colAbonos}
+					dataSource={abonos}
 					pagination={false}
 					loading={loading}
 					bordered
@@ -186,31 +178,6 @@ export default function Productos({ stateRecord, loading }) {
 							/>
 						),
 					}}
-					footer={() => (
-						<Row justify='space-around'>
-							<h1
-								style={{
-									color: "blue",
-									fontSize: "x-large",
-									fontWeight: "bold",
-									marginTop: "10px",
-								}}
-							>
-								Productos: {totalProductos}
-							</h1>
-							<h1
-								style={{
-									color: "green",
-									fontSize: "xx-large",
-									fontWeight: "bold",
-								}}
-							>
-								Resta ${totalTotal - totalAbonos}
-							</h1>
-							{/* <h1>{totalAbonos}</h1>
-							<h1>Resta{totalTotal - totalAbonos}</h1> */}
-						</Row>
-					)}
 				/>
 			</Col>
 		</>

@@ -11,7 +11,16 @@ import { useMutation } from "@apollo/client";
 import Imprimir from "./Imprimir/Imprimir";
 import useAuth from "../../../hooks/useAuth";
 import moment from "moment";
-import { Table, Result, Col, Divider, Row, Button, Popconfirm } from "antd";
+import {
+	Table,
+	Result,
+	Col,
+	Divider,
+	Row,
+	Button,
+	Popconfirm,
+	Tooltip,
+} from "antd";
 import { useHistory } from "react-router-dom";
 
 export default function Ventas({
@@ -80,16 +89,18 @@ export default function Ventas({
 			key: "key",
 			sorter: (a, b) => b.key - a.key,
 			defaultSortOrder: "ascend",
-			width: "90px",
+			width: "70px",
 			render: (key) => (
-				<h3
-					style={{
-						fontWeight: "revert",
-						fontSize: "large",
-					}}
-				>
-					{key}
-				</h3>
+				<Tooltip placement='topLeft' title={key}>
+					<h3
+						style={{
+							fontWeight: "revert",
+							fontSize: "large",
+						}}
+					>
+						{key}
+					</h3>
+				</Tooltip>
 			),
 		},
 		{
@@ -98,14 +109,16 @@ export default function Ventas({
 			key: "cliente",
 			ellipsis: true,
 			render: (cliente) => (
-				<h3
-					style={{
-						fontWeight: "revert",
-						fontSize: "large",
-					}}
-				>
-					{cliente}
-				</h3>
+				<Tooltip placement='topLeft' title={cliente}>
+					<h3
+						style={{
+							fontWeight: "revert",
+							fontSize: "large",
+						}}
+					>
+						{cliente}
+					</h3>
+				</Tooltip>
 			),
 		},
 		{
@@ -172,7 +185,12 @@ export default function Ventas({
 						icon={<FaRegEdit style={{ fontSize: "25px" }} />}
 						shape='circle'
 						style={{ color: "blue" }}
-						onClick={() => history.push(`/apartado/${record.folio}`)}
+						onClick={() =>
+							history.push({
+								pathname: `/apartado/${record.folio}`,
+								apartado: { ...record },
+							})
+						}
 					/>
 				</Row>
 			),
@@ -182,7 +200,12 @@ export default function Ventas({
 	return (
 		<>
 			{imprimir ? (
-				<Imprimir imprimir={imprimir} stateRecord={stateRecord} auth={auth} />
+				<Imprimir
+					imprimir={imprimir}
+					setimprimir={setimprimir}
+					stateRecord={stateRecord}
+					auth={auth}
+				/>
 			) : null}
 			<Col xs={24} sm={24} md={14}>
 				<Divider orientation='left'>Apartados</Divider>
@@ -216,7 +239,7 @@ export default function Ventas({
 										style={{ color: "red", fontSize: "xxx-large" }}
 									/>
 								}
-								subTitle='No se encontraron ventas'
+								subTitle='No se encontraron apartados'
 							/>
 						),
 					}}

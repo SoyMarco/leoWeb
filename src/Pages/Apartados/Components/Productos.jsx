@@ -31,6 +31,7 @@ export default function Productos({ stateRecord, loading }) {
 		}
 		settotalAbonos(sumAbo);
 	}, [productos]);
+
 	useEffect(() => {
 		if (stateRecord) {
 			let { productos } = stateRecord;
@@ -45,6 +46,9 @@ export default function Productos({ stateRecord, loading }) {
 			});
 			console.log("listaAbonos", listaAbonos);
 			setabonos(listaAbonos);
+		} else {
+			setproductos([]);
+			setabonos(0);
 		}
 	}, [stateRecord]);
 
@@ -83,7 +87,7 @@ export default function Productos({ stateRecord, loading }) {
 			ellipsis: true,
 
 			render: (nombre) => (
-				<Tooltip placement="topLeft" title={nombre}>
+				<Tooltip placement='topLeft' title={nombre}>
 					{nombre}
 				</Tooltip>
 			),
@@ -117,7 +121,7 @@ export default function Productos({ stateRecord, loading }) {
 			dataIndex: "cantidad",
 			key: "cantidad",
 			render: (cantidad, record) => (
-				<Row justify="space-around">
+				<Row justify='space-around'>
 					<h3
 						style={{
 							textAlignLast: "center",
@@ -135,7 +139,7 @@ export default function Productos({ stateRecord, loading }) {
 			dataIndex: "totalArticulo",
 			key: "totalArticulo",
 			render: (totalArticulo, record) => (
-				<Row justify="end">
+				<Row justify='end'>
 					<h3
 						style={{
 							textAlignLast: "end",
@@ -153,7 +157,7 @@ export default function Productos({ stateRecord, loading }) {
 	return (
 		<>
 			<Col xs={24} sm={24} md={10}>
-				<Divider orientation="left">Productos</Divider>
+				<Divider orientation='left'>Productos</Divider>
 				{/* PRODUCTOS */}
 				<Table
 					columns={colProductos}
@@ -163,7 +167,7 @@ export default function Productos({ stateRecord, loading }) {
 					bordered
 					scroll={{ y: 300 }}
 					// rowSelection={rowSelection}
-					size="small"
+					size='small'
 					style={{
 						height: "400px",
 						borderRadius: "10px",
@@ -182,12 +186,12 @@ export default function Productos({ stateRecord, loading }) {
 							<Result
 								icon={<SmileOutlined />}
 								// status="500"
-								subTitle="Selecciona un apartado"
+								subTitle='Selecciona un apartado'
 							/>
 						),
 					}}
 					footer={() => (
-						<Row justify="space-around">
+						<Row justify='space-around'>
 							<h1
 								style={{
 									color: "blue",
@@ -207,8 +211,6 @@ export default function Productos({ stateRecord, loading }) {
 							>
 								Resta ${totalTotal - totalAbonos}
 							</h1>
-							{/* <h1>{totalAbonos}</h1>
-							<h1>Resta{totalTotal - totalAbonos}</h1> */}
 						</Row>
 					)}
 				/>

@@ -38,6 +38,7 @@ export default function Apartados() {
 		}
 
 		setdataFilter(newArray);
+		setstateRecord(null);
 	};
 	useEffect(() => {
 		refetch();

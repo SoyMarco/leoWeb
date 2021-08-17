@@ -1,25 +1,54 @@
 import React, { useEffect, useState } from "react";
 import { openNotification, errorConection } from "Utils/openNotification";
 import { CANCELAR_VENTA } from "graphql/venta";
-import { MdLocalGroceryStore } from "react-icons/md";
-import { GoFileSymlinkDirectory } from "react-icons/go";
-import { AiFillPrinter } from "react-icons/ai";
+import {
+	GET_PRODUCTOS_FOLIO,
+	CANCELAR_APARTADO,
+	EDIT_VENCE_APARTADO,
+	CANCELAR_PRODUCTO_APARTDO,
+} from "graphql/apartado";
+import {
+	MdLocalGroceryStore,
+	MdDelete,
+	MdAddShoppingCart,
+} from "react-icons/md";
+import { FaShoppingCart, FaMoneyBillWave } from "react-icons/fa";
+import { GiLargeDress } from "react-icons/gi";
 import { useMutation } from "@apollo/client";
 import Imprimir from "./Imprimir/Imprimir";
 import useAuth from "hooks/useAuth";
 import moment from "moment";
-import { Table, Result, Col, Divider, Row, Button, Popconfirm } from "antd";
-export default function Ventas({
+import {
+	Table,
+	Result,
+	Col,
+	Divider,
+	Row,
+	Button,
+	Popconfirm,
+	Switch,
+	Tooltip,
+	Modal,
+	Input,
+	Form,
+} from "antd";
+import "./productos.css";
+export default function Productos({
 	loading,
-	getApartados,
+	productos,
 	refetch,
 	setstateRecord,
 	loader,
 	setloader,
 	stateRecord,
 }) {
-	const [mutateCANCELAR_VENTA] = useMutation(CANCELAR_VENTA);
+	const [mutateCANCELAR_PRODUCTO_APARTDO] = useMutation(
+		CANCELAR_PRODUCTO_APARTDO
+	);
+	const [nombre, setnombre] = useState("");
+	const [precio, setprecio] = useState(0);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
+	const [modalAddProduct, setmodalAddProduct] = useState(true);
 	const { auth } = useAuth();
 	const [imprimir, setimprimir] = useState(false);
 	const onSelectChange = (selectedRowKeys) => {
@@ -37,98 +66,169 @@ export default function Ventas({
 		// addArticulo(record, rowIndex);
 	};
 	const pasarAFecha = (item) => {
-		let fecha = moment.unix(item / 1000).format("ll");
+		let fecha = moment.unix(item / 1000).format("l");
 		return fecha;
 	};
-	const cancelVenta = async (item) => {
+	const pasarAFechaLL = (item) => {
+		let fecha = moment.unix(item / 1000).format("LL");
+		return fecha;
+	};
+
+	const borrarEntregarProduct = async (item, borrarEntregar) => {
+		console.log(item);
 		setloader(true);
+		let status = true;
+		if (item.entregado[0] && item.entregado[0].status) {
+			status = !item.entregado[0].status;
+		}
 		try {
-			const { data } = await mutateCANCELAR_VENTA({
-				variables: {
-					input: {
-						id: item.id,
-						status: item.cancelado,
+			if (item._id) {
+				const { data } = await mutateCANCELAR_PRODUCTO_APARTDO({
+					// Parameters
+					variables: {
+						input: {
+							_id: item._id,
+							status: status,
+							borrarEntregar: borrarEntregar,
+						},
 					},
-				},
-			});
-			if (data) {
-				openNotification(
-					"success",
-					`Venta ${item.cancelado ? "recuperada" : "cancelada"} con exito`
-				);
-				refetch();
-				setloader(false);
+				});
+				if (data) {
+					if (borrarEntregar === "borrar") {
+						openNotification("success", `Articulo borrado con exito`);
+					} else if (borrarEntregar === "entregar") {
+						openNotification("success", `Articulo modificado con exito`);
+					}
+					refetch();
+					setloader(false);
+				}
 			}
 		} catch (error) {
 			setloader(false);
 			errorConection();
 		}
 	};
+	const pressKeyEnter = (e) => {
+		if (e.keyCode === 13) {
+			agregarProducto();
+		}
+	};
+	const agregarProducto = () => {
+		// 	if (precio > 0 && nombre) {
+		// 		borrarEntregar = "editar";
+		// 		updateProducto();
+		// 	} else if (!nombre && precio > 0) {
+		// 		document.querySelector("#addProductNombre").select();
+		// 	} else if (nombre && !precio) {
+		// 		document.querySelector("#addProductPrecio").select();
+		// 	} else {
+		// 	}
+	};
+
+	// const updateProducto = async () => {
+	// 	console.log(item);
+	// 	setloader(true);
+	// 	let status = true;
+	// 	if (item.entregado[0] && item.entregado[0].status) {
+	// 		status = !item.entregado[0].status;
+	// 	}
+	// 	try {
+	// 		if (item._id) {
+	// 			const { data } = await mutateCANCELAR_PRODUCTO_APARTDO({
+	// 				// Parameters
+	// 				variables: {
+	// 					input: {
+	// 						_id: item._id,
+	// 						status: status,
+	// 						borrarEntregar: borrarEntregar,
+	// 					},
+	// 				},
+	// 			});
+	// 			if (data) {
+	// 				if (borrarEntregar === "borrar") {
+	// 					openNotification("success", `Articulo borrado con exito`);
+	// 				} else if (borrarEntregar === "entregar") {
+	// 					openNotification("success", `Articulo modificado con exito`);
+	// 				}
+	// 				refetch();
+	// 				setloader(false);
+	// 			}
+	// 		}
+	// 	} catch (error) {
+	// 		setloader(false);
+	// 		errorConection();
+	// 	}
+	// };
 	/* COLUMNAS VENTAS */
-	const colVentas = [
+	const colProductos = [
 		{
-			title: "Folio",
-			dataIndex: "key",
-			key: "key",
-			sorter: (a, b) => b.key - a.key,
+			title: "ID",
+			dataIndex: "idArray",
+			key: "idArray",
+			sorter: (a, b) => b.idArray - a.idArray,
 			defaultSortOrder: "ascend",
-			width: "90px",
-			render: (key) => (
-				<h3
-					style={{
-						fontWeight: "revert",
-						fontSize: "large",
-					}}
-				>
-					{key}
-				</h3>
-			),
+			width: "24px",
+			// render: (idArray) => <span>{idArray}</span>,
 		},
 		{
-			title: "Cliente",
-			dataIndex: "cliente",
-			key: "cliente",
+			title: "Producto",
+			dataIndex: "nombre",
+			key: "nombre",
 			ellipsis: true,
-			render: (cliente) => (
+			render: (nombre) => (
 				<h3
 					style={{
 						fontWeight: "revert",
 						fontSize: "large",
 					}}
 				>
-					{cliente}
+					{nombre}
 				</h3>
 			),
 		},
 		{
-			title: "Vence",
-			dataIndex: "vence",
-			key: "vence",
-			width: "100px",
-			render: (vence) => <h1>{pasarAFecha(vence)}</h1>,
+			title: "Fecha",
+			dataIndex: "createAt",
+			key: "createAt",
+			// width: "80px",
+			render: (createAt, record) => (
+				<h1
+					style={{
+						textAlignLast: "center",
+						// fontWeight: "revert",
+						// fontSize: "x-large",
+					}}
+				>
+					{record?.entregado[0]?.status === true
+						? `${pasarAFechaLL(
+								createAt
+						  )} por ${record?.entregado[0]?.vendedor.toUpperCase()}`
+						: `${pasarAFecha(createAt)}`}
+				</h1>
+			),
 		},
 
 		{
-			title: "Vendedor",
-			dataIndex: "vendedor",
-			key: "vendedor",
-			width: "90px",
-			render: (vendedor, record) => (
+			title: "Precio",
+			dataIndex: "precio",
+			key: "precio",
+			// width: "90px",
+			render: (precio, record) => (
 				<Row justify='space-around'>
 					<h3
 						style={{
 							textAlignLast: "center",
-							// fontWeight: "revert",
-							// fontSize: "x-large",
+							fontWeight: "revert",
+							fontSize: "large",
 						}}
 					>
-						{vendedor}
+						${precio}
 					</h3>
 				</Row>
 			),
 		},
 		{
-			title: "Print",
+			title: "Delete",
 			dataIndex: "totalArticulo",
 			key: "totalArticulo",
 			ellipsis: {
@@ -138,39 +238,48 @@ export default function Ventas({
 			render: (totalArticulo, record) => (
 				<Row justify='center'>
 					<Popconfirm
-						title='¿Deseas reimprimir?'
-						onConfirm={() => setimprimir(true)}
+						title='¿Deseas eliminar?'
+						onConfirm={() => borrarEntregarProduct(record, "borrar")}
 					>
 						<Button
-							icon={<AiFillPrinter style={{ fontSize: "25px" }} />}
 							shape='circle'
-							style={{ color: "blue" }}
-						/>
+							icon={<MdDelete style={{ color: "#c5221f" }} size='25px' />}
+						></Button>
 					</Popconfirm>
 				</Row>
 			),
 		},
 		{
-			title: "Abrir",
-			dataIndex: "abrir",
-			key: "abrir",
+			title: "Status",
+			dataIndex: "idArray",
+			key: "idArray",
 			ellipsis: {
 				showTitle: false,
 			},
 			width: "60px",
-			render: (abrir, record) => (
-				<Row justify='center'>
-					<Popconfirm
-						title='¿Deseas reimprimir?'
-						onConfirm={() => setimprimir(true)}
-					>
-						<Button
-							icon={<GoFileSymlinkDirectory style={{ fontSize: "25px" }} />}
-							shape='circle'
-							style={{ color: "blue" }}
-						/>
-					</Popconfirm>
-				</Row>
+			render: (idArray, record) => (
+				<Tooltip
+					placement='right'
+					title={record?.entregado[0]?.status !== true ? "Activo" : "Entregado"}
+				>
+					<Row justify='center'>
+						<Popconfirm
+							title='¿Entregar Venta?'
+							onConfirm={() => borrarEntregarProduct(record, "entregar")}
+						>
+							<Switch
+								loading={loader}
+								checked={record?.entregado[0]?.status !== true}
+								size='small'
+								style={
+									record?.entregado[0]?.status
+										? { background: "orange", marginTop: "5px" }
+										: { background: "limegreen", marginTop: "5px" }
+								}
+							/>
+						</Popconfirm>
+					</Row>
+				</Tooltip>
 			),
 		},
 	];
@@ -183,8 +292,39 @@ export default function Ventas({
 			<Col xs={24} sm={24} md={14}>
 				<Divider orientation='left'>Productos</Divider>
 				<Table
-					columns={colVentas}
-					dataSource={getApartados}
+					id='tableApartado'
+					title={() => (
+						<Row justify='space-between'>
+							<h1
+								style={{
+									color: "white",
+									fontSize: "large",
+									fontWeight: "revert",
+									margin: "10px 0 5px 10px",
+								}}
+							>
+								Productos: {productos.length}
+							</h1>
+							<Button
+								shape='round'
+								style={{
+									background: "linear-gradient(#2196F3,#0000E6)",
+									marginTop: 5,
+									marginRight: 10,
+									color: "white",
+									border: 0,
+									// fontSize: "large",
+									fontWeight: "bold",
+								}}
+								onClick={() => setmodalAddProduct(true)}
+							>
+								<FaShoppingCart style={{ fontSize: "large", marginRight: 5 }} />
+								Agregar
+							</Button>
+						</Row>
+					)}
+					columns={colProductos}
+					dataSource={productos}
 					pagination={false}
 					bordered
 					loading={loading}
@@ -218,6 +358,63 @@ export default function Ventas({
 					}}
 				/>
 			</Col>
+			{modalAddProduct && (
+				<Modal
+					title='Agregar producto'
+					visible={modalAddProduct}
+					onOk={() => agregarProducto()}
+					onCancel={() => setmodalAddProduct(false)}
+				>
+					<Form.Item
+						label='Articulo'
+						name='Articulo'
+						key='1'
+						rules={[
+							{
+								required: false,
+								message: "Please input your username!",
+							},
+						]}
+						className='labelCobrar'
+						id='inputAddProduct'
+						onKeyUp={pressKeyEnter}
+						onChange={(e) => setnombre(e.target.value)}
+					>
+						<Input
+							id='addProductNombre'
+							className='labelAddProducts'
+							prefix={<GiLargeDress style={{ color: "gray" }} />}
+							// onKeyUp={pressKeyPrecio}
+							// onKeyDown={keyBlock}
+						/>
+					</Form.Item>
+
+					<Form.Item
+						label='Precio'
+						name='Precio'
+						key='1'
+						rules={[
+							{
+								required: false,
+								message: "Please input your username!",
+							},
+						]}
+						className='labelCobrar'
+						onKeyUp={pressKeyEnter}
+						onChange={(e) => setprecio(e.target.value)}
+					>
+						<Input
+							id='addProductPrecio'
+							className='labelAddProducts'
+							type='number'
+							// style={{ borderRadius: 50 }}
+							prefix={<FaMoneyBillWave style={{ color: "gray" }} />}
+							// onKeyUp={pressKeyPrecio}
+							// onKeyDown={keyBlock}
+						/>
+					</Form.Item>
+				</Modal>
+			)}
 		</>
 	);
 }
