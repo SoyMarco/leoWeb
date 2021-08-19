@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { openNotification, errorConection } from "Utils/openNotification";
+import { openNotification, ErrorConection } from "Utils/openNotification";
 import { CANCELAR_VENTA } from "graphql/venta";
 import {
 	GET_PRODUCTOS_FOLIO,
@@ -105,7 +105,7 @@ export default function Productos({
 			}
 		} catch (error) {
 			setloader(false);
-			errorConection();
+			ErrorConection();
 		}
 	};
 	const pressKeyEnter = (e) => {
@@ -156,7 +156,7 @@ export default function Productos({
 	// 		}
 	// 	} catch (error) {
 	// 		setloader(false);
-	// 		errorConection();
+	// 		ErrorConection();
 	// 	}
 	// };
 	/* COLUMNAS VENTAS */

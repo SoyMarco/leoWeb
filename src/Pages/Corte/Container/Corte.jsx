@@ -6,6 +6,8 @@ import "./corte.css";
 import { Row, Divider, notification } from "antd";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import { GET_VENTAS_DIA } from "../../../graphql/venta";
+import { ErrorConection } from "Utils/openNotification";
+
 import "./corte.css";
 
 const Corte = () => {
@@ -18,11 +20,7 @@ const Corte = () => {
 	}, []);
 
 	if (error) {
-		notification.open({
-			message: "Error de conexión",
-			description: "Intentalo más tarde",
-			icon: <RiWifiOffLine style={{ color: "red" }} />,
-		});
+		ErrorConection();
 	}
 	useEffect(() => {
 		if (data) {
@@ -49,7 +47,7 @@ const Corte = () => {
 				<TablaProductos stateRecord={stateRecord} loading={loading} />
 			</Row>
 
-			<Divider orientation="left">Total del día</Divider>
+			<Divider orientation='left'>Total del día</Divider>
 
 			<Row>
 				<TablaTotales getVentasDia={getVentasDia} loading={loading} />

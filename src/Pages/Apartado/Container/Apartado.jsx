@@ -5,7 +5,7 @@ import { useQuery, gql, useMutation } from "@apollo/client";
 import { useHistory, useParams, withRouter } from "react-router-dom";
 import { GET_PRODUCTOS_FOLIO } from "graphql/apartado";
 import { RiWifiOffLine } from "react-icons/ri";
-
+import { ErrorConection } from "Utils/openNotification";
 export default function Apartado(props) {
 	const params = useParams();
 	let urlFolio = parseInt(params.folio);
@@ -73,11 +73,7 @@ export default function Apartado(props) {
 	}, [productos]);
 
 	if (error) {
-		notification.open({
-			message: "Error de conexión",
-			description: "Intentalo más tarde",
-			icon: <RiWifiOffLine style={{ color: "red" }} />,
-		});
+		ErrorConection();
 	}
 	return (
 		<>

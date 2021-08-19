@@ -7,12 +7,9 @@ import NavToken from "Routes/NavToken";
 import { getToken, decodeToken, removeToken } from "Utils/token";
 import Login from "Pages/Login/Container/Login";
 import { openNotification } from "Utils/openNotification";
+
 function App() {
 	const [auth, setAuth] = useState(undefined);
-
-	useEffect(() => {
-		timeLogout();
-	}, []);
 
 	const timeLogout = () => {
 		const token = getToken();
@@ -33,6 +30,10 @@ function App() {
 			setAuth(null);
 		}
 	};
+
+	useEffect(() => {
+		timeLogout();
+	}, []);
 
 	const logout = () => {
 		removeToken();

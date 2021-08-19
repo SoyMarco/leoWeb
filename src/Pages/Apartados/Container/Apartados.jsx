@@ -6,6 +6,8 @@ import { GET_APARTADOS } from "graphql/apartado";
 import { RiWifiOffLine } from "react-icons/ri";
 import { BsSearch } from "react-icons/bs";
 import "./apartados.css";
+import { ErrorConection } from "Utils/openNotification";
+
 export default function Apartados() {
 	let { data, loading, error, refetch } = useQuery(GET_APARTADOS);
 	const [stateRecord, setstateRecord] = useState(null);
@@ -47,11 +49,7 @@ export default function Apartados() {
 	}, []);
 
 	if (error) {
-		notification.open({
-			message: "Error de conexión",
-			description: "Intentalo más tarde",
-			icon: <RiWifiOffLine style={{ color: "red" }} />,
-		});
+		ErrorConection();
 	}
 	useEffect(() => {
 		if (data) {

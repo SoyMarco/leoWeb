@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
 	openNotification,
-	errorConection,
+	ErrorConection,
 } from "../../../Utils/openNotification";
 import { CANCELAR_VENTA } from "../../../graphql/venta";
 import { MdLocalGroceryStore } from "react-icons/md";
@@ -73,7 +73,7 @@ export default function Ventas({
 			}
 		} catch (error) {
 			setloader(false);
-			errorConection();
+			ErrorConection();
 		}
 	};
 	/* COLUMNAS VENTAS */
@@ -114,7 +114,7 @@ export default function Ventas({
 			dataIndex: "tarjeta",
 			key: "tarjeta",
 			render: (tarjeta, record) => (
-				<Row justify="space-around">
+				<Row justify='space-around'>
 					<h3
 						style={{
 							textAlignLast: "center",
@@ -154,7 +154,7 @@ export default function Ventas({
 				showTitle: false,
 			},
 			render: (total) => (
-				<Tooltip placement="topRight" title={total}>
+				<Tooltip placement='topRight' title={total}>
 					<h3
 						style={{
 							textAlignLast: "right",
@@ -176,14 +176,14 @@ export default function Ventas({
 			},
 			width: "60px",
 			render: (totalArticulo, record) => (
-				<Row justify="center">
+				<Row justify='center'>
 					<Popconfirm
-						title="¿Deseas reimprimir?"
+						title='¿Deseas reimprimir?'
 						onConfirm={() => setimprimir(true)}
 					>
 						<Button
 							icon={<AiFillPrinter style={{ fontSize: "25px" }} />}
-							shape="circle"
+							shape='circle'
 							style={{ color: "blue" }}
 						/>
 					</Popconfirm>
@@ -199,15 +199,15 @@ export default function Ventas({
 			},
 			width: "60px",
 			render: (totalArticulo, record) => (
-				<Row justify="center">
+				<Row justify='center'>
 					<Popconfirm
-						title="¿Cancelar Venta?"
+						title='¿Cancelar Venta?'
 						onConfirm={() => cancelVenta(record)}
 					>
 						<Switch
 							loading={loader}
 							checked={!record.cancelado}
-							size="small"
+							size='small'
 							style={
 								record.cancelado
 									? { background: "red", marginTop: "5px" }
@@ -226,7 +226,7 @@ export default function Ventas({
 				<Imprimir imprimir={imprimir} stateRecord={stateRecord} auth={auth} />
 			) : null}
 			<Col xs={24} sm={24} md={16}>
-				<Divider orientation="left">Ventas</Divider>
+				<Divider orientation='left'>Ventas</Divider>
 				<Table
 					columns={colVentas}
 					dataSource={getVentasDia}
@@ -241,7 +241,7 @@ export default function Ventas({
 						margin: "10px",
 					}}
 					rowSelection={rowSelection}
-					size="small"
+					size='small'
 					onRow={(record, rowIndex) => {
 						return {
 							onClick: (e) => {
@@ -257,7 +257,7 @@ export default function Ventas({
 										style={{ color: "red", fontSize: "xxx-large" }}
 									/>
 								}
-								subTitle="No se encontraron ventas"
+								subTitle='No se encontraron ventas'
 							/>
 						),
 					}}

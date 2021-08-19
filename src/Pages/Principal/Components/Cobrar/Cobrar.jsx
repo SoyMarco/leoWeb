@@ -3,7 +3,7 @@ import { Modal, Input, Form, Button, Row, notification } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
 import Imprimir from "../Imprimir/Imprimir";
-import { openNotification, errorConection } from "Utils/openNotification";
+import { openNotification, ErrorConection } from "Utils/openNotification";
 import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
 import { REGISTER_VENTA } from "graphql/venta";
@@ -145,7 +145,7 @@ const Cobrar = ({
 				}
 			} catch (error) {
 				setbtnLoading(false);
-				errorConection();
+				ErrorConection();
 			}
 		}
 	};
@@ -176,7 +176,7 @@ const Cobrar = ({
 				visible={modalCobrar}
 				onCancel={() => setmodalCobrar(!modalCobrar)}
 				footer={[
-					<Row justify="space-around">
+					<Row justify='space-around'>
 						<Button
 							style={{
 								background: "linear-gradient(#32A632,#005800)",
@@ -184,7 +184,7 @@ const Cobrar = ({
 								fontWeight: "bold",
 								width: 230,
 							}}
-							shape="round"
+							shape='round'
 							// loading={loading}
 							// disabled={cambio < 0}
 							onClick={() => savePrintNewV("F1")}
@@ -200,7 +200,7 @@ const Cobrar = ({
 								fontWeight: "bold",
 								width: 230,
 							}}
-							shape="round"
+							shape='round'
 							// loading={loading}
 							// disabled={cambio < 0}
 							onClick={() => savePrintNewV("F2")}
@@ -212,7 +212,7 @@ const Cobrar = ({
 					</Row>,
 				]}
 			>
-				<div key="div1" style={{ textAlignLast: "center" }}>
+				<div key='div1' style={{ textAlignLast: "center" }}>
 					<h1
 						style={{
 							fontWeight: "bold",
@@ -224,66 +224,66 @@ const Cobrar = ({
 						Total: ${totalTotal}
 					</h1>
 				</div>
-				<div key="div2" style={{ textAlignLast: "right" }}>
+				<div key='div2' style={{ textAlignLast: "right" }}>
 					<Form form={form} onValuesChange={OnValuesChange}>
 						<Form.Item
-							label="Efectivo"
-							name="efectivo"
-							key="1"
+							label='Efectivo'
+							name='efectivo'
+							key='1'
 							rules={[
 								{
 									required: false,
 									message: "Please input your username!",
 								},
 							]}
-							className="labelCobrar"
+							className='labelCobrar'
 						>
 							<Input
-								id="cobrarEfectivo"
-								className="inputCobrar"
-								type="number"
+								id='cobrarEfectivo'
+								className='inputCobrar'
+								type='number'
 								prefix={<FaMoneyBillWave style={{ color: "gray" }} />}
 								onKeyUp={pressKeyPrecio}
 								onKeyDown={keyBlock}
 							></Input>
 						</Form.Item>
 						<Form.Item
-							label="Tarjeta"
-							name="tarjeta"
-							key="2"
+							label='Tarjeta'
+							name='tarjeta'
+							key='2'
 							rules={[
 								{
 									required: false,
 									message: "Please input your username!",
 								},
 							]}
-							className="labelCobrar"
+							className='labelCobrar'
 						>
 							<Input
-								id="cobrarTarjeta"
-								className="inputCobrar"
-								type="number"
+								id='cobrarTarjeta'
+								className='inputCobrar'
+								type='number'
 								prefix={<FaCreditCard style={{ color: "gray" }} />}
 								onKeyUp={pressKeyPrecio}
 								onKeyDown={keyBlock}
 							></Input>
 						</Form.Item>
 						<Form.Item
-							label="A cuenta"
-							name="aCuenta"
-							key="3"
+							label='A cuenta'
+							name='aCuenta'
+							key='3'
 							rules={[
 								{
 									required: false,
 									message: "Please input your username!",
 								},
 							]}
-							className="labelCobrar"
+							className='labelCobrar'
 						>
 							<Input
-								id="cobraraCuenta"
-								className="inputCobrar"
-								type="number"
+								id='cobraraCuenta'
+								className='inputCobrar'
+								type='number'
 								prefix={<FaStoreAlt style={{ color: "gray" }} />}
 								onKeyUp={pressKeyPrecio}
 								onKeyDown={keyBlock}
@@ -291,7 +291,7 @@ const Cobrar = ({
 						</Form.Item>
 					</Form>
 				</div>
-				<div key="div3" style={{ textAlignLast: "center" }}>
+				<div key='div3' style={{ textAlignLast: "center" }}>
 					<h1
 						style={
 							cambio >= 0

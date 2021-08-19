@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
 	openNotification,
-	errorConection,
+	ErrorConection,
 } from "../../../Utils/openNotification";
 import { CANCELAR_VENTA } from "../../../graphql/venta";
 import { MdLocalGroceryStore } from "react-icons/md";
@@ -78,7 +78,7 @@ export default function Ventas({
 			}
 		} catch (error) {
 			setloader(false);
-			errorConection();
+			ErrorConection();
 		}
 	};
 	/* COLUMNAS VENTAS */

@@ -69,7 +69,7 @@ function LayoutForm({ children }) {
 					minHeight: "100vh",
 					background: "linear-gradient(#0000A6,#000066,#000058)",
 				}}
-				className="site-layout"
+				className='site-layout'
 			>
 				{/* HORIZONTAL */}
 				<Header
@@ -82,7 +82,7 @@ function LayoutForm({ children }) {
 					}}
 				>
 					<Menu
-						mode="horizontal"
+						mode='horizontal'
 						style={{
 							background: "transparent",
 							margin: "-10px 0 0 0",
@@ -92,17 +92,17 @@ function LayoutForm({ children }) {
 						}}
 					>
 						<Menu.Item
-							key="header1"
+							key='header1'
 							style={{
 								background: "transparent",
 								margin: 0,
 								padding: " 0 0 0 20px",
 							}}
 							onClick={() => history.push("/")}
-							icon={<Avatar src={LogoLeo} size="large" />}
+							icon={<Avatar src={LogoLeo} size='large' />}
 						></Menu.Item>
 						<Menu.Item
-							key="header2"
+							key='header2'
 							onClick={() => history.push("/")}
 							style={{
 								padding: 0,
@@ -120,7 +120,7 @@ function LayoutForm({ children }) {
 							</h1>
 						</Menu.Item>
 						<Menu.Item
-							key="header3"
+							key='header3'
 							style={{
 								display: "flex",
 								flexDirection: "column",
@@ -137,12 +137,12 @@ function LayoutForm({ children }) {
 								}}
 							/>
 						</Menu.Item>
-						<Menu.Item key="header4" style={{ padding: "3px 0 0 15px" }}>
+						<Menu.Item key='header4' style={{ padding: "3px 0 0 15px" }}>
 							<h1 style={{ color: "white", marginRight: 60 }}>Marco</h1>
 						</Menu.Item>
-						<Menu.Item key="5">
+						<Menu.Item key='5'>
 							{/* <h1></h1> */}
-							<Popconfirm title="¿Cerrar sesión?" onConfirm={() => logoutApp()}>
+							<Popconfirm title='¿Cerrar sesión?' onConfirm={() => logoutApp()}>
 								<Switch
 									checked={swtichstate}
 									style={
@@ -167,15 +167,15 @@ function LayoutForm({ children }) {
 				{/* VERTICAL */}
 				<Layout>
 					<Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-						<div className="logo" />
+						<div className='logo' />
 						<Menu
-							mode="inline"
+							mode='inline'
 							onClick={handleClick}
 							defaultOpenKeys={["sub1"]}
 							selectedKeys={[currentMenu]}
 						>
 							<Menu.Item
-								key="1"
+								key='1'
 								icon={
 									<Link
 										to={{
@@ -190,7 +190,7 @@ function LayoutForm({ children }) {
 								Cuenta
 							</Menu.Item>
 							<Menu.Item
-								key="2"
+								key='2'
 								icon={
 									<Link
 										to={{
@@ -205,7 +205,7 @@ function LayoutForm({ children }) {
 								Corte
 							</Menu.Item>
 							<Menu.Item
-								key="3"
+								key='3'
 								icon={
 									<Link
 										to={{
@@ -220,7 +220,7 @@ function LayoutForm({ children }) {
 								Apartados
 							</Menu.Item>
 							<Menu.Item
-								key="4"
+								key='4'
 								icon={<FaWindowRestore style={{ color: "darkblue" }} />}
 								onClick={() => window.open(UrlFrontend)}
 							>
