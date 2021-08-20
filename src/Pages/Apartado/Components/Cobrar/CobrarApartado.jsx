@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Modal, Input, Form, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
-import Imprimir from "../Imprimir/Imprimir";
+import Imprimir from "../Imprimir/ImprimirApartado";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
-
 import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
-import { REGISTER_VENTA } from "graphql/venta";
+import { ADD_ABONO } from "graphql/apartado";
 import useAuth from "hooks/useAuth";
 
 // import "./cobrar.css";
@@ -20,7 +19,7 @@ const Cobrar = ({
 	listaCompras,
 	initialState,
 }) => {
-	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
+	const [mutateADD_ABONO] = useMutation(ADD_ABONO);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);
 	const [imprimir, setimprimir] = useState(false);
@@ -43,7 +42,7 @@ const Cobrar = ({
 	const pressKeyPrecio = (e) => {
 		// Enter
 		if (e.keyCode === 13) {
-			savePrintNewV("F1");
+			savePrintAbono("F1");
 		}
 		// E
 		if (e.keyCode === 69) {
@@ -60,11 +59,11 @@ const Cobrar = ({
 
 		// 	F1
 		if (e.keyCode === 112) {
-			savePrintNewV("F1");
+			savePrintAbono("F1");
 		}
 		// F2
 		if (e.keyCode === 113) {
-			savePrintNewV("F2");
+			savePrintAbono("F2");
 		}
 		// F3
 		if (e.keyCode === 114) {
@@ -98,42 +97,17 @@ const Cobrar = ({
 		setcambio(resultado);
 	};
 
-	//Guardar y/o Imprimir VENTA CON GraphQL
-	const savePrintNewV = async (keyF) => {
-		let efectivo = parseFloat(dinero.efectivo);
-		let tarjeta = parseFloat(dinero.tarjeta);
-		let aCuenta = parseFloat(dinero.aCuenta);
-		let total = parseFloat(totalTotal);
-
+	//Guardar y/o Imprimir APARTADO CON GraphQL
+	const savePrintAbono = async (keyF) => {
 		if (cambio >= 0) {
 			setbtnLoading(true);
-			let listaComprasNew = listaCompras.map((item) => {
-				return {
-					apartado: item.apartado,
-					cantidad: item.cantidad,
-					idArray: item.key,
-					nombre: item.nombre,
-					precio: item.precio,
-					refApartado: item.refApartado,
-					totalArticulo: item.totalArticulo,
-				};
-			});
 
-			console.log(listaComprasNew);
 			try {
-				const { data } = await mutateREGISTER_VENTA({
+				const { data } = await mutateADD_ABONO({
 					variables: {
 						input: {
-							productos: listaComprasNew,
-							vendedor: auth.name,
-							folio: 1,
-							total: total,
-							efectivo: efectivo,
-							tarjeta: tarjeta,
-							aCuenta: aCuenta,
-							pagoCon: 0,
-							referencia: "",
-							notas: "",
+							id: listaCompras.id,
+							abono: parseFloat(totalTotal),
 						},
 					},
 				});
@@ -142,7 +116,7 @@ const Cobrar = ({
 						setfolio(data.registerVenta.folio);
 						setimprimir(true);
 					} else if (keyF === "F2") {
-						openNotification("success", "Venta guardada con exito");
+						openNotification("success", "Apartado guardado con exito");
 						initialState();
 					}
 				}
@@ -190,7 +164,7 @@ const Cobrar = ({
 							shape='round'
 							// loading={loading}
 							// disabled={cambio < 0}
-							onClick={() => savePrintNewV("F1")}
+							onClick={() => savePrintAbono("F1")}
 							icon={<PrinterFilled />}
 							loading={btnLoading}
 						>
@@ -206,7 +180,7 @@ const Cobrar = ({
 							shape='round'
 							// loading={loading}
 							// disabled={cambio < 0}
-							onClick={() => savePrintNewV("F2")}
+							onClick={() => savePrintAbono("F2")}
 							icon={<SaveFilled />}
 							loading={btnLoading}
 						>

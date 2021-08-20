@@ -1,21 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { openNotification, ErrorConection } from "Utils/openNotification";
-import { CANCELAR_VENTA } from "graphql/venta";
-import {
-	GET_PRODUCTOS_FOLIO,
-	CANCELAR_APARTADO,
-	EDIT_VENCE_APARTADO,
-	CANCELAR_PRODUCTO_APARTDO,
-} from "graphql/apartado";
-import {
-	MdLocalGroceryStore,
-	MdDelete,
-	MdAddShoppingCart,
-} from "react-icons/md";
-import { FaShoppingCart, FaMoneyBillWave } from "react-icons/fa";
-import { GiLargeDress } from "react-icons/gi";
+import React, { useState, useEffect } from "react";
+import { openNotification } from "Utils/openNotification";
+import ErrorConection from "Utils/ErrorConection";
+import { CANCELAR_PRODUCTO_APARTDO } from "graphql/apartado";
+import { MdLocalGroceryStore, MdDelete } from "react-icons/md";
+import { FaShoppingCart } from "react-icons/fa";
 import { useMutation } from "@apollo/client";
-import Imprimir from "./Imprimir/Imprimir";
 import useAuth from "hooks/useAuth";
 import moment from "moment";
 import {
@@ -28,11 +17,10 @@ import {
 	Popconfirm,
 	Switch,
 	Tooltip,
-	Modal,
-	Input,
-	Form,
 } from "antd";
 import "./productos.css";
+import AddProduct from "./AddProduct/AddProduct";
+
 export default function Productos({
 	loading,
 	productos,
@@ -41,16 +29,17 @@ export default function Productos({
 	loader,
 	setloader,
 	stateRecord,
+	dataApartado,
+	totalProductos,
+	totalTotal,
+	inputAbono,
 }) {
 	const [mutateCANCELAR_PRODUCTO_APARTDO] = useMutation(
 		CANCELAR_PRODUCTO_APARTDO
 	);
-	const [nombre, setnombre] = useState("");
-	const [precio, setprecio] = useState(0);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
-	const [modalAddProduct, setmodalAddProduct] = useState(true);
-	const { auth } = useAuth();
-	const [imprimir, setimprimir] = useState(false);
+	const [modalAddProduct, setmodalAddProduct] = useState(false);
+	const { logout } = useAuth();
 	const onSelectChange = (selectedRowKeys) => {
 		setselectedRowKeys([]);
 		// setselectedRowKeys(selectedRowKeys);
@@ -59,10 +48,14 @@ export default function Productos({
 		selectedRowKeys,
 		onChange: onSelectChange,
 	};
-
+	useEffect(() => {
+		if (modalAddProduct === false) inputAbono.current.select();
+	}, [modalAddProduct]);
 	const click = (record, rowIndex) => {
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
+		inputAbono.current.select();
+
 		// addArticulo(record, rowIndex);
 	};
 	const pasarAFecha = (item) => {
@@ -105,75 +98,24 @@ export default function Productos({
 			}
 		} catch (error) {
 			setloader(false);
-			ErrorConection();
+			ErrorConection(logout);
 		}
-	};
-	const pressKeyEnter = (e) => {
-		if (e.keyCode === 13) {
-			agregarProducto();
-		}
-	};
-	const agregarProducto = () => {
-		// 	if (precio > 0 && nombre) {
-		// 		borrarEntregar = "editar";
-		// 		updateProducto();
-		// 	} else if (!nombre && precio > 0) {
-		// 		document.querySelector("#addProductNombre").select();
-		// 	} else if (nombre && !precio) {
-		// 		document.querySelector("#addProductPrecio").select();
-		// 	} else {
-		// 	}
 	};
 
-	// const updateProducto = async () => {
-	// 	console.log(item);
-	// 	setloader(true);
-	// 	let status = true;
-	// 	if (item.entregado[0] && item.entregado[0].status) {
-	// 		status = !item.entregado[0].status;
-	// 	}
-	// 	try {
-	// 		if (item._id) {
-	// 			const { data } = await mutateCANCELAR_PRODUCTO_APARTDO({
-	// 				// Parameters
-	// 				variables: {
-	// 					input: {
-	// 						_id: item._id,
-	// 						status: status,
-	// 						borrarEntregar: borrarEntregar,
-	// 					},
-	// 				},
-	// 			});
-	// 			if (data) {
-	// 				if (borrarEntregar === "borrar") {
-	// 					openNotification("success", `Articulo borrado con exito`);
-	// 				} else if (borrarEntregar === "entregar") {
-	// 					openNotification("success", `Articulo modificado con exito`);
-	// 				}
-	// 				refetch();
-	// 				setloader(false);
-	// 			}
-	// 		}
-	// 	} catch (error) {
-	// 		setloader(false);
-	// 		ErrorConection();
-	// 	}
-	// };
 	/* COLUMNAS VENTAS */
 	const colProductos = [
-		{
-			title: "ID",
-			dataIndex: "idArray",
-			key: "idArray",
-			sorter: (a, b) => b.idArray - a.idArray,
-			defaultSortOrder: "ascend",
-			width: "24px",
-			// render: (idArray) => <span>{idArray}</span>,
-		},
+		// {
+		// 	title: "ID",
+		// 	dataIndex: "idArray",
+		// 	key: "idArray",
+		// 	width: "24px",
+		// 	render: (idArray) => <span></span>,
+		// },
 		{
 			title: "Producto",
 			dataIndex: "nombre",
 			key: "nombre",
+
 			ellipsis: true,
 			render: (nombre) => (
 				<h3
@@ -190,6 +132,8 @@ export default function Productos({
 			title: "Fecha",
 			dataIndex: "createAt",
 			key: "createAt",
+			sorter: (a, b) => b.createAt - a.createAt,
+			defaultSortOrder: "ascend",
 			// width: "80px",
 			render: (createAt, record) => (
 				<h1
@@ -212,6 +156,7 @@ export default function Productos({
 			title: "Precio",
 			dataIndex: "precio",
 			key: "precio",
+			sorter: (a, b) => b.precio - a.precio,
 			// width: "90px",
 			render: (precio, record) => (
 				<Row justify='space-around'>
@@ -236,17 +181,19 @@ export default function Productos({
 			},
 			width: "60px",
 			render: (totalArticulo, record) => (
-				<Row justify='center'>
-					<Popconfirm
-						title='¿Deseas eliminar?'
-						onConfirm={() => borrarEntregarProduct(record, "borrar")}
-					>
-						<Button
-							shape='circle'
-							icon={<MdDelete style={{ color: "#c5221f" }} size='25px' />}
-						></Button>
-					</Popconfirm>
-				</Row>
+				<Tooltip placement='right' title='Borrar producto'>
+					<Row justify='center'>
+						<Popconfirm
+							title='¿Deseas eliminar?'
+							onConfirm={() => borrarEntregarProduct(record, "borrar")}
+						>
+							<Button
+								shape='circle'
+								icon={<MdDelete style={{ color: "#c5221f" }} size='25px' />}
+							></Button>
+						</Popconfirm>
+					</Row>
+				</Tooltip>
 			),
 		},
 		{
@@ -286,11 +233,7 @@ export default function Productos({
 
 	return (
 		<>
-			{imprimir ? (
-				<Imprimir imprimir={imprimir} stateRecord={stateRecord} auth={auth} />
-			) : null}
 			<Col xs={24} sm={24} md={14}>
-				<Divider orientation='left'>Productos</Divider>
 				<Table
 					id='tableApartado'
 					title={() => (
@@ -305,22 +248,26 @@ export default function Productos({
 							>
 								Productos: {productos.length}
 							</h1>
-							<Button
-								shape='round'
-								style={{
-									background: "linear-gradient(#2196F3,#0000E6)",
-									marginTop: 5,
-									marginRight: 10,
-									color: "white",
-									border: 0,
-									// fontSize: "large",
-									fontWeight: "bold",
-								}}
-								onClick={() => setmodalAddProduct(true)}
-							>
-								<FaShoppingCart style={{ fontSize: "large", marginRight: 5 }} />
-								Agregar
-							</Button>
+							<Tooltip placement='top' title='Agregar producto'>
+								<Button
+									shape='round'
+									style={{
+										background: "linear-gradient(#2196F3,#0000E6)",
+										marginTop: 5,
+										marginRight: 10,
+										color: "white",
+										border: 0,
+										// fontSize: "large",
+										fontWeight: "bold",
+									}}
+									onClick={() => setmodalAddProduct(true)}
+								>
+									<FaShoppingCart
+										style={{ fontSize: "large", marginRight: 5 }}
+									/>
+									Agregar
+								</Button>
+							</Tooltip>
 						</Row>
 					)}
 					columns={colProductos}
@@ -328,9 +275,9 @@ export default function Productos({
 					pagination={false}
 					bordered
 					loading={loading}
-					scroll={{ y: 350 }}
+					scroll={{ y: 210 }}
 					style={{
-						height: "400px",
+						height: "380px",
 						borderRadius: "10px",
 						boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
 						margin: "10px",
@@ -352,68 +299,34 @@ export default function Productos({
 										style={{ color: "red", fontSize: "xxx-large" }}
 									/>
 								}
-								subTitle='No se encontraron ventas'
+								subTitle='Apartado sin productos'
 							/>
 						),
 					}}
+					footer={() => (
+						<Row justify='end'>
+							<h1
+								style={{
+									color: "green",
+									fontSize: "xx-large",
+									fontWeight: "revert",
+									marginRight: "20px",
+								}}
+							>
+								Productos ${totalTotal}
+							</h1>
+						</Row>
+					)}
 				/>
 			</Col>
-			{modalAddProduct && (
-				<Modal
-					title='Agregar producto'
-					visible={modalAddProduct}
-					onOk={() => agregarProducto()}
-					onCancel={() => setmodalAddProduct(false)}
-				>
-					<Form.Item
-						label='Articulo'
-						name='Articulo'
-						key='1'
-						rules={[
-							{
-								required: false,
-								message: "Please input your username!",
-							},
-						]}
-						className='labelCobrar'
-						id='inputAddProduct'
-						onKeyUp={pressKeyEnter}
-						onChange={(e) => setnombre(e.target.value)}
-					>
-						<Input
-							id='addProductNombre'
-							className='labelAddProducts'
-							prefix={<GiLargeDress style={{ color: "gray" }} />}
-							// onKeyUp={pressKeyPrecio}
-							// onKeyDown={keyBlock}
-						/>
-					</Form.Item>
 
-					<Form.Item
-						label='Precio'
-						name='Precio'
-						key='1'
-						rules={[
-							{
-								required: false,
-								message: "Please input your username!",
-							},
-						]}
-						className='labelCobrar'
-						onKeyUp={pressKeyEnter}
-						onChange={(e) => setprecio(e.target.value)}
-					>
-						<Input
-							id='addProductPrecio'
-							className='labelAddProducts'
-							type='number'
-							// style={{ borderRadius: 50 }}
-							prefix={<FaMoneyBillWave style={{ color: "gray" }} />}
-							// onKeyUp={pressKeyPrecio}
-							// onKeyDown={keyBlock}
-						/>
-					</Form.Item>
-				</Modal>
+			{modalAddProduct && (
+				<AddProduct
+					setmodalAddProduct={setmodalAddProduct}
+					modalAddProduct={modalAddProduct}
+					refetch={refetch}
+					dataApartado={dataApartado}
+				/>
 			)}
 		</>
 	);

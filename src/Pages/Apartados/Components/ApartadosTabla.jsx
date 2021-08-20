@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {
-	openNotification,
-	ErrorConection,
-} from "../../../Utils/openNotification";
-import { CANCELAR_VENTA } from "../../../graphql/venta";
+import { openNotification } from "Utils/openNotification";
+import ErrorConection from "Utils/ErrorConection";
+
+import { CANCELAR_VENTA } from "graphql/venta";
 import { MdLocalGroceryStore } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { AiFillPrinter } from "react-icons/ai";
 import { useMutation } from "@apollo/client";
-import Imprimir from "./Imprimir/Imprimir";
-import useAuth from "../../../hooks/useAuth";
+import Imprimir from "./Imprimir/ImprimirApartado";
+import useAuth from "hooks/useAuth";
 import moment from "moment";
 import {
 	Table,
@@ -34,7 +33,7 @@ export default function Ventas({
 }) {
 	const [mutateCANCELAR_VENTA] = useMutation(CANCELAR_VENTA);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
-	const { auth } = useAuth();
+	const { auth, logout } = useAuth();
 	const [imprimir, setimprimir] = useState(false);
 	const history = useHistory();
 
@@ -78,7 +77,7 @@ export default function Ventas({
 			}
 		} catch (error) {
 			setloader(false);
-			ErrorConection();
+			ErrorConection(logout);
 		}
 	};
 	/* COLUMNAS VENTAS */

@@ -6,8 +6,8 @@ import "./corte.css";
 import { Row, Divider, notification } from "antd";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import { GET_VENTAS_DIA } from "../../../graphql/venta";
-import { ErrorConection } from "Utils/openNotification";
-
+import ErrorConection from "Utils/ErrorConection";
+import useAuth from "hooks/useAuth";
 import "./corte.css";
 
 const Corte = () => {
@@ -15,12 +15,13 @@ const Corte = () => {
 	const [getVentasDia, setgetVentasDia] = useState([]);
 	const [stateRecord, setstateRecord] = useState(null);
 	const [loader, setloader] = useState(false);
+	const { logout } = useAuth();
 	useEffect(() => {
 		refetch();
 	}, []);
 
 	if (error) {
-		ErrorConection();
+		ErrorConection(logout);
 	}
 	useEffect(() => {
 		if (data) {

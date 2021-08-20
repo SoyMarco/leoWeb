@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { TablaProductos, TablaApartados } from "../Components";
-import { Row, notification, Input, Card } from "antd";
+import { Row, Input, Card } from "antd";
 import { useQuery } from "@apollo/client";
 import { GET_APARTADOS } from "graphql/apartado";
-import { RiWifiOffLine } from "react-icons/ri";
 import { BsSearch } from "react-icons/bs";
 import "./apartados.css";
-import { ErrorConection } from "Utils/openNotification";
+import ErrorConection from "Utils/ErrorConection";
+import useAuth from "hooks/useAuth";
+import { UrlFrontend } from "config/apollo";
+import { useHistory } from "react-router-dom";
 
 export default function Apartados() {
 	let { data, loading, error, refetch } = useQuery(GET_APARTADOS);
@@ -14,6 +16,8 @@ export default function Apartados() {
 	const [getApartados, setgetApartados] = useState([]);
 	const [dataFilter, setdataFilter] = useState(null);
 	const [loader, setloader] = useState(false);
+	const { logout } = useAuth();
+	const history = useHistory();
 
 	const onChangeFilter = (e) => {
 		setdataFilter(null);
@@ -49,7 +53,7 @@ export default function Apartados() {
 	}, []);
 
 	if (error) {
-		ErrorConection();
+		ErrorConection(logout);
 	}
 	useEffect(() => {
 		if (data) {
@@ -61,6 +65,62 @@ export default function Apartados() {
 			setgetApartados(listaApartados);
 		}
 	}, [data]);
+	const pressKeyAbono = (e) => {
+		// F6 abrir ventana
+		if (e.keyCode === 117) {
+			window.open(UrlFrontend);
+		}
+	};
+	const keyBlock = (e) => {
+		if (e.shiftKey || (e.shiftKey && e.which === 51) || e.key === "Dead") {
+			e.preventDefault();
+		}
+		if (
+			e.keyCode === 69 ||
+			e.keyCode === 73 ||
+			e.keyCode === 186 ||
+			e.keyCode === 187 ||
+			e.keyCode === 189 ||
+			e.keyCode === 40 ||
+			e.keyCode === 107 ||
+			e.keyCode === 109 ||
+			e.keyCode === 112 ||
+			e.keyCode === 113 ||
+			e.keyCode === 114 ||
+			e.keyCode === 117 ||
+			e.keyCode === 123 ||
+			e.keyCode === 191 ||
+			e.keyCode === 192 ||
+			e.keyCode === 219 ||
+			e.keyCode === 220 ||
+			e.keyCode === 221 ||
+			e.keyCode === 222 ||
+			e.keyCode === 38 ||
+			e.keyCode === 40 ||
+			e.key === "{" ||
+			e.key === "}" ||
+			e.key === "+" ||
+			e.key === "*" ||
+			e.key === "[" ||
+			e.key === "]" ||
+			e.key === "´" ||
+			e.key === "/" ||
+			e.key === "<" ||
+			e.key === "+" ||
+			e.key === "´´" ||
+			e.key === "ArrowLeft" ||
+			e.key === "BracketLeft" ||
+			e.key === "BracketRight" ||
+			e.key === "Quote" ||
+			e.key === "Shift" ||
+			e.key === "Dead" ||
+			e.shiftKey ||
+			e.key === "ArrowDown" ||
+			e.key === "ArrowUp"
+		) {
+			e.preventDefault();
+		}
+	};
 	return (
 		<>
 			<Card>
@@ -77,6 +137,8 @@ export default function Apartados() {
 						prefix={<BsSearch style={{ marginLeft: "20px" }} />}
 						placeholder='Buscar...'
 						onChange={onChangeFilter}
+						onKeyUp={pressKeyAbono}
+						onKeyDown={keyBlock}
 						style={{
 							color: "blue",
 							// fontSize: 30,

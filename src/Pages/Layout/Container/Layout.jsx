@@ -29,7 +29,12 @@ function LayoutForm({ children }) {
 
 	/* Cambiar titulo de pagina */
 	useEffect(() => {
+		let apartado = Location.pathname;
+		apartado = apartado.slice(0, 10);
+		console.log("apartado", apartado);
 		if (Location.pathname === "/") {
+			settitleWeb(null);
+		} else if (apartado === "/apartado/") {
 			settitleWeb(null);
 		} else {
 			let title = Location.pathname;
