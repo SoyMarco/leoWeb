@@ -215,6 +215,12 @@ export const ADD_PRODUCTO = gql`
 		}
 	}
 `;
+
+export const CANCEL_ENTREGA = gql`
+	mutation cancelEntrega($input: cancelEntregaInput) {
+		cancelEntrega(input: $input)
+	}
+`;
 export const CANCELAR_PRODUCTO_APARTDO = gql`
 	mutation cancelarProductoApartado($input: productoESCinput) {
 		cancelarProductoApartado(input: $input) {

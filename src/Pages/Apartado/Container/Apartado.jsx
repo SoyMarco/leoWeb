@@ -13,19 +13,23 @@ import {
 	Progress,
 	Result,
 } from "antd";
-import { DollarCircleFilled } from "@ant-design/icons";
+import { DollarCircleFilled, CalendarOutlined } from "@ant-design/icons";
 import { useQuery, gql, useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { useParams, useLocation, useHistory } from "react-router-dom";
-import { GET_PRODUCTOS_FOLIO, CANCELAR_APARTADO } from "graphql/apartado";
+import {
+	GET_PRODUCTOS_FOLIO,
+	CANCELAR_APARTADO,
+	CANCEL_ENTREGA,
+} from "graphql/apartado";
 import useAuth from "hooks/useAuth";
 import { DeleteFilled, PrinterFilled } from "@ant-design/icons";
 import { keyBlock } from "Utils";
 import { UrlFrontend } from "config/apollo";
 import CobrarApartado from "../Components/Cobrar/CobrarApartado";
 import moment from "moment";
-
+import ModalCalendar from "Pages/Apartado/Components/ModalCalendar/ModalCalendar";
 export default function Apartado(props) {
 	const history = useHistory();
 	const params = useParams();
@@ -33,6 +37,7 @@ export default function Apartado(props) {
 	let urlFolio = parseInt(params.folio);
 	const [titleWeb, settitleWeb] = useState("Apartado");
 	const [mutateCANCELAR_APARTADO] = useMutation(CANCELAR_APARTADO);
+	const [mutateCANCEL_ENTREGA] = useMutation(CANCEL_ENTREGA);
 	let { data, loading, error, refetch } = useQuery(GET_PRODUCTOS_FOLIO, {
 		variables: { folio: urlFolio },
 	});
@@ -50,6 +55,11 @@ export default function Apartado(props) {
 	const [totalProductos, settotalProductos] = useState(0);
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
+	const [modalCalendar, setmodalCalendar] = useState(false);
+	const [colorVence, setcolorVence] = useState(
+		"linear-gradient(#2196F3,#0000E6)"
+	);
+	const [venceEn, setvenceEn] = useState(null);
 	const inputAbono = useRef();
 	useEffect(() => {
 		if (data?.getProductosFolio[0]) {
@@ -171,9 +181,62 @@ export default function Apartado(props) {
 		let fecha = moment.unix(item / 1000).format("LLLL");
 		return fecha;
 	};
+	const pasarAFechaLL = (item) => {
+		let fecha = moment.unix(item / 1000).format("LL");
+		return fecha;
+	};
+	const cancelEntrega = async () => {
+		setbtnLoading(true);
+		let status = dataApartado?.entregado[0]?.status ?? false;
+		try {
+			if (dataApartado.id) {
+				let { data } = await mutateCANCEL_ENTREGA({
+					// Parameters
+					variables: {
+						input: {
+							id: dataApartado.id,
+							status: status,
+						},
+					},
+				});
+				if (data) {
+					openNotification(
+						"success",
+						`Apartado ${status ? "ENTREGADO" : "REACTIVADO"}`
+					);
+					refetch();
+					setbtnLoading(false);
+				}
+			}
+		} catch (error) {
+			setbtnLoading(false);
+			ErrorConection(logout);
+		}
+	};
+	const fechaVenceEn = () => {
+		var fecha = moment.unix(dataApartado.vence / 1000).fromNow();
+		if (dataApartado.vence > Date.now()) {
+			setvenceEn(`Vence ${fecha}`);
+			//Color azul
+			setcolorVence("linear-gradient(#2196F3,#0000E6)");
+		} else {
+			setvenceEn(`Venció ${fecha}`);
+			//Color rojo
+			setcolorVence("linear-gradient(#F53636,#D32F2F,#8B0000)");
+		}
+		// this.vence = fecha;
+		return fecha;
+	};
+	useEffect(() => {
+		if (dataApartado?.vence) {
+			fechaVenceEn();
+		}
+	}, [dataApartado?.vence]);
 	return (
 		<>
 			<title>{titleWeb}</title>
+
+			{/* APARTADO ENTREGADO */}
 			{dataApartado?.entregado[0]?.status && (
 				<Result
 					status='warning'
@@ -181,26 +244,55 @@ export default function Apartado(props) {
 						dataApartado?.entregado[0]?.fecha
 					)}, por ${dataApartado?.entregado[0]?.vendedor?.toUpperCase()}`}
 					extra={
-						<Button type='primary' key='console'>
-							Quitar entrega
-						</Button>
+						<Popconfirm
+							title='¿Borrar entrega?'
+							onConfirm={() => cancelEntrega()}
+						>
+							<Button type='primary' key='console' loading={btnLoading}>
+								Quitar entrega
+							</Button>
+						</Popconfirm>
 					}
 				/>
 			)}
+
+			{/* INFO APARTADO */}
 			{dataApartado?.id ? (
 				<Card
 					disabled={true}
 					actions={[
-						<h1
-							style={{
-								color: "darkblue",
-								fontSize: "xx-large",
-								fontWeight: "bold",
-								marginTop: "-5px",
-							}}
+						<Button
+							shape='round'
+							style={
+								/* statusApartado
+									?  */ {
+									background: colorVence,
+									marginTop: 5,
+									marginRight: 15,
+									color: "white",
+									border: 0,
+									fontSize: "large",
+									fontWeight: "bold",
+								}
+								/* : {
+											background: "gray",
+											marginTop: 5,
+											marginRight: 15,
+											color: "white",
+											border: 0,
+											// fontSize: "large",
+											fontWeight: "bold",
+									  } */
+							}
+							onClick={() => setmodalCalendar(true)}
+							icon={
+								<CalendarOutlined
+									style={{ fontSize: "large", marginRight: 5 }}
+								/>
+							}
 						>
-							{totalProductos ? `Fecha` : null}
-						</h1>,
+							{`${venceEn}, ${pasarAFechaLL(dataApartado.vence)}`}
+						</Button>,
 						<h1
 							style={
 								calculateRestaria() >= 0
@@ -405,7 +497,12 @@ export default function Apartado(props) {
 							/>
 						</Row>
 					) : (
-						<ErrorPage />
+						<Result
+							status='error'
+							title={`Este apartado se canceló el día ${pasarAFecha(
+								dataApartado?.cancelado[0]?.fecha
+							)}, por ${dataApartado?.cancelado[0]?.vendedor?.toUpperCase()}`}
+						/>
 					)}
 				</Card>
 			) : loading ? (
@@ -414,6 +511,7 @@ export default function Apartado(props) {
 				<ErrorPage />
 			)}
 
+			{/* MODAL APARTADO */}
 			{modalCobrar ? (
 				<CobrarApartado
 					modalCobrar={modalCobrar}
@@ -424,6 +522,16 @@ export default function Apartado(props) {
 					calculateRestaria={calculateRestaria}
 				></CobrarApartado>
 			) : null}
+
+			{/* MODAL CALENDARIO */}
+			{modalCalendar && (
+				<ModalCalendar
+					setmodalCalendar={setmodalCalendar}
+					modalCalendar={modalCalendar}
+					refetch={refetch}
+					dataApartado={dataApartado}
+				/>
+			)}
 		</>
 	);
 }
