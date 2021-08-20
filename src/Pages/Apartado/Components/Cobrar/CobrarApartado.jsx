@@ -18,6 +18,7 @@ const Cobrar = ({
 	totalTotal,
 	listaCompras,
 	initialState,
+	calculateRestaria,
 }) => {
 	const [mutateADD_ABONO] = useMutation(ADD_ABONO);
 	const [form] = Form.useForm();
@@ -108,6 +109,7 @@ const Cobrar = ({
 						input: {
 							id: listaCompras.id,
 							abono: parseFloat(totalTotal),
+							resta: parseFloat(calculateRestaria()),
 						},
 					},
 				});

@@ -11,6 +11,7 @@ import {
 	Switch,
 	Tooltip,
 	Progress,
+	Result,
 } from "antd";
 import { DollarCircleFilled } from "@ant-design/icons";
 import { useQuery, gql, useMutation } from "@apollo/client";
@@ -23,6 +24,7 @@ import { DeleteFilled, PrinterFilled } from "@ant-design/icons";
 import { keyBlock } from "Utils";
 import { UrlFrontend } from "config/apollo";
 import CobrarApartado from "../Components/Cobrar/CobrarApartado";
+import moment from "moment";
 
 export default function Apartado(props) {
 	const history = useHistory();
@@ -165,10 +167,26 @@ export default function Apartado(props) {
 
 		return restaría;
 	};
+	const pasarAFecha = (item) => {
+		let fecha = moment.unix(item / 1000).format("LLLL");
+		return fecha;
+	};
 	return (
 		<>
 			<title>{titleWeb}</title>
-
+			{dataApartado?.entregado[0]?.status && (
+				<Result
+					status='warning'
+					title={`Este apartado se entregó el día ${pasarAFecha(
+						dataApartado?.entregado[0]?.fecha
+					)}, por ${dataApartado?.entregado[0]?.vendedor?.toUpperCase()}`}
+					extra={
+						<Button type='primary' key='console'>
+							Quitar entrega
+						</Button>
+					}
+				/>
+			)}
 			{dataApartado?.id ? (
 				<Card
 					disabled={true}
@@ -403,6 +421,7 @@ export default function Apartado(props) {
 					totalTotal={abono.abono}
 					listaCompras={dataApartado}
 					initialState={initialState}
+					calculateRestaria={calculateRestaria}
 				></CobrarApartado>
 			) : null}
 		</>
