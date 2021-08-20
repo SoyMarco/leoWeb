@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Table, Result, Col, Row, Tooltip, Popconfirm, Button } from "antd";
+import {
+	Table,
+	Result,
+	Col,
+	Row,
+	Tooltip,
+	Popconfirm,
+	Button,
+	Progress,
+} from "antd";
 import { MdDelete } from "react-icons/md";
 import { SmileOutlined } from "@ant-design/icons";
 import moment from "moment";
@@ -17,6 +26,8 @@ export default function Abonos({
 	totalAbonos,
 	inputAbono,
 	refetch,
+	totalTotal,
+	abono,
 }) {
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [mutateBORRAR_EDITAR_ABONO] = useMutation(BORRAR_EDITAR_ABONO);
@@ -145,7 +156,17 @@ export default function Abonos({
 			),
 		},
 	];
-
+	const calculatePorcent = () => {
+		console.log(abono.abono);
+		let addAbono = 0;
+		if (parseInt(abono.abono) > 0) {
+			addAbono = parseInt(abono.abono);
+		}
+		let porcent = 0;
+		porcent = ((totalAbonos + addAbono) * 100) / totalTotal ?? 0;
+		console.log(porcent);
+		return porcent;
+	};
 	return (
 		<>
 			<Col xs={24} sm={24} md={10}>
@@ -171,7 +192,7 @@ export default function Abonos({
 					pagination={false}
 					loading={loading}
 					bordered
-					scroll={{ y: 230 }}
+					scroll={{ y: 210 }}
 					rowSelection={rowSelection}
 					size='small'
 					style={{
@@ -197,18 +218,38 @@ export default function Abonos({
 						),
 					}}
 					footer={() => (
-						<Row justify='end'>
-							<h1
-								style={{
-									color: "green",
-									fontSize: "xx-large",
-									fontWeight: "revert",
-									marginRight: "20px",
-								}}
-							>
-								Abonos ${totalAbonos}
-							</h1>
-						</Row>
+						<>
+							<Row justify='end'>
+								<h1
+									style={{
+										color: "green",
+										fontSize: "xx-large",
+										fontWeight: "revert",
+										marginRight: "20px",
+									}}
+								>
+									Abonos ${totalAbonos}
+								</h1>
+							</Row>
+							<Row justify='center'>
+								<Progress
+									strokeColor={
+										calculatePorcent() > 100
+											? {
+													from: "red",
+													to: "limegreen",
+											  }
+											: {
+													from: "dodgerblue",
+													to: "limegreen",
+											  }
+									}
+									percent={parseInt(calculatePorcent())}
+									status='active'
+									// style={{ width: "90%" }}
+								/>
+							</Row>
+						</>
 					)}
 				/>
 			</Col>

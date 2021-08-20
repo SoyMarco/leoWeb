@@ -10,6 +10,7 @@ import {
 	Popconfirm,
 	Switch,
 	Tooltip,
+	Progress,
 } from "antd";
 import { DollarCircleFilled } from "@ant-design/icons";
 import { useQuery, gql, useMutation } from "@apollo/client";
@@ -98,7 +99,7 @@ export default function Apartado(props) {
 		ErrorConection(logout);
 	}
 	const pressEnter = () => {
-		if (abono.abono > 0) {
+		if (abono.abono > 0 && calculateRestaria() >= 0) {
 			setmodalCobrar(true);
 		}
 	};
@@ -154,6 +155,16 @@ export default function Apartado(props) {
 		setabono({ abono: null });
 		inputAbono.current.select();
 	};
+	const calculateRestaria = () => {
+		let addAbono = 0;
+		if (parseInt(abono.abono) > 0) {
+			addAbono = parseInt(abono.abono);
+		}
+		let restaría = 0;
+		restaría = parseInt(totalTotal - (totalAbonos + addAbono)) ?? 0;
+
+		return restaría;
+	};
 	return (
 		<>
 			<title>{titleWeb}</title>
@@ -172,18 +183,46 @@ export default function Apartado(props) {
 						>
 							{totalProductos ? `Fecha` : null}
 						</h1>,
-						<></>,
 						<h1
-							style={{
-								color: "green",
-								fontSize: "xxx-large",
-								fontWeight: "bold",
-								marginTop: "-20px",
-							}}
+							style={
+								calculateRestaria() >= 0
+									? {
+											color: "green",
+											fontSize: "x-large",
+											fontWeight: "bold",
+									  }
+									: {
+											color: "red",
+											fontSize: "x-large",
+											fontWeight: "bold",
+									  }
+							}
 							onClick={pressEnter}
 						>
-							{totalProductos ? `Resta $${totalTotal - totalAbonos}` : null}
+							{abono.abono > 0 ? `Restaría $${calculateRestaria()}` : null}
 						</h1>,
+						<>
+							{/* <Progress
+								strokeColor={{
+									from: "#108ee9",
+									to: "#87d068",
+								}}
+								percent={99.9}
+								status='active'
+								style={{ marginTop: "-60px" }}
+							/> */}
+							<h1
+								style={{
+									color: "green",
+									fontSize: "xxx-large",
+									fontWeight: "bold",
+									marginTop: "-20px",
+								}}
+								onClick={pressEnter}
+							>
+								{totalProductos ? `Resta $${totalTotal - totalAbonos}` : null}
+							</h1>
+						</>,
 					]}
 				>
 					{/* Header Card */}
@@ -204,30 +243,35 @@ export default function Apartado(props) {
 								fontWeight: "bold",
 							}}
 						>{`Folio: ${dataApartado.folio}`}</h1>
-
-						<Input
-							// id='inputAbono'
-							ref={inputAbono}
-							placeholder='Abono'
-							disabled={!statusApartado}
-							// prefix={<AiFillDollarCircle style={{ marginLeft: "20px" }} />}
-							style={{
-								color: "green",
-								// fontSize: 30,
-								fontSize: "x-large",
-								fontWeight: "bold",
-								borderRadius: "50px",
-								maxWidth: "60%",
-								padding: "0 0 0 0px",
-								border: "0 0 0 0",
-							}}
-							prefix={<DollarCircleFilled style={{ marginLeft: "10px" }} />}
-							onKeyUp={pressKeyAbono}
-							onKeyDown={keyBlock}
-							value={abono.abono}
-							onChange={(e) => setabono({ abono: e.target.value })}
-						/>
-
+						<Tooltip
+							placement='top'
+							title={`
+							(F3)AÑADIR A CUENTA
+							  (F12)ENTREGAR`}
+						>
+							<Input
+								// id='inputAbono'
+								ref={inputAbono}
+								placeholder='Abono'
+								disabled={!statusApartado}
+								// prefix={<AiFillDollarCircle style={{ marginLeft: "20px" }} />}
+								style={{
+									color: "green",
+									// fontSize: 30,
+									fontSize: "x-large",
+									fontWeight: "bold",
+									borderRadius: "50px",
+									maxWidth: "60%",
+									padding: "0 0 0 0px",
+									border: "0 0 0 0",
+								}}
+								prefix={<DollarCircleFilled style={{ marginLeft: "10px" }} />}
+								onKeyUp={pressKeyAbono}
+								onKeyDown={keyBlock}
+								value={abono.abono}
+								onChange={(e) => setabono({ abono: e.target.value })}
+							/>
+						</Tooltip>
 						<Row>
 							<Popconfirm
 								disabled={!statusApartado}
@@ -332,11 +376,13 @@ export default function Apartado(props) {
 							/>
 							<TablaAbonos
 								abonos={abonos}
+								abono={abono}
 								loading={loading}
 								loader={loader}
 								setloader={setloader}
 								totalAbonos={totalAbonos}
 								inputAbono={inputAbono}
+								totalTotal={totalTotal}
 								refetch={refetch}
 							/>
 						</Row>

@@ -211,12 +211,14 @@ export default function Productos({
 				>
 					<Row justify='center'>
 						<Popconfirm
-							title='¿Entregar Venta?'
+							title={`¿${
+								record?.entregado[0]?.status !== true ? "Entregar" : "Regresar"
+							} venta?`}
 							onConfirm={() => borrarEntregarProduct(record, "entregar")}
 						>
 							<Switch
 								loading={loader}
-								checked={record?.entregado[0]?.status !== true}
+								checked={record?.entregado[0]?.status === true}
 								size='small'
 								style={
 									record?.entregado[0]?.status
@@ -307,7 +309,7 @@ export default function Productos({
 						<Row justify='end'>
 							<h1
 								style={{
-									color: "green",
+									color: "dodgerblue",
 									fontSize: "xx-large",
 									fontWeight: "revert",
 									marginRight: "20px",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Menu, Switch, Popconfirm } from "antd";
+import { Layout, Menu, Switch, Popconfirm, Tooltip } from "antd";
 import { Avatar } from "antd";
 import "antd/dist/antd.css";
 import { MdLocalGroceryStore } from "react-icons/md";
@@ -20,13 +20,12 @@ import { GiLargeDress } from "react-icons/gi";
 function LayoutForm({ children }) {
 	const [collapsed, setcollapsed] = useState(true);
 	const { Header, Content, Footer, Sider } = Layout;
-	const { logout } = useAuth();
+	const { logout, auth } = useAuth();
 	const [swtichstate, setswtichstate] = useState(true);
 	const [currentMenu, setcurrentMenu] = useState(1);
 	const [titleWeb, settitleWeb] = useState(null);
 	const history = useHistory();
 	const Location = useLocation();
-
 	/* Cambiar titulo de pagina */
 	useEffect(() => {
 		let apartado = Location.pathname;
@@ -134,16 +133,28 @@ function LayoutForm({ children }) {
 								padding: 0,
 							}}
 						>
-							<FaUserAstronaut
-								style={{
-									color: "white",
-									fontSize: "x-large",
-									margin: "22px 0 0 0",
-								}}
-							/>
+							<Tooltip
+								placement='bottom'
+								title={`HOLA ${auth.name.toUpperCase()}`}
+							>
+								<FaUserAstronaut
+									style={{
+										color: "white",
+										fontSize: "x-large",
+										margin: "22px 0 0 0",
+									}}
+								/>
+							</Tooltip>
 						</Menu.Item>
 						<Menu.Item key='header4' style={{ padding: "3px 0 0 15px" }}>
-							<h1 style={{ color: "white", marginRight: 60 }}>Marco</h1>
+							<Tooltip
+								placement='bottom'
+								title={`HOLA ${auth.name.toUpperCase()}`}
+							>
+								<h1 style={{ color: "white", marginRight: 60 }}>
+									{auth.name.toUpperCase()}
+								</h1>
+							</Tooltip>
 						</Menu.Item>
 						<Menu.Item key='5'>
 							{/* <h1></h1> */}
