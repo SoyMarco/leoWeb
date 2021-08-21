@@ -8,6 +8,7 @@ import Apartados from "Pages/Apartados/Container/Apartados";
 import Apartado from "Pages/Apartado/Container/Apartado";
 import Error from "Pages/Error/Error";
 import Prueba from "Pages/prueba";
+import AddApartado from "Pages/AddApartado/Container/AddApartado";
 
 const routes = [
 	{
@@ -38,6 +39,12 @@ const routes = [
 		path: "/prueba",
 		layout: LayoutForm,
 		component: Prueba,
+		exact: true,
+	},
+	{
+		path: "/add",
+		layout: LayoutForm,
+		component: AddApartado,
 		exact: true,
 	},
 	{

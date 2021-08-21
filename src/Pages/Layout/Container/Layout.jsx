@@ -1,21 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Menu, Switch, Popconfirm, Tooltip } from "antd";
-import { Avatar } from "antd";
+import { Layout, Menu } from "antd";
 import "antd/dist/antd.css";
 import { MdLocalGroceryStore } from "react-icons/md";
-import {
-	FaCashRegister,
-	FaUserAstronaut,
-	FaWindowRestore,
-} from "react-icons/fa";
+import { FaCashRegister, FaWindowRestore } from "react-icons/fa";
 import "./layout.css";
 import "material-design-icons-iconfont";
-import LogoLeo from "assets/png/logo.png";
 import { openNotification } from "Utils/openNotification";
 import { useHistory, useLocation, Link } from "react-router-dom";
 import useAuth from "hooks/useAuth";
 import { UrlFrontend } from "config/apollo";
-import { GiLargeDress } from "react-icons/gi";
+import { GiLargeDress, GiArchiveResearch } from "react-icons/gi";
+import { RiFileSearchFill } from "react-icons/ri";
+import Horizontal from "../Components/Horizontal";
 
 function LayoutForm({ children }) {
 	const [collapsed, setcollapsed] = useState(true);
@@ -34,6 +30,8 @@ function LayoutForm({ children }) {
 		if (Location.pathname === "/") {
 			settitleWeb(null);
 		} else if (apartado === "/apartado/") {
+			settitleWeb(null);
+		} else if (apartado === "/add") {
 			settitleWeb(null);
 		} else {
 			let title = Location.pathname;
@@ -76,109 +74,13 @@ function LayoutForm({ children }) {
 				className='site-layout'
 			>
 				{/* HORIZONTAL */}
-				<Header
-					style={{
-						background: "linear-gradient(#0000A6,#000066,#000058)",
-						margin: 0,
-						height: "50px",
-						color: "white",
-						padding: 0,
-					}}
-				>
-					<Menu
-						mode='horizontal'
-						style={{
-							background: "transparent",
-							margin: "-10px 0 0 0",
-							// height: "50px",
-							color: "white",
-							width: "100%",
-						}}
-					>
-						<Menu.Item
-							key='header1'
-							style={{
-								background: "transparent",
-								margin: 0,
-								padding: " 0 0 0 20px",
-							}}
-							onClick={() => history.push("/")}
-							icon={<Avatar src={LogoLeo} size='large' />}
-						></Menu.Item>
-						<Menu.Item
-							key='header2'
-							onClick={() => history.push("/")}
-							style={{
-								padding: 0,
-							}}
-						>
-							<h1
-								style={{
-									background: "transparent",
-									margin: 0,
-									color: "white",
-									padding: 0,
-								}}
-							>
-								Bazar Leo
-							</h1>
-						</Menu.Item>
-						<Menu.Item
-							key='header3'
-							style={{
-								display: "flex",
-								flexDirection: "column",
-								float: "right",
-								marginLeft: "auto",
-								padding: 0,
-							}}
-						>
-							<Tooltip
-								placement='bottom'
-								title={`HOLA ${auth?.name?.toUpperCase()}`}
-							>
-								<FaUserAstronaut
-									style={{
-										color: "white",
-										fontSize: "x-large",
-										margin: "22px 0 0 0",
-									}}
-								/>
-							</Tooltip>
-						</Menu.Item>
-						<Menu.Item key='header4' style={{ padding: "3px 0 0 15px" }}>
-							<Tooltip
-								placement='bottom'
-								title={`HOLA ${auth?.name?.toUpperCase()}`}
-							>
-								<h1 style={{ color: "white", marginRight: 60 }}>
-									{auth.name.toUpperCase()}
-								</h1>
-							</Tooltip>
-						</Menu.Item>
-						<Menu.Item key='5'>
-							{/* <h1></h1> */}
-							<Popconfirm title='¿Cerrar sesión?' onConfirm={() => logoutApp()}>
-								<Switch
-									checked={swtichstate}
-									style={
-										swtichstate
-											? {
-													background: "blue",
-													boxShadow:
-														"5px 5px 29px #b3b3b3, -5px -5px 29px #ffffff",
-											  }
-											: {
-													background: "red", // boxShadow: "5px 5px 19px #b3b3b3, -5px -5px 19px #ffffff",
-											  }
-									}
-									// onChange={logoutApp}
-									defaultChecked
-								></Switch>
-							</Popconfirm>
-						</Menu.Item>
-					</Menu>
-				</Header>
+				<Horizontal
+					Header={Header}
+					history={history}
+					auth={auth}
+					logoutApp={logoutApp}
+					swtichstate={swtichstate}
+				/>
 
 				{/* VERTICAL */}
 				<Layout>
@@ -228,15 +130,30 @@ function LayoutForm({ children }) {
 											pathname: `/apartados`,
 										}}
 									>
+										<RiFileSearchFill style={{ color: "darkblue" }} />
+									</Link>
+								}
+								onClick={() => history.push("/apartados")}
+							>
+								Ver Apartados
+							</Menu.Item>
+							<Menu.Item
+								key='4'
+								icon={
+									<Link
+										to={{
+											pathname: `/apartados`,
+										}}
+									>
 										<GiLargeDress style={{ color: "darkblue" }} />
 									</Link>
 								}
 								onClick={() => history.push("/apartados")}
 							>
-								Apartados
+								Nuevo Apartado
 							</Menu.Item>
 							<Menu.Item
-								key='4'
+								key='7'
 								icon={<FaWindowRestore style={{ color: "darkblue" }} />}
 								onClick={() => window.open(UrlFrontend)}
 							>

@@ -1,0 +1,15 @@
+.ant-steps-item-process > .ant-steps-item-container > .ant-steps-item-icon {
+	background: blue;
+}
+#inputNameClient {
+	padding: 0;
+	border: none;
+	outline: none;
+	text-align-last: center;
+	color: blue;
+	border-radius: 50px;
+	font-size: x-large;
+	font-weight: bold;
+	padding-left: 20px;
+	margin-right: 40px;
+}
