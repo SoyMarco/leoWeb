@@ -31,7 +31,7 @@ export default function Abonos({
 }) {
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [mutateBORRAR_EDITAR_ABONO] = useMutation(BORRAR_EDITAR_ABONO);
-	const { logout, auth } = useAuth();
+	const { logout } = useAuth();
 
 	const onSelectChange = (selectedRowKeys) => {
 		setselectedRowKeys([]);
@@ -43,7 +43,6 @@ export default function Abonos({
 	};
 
 	const click = (record, rowIndex) => {
-		console.log(record);
 		setselectedRowKeys([record.key]);
 		inputAbono.current.select();
 		// setstateRecord(record);
@@ -51,6 +50,10 @@ export default function Abonos({
 	};
 	const pasarAFecha = (item) => {
 		let fecha = moment.unix(item / 1000).format("L");
+		return fecha;
+	};
+	const pasarAFechaLLLL = (item) => {
+		let fecha = moment.unix(item / 1000).format("LLLL");
 		return fecha;
 	};
 	const borrarAbono = async (record, borrarEditar) => {
@@ -65,6 +68,8 @@ export default function Abonos({
 							_id: record._id,
 							abono: 0,
 							borrarEditar: borrarEditar,
+							idVenta: record.idVenta,
+							statusVenta: true,
 						},
 					},
 				});
@@ -108,9 +113,13 @@ export default function Abonos({
 			title: "Fecha",
 			dataIndex: "createAt",
 			key: "createAt",
-			sorter: (a, b) => b._id - a._id,
+			sorter: (a, b) => b.createAt - a.createAt,
 			defaultSortOrder: "ascend",
-			render: (createAt) => <h1>{pasarAFecha(createAt)}</h1>,
+			render: (createAt, record) => (
+				<Tooltip placement='top' title={`${pasarAFechaLLLL(createAt)}`}>
+					<h1>{pasarAFecha(createAt)}</h1>
+				</Tooltip>
+			),
 		},
 
 		{
@@ -157,14 +166,13 @@ export default function Abonos({
 		},
 	];
 	const calculatePorcent = () => {
-		console.log(abono.abono);
 		let addAbono = 0;
 		if (parseInt(abono.abono) > 0) {
 			addAbono = parseInt(abono.abono);
 		}
 		let porcent = 0;
 		porcent = ((totalAbonos + addAbono) * 100) / totalTotal ?? 0;
-		console.log(porcent);
+
 		return porcent;
 	};
 	return (

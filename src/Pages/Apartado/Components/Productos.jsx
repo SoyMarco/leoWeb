@@ -11,7 +11,6 @@ import {
 	Table,
 	Result,
 	Col,
-	Divider,
 	Row,
 	Button,
 	Popconfirm,
@@ -50,6 +49,7 @@ export default function Productos({
 	};
 	useEffect(() => {
 		if (modalAddProduct === false) inputAbono.current.select();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [modalAddProduct]);
 	const click = (record, rowIndex) => {
 		setselectedRowKeys([record.key]);
@@ -59,16 +59,15 @@ export default function Productos({
 		// addArticulo(record, rowIndex);
 	};
 	const pasarAFecha = (item) => {
-		let fecha = moment.unix(item / 1000).format("l");
-		return fecha;
-	};
-	const pasarAFechaLL = (item) => {
-		let fecha = moment.unix(item / 1000).format("LL");
+		let fecha = moment.unix(item / 1000).format("ll");
 		return fecha;
 	};
 
+	const pasarAFechaLLLL = (item) => {
+		let fecha = moment.unix(item / 1000).format("LLLL");
+		return fecha;
+	};
 	const borrarEntregarProduct = async (item, borrarEntregar) => {
-		console.log(item);
 		setloader(true);
 		let status = true;
 		if (item.entregado[0] && item.entregado[0].status) {
@@ -136,19 +135,30 @@ export default function Productos({
 			defaultSortOrder: "ascend",
 			// width: "80px",
 			render: (createAt, record) => (
-				<h1
-					style={{
-						textAlignLast: "center",
-						// fontWeight: "revert",
-						// fontSize: "x-large",
-					}}
+				<Tooltip
+					placement='top'
+					title={
+						record?.entregado[0]?.status === true
+							? `${pasarAFechaLLLL(
+									record?.entregado[0]?.fecha
+							  )} por ${record?.entregado[0]?.vendedor.toUpperCase()}`
+							: `${pasarAFechaLLLL(
+									createAt
+							  )}  por ${record.vendedor.toUpperCase()}`
+					}
 				>
-					{record?.entregado[0]?.status === true
-						? `${pasarAFechaLL(
-								createAt
-						  )} por ${record?.entregado[0]?.vendedor.toUpperCase()}`
-						: `${pasarAFecha(createAt)}`}
-				</h1>
+					<h1
+						style={{
+							textAlignLast: "center",
+							// fontWeight: "revert",
+							// fontSize: "x-large",
+						}}
+					>
+						{record?.entregado[0]?.status === true
+							? `${pasarAFecha(record?.entregado[0]?.fecha)}`
+							: `${pasarAFecha(createAt)}`}
+					</h1>
+				</Tooltip>
 			),
 		},
 

@@ -72,6 +72,16 @@ const Imprimir = ({ imprimir, stateRecord, auth, setimprimir }) => {
 		document.body.innerHTML = contenidoOriginal;
 		window.location.reload();
 	};
+	const fechaVenceEn = () => {
+		var fecha = moment.unix(dataApartado.vence / 1000).fromNow();
+		if (dataApartado.vence > Date.now()) {
+			fecha = `Vence ${fecha}`;
+		} else {
+			fecha = `Venció ${fecha}`;
+		}
+		// this.vence = fecha;
+		return fecha;
+	};
 	return (
 		<>
 			<Modal
@@ -148,7 +158,7 @@ const Imprimir = ({ imprimir, stateRecord, auth, setimprimir }) => {
 					<Row justify='space-around'>
 						<span
 							style={{ fontWeight: "bold", fontFamily: "Roboto, sans-serif" }}
-						>{`Vence el ${pasarAFechaVence(vence)}`}</span>
+						>{`${fechaVenceEn()}, ${pasarAFechaVence(vence)}`}</span>
 					</Row>
 					{/* <!-- TABLA DE PRODUCTOS --> */}
 					<h3 className='subtituloTicketApartado'>

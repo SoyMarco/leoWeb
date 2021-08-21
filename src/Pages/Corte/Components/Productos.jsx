@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Table, Result, Col, Divider, Row, Tooltip } from "antd";
+import { Table, Result, Col, Divider, Row, Tooltip, Button } from "antd";
 import { SmileOutlined } from "@ant-design/icons";
+import { UrlFrontend } from "config/apollo";
 
 export default function Productos({ stateRecord, loading }) {
 	const [listaCompras, setlistaCompras] = useState([]);
@@ -47,10 +48,29 @@ export default function Productos({ stateRecord, loading }) {
 			title: "Nombre",
 			dataIndex: "nombre",
 			key: "nombre",
-			width: "70px",
-			render: (nombre) => (
-				<Tooltip placement="topLeft" title={nombre}>
-					{nombre}
+			// width: "70px",
+			ellipsis: true,
+			render: (nombre, record) => (
+				<Tooltip
+					placement='topLeft'
+					title={`${nombre} folio: ${record.apartado}`}
+				>
+					{record?.apartado > 0 ? (
+						<Button
+							size='small'
+							shape='round'
+							style={{
+								color: "white",
+								background: "linear-gradient(#2196F3,#0000E6)",
+							}}
+							onClick={() =>
+								record.apartado > 0 &&
+								window.open(`${UrlFrontend}apartado/${record.apartado}`)
+							}
+						>{`${nombre}`}</Button>
+					) : (
+						nombre
+					)}
 				</Tooltip>
 			),
 		},
@@ -76,7 +96,7 @@ export default function Productos({ stateRecord, loading }) {
 			dataIndex: "cantidad",
 			key: "cantidad",
 			render: (cantidad, record) => (
-				<Row justify="space-around">
+				<Row justify='space-around'>
 					<h3
 						style={{
 							textAlignLast: "center",
@@ -94,7 +114,7 @@ export default function Productos({ stateRecord, loading }) {
 			dataIndex: "totalArticulo",
 			key: "totalArticulo",
 			render: (totalArticulo, record) => (
-				<Row justify="space-around">
+				<Row justify='space-around'>
 					<h3
 						style={{
 							textAlignLast: "center",
@@ -112,7 +132,7 @@ export default function Productos({ stateRecord, loading }) {
 	return (
 		<>
 			<Col xs={24} sm={24} md={8}>
-				<Divider orientation="left">Productos</Divider>
+				<Divider orientation='left'>Productos</Divider>
 				{/* PRODUCTOS */}
 				<Table
 					columns={colProductos}
@@ -122,7 +142,7 @@ export default function Productos({ stateRecord, loading }) {
 					bordered
 					scroll={{ y: 250 }}
 					// rowSelection={rowSelection}
-					size="small"
+					size='small'
 					style={{
 						height: "300px",
 						borderRadius: "10px",
@@ -141,7 +161,7 @@ export default function Productos({ stateRecord, loading }) {
 							<Result
 								icon={<SmileOutlined />}
 								// status="500"
-								subTitle="Selecciona una venta"
+								subTitle='Selecciona una venta'
 							/>
 						),
 					}}

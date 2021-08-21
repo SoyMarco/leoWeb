@@ -39,6 +39,8 @@ export const GET_PRODUCTOS_FOLIO = gql`
 			}
 			abonos {
 				_id
+				idVenta
+				folioVenta
 				abono
 				vendedor
 				createAt
@@ -120,6 +122,8 @@ export const GET_APARTADOS = gql`
 			}
 			abonos {
 				_id
+				idVenta
+				folioVenta
 				abono
 				vendedor
 				createAt
@@ -135,17 +139,7 @@ export const GET_APARTADOS = gql`
 export const ADD_ABONO = gql`
 	mutation addAbono($input: AbonoApartadoInput) {
 		addAbono(input: $input) {
-			abonos {
-				_id
-				abono
-				vendedor
-				createAt
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
+			folio
 		}
 	}
 `;
@@ -188,6 +182,8 @@ export const ADD_PRODUCTO = gql`
 			}
 			abonos {
 				_id
+				idVenta
+				folioVenta
 				abono
 				vendedor
 				createAt

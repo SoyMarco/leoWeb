@@ -175,7 +175,7 @@ function Principal() {
 					precio: Math.round(precio.precio * 100) / 100,
 					cantidad: 1,
 					apartado: 0,
-					refApartado: 0,
+					refApartado: "0",
 					totalArticulo: Math.round(precio.precio * 100) / 100,
 				},
 			]);

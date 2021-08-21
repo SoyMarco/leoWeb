@@ -8,6 +8,7 @@ import { useMutation } from "@apollo/client";
 import Imprimir from "./Imprimir/Imprimir";
 import useAuth from "../../../hooks/useAuth";
 import moment from "moment";
+import { UrlFrontend } from "config/apollo";
 import {
 	Table,
 	Result,
@@ -175,16 +176,37 @@ export default function Ventas({
 			width: "60px",
 			render: (totalArticulo, record) => (
 				<Row justify='center'>
-					<Popconfirm
-						title='¿Deseas reimprimir?'
-						onConfirm={() => setimprimir(true)}
+					<Tooltip
+						placement='right'
+						title={
+							record?.productos[0]?.apartado > 0
+								? "Abre el apartado para Reimprimir"
+								: "Reimprimir"
+						}
 					>
-						<Button
-							icon={<AiFillPrinter style={{ fontSize: "25px" }} />}
-							shape='circle'
-							style={{ color: "blue" }}
-						/>
-					</Popconfirm>
+						<Popconfirm
+							// disabled={record?.productos[0]?.apartado > 0 ? true : false}
+							title='¿Deseas reimprimir?'
+							onConfirm={() =>
+								record?.productos[0]?.apartado > 0
+									? window.open(
+											`${UrlFrontend}apartado/${record?.productos[0]?.apartado}`
+									  )
+									: setimprimir(true)
+							}
+						>
+							<Button
+								// disabled={record?.productos[0]?.apartado > 0 ? true : false}
+								icon={<AiFillPrinter style={{ fontSize: "25px" }} />}
+								shape='circle'
+								style={{ color: "blue" }}
+								// onClick={() =>
+								// 	record.apartado > 0 &&
+								// 	window.open(`${UrlFrontend}apartado/${record.apartado}`)
+								// }
+							/>
+						</Popconfirm>
+					</Tooltip>
 				</Row>
 			),
 		},
@@ -198,21 +220,52 @@ export default function Ventas({
 			width: "60px",
 			render: (totalArticulo, record) => (
 				<Row justify='center'>
-					<Popconfirm
-						title='¿Cancelar Venta?'
-						onConfirm={() => cancelVenta(record)}
+					<Tooltip
+						placement='right'
+						title={
+							record?.productos[0]?.apartado > 0 && record.cancelado === false
+								? "Abre el apartado para borrar"
+								: record?.productos[0]?.apartado > 0 &&
+								  record.cancelado === true
+								? "No se puede activar, se borró el Abono vinculado"
+								: record.cancelado === true
+								? "Desactivado"
+								: "Activo"
+						}
 					>
-						<Switch
-							loading={loader}
-							checked={!record.cancelado}
-							size='small'
-							style={
-								record.cancelado
-									? { background: "red", marginTop: "5px" }
-									: { background: "limegreen", marginTop: "5px" }
+						<Popconfirm
+							disabled={
+								record?.productos[0]?.apartado > 0 && record.cancelado === true
+									? true
+									: false
 							}
-						/>
-					</Popconfirm>
+							title='¿Cancelar Venta?'
+							onConfirm={() =>
+								record?.productos[0]?.apartado > 0
+									? window.open(
+											`${UrlFrontend}apartado/${record?.productos[0]?.apartado}`
+									  )
+									: cancelVenta(record)
+							}
+						>
+							<Switch
+								disabled={
+									record?.productos[0]?.apartado > 0 &&
+									record.cancelado === true
+										? true
+										: false
+								}
+								loading={loader}
+								checked={!record.cancelado}
+								size='small'
+								style={
+									record.cancelado
+										? { background: "red", marginTop: "5px" }
+										: { background: "limegreen", marginTop: "5px" }
+								}
+							/>
+						</Popconfirm>
+					</Tooltip>
 				</Row>
 			),
 		},

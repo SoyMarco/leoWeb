@@ -7,7 +7,7 @@ import { MdLocalGroceryStore } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { AiFillPrinter } from "react-icons/ai";
 import { useMutation } from "@apollo/client";
-import Imprimir from "./Imprimir/ImprimirApartado";
+import Imprimir from "Pages/Apartado/Components/ImprimirApartado/ImprimirApartado";
 import useAuth from "hooks/useAuth";
 import moment from "moment";
 import {
@@ -202,7 +202,7 @@ export default function Ventas({
 				<Imprimir
 					imprimir={imprimir}
 					setimprimir={setimprimir}
-					stateRecord={stateRecord}
+					dataApartado={stateRecord}
 					auth={auth}
 				/>
 			) : null}

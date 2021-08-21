@@ -135,7 +135,7 @@ function LayoutForm({ children }) {
 						>
 							<Tooltip
 								placement='bottom'
-								title={`HOLA ${auth.name.toUpperCase()}`}
+								title={`HOLA ${auth?.name?.toUpperCase()}`}
 							>
 								<FaUserAstronaut
 									style={{
@@ -149,7 +149,7 @@ function LayoutForm({ children }) {
 						<Menu.Item key='header4' style={{ padding: "3px 0 0 15px" }}>
 							<Tooltip
 								placement='bottom'
-								title={`HOLA ${auth.name.toUpperCase()}`}
+								title={`HOLA ${auth?.name?.toUpperCase()}`}
 							>
 								<h1 style={{ color: "white", marginRight: 60 }}>
 									{auth.name.toUpperCase()}

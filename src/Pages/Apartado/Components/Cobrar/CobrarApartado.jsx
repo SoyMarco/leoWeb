@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Modal, Input, Form, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
-import Imprimir from "../Imprimir/ImprimirApartado";
+import ImprimirApartado from "../ImprimirApartado/ImprimirApartado";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
 import { ADD_ABONO } from "graphql/apartado";
+import { REGISTER_VENTA } from "graphql/venta";
 import useAuth from "hooks/useAuth";
 
 // import "./cobrar.css";
@@ -15,17 +16,20 @@ import useAuth from "hooks/useAuth";
 const Cobrar = ({
 	modalCobrar,
 	setmodalCobrar,
+	cerrarCobrar,
 	totalTotal,
 	listaCompras,
 	initialState,
 	calculateRestaria,
+	inputAbono,
+	dataApartado,
 }) => {
+	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
 	const [mutateADD_ABONO] = useMutation(ADD_ABONO);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);
 	const [imprimir, setimprimir] = useState(false);
 	const [btnLoading, setbtnLoading] = useState(false);
-	const [folio, setfolio] = useState(0);
 	const [dinero, setdinero] = useState({
 		aCuenta: 0,
 		tarjeta: 0,
@@ -37,13 +41,15 @@ const Cobrar = ({
 			form.setFieldsValue({ efectivo: totalTotal });
 			OnValuesChange();
 			document.querySelector("#cobrarEfectivo").select();
+		} else if (modalCobrar === false) {
+			inputAbono.current.select();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [modalCobrar]);
-
 	const pressKeyPrecio = (e) => {
 		// Enter
 		if (e.keyCode === 13) {
-			savePrintAbono("F1");
+			savePrintNewV("F1");
 		}
 		// E
 		if (e.keyCode === 69) {
@@ -60,11 +66,11 @@ const Cobrar = ({
 
 		// 	F1
 		if (e.keyCode === 112) {
-			savePrintAbono("F1");
+			savePrintNewV("F1");
 		}
 		// F2
 		if (e.keyCode === 113) {
-			savePrintAbono("F2");
+			savePrintNewV("F2");
 		}
 		// F3
 		if (e.keyCode === 114) {
@@ -99,7 +105,7 @@ const Cobrar = ({
 	};
 
 	//Guardar y/o Imprimir APARTADO CON GraphQL
-	const savePrintAbono = async (keyF) => {
+	const savePrintAbono = async (keyF, dataVenta) => {
 		if (cambio >= 0) {
 			setbtnLoading(true);
 
@@ -110,12 +116,13 @@ const Cobrar = ({
 							id: listaCompras.id,
 							abono: parseFloat(totalTotal),
 							resta: parseFloat(calculateRestaria()),
+							idVenta: dataVenta.id,
+							folioVenta: dataVenta.folio,
 						},
 					},
 				});
 				if (data) {
 					if (keyF === "F1") {
-						setfolio(data.registerVenta.folio);
 						setimprimir(true);
 					} else if (keyF === "F2") {
 						openNotification("success", "Apartado guardado con exito");
@@ -128,20 +135,66 @@ const Cobrar = ({
 			}
 		}
 	};
+	//Guardar y/o Imprimir VENTA CON GraphQL
+	const savePrintNewV = async (keyF) => {
+		let efectivo = parseFloat(dinero.efectivo);
+		let tarjeta = parseFloat(dinero.tarjeta);
+		let aCuenta = parseFloat(dinero.aCuenta);
+		let total = parseFloat(totalTotal);
 
+		if (cambio >= 0) {
+			setbtnLoading(true);
+			let listaComprasNew = {
+				apartado: dataApartado.folio,
+				cantidad: 1,
+				idArray: dataApartado.folio,
+				nombre: "APARTADO",
+				precio: total,
+				refApartado: dataApartado.id,
+				totalArticulo: total,
+			};
+
+			console.log(listaComprasNew);
+			try {
+				const { data } = await mutateREGISTER_VENTA({
+					variables: {
+						input: {
+							productos: listaComprasNew,
+							vendedor: auth.name,
+							folio: 1,
+							total: total,
+							efectivo: efectivo,
+							tarjeta: tarjeta,
+							aCuenta: aCuenta,
+							pagoCon: 0,
+							referencia: dataApartado.id,
+							notas: "APARTADO",
+						},
+					},
+				});
+				if (data) {
+					savePrintAbono(keyF, data.registerVenta);
+				}
+			} catch (error) {
+				ErrorConection(logout);
+				return false;
+			}
+		}
+	};
 	return (
 		<>
 			{imprimir ? (
-				<Imprimir
+				<ImprimirApartado
 					imprimir={imprimir}
-					totalTotal={totalTotal}
-					cambio={cambio}
 					setimprimir={setimprimir}
-					dinero={dinero}
+					totalTotal={totalTotal}
 					listaCompras={listaCompras}
-					setmodalCobrar={setmodalCobrar}
-					folio={folio}
+					initialState={initialState}
+					calculateRestaria={calculateRestaria}
+					dataApartado={dataApartado}
 					auth={auth}
+					dinero={dinero}
+					cambio={cambio}
 				/>
 			) : null}
 			<Modal
@@ -153,7 +206,7 @@ const Cobrar = ({
 					</>
 				}
 				visible={modalCobrar}
-				onCancel={() => setmodalCobrar(!modalCobrar)}
+				onCancel={() => cerrarCobrar()}
 				footer={[
 					<Row justify='space-around'>
 						<Button
@@ -166,7 +219,7 @@ const Cobrar = ({
 							shape='round'
 							// loading={loading}
 							// disabled={cambio < 0}
-							onClick={() => savePrintAbono("F1")}
+							onClick={() => savePrintNewV("F1")}
 							icon={<PrinterFilled />}
 							loading={btnLoading}
 						>
@@ -182,7 +235,7 @@ const Cobrar = ({
 							shape='round'
 							// loading={loading}
 							// disabled={cambio < 0}
-							onClick={() => savePrintAbono("F2")}
+							onClick={() => savePrintNewV("F2")}
 							icon={<SaveFilled />}
 							loading={btnLoading}
 						>

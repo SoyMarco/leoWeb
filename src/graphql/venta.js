@@ -29,6 +29,8 @@ export const GET_VENTAS_DIA = gql`
 				cantidad
 				cancelado
 				totalArticulo
+				apartado
+				refApartado
 			}
 		}
 	}
