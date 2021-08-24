@@ -1,12 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { openNotification } from "Utils/openNotification";
-import ErrorConection from "Utils/ErrorConection";
-
-import { CANCELAR_VENTA } from "graphql/venta";
+import React, { useState } from "react";
 import { MdLocalGroceryStore } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { AiFillPrinter } from "react-icons/ai";
-import { useMutation } from "@apollo/client";
 import Imprimir from "Pages/Apartado/Components/ImprimirApartado/ImprimirApartado";
 import useAuth from "hooks/useAuth";
 import moment from "moment";
@@ -31,9 +26,8 @@ export default function Ventas({
 	setloader,
 	stateRecord,
 }) {
-	const [mutateCANCELAR_VENTA] = useMutation(CANCELAR_VENTA);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
-	const { auth, logout } = useAuth();
+	const { auth } = useAuth();
 	const [imprimir, setimprimir] = useState(false);
 	const history = useHistory();
 
@@ -56,30 +50,7 @@ export default function Ventas({
 		let fecha = moment.unix(item / 1000).format("ll");
 		return fecha;
 	};
-	const cancelVenta = async (item) => {
-		setloader(true);
-		try {
-			const { data } = await mutateCANCELAR_VENTA({
-				variables: {
-					input: {
-						id: item.id,
-						status: item.cancelado,
-					},
-				},
-			});
-			if (data) {
-				openNotification(
-					"success",
-					`Venta ${item.cancelado ? "recuperada" : "cancelada"} con exito`
-				);
-				refetch();
-				setloader(false);
-			}
-		} catch (error) {
-			setloader(false);
-			ErrorConection(logout);
-		}
-	};
+
 	/* COLUMNAS VENTAS */
 	const colVentas = [
 		{

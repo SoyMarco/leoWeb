@@ -96,7 +96,7 @@ export default function Prueba() {
 						.includes(value.toLowerCase())
 				: "",
 		onFilterDropdownVisibleChange: (visible) => {},
-		render: (text) => (state.searchedColumn === dataIndex ? <h1 /> : text),
+		render: (text) => (state.searchedColumn === dataIndex ? "hola" : text),
 	});
 	const handleSearch = (selectedKeys, confirm, dataIndex) => {
 		confirm();

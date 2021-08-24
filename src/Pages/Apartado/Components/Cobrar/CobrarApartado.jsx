@@ -51,6 +51,7 @@ const Cobrar = ({
 		if (e.keyCode === 13) {
 			savePrintNewV("F1");
 		}
+
 		// E
 		if (e.keyCode === 69) {
 			document.querySelector("#cobrarEfectivo").select();
@@ -181,6 +182,7 @@ const Cobrar = ({
 			}
 		}
 	};
+
 	return (
 		<>
 			{imprimir ? (

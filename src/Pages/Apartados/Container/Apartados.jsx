@@ -8,7 +8,6 @@ import "./apartados.css";
 import ErrorConection from "Utils/ErrorConection";
 import useAuth from "hooks/useAuth";
 import { UrlFrontend } from "config/apollo";
-import { useHistory } from "react-router-dom";
 
 export default function Apartados() {
 	let { data, loading, error, refetch } = useQuery(GET_APARTADOS);
@@ -17,7 +16,6 @@ export default function Apartados() {
 	const [dataFilter, setdataFilter] = useState(null);
 	const [loader, setloader] = useState(false);
 	const { logout } = useAuth();
-	const history = useHistory();
 
 	const onChangeFilter = (e) => {
 		setdataFilter(null);

@@ -5,7 +5,7 @@ import { getToken } from "../Utils/token";
 
 /* LOCAL */
 export const UrlBackend = {
-	uri: "http://localhost:4000/",
+	uri: "http://192.168.100.17:4000/",
 };
 export const UrlFrontend = "http://localhost:3000/";
 

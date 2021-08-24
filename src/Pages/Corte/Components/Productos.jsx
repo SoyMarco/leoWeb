@@ -4,12 +4,9 @@ import { SmileOutlined } from "@ant-design/icons";
 import { UrlFrontend } from "config/apollo";
 
 export default function Productos({ stateRecord, loading }) {
-	const [listaCompras, setlistaCompras] = useState([]);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [productos, setproductos] = useState([]);
-	const [precio, setprecio] = useState({
-		precio: null,
-	});
+
 	useEffect(() => {
 		if (stateRecord) {
 			let { productos } = stateRecord;
@@ -141,7 +138,7 @@ export default function Productos({ stateRecord, loading }) {
 					loading={loading}
 					bordered
 					scroll={{ y: 250 }}
-					// rowSelection={rowSelection}
+					rowSelection={rowSelection}
 					size='small'
 					style={{
 						height: "300px",

@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Table, Col } from "antd";
-import { SmileOutlined } from "@ant-design/icons";
-import { MdDelete, MdLocalGroceryStore } from "react-icons/md";
 
 export default function Ventas({ loading, getVentasDia }) {
 	const [totales, settotales] = useState([]);
@@ -17,7 +15,6 @@ export default function Ventas({ loading, getVentasDia }) {
 		let totales = [];
 		for (var i = 0; i < getVentasDia.length; i++) {
 			if (getVentasDia[i].cancelado === false) {
-				console.log("@@@@venta", getVentasDia[i]);
 				total = total + getVentasDia[i].total;
 				efectivo = efectivo + getVentasDia[i].efectivo;
 				tarjeta = tarjeta + getVentasDia[i].tarjeta;
@@ -175,7 +172,7 @@ export default function Ventas({ loading, getVentasDia }) {
 					dataSource={totales}
 					loading={loading}
 					pagination={false}
-					size="middle"
+					size='middle'
 					style={{
 						height: "100px",
 						borderRadius: "10px",

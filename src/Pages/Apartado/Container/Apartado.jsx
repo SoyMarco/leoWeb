@@ -1,6 +1,24 @@
 import React, { useEffect, useState, useRef } from "react";
+import ImprimirApartado from "Pages/Apartado/Components/ImprimirApartado/ImprimirApartado";
+import ModalCalendar from "Pages/Apartado/Components/ModalCalendar/ModalCalendar";
+import { DollarCircleFilled, CalendarOutlined } from "@ant-design/icons";
+import CobrarApartado from "../Components/Cobrar/CobrarApartado";
+import { DeleteFilled, PrinterFilled } from "@ant-design/icons";
 import { TablaProductos, TablaAbonos } from "../Components";
+import { openNotification } from "Utils/openNotification";
+import { useParams, useHistory } from "react-router-dom";
+import { useQuery, useMutation } from "@apollo/client";
+import ErrorConection from "Utils/ErrorConection";
+import { UrlFrontend } from "config/apollo";
 import ErrorPage from "Pages/Error/Error";
+import useAuth from "hooks/useAuth";
+import { keyBlock } from "Utils";
+import moment from "moment";
+import {
+	GET_PRODUCTOS_FOLIO,
+	CANCELAR_APARTADO,
+	CANCEL_ENTREGA,
+} from "graphql/apartado";
 import {
 	Row,
 	Card,
@@ -12,24 +30,6 @@ import {
 	Tooltip,
 	Result,
 } from "antd";
-import { DollarCircleFilled, CalendarOutlined } from "@ant-design/icons";
-import { useQuery, useMutation } from "@apollo/client";
-import { openNotification } from "Utils/openNotification";
-import ErrorConection from "Utils/ErrorConection";
-import { useParams, useHistory } from "react-router-dom";
-import {
-	GET_PRODUCTOS_FOLIO,
-	CANCELAR_APARTADO,
-	CANCEL_ENTREGA,
-} from "graphql/apartado";
-import useAuth from "hooks/useAuth";
-import { DeleteFilled, PrinterFilled } from "@ant-design/icons";
-import { keyBlock } from "Utils";
-import { UrlFrontend } from "config/apollo";
-import CobrarApartado from "../Components/Cobrar/CobrarApartado";
-import moment from "moment";
-import ModalCalendar from "Pages/Apartado/Components/ModalCalendar/ModalCalendar";
-import ImprimirApartado from "Pages/Apartado/Components/ImprimirApartado/ImprimirApartado";
 
 export default function Apartado(props) {
 	const history = useHistory();
@@ -88,7 +88,7 @@ export default function Apartado(props) {
 			setproductos(listaProductos);
 
 			settitleWeb(cliente);
-			let cancel = cancelado[0]?.status ?? false;
+			let cancel = cancelado[0]?.status ?? true;
 			setstatusApartado(cancel);
 		}
 	}, [data]);
@@ -161,7 +161,11 @@ export default function Apartado(props) {
 		}
 		// ESC
 		if (e.keyCode === 27) {
-			history.push("/");
+			if (abono.abono > 0) {
+				setabono({ abono: null });
+			} else {
+				history.push("/");
+			}
 		}
 		// Reimprimir
 		if (e.keyCode === 112) {
@@ -554,7 +558,7 @@ export default function Apartado(props) {
 					calculateRestaria={calculateRestaria}
 					dataApartado={dataApartado}
 					auth={auth}
-				></ImprimirApartado>
+				/>
 			) : null}
 		</>
 	);

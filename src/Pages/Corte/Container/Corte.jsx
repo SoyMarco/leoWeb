@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { TablaProductos, TablaTotales, TablaVentas } from "../Components";
-import { SmileOutlined } from "@ant-design/icons";
-import { RiWifiOffLine } from "react-icons/ri";
 import "./corte.css";
-import { Row, Divider, notification } from "antd";
-import { useQuery, gql, useMutation } from "@apollo/client";
+import { Row, Divider } from "antd";
+import { useQuery } from "@apollo/client";
 import { GET_VENTAS_DIA } from "../../../graphql/venta";
 import ErrorConection from "Utils/ErrorConection";
 import useAuth from "hooks/useAuth";
@@ -18,6 +16,7 @@ const Corte = () => {
 	const { logout } = useAuth();
 	useEffect(() => {
 		refetch();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	if (error) {

@@ -3,7 +3,6 @@ import { Table, Result, Col, Divider, Row, Tooltip } from "antd";
 import { SmileOutlined } from "@ant-design/icons";
 import moment from "moment";
 export default function Productos({ stateRecord, loading }) {
-	const [listaCompras, setlistaCompras] = useState([]);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [productos, setproductos] = useState([]);
 	const [abonos, setabonos] = useState([]);
@@ -11,9 +10,6 @@ export default function Productos({ stateRecord, loading }) {
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
 
-	const [precio, setprecio] = useState({
-		precio: null,
-	});
 	useEffect(() => {
 		// selectLastRow();
 		let sum = 0;
@@ -30,6 +26,7 @@ export default function Productos({ stateRecord, loading }) {
 			sumAbo += abonos[i].abono;
 		}
 		settotalAbonos(sumAbo);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [productos]);
 
 	useEffect(() => {
@@ -166,7 +163,7 @@ export default function Productos({ stateRecord, loading }) {
 					loading={loading}
 					bordered
 					scroll={{ y: 300 }}
-					// rowSelection={rowSelection}
+					rowSelection={rowSelection}
 					size='small'
 					style={{
 						height: "400px",

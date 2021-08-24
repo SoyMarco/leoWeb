@@ -1,7 +1,7 @@
 // import React, { useEffect } from "react";
 import { notification } from "antd";
 import { RiWifiOffLine } from "react-icons/ri";
-import { getToken, decodeToken, removeToken } from "Utils/token";
+import { getToken, decodeToken } from "Utils/token";
 
 export default function ErrorConection(logout) {
 	notification.open({

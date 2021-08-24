@@ -9,7 +9,7 @@ import { openNotification } from "Utils/openNotification";
 import { useHistory, useLocation, Link } from "react-router-dom";
 import useAuth from "hooks/useAuth";
 import { UrlFrontend } from "config/apollo";
-import { GiLargeDress, GiArchiveResearch } from "react-icons/gi";
+import { GiLargeDress } from "react-icons/gi";
 import { RiFileSearchFill } from "react-icons/ri";
 import Horizontal from "../Components/Horizontal";
 
@@ -26,7 +26,6 @@ function LayoutForm({ children }) {
 	useEffect(() => {
 		let apartado = Location.pathname;
 		apartado = apartado.slice(0, 10);
-		console.log("apartado", apartado);
 		if (Location.pathname === "/") {
 			settitleWeb(null);
 		} else if (apartado === "/apartado/") {
@@ -60,7 +59,6 @@ function LayoutForm({ children }) {
 		// setAuth(null);
 	};
 	const handleClick = (e) => {
-		console.log(e);
 		setcurrentMenu(e.key);
 	};
 	return (
@@ -123,6 +121,21 @@ function LayoutForm({ children }) {
 								Corte
 							</Menu.Item>
 							<Menu.Item
+								key='4'
+								icon={
+									<Link
+										to={{
+											pathname: `/add`,
+										}}
+									>
+										<GiLargeDress style={{ color: "darkblue" }} />
+									</Link>
+								}
+								onClick={() => history.push("/add")}
+							>
+								Nuevo Apartado
+							</Menu.Item>
+							<Menu.Item
 								key='3'
 								icon={
 									<Link
@@ -135,23 +148,9 @@ function LayoutForm({ children }) {
 								}
 								onClick={() => history.push("/apartados")}
 							>
-								Ver Apartados
+								Buscar Apartados
 							</Menu.Item>
-							<Menu.Item
-								key='4'
-								icon={
-									<Link
-										to={{
-											pathname: `/apartados`,
-										}}
-									>
-										<GiLargeDress style={{ color: "darkblue" }} />
-									</Link>
-								}
-								onClick={() => history.push("/apartados")}
-							>
-								Nuevo Apartado
-							</Menu.Item>
+
 							<Menu.Item
 								key='7'
 								icon={<FaWindowRestore style={{ color: "darkblue" }} />}

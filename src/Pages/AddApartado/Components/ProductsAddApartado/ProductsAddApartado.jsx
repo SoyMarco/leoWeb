@@ -1,18 +1,32 @@
-import React, { useState } from "react";
-import { Card, Table, Tooltip, Input, Button, Result, Form, Row } from "antd";
+import React, { useState, useEffect } from "react";
+import { Table, Input, Button, Result, Row } from "antd";
 import { MdDelete, MdLocalGroceryStore } from "react-icons/md";
 import { DollarCircleOutlined } from "@ant-design/icons";
-import { GiLargeDress, GiArchiveResearch } from "react-icons/gi";
+import { GiLargeDress } from "react-icons/gi";
+import { keyBlock } from "Utils";
+import useAuth from "hooks/useAuth";
 
-export default function ProductsAddApartado() {
-	const [listaCompras, setlistaCompras] = useState([]);
+export default function ProductsAddApartado({
+	next,
+	prev,
+	setlistaCompras,
+	listaCompras,
+}) {
+	const [idArticulo, setidArticulo] = useState(0);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
-	const [stateRecord, setstateRecord] = useState(null);
+	// const [stateRecord, setstateRecord] = useState(null);
+	const [nombre, setnombre] = useState("");
+	const [precio, setprecio] = useState(null);
+	const { auth } = useAuth();
+
+	useEffect(() => {
+		document.querySelector("#inputNameProduct").select();
+	}, []);
 
 	const click = (record, rowIndex) => {
 		console.log(record);
 		setselectedRowKeys([record.key]);
-		setstateRecord(record);
+		// setstateRecord(record);
 		// selectInputPrecio();
 		// addArticulo(record, rowIndex);
 	};
@@ -44,6 +58,47 @@ export default function ProductsAddApartado() {
 		}
 		// this.focusPrecio();
 	};
+	const addProducto = () => {
+		if (precio > 0 && nombre) {
+			setlistaCompras([
+				...listaCompras,
+				{
+					// key: idArticulo + 1,
+					idArray: idArticulo + 1,
+					vendedor: auth.name,
+					nombre: nombre,
+					precio: Math.round(precio * 100) / 100,
+					cantidad: 1,
+					totalArticulo: Math.round(precio * 100) / 100,
+				},
+			]);
+			setprecio(null);
+			setnombre("");
+			setidArticulo(idArticulo + 1);
+			document.querySelector("#inputNameProduct").select();
+			// } else if (!this.precio && this.cantidadAtirulos > 0) {
+			// 	this.abrirCobrar();
+			// } else {
+			// 	this.precio = "";
+		}
+	};
+	const pressKeyEnter = (e) => {
+		if (e.keyCode === 13) {
+			if (precio > 0 && nombre) {
+				addProducto();
+			} else if (!nombre && precio > 0) {
+				document.querySelector("#inputNameProduct").select();
+			} else if (nombre && !precio) {
+				document.querySelector("#inputPriceProduct").select();
+			} else if (listaCompras.length > 0) {
+				next();
+			}
+		}
+
+		if (e.keyCode === 27) {
+			prev();
+		}
+	};
 	const columns = [
 		{
 			title: "ID",
@@ -57,7 +112,17 @@ export default function ProductsAddApartado() {
 			title: "Producto",
 			dataIndex: "nombre",
 			key: "nombre",
-			width: "90px",
+			// width: "90px",
+			render: (nombre) => (
+				<h3
+					style={{
+						fontWeight: "revert",
+						fontSize: "large",
+					}}
+				>
+					{nombre}
+				</h3>
+			),
 		},
 		{
 			title: "Precio",
@@ -67,100 +132,22 @@ export default function ProductsAddApartado() {
 			render: (precio) => (
 				<h3
 					style={{
-						textAlignLast: "right",
+						textAlignLast: "center",
 						fontWeight: "revert",
 						fontSize: "large",
+						color: "green",
 					}}
 				>
 					${precio}
 				</h3>
 			),
 		},
-		{
-			title: "Cantidad",
-			dataIndex: "cantidad",
-			key: "cantidad",
-			render: (cantidad, record) => (
-				<Row justify='space-around'>
-					<Button
-						type='primary'
-						shape='circle'
-						// icon={<MinusOutlined />}
-						size='small'
-						// onClick={() => removeArticulo(record)}
-					></Button>
-					<h3
-						style={{
-							textAlignLast: "center",
-							fontWeight: "revert",
-							// fontSize: "x-large",
-						}}
-					>
-						{cantidad}
-					</h3>
-					<Button
-						type='primary'
-						shape='circle'
-						// icon={<PlusOutlined />}
-						size='small'
-						// onClick={() => addArticulo(record)}
-					></Button>
-				</Row>
-			),
-		},
-		{
-			title: "Apartado",
-			dataIndex: "apartado",
-			key: "apartado",
-			ellipsis: {
-				showTitle: false,
-			},
-			width: "90px",
-			render: (address) => (
-				<Tooltip placement='topLeft' title={address}>
-					{address}
-				</Tooltip>
-			),
-		},
-		{
-			title: "Referencia",
-			dataIndex: "refApartado",
-			key: "refApartado",
-			ellipsis: {
-				showTitle: false,
-			},
-			width: "90px",
-			render: (address) => (
-				<Tooltip placement='topLeft' title={address}>
-					{address}
-				</Tooltip>
-			),
-		},
-		{
-			title: "Total",
-			dataIndex: "totalArticulo",
-			key: "totalArticulo",
-			ellipsis: {
-				showTitle: false,
-			},
-			render: (totalArticulo, record) => (
-				<h3
-					style={{
-						textAlignLast: "right",
-						color: "green",
-						fontWeight: "revert",
-						fontSize: "large",
-					}}
-				>
-					${totalArticulo}
-				</h3>
-			),
-		},
+
 		{
 			title: "Borrar",
 			dataIndex: "key",
 			key: "key",
-			width: "60px",
+			width: "90px",
 			render: (key, record) => (
 				<div style={{ textAlignLast: "center" }}>
 					<Button
@@ -173,7 +160,11 @@ export default function ProductsAddApartado() {
 			),
 		},
 	];
-
+	const keyNumber = (e) => {
+		if (e.keyCode >= 96 && e.keyCode <= 105) {
+			document.querySelector("#inputPriceProduct").select();
+		}
+	};
 	return (
 		<>
 			<Row
@@ -187,7 +178,7 @@ export default function ProductsAddApartado() {
 			>
 				{/* Ingresar Precio */}
 				<Input
-					id='inputPrecio'
+					id='inputNameProduct'
 					// <GiLargeDress style={{ color: "darkblue" }} />
 					prefix={<GiLargeDress style={{ marginLeft: "20px" }} />}
 					style={{
@@ -200,13 +191,14 @@ export default function ProductsAddApartado() {
 						padding: "0 0 0 0px",
 						border: "0 0 0 0",
 					}}
-					// onKeyUp={pressKeyPrecio}
-					// onKeyDown={keyBlock}
-					// value={precio.precio}
+					onKeyUp={pressKeyEnter}
+					onKeyDown={keyNumber}
+					value={nombre}
 					// onChange={handlePrecio}
+					onChange={(e) => setnombre(e.target.value.toUpperCase())}
 				/>
 				<Input
-					id='inputPrecio'
+					id='inputPriceProduct'
 					prefix={<DollarCircleOutlined style={{ marginLeft: "20px" }} />}
 					style={{
 						color: "green",
@@ -218,10 +210,10 @@ export default function ProductsAddApartado() {
 						padding: "0 0 0 0px",
 						border: "0 0 0 0",
 					}}
-					// onKeyUp={pressKeyPrecio}
-					// onKeyDown={keyBlock}
-					// value={precio.precio}
-					// onChange={handlePrecio}
+					onKeyUp={pressKeyEnter}
+					onKeyDown={keyBlock}
+					value={precio}
+					onChange={(e) => setprecio(e.target.value.toUpperCase())}
 				/>
 			</Row>
 
@@ -230,9 +222,9 @@ export default function ProductsAddApartado() {
 				dataSource={listaCompras}
 				pagination={false}
 				bordered
-				scroll={{ y: 280 }}
+				scroll={{ y: 200 }}
 				style={{
-					height: "300px",
+					height: "250px",
 					borderRadius: "10px",
 					boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
 					margin: "10px",

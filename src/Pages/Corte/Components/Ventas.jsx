@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { openNotification } from "../../../Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { CANCELAR_VENTA } from "../../../graphql/venta";

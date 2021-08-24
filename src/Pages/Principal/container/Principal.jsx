@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Table, Tooltip, Input, Button, Result, Form, Row } from "antd";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { MdDelete, MdLocalGroceryStore } from "react-icons/md";
-import { SmileOutlined, PlusOutlined, MinusOutlined } from "@ant-design/icons";
+import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import Cobrar from "../Components/Cobrar/Cobrar";
 import { keyBlock } from "Utils";
 import { useLocation } from "react-router-dom";

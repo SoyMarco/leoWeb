@@ -1,5 +1,12 @@
 import gql from "graphql-tag";
 
+export const GET_FOLIO_MAX_APARTADO = gql`
+	mutation getFolioMaxApartado($input: BasicInput) {
+		getFolioMaxApartado(input: $input) {
+			folio
+		}
+	}
+`;
 export const GET_PRODUCTOS_FOLIO = gql`
 	query getProductosFolio($folio: Float) {
 		getProductosFolio(folio: $folio) {

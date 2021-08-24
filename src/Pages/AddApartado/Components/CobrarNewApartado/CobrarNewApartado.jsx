@@ -1,50 +1,67 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 import { Modal, Input, Form, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
-import Imprimir from "../Imprimir/Imprimir";
+import ImprimirApartado from "../ImprimirApartado/ImprimirApartado";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
-
 import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
+import { REGISTER_APARTADO, GET_FOLIO_MAX_APARTADO } from "graphql/apartado";
 import { REGISTER_VENTA } from "graphql/venta";
 import useAuth from "hooks/useAuth";
 
 // import "./cobrar.css";
 
-const Cobrar = ({
+const CobrarNewApartado = ({
 	modalCobrar,
 	setmodalCobrar,
+	cerrarCobrar,
 	totalTotal,
 	listaCompras,
 	initialState,
+	calculateRestaria,
+	inputAbono,
+	dataApartado,
+	cliente,
 }) => {
+	let [mutateGET_FOLIO_MAX_APARTADO] = useMutation(GET_FOLIO_MAX_APARTADO);
+	const { auth, logout } = useAuth();
+
 	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
+	const [mutateREGISTER_APARTADO] = useMutation(REGISTER_APARTADO);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);
 	const [imprimir, setimprimir] = useState(false);
 	const [btnLoading, setbtnLoading] = useState(false);
-	const [folio, setfolio] = useState(0);
 	const [dinero, setdinero] = useState({
 		aCuenta: 0,
 		tarjeta: 0,
 		efectivo: 0,
 	});
-	const { auth, logout } = useAuth();
+
 	useEffect(() => {
 		if (modalCobrar === true) {
 			form.setFieldsValue({ efectivo: totalTotal });
 			OnValuesChange();
 			document.querySelector("#cobrarEfectivo").select();
+		} else if (modalCobrar === false) {
+			inputAbono.current.select();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [modalCobrar]);
-
 	const pressKeyPrecio = (e) => {
 		// Enter
 		if (e.keyCode === 13) {
 			savePrintNewV("F1");
+		}
+		// 	F1
+		if (e.keyCode === 112) {
+			savePrintNewV("F1");
+		}
+		// F2
+		if (e.keyCode === 113) {
+			savePrintNewV("F2");
 		}
 		// E
 		if (e.keyCode === 69) {
@@ -59,14 +76,6 @@ const Cobrar = ({
 			document.querySelector("#cobrarTarjeta").select();
 		}
 
-		// 	F1
-		if (e.keyCode === 112) {
-			savePrintNewV("F1");
-		}
-		// F2
-		if (e.keyCode === 113) {
-			savePrintNewV("F2");
-		}
 		// F3
 		if (e.keyCode === 114) {
 			document.querySelector("#cobrarTarjeta").select();
@@ -105,34 +114,76 @@ const Cobrar = ({
 		let tarjeta = parseFloat(dinero.tarjeta);
 		let aCuenta = parseFloat(dinero.aCuenta);
 		let total = parseFloat(totalTotal);
-
+		setbtnLoading(true);
 		if (cambio >= 0) {
-			setbtnLoading(true);
-			let listaComprasNew = listaCompras.map((item) => {
-				return {
-					apartado: item.apartado,
-					cantidad: item.cantidad,
-					idArray: item.key,
-					nombre: item.nombre,
-					precio: item.precio,
-					refApartado: item.refApartado,
-					totalArticulo: item.totalArticulo,
-				};
-			});
-
-			console.log(listaComprasNew);
 			try {
-				const { data } = await mutateREGISTER_VENTA({
+				const { data: FolioMax } = await mutateGET_FOLIO_MAX_APARTADO({
 					variables: {
 						input: {
-							productos: listaComprasNew,
+							status: true,
+						},
+					},
+				});
+				let folioApartado = FolioMax?.getFolioMaxApartado?.folio;
+				let listaComprasNew = {
+					apartado: folioApartado,
+					cantidad: 1,
+					idArray: folioApartado,
+					nombre: "APARTADO",
+					precio: total,
+					refApartado: "Apartado",
+					totalArticulo: total,
+				};
+				if (folioApartado) {
+					const { data } = await mutateREGISTER_VENTA({
+						variables: {
+							input: {
+								productos: listaComprasNew,
+								vendedor: auth.name,
+								folio: 1,
+								total: total,
+								efectivo: efectivo,
+								tarjeta: tarjeta,
+								aCuenta: aCuenta,
+								pagoCon: 0,
+								referencia: "Apartado",
+								notas: "APARTADO",
+							},
+						},
+					});
+					if (await data) {
+						savePrintAbono(keyF, data.registerVenta);
+					}
+				}
+			} catch (error) {
+				ErrorConection(logout);
+				return false;
+			}
+		}
+	};
+
+	//Guardar y/o Imprimir APARTADO CON GraphQL
+	const savePrintAbono = async (keyF, dataVenta) => {
+		let abonos = [
+			{
+				abono: parseFloat(totalTotal),
+				vendedor: auth.name,
+				idVenta: dataVenta.id,
+				folioVenta: dataVenta.folio,
+			},
+		];
+		if (cambio >= 0) {
+			setbtnLoading(true);
+			try {
+				const { data } = await mutateREGISTER_APARTADO({
+					variables: {
+						input: {
+							productos: listaCompras,
 							vendedor: auth.name,
+							cliente: cliente,
+							abonos: abonos,
 							folio: 1,
-							total: total,
-							efectivo: efectivo,
-							tarjeta: tarjeta,
-							aCuenta: aCuenta,
-							pagoCon: 0,
+							total: parseFloat(totalTotal),
 							referencia: "",
 							notas: "",
 						},
@@ -140,10 +191,9 @@ const Cobrar = ({
 				});
 				if (data) {
 					if (keyF === "F1") {
-						setfolio(data.registerVenta.folio);
 						setimprimir(true);
 					} else if (keyF === "F2") {
-						openNotification("success", "Venta guardada con exito");
+						openNotification("success", "Apartado guardado con exito");
 						initialState();
 					}
 				}
@@ -153,20 +203,20 @@ const Cobrar = ({
 			}
 		}
 	};
-
 	return (
 		<>
 			{imprimir ? (
-				<Imprimir
+				<ImprimirApartado
 					imprimir={imprimir}
-					totalTotal={totalTotal}
-					cambio={cambio}
 					setimprimir={setimprimir}
-					dinero={dinero}
+					totalTotal={totalTotal}
 					listaCompras={listaCompras}
-					setmodalCobrar={setmodalCobrar}
-					folio={folio}
+					initialState={initialState}
+					calculateRestaria={calculateRestaria}
+					dataApartado={dataApartado}
 					auth={auth}
+					dinero={dinero}
+					cambio={cambio}
 				/>
 			) : null}
 			<Modal
@@ -178,7 +228,7 @@ const Cobrar = ({
 					</>
 				}
 				visible={modalCobrar}
-				onCancel={() => setmodalCobrar(!modalCobrar)}
+				onCancel={() => cerrarCobrar()}
 				footer={[
 					<Row justify='space-around'>
 						<Button
@@ -225,7 +275,7 @@ const Cobrar = ({
 							margin: 0,
 						}}
 					>
-						Total: ${totalTotal}
+						Abono: ${totalTotal}
 					</h1>
 				</div>
 				<div key='div2' style={{ textAlignLast: "right" }}>
@@ -233,7 +283,7 @@ const Cobrar = ({
 						<Form.Item
 							label='Efectivo'
 							name='efectivo'
-							key='1'
+							key='formItem1'
 							rules={[
 								{
 									required: false,
@@ -254,7 +304,7 @@ const Cobrar = ({
 						<Form.Item
 							label='Tarjeta'
 							name='tarjeta'
-							key='2'
+							key='formItem2'
 							rules={[
 								{
 									required: false,
@@ -275,7 +325,7 @@ const Cobrar = ({
 						<Form.Item
 							label='A cuenta'
 							name='aCuenta'
-							key='3'
+							key='formItem3'
 							rules={[
 								{
 									required: false,
@@ -321,4 +371,4 @@ const Cobrar = ({
 	);
 };
 
-export default Cobrar;
+export default CobrarNewApartado;
