@@ -10,6 +10,7 @@ import Error from "Pages/Error/Error";
 import Prueba from "Pages/prueba";
 import AddApartado from "Pages/AddApartado/Container/AddApartado";
 import Caja from "Pages/Caja/Container/Caja";
+import EntradasSalidas from "Pages/EntradasSalidas/Container/EntradasSalidas";
 const routes = [
 	{
 		path: "/",
@@ -51,6 +52,12 @@ const routes = [
 		path: "/caja",
 		layout: LayoutForm,
 		component: Caja,
+		exact: true,
+	},
+	{
+		path: "/entradasSalidas",
+		layout: LayoutForm,
+		component: EntradasSalidas,
 		exact: true,
 	},
 	{

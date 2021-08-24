@@ -3,6 +3,7 @@ import { Layout, Menu } from "antd";
 import "antd/dist/antd.css";
 import { MdLocalGroceryStore } from "react-icons/md";
 import { FaCashRegister, FaWindowRestore } from "react-icons/fa";
+import { IoIosCash } from "react-icons/io";
 import "./layout.css";
 import "material-design-icons-iconfont";
 import { openNotification } from "Utils/openNotification";
@@ -121,7 +122,7 @@ function LayoutForm({ children }) {
 								Corte
 							</Menu.Item>
 							<Menu.Item
-								key='4'
+								key='3'
 								icon={
 									<Link
 										to={{
@@ -136,7 +137,7 @@ function LayoutForm({ children }) {
 								Nuevo Apartado
 							</Menu.Item>
 							<Menu.Item
-								key='3'
+								key='4'
 								icon={
 									<Link
 										to={{
@@ -150,7 +151,21 @@ function LayoutForm({ children }) {
 							>
 								Buscar Apartados
 							</Menu.Item>
-
+							<Menu.Item
+								key='5'
+								icon={
+									<Link
+										to={{
+											pathname: `/entradasSalidas`,
+										}}
+									>
+										<IoIosCash style={{ color: "darkblue" }} />
+									</Link>
+								}
+								onClick={() => history.push("/entradasSalidas")}
+							>
+								Entradas / Salidas
+							</Menu.Item>
 							<Menu.Item
 								key='7'
 								icon={<FaWindowRestore style={{ color: "darkblue" }} />}
