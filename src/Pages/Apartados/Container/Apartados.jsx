@@ -121,6 +121,11 @@ export default function Apartados() {
 	};
 	return (
 		<>
+			<Row justify='center'>
+				<h1 style={{ fontSize: "x-large", fontWeight: "bold", color: "blue" }}>
+					Buscar apartados
+				</h1>
+			</Row>
 			<Card>
 				<div
 					style={{

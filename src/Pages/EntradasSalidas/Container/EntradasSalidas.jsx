@@ -18,9 +18,11 @@ export default function EntradasSalidas() {
 	const [caja, setcaja] = useState(0);
 	const [entradaSalida, setentradaSalida] = useState(null);
 	const inputCaja = useRef();
+
 	useEffect(() => {
 		if (entradaSalida) inputCaja.current.select();
 	}, [entradaSalida]);
+
 	const sendLogin = async () => {
 		let monto = 0;
 		if (entradaSalida === "Entrada") {
@@ -90,7 +92,7 @@ export default function EntradasSalidas() {
 				>
 					<Row justify='center'>
 						<h1 style={{ color: "white", fontSize: "x-large" }}>
-							<span class='material-icons' style={{ marginRight: "20px" }}>
+							<span className='material-icons' style={{ marginRight: "20px" }}>
 								point_of_sale
 							</span>
 							{entradaSalida === null ? "Entrada / Salida" : entradaSalida}
@@ -111,7 +113,7 @@ export default function EntradasSalidas() {
 							ref={inputCaja}
 							id='inputLogin'
 							type='number'
-							prefix={<span class='material-icons'>payments</span>}
+							prefix={<span className='material-icons'>payments</span>}
 							style={{
 								color: "#000058",
 								// fontSize: 30,

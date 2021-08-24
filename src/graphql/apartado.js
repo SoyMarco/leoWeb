@@ -264,8 +264,67 @@ export const REGISTER_APARTADO = gql`
 	mutation registerApartado($input: ApartadoInput) {
 		registerApartado(input: $input) {
 			id
+			vendedor
+			cliente
 			folio
+			total
+			referencia
+			notas
+			createAt
 			vence
+			productos {
+				vendedor
+				nombre
+				precio
+				cantidad
+				totalArticulo
+				idArray
+				_id
+				createAt
+				entregado {
+					status
+					fecha
+					vendedor
+				}
+				sacado {
+					status
+					fecha
+					vendedor
+				}
+				cancelado {
+					status
+					fecha
+					vendedor
+				}
+			}
+			abonos {
+				_id
+				idVenta
+				folioVenta
+				abono
+				vendedor
+				createAt
+				cancelado {
+					status
+					fecha
+					vendedor
+				}
+			}
+			entregado {
+				status
+				fecha
+				vendedor
+			}
+			sacado {
+				status
+				fecha
+				vendedor
+			}
+			cancelado {
+				status
+				fecha
+				vendedor
+			}
 		}
 	}
 `;

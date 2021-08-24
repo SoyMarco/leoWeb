@@ -1,10 +1,14 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import moment from "moment";
 import "moment/locale/es-us";
 import { Modal, Row } from "antd";
 import "./imprimir.css";
-const Imprimir = ({
+import { useHistory } from "react-router-dom";
+import ReactToPrint from "react-to-print";
+import { openNotification } from "Utils/openNotification";
+
+const ImprimirNewApartado = ({
 	imprimir,
 	dataApartado,
 	auth,
@@ -12,35 +16,35 @@ const Imprimir = ({
 	dinero,
 	cambio,
 }) => {
-	// const [totalProductos, settotalProductos] = useState(0);
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
 	const { abonos, cliente, entregado, folio, productos, vence } = dataApartado;
+	const imprimirNewApartado = useRef();
+	const history = useHistory();
 
 	useEffect(() => {
 		let sum = 0;
-		// let sumProd = 0;
 		for (let i = 0; i < productos.length; i++) {
 			sum += productos[i].totalArticulo;
-			// sumProd += productos[i].cantidad;
 		}
 		settotalTotal(sum);
-		// settotalProductos(sumProd);
-
 		let sumAbo = 0;
 		for (let i = 0; i < abonos.length; i++) {
 			sumAbo += abonos[i].abono;
 		}
 		settotalAbonos(sumAbo);
-
 		if (imprimir === true) {
 			setTimeout(() => {
-				crearPDF();
+				document.getElementById("print-button").click();
 			}, 100);
 		}
-		console.log(dataApartado);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imprimir]);
+
+	const afterPrint = () => {
+		openNotification("success", "Apartado guardado con exito");
+		history.push("/");
+	};
 
 	const pasarAFechaLL = (item) => {
 		let fecha = moment.unix(item / 1000).format("LL");
@@ -58,14 +62,7 @@ const Imprimir = ({
 		let fecha = moment.unix(item / 1000).format("LL");
 		return fecha;
 	};
-	const crearPDF = () => {
-		// let contenidoOriginal = document.body.innerHTML;
-		let contenido = document.getElementById("tickets").innerHTML;
-		document.body.innerHTML = contenido;
-		window.print();
-		// document.body.innerHTML = contenidoOriginal;
-		window.location.reload();
-	};
+
 	const fechaVenceEn = () => {
 		var fecha = moment.unix(dataApartado.vence / 1000).fromNow();
 		if (dataApartado.vence > Date.now()) {
@@ -79,12 +76,24 @@ const Imprimir = ({
 
 	return (
 		<>
+			<ReactToPrint
+				trigger={(e) => <button id='print-button'>Imprimiendo...</button>}
+				content={() => imprimirNewApartado.current}
+				// onBeforePrint={() => antesDeImprimir()}
+				onAfterPrint={() => afterPrint()}
+			/>
+
 			<Modal
 				visible={imprimir}
 				width='229px'
 				onCancel={() => setimprimir(false)}
 			>
-				<div id='tickets' className='ticket' name='tickets'>
+				<div
+					id='tickets'
+					className='ticket'
+					name='tickets'
+					ref={imprimirNewApartado}
+				>
 					<link rel='preconnect' href='https://fonts.gstatic.com' />
 					<link
 						href='https://fonts.googleapis.com/css2?family=Roboto&display=swap'
@@ -236,7 +245,7 @@ const Imprimir = ({
 						</row>
 					) : null}
 					{/* <!-- VENDEDOR --> */}
-					<span>Reimpresión</span>
+					{/* <span>Reimpresión</span> */}
 					<br></br>
 					<span>{`Vendedor: ${auth.name.toUpperCase()}`}</span>
 					<br></br>
@@ -251,4 +260,4 @@ const Imprimir = ({
 		</>
 	);
 };
-export default Imprimir;
+export default ImprimirNewApartado;

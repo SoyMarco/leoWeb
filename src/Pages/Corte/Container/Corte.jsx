@@ -47,6 +47,11 @@ const Corte = () => {
 	}, [data2]);
 	return (
 		<>
+			<Row justify='center'>
+				<h1 style={{ fontSize: "x-large", fontWeight: "bold", color: "blue" }}>
+					Corte
+				</h1>
+			</Row>
 			<Row>
 				<TablaVentas
 					getVentasDia={getVentasDia}
@@ -60,7 +65,9 @@ const Corte = () => {
 				<TablaProductos stateRecord={stateRecord} loading={loading} />
 			</Row>
 
-			<Divider orientation='left'>Total del día</Divider>
+			<Divider orientation='left' style={{ marginBottom: 0 }}>
+				Total del día
+			</Divider>
 
 			<Row>
 				<TablaTotales

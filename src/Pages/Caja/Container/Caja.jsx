@@ -6,10 +6,13 @@ import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { REGISTER_CAJA } from "graphql/caja";
 import useAuth from "hooks/useAuth";
+import { useHistory } from "react-router-dom";
+
 import "./caja.css";
 
 export default function Caja() {
 	const [mutateREGISTER_CAJA] = useMutation(REGISTER_CAJA);
+	const history = useHistory();
 	const { logout } = useAuth();
 	const [caja, setcaja] = useState(0);
 	const inputCaja = useRef();
@@ -27,6 +30,7 @@ export default function Caja() {
 				},
 			});
 			if (data) {
+				history.push("/");
 				openNotification("success", `Registro guardado con exito`);
 			}
 		} catch (error) {
@@ -63,7 +67,7 @@ export default function Caja() {
 							/> */}
 
 						<h1 style={{ color: "white", fontSize: "x-large" }}>
-							<span class='material-icons' style={{ marginRight: "20px" }}>
+							<span className='material-icons' style={{ marginRight: "20px" }}>
 								point_of_sale
 							</span>
 							Inicio de caja
@@ -83,7 +87,7 @@ export default function Caja() {
 						ref={inputCaja}
 						id='inputLogin'
 						type='number'
-						prefix={<span class='material-icons'>payments</span>}
+						prefix={<span className='material-icons'>payments</span>}
 						style={{
 							color: "#000058",
 							// fontSize: 30,

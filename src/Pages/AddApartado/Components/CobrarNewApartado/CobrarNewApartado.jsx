@@ -22,7 +22,6 @@ const CobrarNewApartado = ({
 	initialState,
 	calculateRestaria,
 	inputAbono,
-	dataApartado,
 	cliente,
 }) => {
 	let [mutateGET_FOLIO_MAX_APARTADO] = useMutation(GET_FOLIO_MAX_APARTADO);
@@ -34,6 +33,7 @@ const CobrarNewApartado = ({
 	const [cambio, setcambio] = useState(0);
 	const [imprimir, setimprimir] = useState(false);
 	const [btnLoading, setbtnLoading] = useState(false);
+	const [dataApartado, setdataApartado] = useState([]);
 	const [dinero, setdinero] = useState({
 		aCuenta: 0,
 		tarjeta: 0,
@@ -191,6 +191,7 @@ const CobrarNewApartado = ({
 				});
 				if (data) {
 					if (keyF === "F1") {
+						setdataApartado(await data.registerApartado);
 						setimprimir(true);
 					} else if (keyF === "F2") {
 						openNotification("success", "Apartado guardado con exito");

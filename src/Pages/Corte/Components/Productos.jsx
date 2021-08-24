@@ -129,7 +129,9 @@ export default function Productos({ stateRecord, loading }) {
 	return (
 		<>
 			<Col xs={24} sm={24} md={8}>
-				<Divider orientation='left'>Productos</Divider>
+				<Divider orientation='left' style={{ marginTop: 0 }}>
+					Productos
+				</Divider>
 				{/* PRODUCTOS */}
 				<Table
 					columns={colProductos}

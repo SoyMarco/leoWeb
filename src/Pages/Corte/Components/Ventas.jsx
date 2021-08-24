@@ -277,7 +277,9 @@ export default function Ventas({
 				<Imprimir imprimir={imprimir} stateRecord={stateRecord} auth={auth} />
 			) : null}
 			<Col xs={24} sm={24} md={16}>
-				<Divider orientation='left'>Ventas</Divider>
+				<Divider orientation='left' style={{ marginTop: 0 }}>
+					Ventas
+				</Divider>
 				<Table
 					columns={colVentas}
 					dataSource={getVentasDia}

@@ -225,6 +225,11 @@ export default function AddApartado() {
 
 	return (
 		<>
+			<Row justify='center'>
+				<h1 style={{ fontSize: "x-large", fontWeight: "bold", color: "blue" }}>
+					Nuevo apartado
+				</h1>
+			</Row>
 			{cliente ? <title>{cliente}</title> : <title>Nuevo Apartado</title>}
 
 			{/* MODAL APARTADO */}
