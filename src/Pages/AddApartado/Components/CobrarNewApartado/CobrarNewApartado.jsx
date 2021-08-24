@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, Input, Form, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
-import ImprimirApartado from "../ImprimirApartado/ImprimirApartado";
+import ImprimirApartado from "../ImprimirApartado/ImprimirNewApartado";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";

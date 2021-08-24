@@ -1,20 +1,26 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import moment from "moment";
 import "moment/locale/es-us";
 import { Modal, Row } from "antd";
 import "./imprimir.css";
-const Imprimir = ({
+import ReactToPrint from "react-to-print";
+import { openNotification } from "Utils/openNotification";
+
+const ImprimirApartado = ({
 	imprimir,
 	dataApartado,
 	auth,
 	setimprimir,
 	dinero,
 	cambio,
+	initialState,
 }) => {
 	// const [totalProductos, settotalProductos] = useState(0);
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
+	const [numPrint, setnumPrint] = useState(0);
+
 	const {
 		abonos,
 		cliente,
@@ -30,6 +36,8 @@ const Imprimir = ({
 		vence,
 		// vendedor,
 	} = dataApartado;
+
+	const ReimprimirApartado = useRef();
 
 	useEffect(() => {
 		let sum = 0;
@@ -49,12 +57,20 @@ const Imprimir = ({
 
 		if (imprimir === true) {
 			setTimeout(() => {
-				crearPDF();
+				document.getElementById("print-button2").click();
 			}, 100);
 		}
-		console.log(dataApartado);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imprimir]);
+	const afterPrint = () => {
+		openNotification("success", "Reimpres@@@@@");
+		if (numPrint === 0) {
+			document.getElementById("print-button2").click();
+			setnumPrint(numPrint + 1);
+		} else if (numPrint === 1) {
+			initialState();
+		}
+	};
 
 	const pasarAFechaLL = (item) => {
 		let fecha = moment.unix(item / 1000).format("LL");
@@ -72,14 +88,7 @@ const Imprimir = ({
 		let fecha = moment.unix(item / 1000).format("LL");
 		return fecha;
 	};
-	const crearPDF = () => {
-		// let contenidoOriginal = document.body.innerHTML;
-		let contenido = document.getElementById("tickets").innerHTML;
-		document.body.innerHTML = contenido;
-		window.print();
-		// document.body.innerHTML = contenidoOriginal;
-		window.location.reload();
-	};
+
 	const fechaVenceEn = () => {
 		var fecha = moment.unix(dataApartado.vence / 1000).fromNow();
 		if (dataApartado.vence > Date.now()) {
@@ -93,12 +102,23 @@ const Imprimir = ({
 
 	return (
 		<>
+			<ReactToPrint
+				trigger={(e) => <button id='print-button2'>Imprimiendo...</button>}
+				content={() => ReimprimirApartado.current}
+				// onBeforePrint={() => antesDeImprimir()}
+				onAfterPrint={() => afterPrint()}
+			/>
 			<Modal
 				visible={imprimir}
 				width='229px'
 				onCancel={() => setimprimir(false)}
 			>
-				<div id='tickets' className='ticket' name='tickets'>
+				<div
+					id='tickets'
+					className='ticket'
+					name='tickets'
+					ref={ReimprimirApartado}
+				>
 					<link rel='preconnect' href='https://fonts.gstatic.com' />
 					<link
 						href='https://fonts.googleapis.com/css2?family=Roboto&display=swap'
@@ -265,4 +285,4 @@ const Imprimir = ({
 		</>
 	);
 };
-export default Imprimir;
+export default ImprimirApartado;

@@ -1,10 +1,13 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import moment from "moment";
 import "moment/locale/es-us";
 import { Modal } from "antd";
 import "./imprimir.css";
-const Imprimir = ({ imprimir, stateRecord, auth }) => {
+import ReactToPrint from "react-to-print";
+import { openNotification } from "Utils/openNotification";
+
+const Imprimir = ({ imprimir, setimprimir, stateRecord, auth }) => {
 	const {
 		createAt,
 		aCuenta,
@@ -15,6 +18,9 @@ const Imprimir = ({ imprimir, stateRecord, auth }) => {
 		total: totalTotal,
 	} = stateRecord;
 	const [cambio, setcambio] = useState(0);
+
+	const imprimirVenta = useRef();
+
 	useEffect(() => {
 		var sumaTodo = efectivo + tarjeta + aCuenta;
 		var resultado = sumaTodo - totalTotal;
@@ -24,10 +30,14 @@ const Imprimir = ({ imprimir, stateRecord, auth }) => {
 	useEffect(() => {
 		if (imprimir === true) {
 			setTimeout(() => {
-				crearPDF();
+				document.getElementById("print-button").click();
 			}, 100);
 		}
 	}, [imprimir]);
+	const afterPrint = () => {
+		openNotification("success", "Reimpreso");
+		setimprimir(false);
+	};
 	const pasarAFecha = (item) => {
 		let fecha = moment.unix(item / 1000).format("lll");
 		return fecha;
@@ -43,7 +53,14 @@ const Imprimir = ({ imprimir, stateRecord, auth }) => {
 	return (
 		<>
 			<Modal visible={imprimir} width='229px'>
-				<div id='tickets' className='ticket' name='tickets'>
+				<ReactToPrint
+					trigger={(e) => <button id='print-button'>Imprimiendo...</button>}
+					content={() => imprimirVenta.current}
+					// onBeforePrint={() => antesDeImprimir()}
+					onAfterPrint={() => afterPrint()}
+				/>
+
+				<div id='tickets' className='ticket' name='tickets' ref={imprimirVenta}>
 					<link rel='preconnect' href='https://fonts.gstatic.com' />
 					<link
 						href='https://fonts.googleapis.com/css2?family=Roboto&display=swap'

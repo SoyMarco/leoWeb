@@ -19,6 +19,7 @@ const ImprimirNewApartado = ({
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
 	const { abonos, cliente, entregado, folio, productos, vence } = dataApartado;
+	const [numPrint, setnumPrint] = useState(0);
 	const imprimirNewApartado = useRef();
 	const history = useHistory();
 
@@ -43,7 +44,13 @@ const ImprimirNewApartado = ({
 
 	const afterPrint = () => {
 		openNotification("success", "Apartado guardado con exito");
-		history.push("/");
+
+		if (numPrint === 0) {
+			document.getElementById("print-button").click();
+			setnumPrint(numPrint + 1);
+		} else if (numPrint === 1) {
+			history.push("/");
+		}
 	};
 
 	const pasarAFechaLL = (item) => {

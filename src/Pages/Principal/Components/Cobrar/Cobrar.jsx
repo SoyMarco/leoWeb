@@ -167,6 +167,7 @@ const Cobrar = ({
 					setmodalCobrar={setmodalCobrar}
 					folio={folio}
 					auth={auth}
+					initialState={initialState}
 				/>
 			) : null}
 			<Modal

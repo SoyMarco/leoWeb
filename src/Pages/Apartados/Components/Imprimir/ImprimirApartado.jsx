@@ -1,9 +1,13 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import moment from "moment";
 import "moment/locale/es-us";
 import { Modal, Row } from "antd";
 import "./imprimir.css";
+import { useHistory } from "react-router-dom";
+import ReactToPrint from "react-to-print";
+import { openNotification } from "Utils/openNotification";
+
 const ImprimirApartado = ({ imprimir, stateRecord, auth, setimprimir }) => {
 	// const [totalProductos, settotalProductos] = useState(0);
 	const [totalAbonos, settotalAbonos] = useState(0);
@@ -17,7 +21,8 @@ const ImprimirApartado = ({ imprimir, stateRecord, auth, setimprimir }) => {
 		productos,
 		vence,
 	} = stateRecord;
-
+	const imprimirApartados = useRef();
+	const history = useHistory();
 	useEffect(() => {
 		let sum = 0;
 		// let sumProd = 0;
@@ -36,12 +41,17 @@ const ImprimirApartado = ({ imprimir, stateRecord, auth, setimprimir }) => {
 
 		if (imprimir === true) {
 			setTimeout(() => {
-				crearPDF();
+				document.getElementById("print-button").click();
 			}, 100);
 		}
 		console.log(stateRecord);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imprimir]);
+	const afterPrint = () => {
+		openNotification("success", "Reimpreso");
+		setimprimir(false);
+		// history.push("/");
+	};
 
 	const pasarAFechaLL = (item) => {
 		let fecha = moment.unix(item / 1000).format("LL");
@@ -59,14 +69,7 @@ const ImprimirApartado = ({ imprimir, stateRecord, auth, setimprimir }) => {
 		let fecha = moment.unix(item / 1000).format("LLL");
 		return fecha;
 	};
-	const crearPDF = () => {
-		let contenido = document.getElementById("tickets").innerHTML;
-		let contenidoOriginal = document.body.innerHTML;
-		document.body.innerHTML = contenido;
-		window.print();
-		document.body.innerHTML = contenidoOriginal;
-		window.location.reload();
-	};
+
 	const fechaVenceEn = () => {
 		var fecha = moment.unix(stateRecord.vence / 1000).fromNow();
 		if (stateRecord.vence > Date.now()) {
@@ -79,12 +82,23 @@ const ImprimirApartado = ({ imprimir, stateRecord, auth, setimprimir }) => {
 	};
 	return (
 		<>
+			<ReactToPrint
+				trigger={(e) => <button id='print-button'>Imprimiendo...</button>}
+				content={() => imprimirApartados.current}
+				// onBeforePrint={() => antesDeImprimir()}
+				onAfterPrint={() => afterPrint()}
+			/>
 			<Modal
 				visible={imprimir}
 				width='229px'
 				onCancel={() => setimprimir(false)}
 			>
-				<div id='tickets' className='ticket' name='tickets'>
+				<div
+					id='tickets'
+					className='ticket'
+					name='tickets'
+					ref={imprimirApartados}
+				>
 					<link rel='preconnect' href='https://fonts.gstatic.com' />
 					<link
 						href='https://fonts.googleapis.com/css2?family=Roboto&display=swap'

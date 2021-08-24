@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import ProductsAddApartado from "../Components/ProductsAddApartado/ProductsAddApartado";
 import { SmileOutlined, DollarCircleOutlined } from "@ant-design/icons";
 import { Steps, Button, message, Card, Input, Row } from "antd";
-import ImprimirNewApartado from "../Components/ImprimirApartado/ImprimirApartado";
+import ImprimirNewApartado from "../Components/ImprimirApartado/ImprimirNewApartado";
 import CobrarNewApartado from "../Components/CobrarNewApartado/CobrarNewApartado";
 import { useHistory } from "react-router-dom";
 import useAuth from "hooks/useAuth";

@@ -274,7 +274,12 @@ export default function Ventas({
 	return (
 		<>
 			{imprimir ? (
-				<Imprimir imprimir={imprimir} stateRecord={stateRecord} auth={auth} />
+				<Imprimir
+					imprimir={imprimir}
+					setimprimir={setimprimir}
+					stateRecord={stateRecord}
+					auth={auth}
+				/>
 			) : null}
 			<Col xs={24} sm={24} md={16}>
 				<Divider orientation='left' style={{ marginTop: 0 }}>
