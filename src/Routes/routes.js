@@ -9,7 +9,7 @@ import Apartado from "Pages/Apartado/Container/Apartado";
 import Error from "Pages/Error/Error";
 import Prueba from "Pages/prueba";
 import AddApartado from "Pages/AddApartado/Container/AddApartado";
-
+import Caja from "Pages/Caja/Container/Caja";
 const routes = [
 	{
 		path: "/",
@@ -45,6 +45,12 @@ const routes = [
 		path: "/add",
 		layout: LayoutForm,
 		component: AddApartado,
+		exact: true,
+	},
+	{
+		path: "/caja",
+		layout: LayoutForm,
+		component: Caja,
 		exact: true,
 	},
 	{

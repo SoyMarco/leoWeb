@@ -269,21 +269,3 @@ export const REGISTER_APARTADO = gql`
 		}
 	}
 `;
-
-/* export const APARTADOS = gql`
-query getApartados {
-  getApartados {
-	id
-	cliente
-	folio
-	vence
-	vendedor
-	entregado{
-	  status
-	}
-	 cancelado{
-	  status
-	}
-  }
-}
-`; */

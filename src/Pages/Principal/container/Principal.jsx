@@ -5,12 +5,15 @@ import { AiFillDollarCircle } from "react-icons/ai";
 import { MdDelete, MdLocalGroceryStore } from "react-icons/md";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import Cobrar from "../Components/Cobrar/Cobrar";
+import { useHistory } from "react-router-dom";
 import { keyBlock } from "Utils";
 import { useLocation } from "react-router-dom";
 import "./principal.css";
 import { UrlFrontend } from "config/apollo";
 
 function Principal() {
+	const history = useHistory();
+
 	const Location = useLocation();
 	const [titleWeb, settitleWeb] = useState("Leo Web");
 	const [modalCobrar, setmodalCobrar] = useState(false);
@@ -102,6 +105,9 @@ function Principal() {
 	const pressKeyPrecio = (e) => {
 		if (e.keyCode === 13) {
 			pressEnter();
+		}
+		if (e.keyCode === 122) {
+			history.push("/add");
 		}
 		if (e.keyCode === 123) {
 			pressEnter();

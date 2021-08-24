@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Col } from "antd";
 
-export default function Ventas({ loading, getVentasDia }) {
+export default function Ventas({ loading, getVentasDia, cajaDia }) {
 	const [totales, settotales] = useState([]);
 
 	useEffect(() => {
@@ -13,12 +13,25 @@ export default function Ventas({ loading, getVentasDia }) {
 		let entSal = 0;
 		let finCaja = 0.0;
 		let totales = [];
-		for (var i = 0; i < getVentasDia.length; i++) {
+		for (let i = 0; i < getVentasDia.length; i++) {
 			if (getVentasDia[i].cancelado === false) {
 				total = total + getVentasDia[i].total;
 				efectivo = efectivo + getVentasDia[i].efectivo;
 				tarjeta = tarjeta + getVentasDia[i].tarjeta;
 				aCuenta = aCuenta + getVentasDia[i].aCuenta;
+			}
+		}
+		for (let j = 0; j < cajaDia.length; j++) {
+			if (
+				cajaDia[j]?.cancelado === false ||
+				cajaDia[j].cancelado.length === 0
+			) {
+				if (cajaDia[j].tipo === "inicio") {
+					inicioCaja = inicioCaja + cajaDia[j].monto;
+				}
+				if (cajaDia[j].tipo === "entradaSalida") {
+					entSal = entSal + cajaDia[j].monto;
+				}
 			}
 		}
 		finCaja = efectivo + tarjeta + aCuenta;
@@ -38,9 +51,8 @@ export default function Ventas({ loading, getVentasDia }) {
 				finCaja: finCaja,
 			},
 		];
-		console.log(totales);
 		settotales(totales);
-	}, [getVentasDia]);
+	}, [getVentasDia, cajaDia]);
 
 	/*COLUMNAS  TOTALES */
 	const colTotales = [

@@ -1,4 +1,14 @@
 import React, { useState } from "react";
+import LogoLeo from "assets/png/logo.png";
+import { useMutation } from "@apollo/client";
+import { LOGIN } from "graphql/user";
+import { FaUserAlt } from "react-icons/fa";
+import { RiShieldUserFill, RiLockPasswordFill } from "react-icons/ri";
+import { openNotification } from "Utils/openNotification";
+import { setToken, decodeToken } from "Utils/token";
+import useAuth from "hooks/useAuth";
+import "./login.css";
+import { UrlFrontend } from "config/apollo";
 import {
 	Card,
 	Form,
@@ -10,15 +20,6 @@ import {
 	Menu,
 	Avatar,
 } from "antd";
-import LogoLeo from "assets/png/logo.png";
-import { /* useQuery, gql, */ useMutation } from "@apollo/client";
-import { LOGIN } from "graphql/user";
-import { FaUserAlt } from "react-icons/fa";
-import { RiShieldUserFill, RiLockPasswordFill } from "react-icons/ri";
-import { openNotification } from "Utils/openNotification";
-import { setToken, decodeToken } from "Utils/token";
-import useAuth from "hooks/useAuth";
-import "./login.css";
 
 const Login = () => {
 	const [mutateLOGIN] = useMutation(LOGIN);
@@ -39,6 +40,7 @@ const Login = () => {
 				},
 			});
 			if (data) {
+				window.location.href = `${UrlFrontend}caja`;
 				const { token } = data.login;
 				setToken(token);
 				let dataToken = await decodeToken(token);
@@ -46,6 +48,7 @@ const Login = () => {
 				openNotification("success", `Bienvenido ${dataToken.name}`);
 			}
 		} catch (error) {
+			console.log(error);
 			openNotification("error", "Error en Usuario o Contraseña");
 		}
 	};
@@ -67,7 +70,7 @@ const Login = () => {
 					}}
 				>
 					<Menu
-						mode="horizontal"
+						mode='horizontal'
 						defaultSelectedKeys={["2"]}
 						style={{
 							background: "transparent",
@@ -78,20 +81,20 @@ const Login = () => {
 						}}
 					>
 						<Menu.Item
-							key="1"
+							key='1'
 							style={{
 								background: "transparent",
 								margin: 0,
 								color: "white",
 							}}
-							icon={<Avatar src={LogoLeo} size="large" />}
+							icon={<Avatar src={LogoLeo} size='large' />}
 						>
 							Bazar Leo
 						</Menu.Item>
-						<Menu.Item key="2"></Menu.Item>
-						<Menu.Item key="3"></Menu.Item>
+						<Menu.Item key='2'></Menu.Item>
+						<Menu.Item key='3'></Menu.Item>
 						<Menu.Item
-							key="3"
+							key='4'
 							style={{
 								display: "flex",
 								flexDirection: "column",
@@ -117,7 +120,7 @@ const Login = () => {
 						height: "75vh",
 					}}
 				>
-					<Card id="cardLogin">
+					<Card id='cardLogin'>
 						<div
 							style={{
 								background: "#000058",
@@ -126,7 +129,7 @@ const Login = () => {
 								borderRadius: "25px 5px 0 0",
 							}}
 						>
-							<Row justify="center">
+							<Row justify='center'>
 								<RiShieldUserFill
 									style={{ color: "white", fontSize: "xx-large" }}
 								/>
@@ -143,7 +146,7 @@ const Login = () => {
 						>
 							<Form form={form}>
 								<Input
-									id="inputLogin"
+									id='inputLogin'
 									prefix={<FaUserAlt />}
 									style={{
 										color: "#000058",
@@ -160,9 +163,9 @@ const Login = () => {
 									onChange={(e) => setname(e.target.value)}
 								/>
 								<Input
-									id="inputLogin"
+									id='inputLogin2'
 									prefix={<RiLockPasswordFill />}
-									type="password"
+									type='password'
 									style={{
 										color: "#000058",
 										// fontSize: 30,
@@ -174,15 +177,15 @@ const Login = () => {
 										border: "0 0 0 0",
 										margin: "10px",
 									}}
-									name="password"
+									name='password'
 									onKeyUp={pressKeyEnter}
 									onChange={(e) => setpassword(e.target.value)}
 								/>
 							</Form>
 							<br />
 							<Button
-								type="primary"
-								shape="round"
+								type='primary'
+								shape='round'
 								style={{
 									width: "60%",
 									height: "40px",

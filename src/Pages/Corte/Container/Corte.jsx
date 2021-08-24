@@ -4,18 +4,22 @@ import "./corte.css";
 import { Row, Divider } from "antd";
 import { useQuery } from "@apollo/client";
 import { GET_VENTAS_DIA } from "../../../graphql/venta";
+import { GET_CAJA_DIA } from "../../../graphql/caja";
 import ErrorConection from "Utils/ErrorConection";
 import useAuth from "hooks/useAuth";
 import "./corte.css";
 
 const Corte = () => {
 	let { data, loading, error, refetch } = useQuery(GET_VENTAS_DIA);
+	let { data: data2, refetch: refetchCaja } = useQuery(GET_CAJA_DIA);
 	const [getVentasDia, setgetVentasDia] = useState([]);
+	const [cajaDia, setcajaDia] = useState([]);
 	const [stateRecord, setstateRecord] = useState(null);
 	const [loader, setloader] = useState(false);
 	const { logout } = useAuth();
 	useEffect(() => {
 		refetch();
+		refetchCaja();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -31,7 +35,16 @@ const Corte = () => {
 			setgetVentasDia(listaVentas);
 		}
 	}, [data]);
-
+	useEffect(() => {
+		if (data2) {
+			console.log(data2);
+			let { getCajaDia } = data2;
+			let listaCaja = getCajaDia.map((item) => {
+				return { ...item, key: item._id };
+			});
+			setcajaDia(listaCaja);
+		}
+	}, [data2]);
 	return (
 		<>
 			<Row>
@@ -50,7 +63,11 @@ const Corte = () => {
 			<Divider orientation='left'>Total del día</Divider>
 
 			<Row>
-				<TablaTotales getVentasDia={getVentasDia} loading={loading} />
+				<TablaTotales
+					getVentasDia={getVentasDia}
+					cajaDia={cajaDia}
+					loading={loading}
+				/>
 			</Row>
 		</>
 	);

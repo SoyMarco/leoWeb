@@ -68,6 +68,11 @@ export default function AddApartado() {
 		if (e.keyCode === 13) {
 			if (cliente) next();
 		}
+		if (e.keyCode === 27) {
+			if (!cliente) {
+				history.push("/");
+			}
+		}
 	};
 	const keyAbono = (e) => {
 		if (e.keyCode === 27) {

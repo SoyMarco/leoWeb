@@ -10,7 +10,6 @@ import { openNotification } from "Utils/openNotification";
 
 function App() {
 	const [auth, setAuth] = useState(undefined);
-
 	const timeLogout = () => {
 		const token = getToken();
 		if (token) {
