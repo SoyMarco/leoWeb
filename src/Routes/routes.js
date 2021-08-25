@@ -11,6 +11,8 @@ import Prueba from "Pages/prueba";
 import AddApartado from "Pages/AddApartado/Container/AddApartado";
 import Caja from "Pages/Caja/Container/Caja";
 import EntradasSalidas from "Pages/EntradasSalidas/Container/EntradasSalidas";
+import Migration from "Migration/Container/Migration";
+
 const routes = [
 	{
 		path: "/",
@@ -58,6 +60,12 @@ const routes = [
 		path: "/entradasSalidas",
 		layout: LayoutForm,
 		component: EntradasSalidas,
+		exact: true,
+	},
+	{
+		path: "/migration",
+		layout: LayoutForm,
+		component: Migration,
 		exact: true,
 	},
 	{

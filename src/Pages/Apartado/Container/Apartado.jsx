@@ -62,8 +62,9 @@ export default function Apartado(props) {
 		"linear-gradient(#2196F3,#0000E6)"
 	);
 	useEffect(() => {
-		console.log(inputAbono);
-	}, [inputAbono]);
+		refetch();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 	if (error) {
 		ErrorConection(logout);
 	}

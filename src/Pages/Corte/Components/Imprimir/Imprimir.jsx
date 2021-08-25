@@ -42,14 +42,7 @@ const Imprimir = ({ imprimir, setimprimir, stateRecord, auth }) => {
 		let fecha = moment.unix(item / 1000).format("lll");
 		return fecha;
 	};
-	const crearPDF = () => {
-		let contenido = document.getElementById("tickets").innerHTML;
-		let contenidoOriginal = document.body.innerHTML;
-		document.body.innerHTML = contenido;
-		window.print();
-		document.body.innerHTML = contenidoOriginal;
-		window.location.reload();
-	};
+
 	return (
 		<>
 			<Modal visible={imprimir} width='229px'>

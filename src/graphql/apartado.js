@@ -143,6 +143,32 @@ export const GET_APARTADOS = gql`
 		}
 	}
 `;
+export const GET_APARTADOS_BUSCADOR = gql`
+	query getApartados {
+		getApartados {
+			id
+			cliente
+			folio
+			vence
+			entregado {
+				status
+				fecha
+				vendedor
+			}
+			sacado {
+				status
+				fecha
+				vendedor
+			}
+			cancelado {
+				status
+				fecha
+				vendedor
+			}
+		}
+	}
+`;
+
 export const ADD_ABONO = gql`
 	mutation addAbono($input: AbonoApartadoInput) {
 		addAbono(input: $input) {

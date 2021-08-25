@@ -106,6 +106,9 @@ function Principal() {
 		if (e.keyCode === 13) {
 			pressEnter();
 		}
+		if (e.keyCode === 66) {
+			document.querySelector("#buscarApartadoInput").select();
+		}
 		if (e.keyCode === 122) {
 			history.push("/add");
 		}

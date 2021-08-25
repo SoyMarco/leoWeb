@@ -3,6 +3,7 @@ import { Menu, Switch, Popconfirm, Tooltip } from "antd";
 import { Avatar } from "antd";
 import LogoLeo from "assets/png/logo.png";
 import { FaUserAstronaut } from "react-icons/fa";
+import BuscadorApartados from "Pages/BuscadorApartados/Container/BuscadorApartados";
 export default function Horizontal({
 	Header,
 	history,
@@ -62,22 +63,14 @@ export default function Horizontal({
 					</Menu.Item>
 					<Menu.Item
 						key='header3'
-						onClick={() => history.push("/")}
+						// onClick={() => history.push("/")}
 						style={{
-							width: "200px",
-							// padding: 0,
+							background: "transparent",
+							margin: "2px 40px",
 						}}
 					>
-						<h1
-							style={{
-								background: "transparent",
-								margin: 0,
-								color: "white",
-								padding: 0,
-							}}
-						>
-							Hola
-						</h1>
+						{/* BUSCADOR RAPIDO DE APARTADOS */}
+						<BuscadorApartados />
 					</Menu.Item>
 					<Menu.Item
 						key='header4'
