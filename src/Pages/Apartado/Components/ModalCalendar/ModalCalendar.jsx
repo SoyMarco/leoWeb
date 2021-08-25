@@ -47,7 +47,6 @@ export default function ModalCalendar({
 		}
 	};
 	const selectFecha = (value, dateString) => {
-		console.log("selectFecha", value.unix(), "@@@@@@@", dateString);
 		setnewFecha(value.unix() * 1000);
 	};
 	const pasarAFechaLL = (item) => {

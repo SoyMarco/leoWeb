@@ -37,7 +37,6 @@ const Corte = () => {
 	}, [data]);
 	useEffect(() => {
 		if (data2) {
-			console.log(data2);
 			let { getCajaDia } = data2;
 			let listaCaja = getCajaDia.map((item) => {
 				return { ...item, key: item._id };

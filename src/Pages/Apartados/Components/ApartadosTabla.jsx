@@ -155,12 +155,7 @@ export default function Ventas({
 						icon={<FaRegEdit style={{ fontSize: "25px" }} />}
 						shape='circle'
 						style={{ color: "blue" }}
-						onClick={() =>
-							history.push({
-								pathname: `/apartado/${record.folio}`,
-								apartado: { ...record },
-							})
-						}
+						onClick={() => history.push(`/apartado/${record.folio}`)}
 					/>
 				</Row>
 			),

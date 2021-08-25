@@ -30,7 +30,6 @@ export default function EntradasSalidas() {
 		} else if (entradaSalida === "Salida") {
 			monto = parseFloat(-caja);
 		}
-		console.log(monto);
 		if (monto !== 0) {
 			try {
 				const { data } = await mutateREGISTER_CAJA({

@@ -155,7 +155,6 @@ const Cobrar = ({
 				totalArticulo: total,
 			};
 
-			console.log(listaComprasNew);
 			try {
 				const { data } = await mutateREGISTER_VENTA({
 					variables: {

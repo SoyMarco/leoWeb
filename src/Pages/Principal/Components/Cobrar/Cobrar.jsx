@@ -120,7 +120,6 @@ const Cobrar = ({
 				};
 			});
 
-			console.log(listaComprasNew);
 			try {
 				const { data } = await mutateREGISTER_VENTA({
 					variables: {

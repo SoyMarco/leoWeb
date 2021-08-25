@@ -87,9 +87,6 @@ export default function AddProduct({
 			agregarProducto();
 		}
 	};
-	const onValuesChange = (e, valuesForm) => {
-		console.log(e, "hola", valuesForm);
-	};
 	return (
 		<Modal
 			title='Agregar producto'
@@ -143,7 +140,7 @@ export default function AddProduct({
 				</Row>,
 			]}
 		>
-			<Form form={form} onValuesChange={onValuesChange}>
+			<Form form={form}>
 				<Form.Item
 					label='Articulo'
 					name='Articulo'

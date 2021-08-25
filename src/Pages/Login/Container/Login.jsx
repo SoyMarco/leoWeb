@@ -48,7 +48,6 @@ const Login = () => {
 				openNotification("success", `Bienvenido ${dataToken.name}`);
 			}
 		} catch (error) {
-			console.log(error);
 			openNotification("error", "Error en Usuario o Contraseña");
 		}
 	};

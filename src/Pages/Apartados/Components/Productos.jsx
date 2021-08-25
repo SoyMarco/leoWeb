@@ -35,13 +35,11 @@ export default function Productos({ stateRecord, loading }) {
 			let listaProductos = productos.map((item) => {
 				return { ...item, key: item.idArray };
 			});
-			console.log("listaProductos", listaProductos);
 			setproductos(listaProductos);
 			let { abonos } = stateRecord;
 			let listaAbonos = abonos.map((item) => {
-				return { ...item, key: item._id };
+				return { ...item, key: item.idArray };
 			});
-			console.log("listaAbonos", listaAbonos);
 			setabonos(listaAbonos);
 		} else {
 			setproductos([]);

@@ -21,7 +21,6 @@ export default function Apartados() {
 		setdataFilter(null);
 		let texto = e.target.value;
 		let isNumber = texto / 2;
-		console.log(texto, isNumber);
 		let newArray = [];
 
 		if (isNumber > 0) {
@@ -42,7 +41,7 @@ export default function Apartados() {
 		}
 
 		setdataFilter(newArray);
-		setstateRecord(null);
+		// setstateRecord(null);
 	};
 	useEffect(() => {
 		refetch();
@@ -55,7 +54,6 @@ export default function Apartados() {
 	}
 	useEffect(() => {
 		if (data) {
-			console.log(data);
 			let { getApartados } = data;
 			let listaApartados = getApartados.map((item) => {
 				return { ...item, key: item.folio };

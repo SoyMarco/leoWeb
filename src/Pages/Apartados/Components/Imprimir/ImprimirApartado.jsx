@@ -44,7 +44,6 @@ const ImprimirApartado = ({ imprimir, stateRecord, auth, setimprimir }) => {
 				document.getElementById("print-button").click();
 			}, 100);
 		}
-		console.log(stateRecord);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imprimir]);
 	const afterPrint = () => {

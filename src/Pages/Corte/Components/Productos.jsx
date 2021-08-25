@@ -13,7 +13,6 @@ export default function Productos({ stateRecord, loading }) {
 			let listaProductos = productos.map((item) => {
 				return { ...item, key: item.idArray };
 			});
-			console.log("stateRecord", listaProductos);
 			setproductos(listaProductos);
 		}
 	}, [stateRecord]);
