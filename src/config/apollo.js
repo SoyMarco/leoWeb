@@ -5,9 +5,9 @@ import { getToken } from "../Utils/token";
 
 /* LOCAL */
 export const UrlBackend = {
-	uri: "http://192.168.100.17:4000/",
+	uri: "https://leo-gql.herokuapp.com/",
 };
-export const UrlFrontend = "http://localhost:3000/";
+export const UrlFrontend = "https://bazarleo.netlify.app/";
 
 const httpLik = createUploadLink(UrlBackend);
 

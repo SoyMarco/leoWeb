@@ -9,7 +9,10 @@ export default function Productos({ stateRecord, loading }) {
 	const [totalProductos, settotalProductos] = useState(0);
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
-
+	useEffect(() => {
+		console.log("productos", productos);
+		console.log("abonos", abonos);
+	}, [productos, abonos]);
 	useEffect(() => {
 		// selectLastRow();
 		let sum = 0;
@@ -37,8 +40,8 @@ export default function Productos({ stateRecord, loading }) {
 			});
 			setproductos(listaProductos);
 			let { abonos } = stateRecord;
-			let listaAbonos = abonos.map((item) => {
-				return { ...item, key: item.idArray };
+			let listaAbonos = abonos.map((item2) => {
+				return { ...item2, key: item2.idArray };
 			});
 			setabonos(listaAbonos);
 		} else {

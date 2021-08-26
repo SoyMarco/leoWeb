@@ -17,7 +17,7 @@ import {
 } from "antd";
 import { useHistory } from "react-router-dom";
 
-export default function Ventas({
+export default function ApartadosTabla({
 	loading,
 	getApartados,
 	refetch,
@@ -41,6 +41,7 @@ export default function Ventas({
 	};
 
 	const click = (record, rowIndex) => {
+		console.log(record);
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
 		document.querySelector("#inputSearch").select();
