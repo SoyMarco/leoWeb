@@ -121,7 +121,6 @@ export default function Abonos({
 				</Tooltip>
 			),
 		},
-
 		{
 			title: "Abono",
 			dataIndex: "abono",
