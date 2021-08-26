@@ -5,18 +5,17 @@ import { getToken } from "../Utils/token";
 
 /* LOCAL */
 const baseUrlFront = window.location;
+// export const UrlBackend = {
+// 	uri: "http://192.168.100.17:4000/",
+// };
+export const UrlFrontend = `${baseUrlFront.origin}/`;
+
+/* HEROKU */
 export const UrlBackend = {
 	uri: "https://leo-gql.herokuapp.com/",
 };
-export const UrlFrontend = `${baseUrlFront.origin}/`;
 
 const httpLik = createUploadLink(UrlBackend);
-
-/* HEROKU */
-/*  const httpLik = createUploadLink({
-   uri: "https://insta-marco.herokuapp.com/",
- });   */
-
 const authLink = setContext((_, { headers }) => {
 	const token = getToken();
 
