@@ -4,10 +4,11 @@ import { setContext } from "apollo-link-context";
 import { getToken } from "../Utils/token";
 
 /* LOCAL */
+const baseUrlFront = window.location;
 export const UrlBackend = {
 	uri: "https://leo-gql.herokuapp.com/",
 };
-export const UrlFrontend = "https://bazarleo.netlify.app/";
+export const UrlFrontend = `${baseUrlFront.origin}/`;
 
 const httpLik = createUploadLink(UrlBackend);
 

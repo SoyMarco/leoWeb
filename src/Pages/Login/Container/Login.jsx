@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import LogoLeo from "assets/png/logo.png";
 import { useMutation } from "@apollo/client";
 import { LOGIN } from "graphql/user";
@@ -25,11 +25,17 @@ const Login = () => {
 	const [mutateLOGIN] = useMutation(LOGIN);
 	const [name, setname] = useState("");
 	const [password, setpassword] = useState("");
+	const [loading, setloading] = useState(false);
 	const { setUser } = useAuth();
 	const { Header, Footer } = Layout;
 	const [form] = Form.useForm();
-
+	const vendedor = useRef();
+	const contraseña = useRef();
+	useEffect(() => {
+		vendedor.current.select();
+	}, []);
 	const sendLogin = async () => {
+		setloading(true);
 		try {
 			const { data } = await mutateLOGIN({
 				variables: {
@@ -40,6 +46,7 @@ const Login = () => {
 				},
 			});
 			if (data) {
+				setloading(false);
 				window.location.href = `${UrlFrontend}caja`;
 				const { token } = data.login;
 				setToken(token);
@@ -49,11 +56,17 @@ const Login = () => {
 			}
 		} catch (error) {
 			openNotification("error", "Error en Usuario o Contraseña");
+			setloading(false);
+			console.log(error);
 		}
 	};
 	const pressKeyEnter = (e) => {
 		if (e.keyCode === 13) {
-			sendLogin();
+			if (name && !password) {
+				contraseña.current.select();
+			} else if (name && password) {
+				sendLogin();
+			}
 		}
 	};
 	return (
@@ -145,6 +158,8 @@ const Login = () => {
 						>
 							<Form form={form}>
 								<Input
+									ref={vendedor}
+									disabled={loading}
 									id='inputLogin'
 									prefix={<FaUserAlt />}
 									style={{
@@ -162,8 +177,10 @@ const Login = () => {
 									onChange={(e) => setname(e.target.value)}
 								/>
 								<Input
+									ref={contraseña}
 									id='inputLogin2'
 									prefix={<RiLockPasswordFill />}
+									disabled={loading}
 									type='password'
 									style={{
 										color: "#000058",
@@ -183,6 +200,7 @@ const Login = () => {
 							</Form>
 							<br />
 							<Button
+								loading={loading}
 								type='primary'
 								shape='round'
 								style={{
