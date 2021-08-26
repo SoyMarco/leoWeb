@@ -4,6 +4,7 @@ import moment from "moment";
 import "moment/locale/es-us";
 import { Modal, Row } from "antd";
 import "./imprimir.css";
+import { keyBlock } from "Utils";
 import ReactToPrint from "react-to-print";
 import { openNotification } from "Utils/openNotification";
 
@@ -38,6 +39,7 @@ const ImprimirApartado = ({
 	} = dataApartado;
 
 	const ReimprimirApartado = useRef();
+	const inputReprint = useRef();
 
 	useEffect(() => {
 		let sum = 0;
@@ -62,16 +64,28 @@ const ImprimirApartado = ({
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imprimir]);
+
 	const afterPrint = () => {
-		openNotification("success", "Reimpres@@@@@");
+		openNotification("success", "Reimpreso con exito");
 		if (numPrint === 0) {
-			document.getElementById("print-button2").click();
+			inputReprint.current.select();
 			setnumPrint(numPrint + 1);
 		} else if (numPrint === 1) {
+			openNotification("success", "Reimpreso con exito");
+
 			initialState();
 		}
 	};
-
+	const pressKeyPrecio = (e) => {
+		// Enter
+		if (e.keyCode === 13) {
+			document.getElementById("print-button2").click();
+		}
+		// 	F1
+		if (e.keyCode === 112) {
+			document.getElementById("print-button2").click();
+		}
+	};
 	const pasarAFechaLL = (item) => {
 		let fecha = moment.unix(item / 1000).format("LL");
 		return fecha;
@@ -108,11 +122,12 @@ const ImprimirApartado = ({
 				// onBeforePrint={() => antesDeImprimir()}
 				onAfterPrint={() => afterPrint()}
 			/>
-			<Modal
-				visible={imprimir}
-				width='229px'
-				onCancel={() => setimprimir(false)}
-			>
+			<Modal visible={imprimir} width='229px' onCancel={() => initialState()}>
+				<input
+					ref={inputReprint}
+					onKeyUp={pressKeyPrecio}
+					onKeyDown={keyBlock}
+				></input>
 				<div
 					id='tickets'
 					className='ticket'

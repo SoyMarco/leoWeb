@@ -21,6 +21,7 @@ const ImprimirNewApartado = ({
 	const { abonos, cliente, entregado, folio, productos, vence } = dataApartado;
 	const [numPrint, setnumPrint] = useState(0);
 	const imprimirNewApartado = useRef();
+	const inputReprint = useRef();
 	const history = useHistory();
 
 	useEffect(() => {
@@ -44,15 +45,25 @@ const ImprimirNewApartado = ({
 
 	const afterPrint = () => {
 		openNotification("success", "Apartado guardado con exito");
-
 		if (numPrint === 0) {
-			document.getElementById("print-button").click();
+			inputReprint.current.select();
 			setnumPrint(numPrint + 1);
 		} else if (numPrint === 1) {
+			openNotification("success", "Reimpreso con exito");
+
 			history.push("/");
 		}
 	};
-
+	const pressKeyPrecio = (e) => {
+		// Enter
+		if (e.keyCode === 13) {
+			document.getElementById("print-button").click();
+		}
+		// 	F1
+		if (e.keyCode === 112) {
+			document.getElementById("print-button").click();
+		}
+	};
 	const pasarAFechaLL = (item) => {
 		let fecha = moment.unix(item / 1000).format("LL");
 		return fecha;
@@ -93,8 +104,9 @@ const ImprimirNewApartado = ({
 			<Modal
 				visible={imprimir}
 				width='229px'
-				onCancel={() => setimprimir(false)}
+				onCancel={() => history.push("/")}
 			>
+				<input ref={inputReprint} onKeyUp={pressKeyPrecio}></input>
 				<div
 					id='tickets'
 					className='ticket'
