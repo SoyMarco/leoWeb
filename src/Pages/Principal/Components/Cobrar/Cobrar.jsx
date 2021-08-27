@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Modal, Input, Form, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
 import Imprimir from "../Imprimir/Imprimir";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
-
 import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
 import { REGISTER_VENTA } from "graphql/venta";
@@ -32,12 +31,15 @@ const Cobrar = ({
 		tarjeta: 0,
 		efectivo: 0,
 	});
+	const cobrarEfectivo = useRef();
 	const { auth, logout } = useAuth();
+	useEffect(() => {
+		cobrarEfectivo.current.select();
+	}, []);
 	useEffect(() => {
 		if (modalCobrar === true) {
 			form.setFieldsValue({ efectivo: totalTotal });
 			OnValuesChange();
-			document.querySelector("#cobrarEfectivo").select();
 		}
 	}, [modalCobrar]);
 
@@ -48,7 +50,7 @@ const Cobrar = ({
 		}
 		// E
 		if (e.keyCode === 69) {
-			document.querySelector("#cobrarEfectivo").select();
+			cobrarEfectivo.current.select();
 		}
 		// A
 		if (e.keyCode === 65) {
@@ -152,7 +154,13 @@ const Cobrar = ({
 			}
 		}
 	};
-
+	const keyBlockCobrar = (e) => {
+		let dataForm = form.getFieldsValue();
+		if (totalTotal === dataForm.efectivo) {
+			cobrarEfectivo.current.select();
+		}
+		keyBlock(e);
+	};
 	return (
 		<>
 			{imprimir ? (
@@ -243,12 +251,13 @@ const Cobrar = ({
 							className='labelCobrar'
 						>
 							<Input
+								ref={cobrarEfectivo}
 								id='cobrarEfectivo'
 								className='inputCobrar'
 								type='number'
 								prefix={<FaMoneyBillWave style={{ color: "gray" }} />}
 								onKeyUp={pressKeyPrecio}
-								onKeyDown={keyBlock}
+								onKeyDown={keyBlockCobrar}
 							></Input>
 						</Form.Item>
 						<Form.Item
