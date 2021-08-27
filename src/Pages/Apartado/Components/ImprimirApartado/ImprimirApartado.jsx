@@ -169,7 +169,6 @@ const ImprimirApartado = ({
 								// textAlign: "center",
 
 								fontWeight: "bold",
-								fontFamily: "Roboto, sans-serif",
 							}}
 						>
 							{cliente}
@@ -189,7 +188,7 @@ const ImprimirApartado = ({
 								background: "black",
 								color: "white",
 								padding: "0px",
-								fontFamily: "Roboto, sans-serif",
+								fontWeight: "bold",
 							}}
 						>
 							Folio: {folio}
@@ -198,7 +197,7 @@ const ImprimirApartado = ({
 					{/* <!-- VENCE --> */}
 					<Row justify='space-around'>
 						<span
-							style={{ fontWeight: "bold", fontFamily: "Roboto, sans-serif" }}
+							style={{ fontWeight: "bold" }}
 						>{`${fechaVenceEn()}, ${pasarAFechaVence(vence)}`}</span>
 					</Row>
 					{/* <!-- TABLA DE PRODUCTOS --> */}

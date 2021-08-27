@@ -135,7 +135,6 @@ const ImprimirApartado = ({ imprimir, stateRecord, auth, setimprimir }) => {
 								// textAlign: "center",
 
 								fontWeight: "bold",
-								fontFamily: "Roboto, sans-serif",
 							}}
 						>
 							{cliente}
@@ -155,7 +154,7 @@ const ImprimirApartado = ({ imprimir, stateRecord, auth, setimprimir }) => {
 								background: "black",
 								color: "white",
 								padding: "0px",
-								fontFamily: "Roboto, sans-serif",
+								fontWeight: "bold",
 							}}
 						>
 							Folio: {folio}
@@ -165,7 +164,7 @@ const ImprimirApartado = ({ imprimir, stateRecord, auth, setimprimir }) => {
 					{/* <!-- VENCE --> */}
 					<Row justify='space-around'>
 						<span
-							style={{ fontWeight: "bold", fontFamily: "Roboto, sans-serif" }}
+							style={{ fontWeight: "bold" }}
 						>{`${fechaVenceEn()}, ${pasarAFechaVence(vence)}`}</span>
 					</Row>
 					{/* <!-- TABLA DE PRODUCTOS --> */}
