@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Modal, Input, Form, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
@@ -36,11 +36,13 @@ const Cobrar = ({
 		efectivo: 0,
 	});
 	const { auth, logout } = useAuth();
+	const cobrarEfectivo = useRef();
+
 	useEffect(() => {
 		if (modalCobrar === true) {
 			form.setFieldsValue({ efectivo: totalTotal });
 			OnValuesChange();
-			document.querySelector("#cobrarEfectivo").select();
+			cobrarEfectivo.current.select();
 		} else if (modalCobrar === false) {
 			inputAbono.current.select();
 		}
@@ -54,7 +56,7 @@ const Cobrar = ({
 
 		// E
 		if (e.keyCode === 69) {
-			document.querySelector("#cobrarEfectivo").select();
+			cobrarEfectivo.current.select();
 		}
 		// A
 		if (e.keyCode === 65) {
@@ -181,7 +183,13 @@ const Cobrar = ({
 			}
 		}
 	};
-
+	const keyBlockCobrar = (e) => {
+		let dataForm = form.getFieldsValue();
+		if (totalTotal === dataForm.efectivo) {
+			cobrarEfectivo.current.select();
+		}
+		keyBlock(e);
+	};
 	return (
 		<>
 			{imprimir ? (
@@ -272,12 +280,13 @@ const Cobrar = ({
 							className='labelCobrar'
 						>
 							<Input
+								ref={cobrarEfectivo}
 								id='cobrarEfectivo'
 								className='inputCobrar'
 								type='number'
 								prefix={<FaMoneyBillWave style={{ color: "gray" }} />}
 								onKeyUp={pressKeyPrecio}
-								onKeyDown={keyBlock}
+								onKeyDown={keyBlockCobrar}
 							></Input>
 						</Form.Item>
 						<Form.Item
