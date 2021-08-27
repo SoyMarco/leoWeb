@@ -125,6 +125,9 @@ const Imprimir = ({
 						<h3>Cambio: </h3>
 						<h2>${cambio}</h2>
 					</row>
+					<br></br>
+					<br></br>
+					<br></br>
 				</div>
 			</Modal>
 		</>

@@ -274,6 +274,9 @@ const ImprimirNewApartado = ({
 					<span>
 						{pasarAFechaLL(Date.now())} <br />
 					</span>
+					<br></br>
+					<br></br>
+					<br></br>
 				</div>
 			</Modal>
 		</>
