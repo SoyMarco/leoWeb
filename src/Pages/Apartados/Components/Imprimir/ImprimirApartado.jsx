@@ -225,7 +225,6 @@ const ImprimirApartado = ({ imprimir, stateRecord, auth, setimprimir }) => {
 							<h1>${totalTotal - totalAbonos}</h1>
 						</row>
 					) : null}
-					{/* <!-- TARJETA --> */}
 
 					{/* <!-- VENDEDOR --> */}
 					<span>{`Vendedor: ${auth.name.toUpperCase()}`}</span>

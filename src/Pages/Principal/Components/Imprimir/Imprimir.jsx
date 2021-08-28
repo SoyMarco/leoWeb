@@ -97,27 +97,27 @@ const Imprimir = ({
 					{/* <!-- TOTAL --> */}
 					<row className='finalTicket'>
 						<h3>Total:</h3>
-						<h1>${totalTotal}</h1>
+						<h2>${totalTotal}</h2>
 					</row>
 					{/* <!-- EFECTIVO --> */}
 					{efectivo > 0 ? (
 						<row className='finalTicket'>
 							<h3>Efectivo:</h3>
-							<h1>${efectivo}</h1>
+							<h2>${efectivo}</h2>
 						</row>
 					) : null}
 					{/* <!-- TARJETA --> */}
 					{tarjeta ? (
 						<row className='finalTicket'>
 							<h3>Tarjeta:</h3>
-							<h1>${tarjeta}</h1>
+							<h2>${tarjeta}</h2>
 						</row>
 					) : null}
 					{/* <!-- A CUENTA --> */}
 					{aCuenta ? (
 						<row className='finalTicket'>
 							<h3>A cueta:</h3>
-							<h1>${aCuenta}</h1>
+							<h2>${aCuenta}</h2>
 						</row>
 					) : null}
 					{/* <!-- CAMBIO --> */}

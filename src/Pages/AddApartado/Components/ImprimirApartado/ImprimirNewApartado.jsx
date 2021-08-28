@@ -227,39 +227,40 @@ const ImprimirNewApartado = ({
 					})}
 					<h3 className='sumaTabla'>Abonos: ${totalAbonos}</h3>
 					{/* <!-- FIN TABLA DE ABONOS --> */}
+					{/* <!-- RESTA --> */}
+					{totalTotal > 0 ? (
+						<row className='finalTicket'>
+							<h3>Resta:</h3>
+							<h1>${totalTotal - totalAbonos}</h1>
+						</row>
+					) : null}
+					<span>{`Pagó con:`}</span>
 					{/* <!-- EFECTIVO --> */}
 					{dinero?.efectivo > 0 ? (
 						<row className='finalTicket'>
 							<h3>Efectivo:</h3>
-							<h1>${dinero.efectivo}</h1>
+							<h2>${dinero.efectivo}</h2>
 						</row>
 					) : null}{" "}
 					{/* <!-- TARJETA --> */}
 					{dinero?.tarjeta > 0 ? (
 						<row className='finalTicket'>
 							<h3>Tarjeta:</h3>
-							<h1>${dinero?.tarjeta}</h1>
+							<h2>${dinero?.tarjeta}</h2>
 						</row>
 					) : null}{" "}
 					{/* <!-- A CUENTA --> */}
 					{dinero?.aCuenta > 0 ? (
 						<row className='finalTicket'>
 							<h3>A cuenta:</h3>
-							<h1>${dinero.aCuenta}</h1>
+							<h2>${dinero.aCuenta}</h2>
 						</row>
 					) : null}
 					{/* <!-- CAMBIO --> */}
 					{cambio > 0 ? (
 						<row className='finalTicket'>
 							<h3>Cambio:</h3>
-							<h1>${cambio}</h1>
-						</row>
-					) : null}
-					{/* <!-- RESTA --> */}
-					{totalTotal > 0 ? (
-						<row className='finalTicket'>
-							<h3>Resta:</h3>
-							<h1>${totalTotal - totalAbonos}</h1>
+							<h2>${cambio}</h2>
 						</row>
 					) : null}
 					{/* <!-- VENDEDOR --> */}

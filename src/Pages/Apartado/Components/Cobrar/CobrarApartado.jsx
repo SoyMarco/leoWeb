@@ -13,7 +13,7 @@ import useAuth from "hooks/useAuth";
 
 // import "./cobrar.css";
 
-const Cobrar = ({
+const CobrarApartado = ({
 	modalCobrar,
 	setmodalCobrar,
 	cerrarCobrar,
@@ -359,4 +359,4 @@ const Cobrar = ({
 	);
 };
 
-export default Cobrar;
+export default CobrarApartado;
