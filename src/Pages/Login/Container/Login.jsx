@@ -19,6 +19,7 @@ import {
 	Switch,
 	Menu,
 	Avatar,
+	Select,
 } from "antd";
 
 const Login = () => {
@@ -32,8 +33,9 @@ const Login = () => {
 	const vendedor = useRef();
 	const contraseña = useRef();
 	useEffect(() => {
-		vendedor.current.select();
+		// vendedor.current.select();
 	}, []);
+	const { Option } = Select;
 	const sendLogin = async () => {
 		setloading(true);
 		try {
@@ -157,7 +159,7 @@ const Login = () => {
 							}}
 						>
 							<Form form={form}>
-								<Input
+								<Select
 									ref={vendedor}
 									disabled={loading}
 									id='inputLogin'
@@ -168,14 +170,23 @@ const Login = () => {
 										fontSize: "x-large",
 										fontWeight: "bold",
 										borderRadius: "50px",
-										maxWidth: "60%",
+										width: "60%",
 										padding: "5",
 										border: "0 0 0 0",
 										margin: "10px",
 									}}
 									onKeyUp={pressKeyEnter}
-									onChange={(e) => setname(e.target.value)}
-								/>
+									onChange={(e) => setname(e)}
+									value={name}
+								>
+									<Option value='MARCO'>MARCO</Option>
+									<Option value='PAO'>PAO</Option>
+									<Option value='ISABEL LEÓN'>ISABEL LEÓN</Option>
+									<Option value='ISABEL SALAZAR'>ISABEL SALAZAR</Option>
+									<Option value='LUPITA'>LUPITA</Option>
+									<Option value='GABY'>GABY</Option>
+									<Option value='JESSICA'>JESSICA</Option>
+								</Select>
 								<Input
 									ref={contraseña}
 									id='inputLogin2'
