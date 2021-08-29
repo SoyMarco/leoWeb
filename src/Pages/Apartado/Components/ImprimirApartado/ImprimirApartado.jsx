@@ -160,9 +160,10 @@ const ImprimirApartado = ({
 							background: "black",
 							marginBottom: "5px",
 							"justify-content": "center",
+							width: "190px",
 						}}
 					>
-						<h3
+						<h2
 							style={{
 								background: "black",
 								color: "white",
@@ -172,7 +173,7 @@ const ImprimirApartado = ({
 							}}
 						>
 							{cliente}
-						</h3>
+						</h2>
 					</Row>
 					{/* <!-- FOLIO APARTADO --> */}
 					<Row
@@ -180,9 +181,10 @@ const ImprimirApartado = ({
 						style={{
 							padding: "0px",
 							background: "black",
+							width: "190px",
 						}}
 					>
-						<h3
+						<h2
 							className='sutituloTicket'
 							style={{
 								background: "black",
@@ -192,13 +194,13 @@ const ImprimirApartado = ({
 							}}
 						>
 							Folio: {folio}
-						</h3>
+						</h2>
 					</Row>
 					{/* <!-- VENCE --> */}
 					<Row justify='space-around'>
 						<span
 							style={{ fontWeight: "bold" }}
-						>{`${fechaVenceEn()}, ${pasarAFechaVence(vence)}`}</span>
+						>{`${fechaVenceEn()}, el ${pasarAFechaVence(vence)}`}</span>
 					</Row>
 					{/* <!-- TABLA DE PRODUCTOS --> */}
 					<h3 className='subtituloTicketApartado'>
