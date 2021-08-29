@@ -94,24 +94,24 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 				</h3>
 			),
 		},
+		// {
+		// 	title: "Efectivo",
+		// 	dataIndex: "efectivo",
+		// 	key: "efectivo",
+		// 	render: (efectivo) => (
+		// 		<h3
+		// 			style={{
+		// 				textAlignLast: "right",
+		// 				fontWeight: "revert",
+		// 				fontSize: "large",
+		// 			}}
+		// 		>
+		// 			${efectivo}
+		// 		</h3>
+		// 	),
+		// },
 		{
-			title: "Efectivo",
-			dataIndex: "efectivo",
-			key: "efectivo",
-			render: (efectivo) => (
-				<h3
-					style={{
-						textAlignLast: "right",
-						fontWeight: "revert",
-						fontSize: "large",
-					}}
-				>
-					${efectivo}
-				</h3>
-			),
-		},
-		{
-			title: "Tarjeta",
+			title: "Venta con Tarjeta",
 			dataIndex: "tarjeta",
 			key: "tarjeta",
 			render: (tarjeta) => (
@@ -126,22 +126,22 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 				</h3>
 			),
 		},
-		{
-			title: "A cuenta",
-			dataIndex: "aCuenta",
-			key: "aCuenta",
-			render: (aCuenta) => (
-				<h3
-					style={{
-						textAlignLast: "right",
-						fontWeight: "revert",
-						fontSize: "large",
-					}}
-				>
-					${aCuenta}
-				</h3>
-			),
-		},
+		// {
+		// 	title: "A cuenta",
+		// 	dataIndex: "aCuenta",
+		// 	key: "aCuenta",
+		// 	render: (aCuenta) => (
+		// 		<h3
+		// 			style={{
+		// 				textAlignLast: "right",
+		// 				fontWeight: "revert",
+		// 				fontSize: "large",
+		// 			}}
+		// 		>
+		// 			${aCuenta}
+		// 		</h3>
+		// 	),
+		// },
 		{
 			title: "VENTA TOTAL",
 			dataIndex: "total",
@@ -159,7 +159,7 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 			),
 		},
 		{
-			title: "Fin caja",
+			title: "Efectivo en Caja",
 			dataIndex: "finCaja",
 			key: "finCaja",
 			render: (finCaja, record) => (
