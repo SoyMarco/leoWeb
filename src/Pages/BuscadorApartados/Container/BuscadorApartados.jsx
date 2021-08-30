@@ -6,11 +6,20 @@ import { GET_APARTADOS_BUSCADOR } from "graphql/apartado";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
 export default function BuscadorApartados() {
-	let { data, loading, refetch } = useQuery(GET_APARTADOS_BUSCADOR);
+	let { data, loading, refetch, startPolling, stopPolling } = useQuery(
+		GET_APARTADOS_BUSCADOR
+	);
 	const [urlFolio, seturlFolio] = useState(0);
 	// const [valueSearch, setvalueSearch] = useState("");
 	const { Option } = Select;
 	const history = useHistory();
+
+	useEffect(() => {
+		startPolling(600000);
+		return () => {
+			stopPolling();
+		};
+	}, [startPolling, stopPolling]);
 
 	useEffect(() => {
 		console.log(urlFolio);
