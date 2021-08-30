@@ -41,3 +41,11 @@ export const CANCELAR_VENTA = gql`
 		cancelarVenta(input: $input)
 	}
 `;
+
+export const GET_HEROKU_DESPIERTO = gql`
+	query getHerokuDespierto {
+		getHerokuDespierto {
+			boolean
+		}
+	}
+`;
