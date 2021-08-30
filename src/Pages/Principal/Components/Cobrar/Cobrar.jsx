@@ -163,20 +163,18 @@ const Cobrar = ({
 	};
 	return (
 		<>
-			{imprimir ? (
-				<Imprimir
-					imprimir={imprimir}
-					totalTotal={totalTotal}
-					cambio={cambio}
-					setimprimir={setimprimir}
-					dinero={dinero}
-					listaCompras={listaCompras}
-					setmodalCobrar={setmodalCobrar}
-					folio={folio}
-					auth={auth}
-					initialState={initialState}
-				/>
-			) : null}
+			<Imprimir
+				imprimir={imprimir}
+				totalTotal={totalTotal}
+				cambio={cambio}
+				setimprimir={setimprimir}
+				dinero={dinero}
+				listaCompras={listaCompras}
+				setmodalCobrar={setmodalCobrar}
+				folio={folio}
+				auth={auth}
+				initialState={initialState}
+			/>
 			<Modal
 				style={{ top: 25 }}
 				title={

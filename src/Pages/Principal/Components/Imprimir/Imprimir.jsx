@@ -23,9 +23,7 @@ const Imprimir = ({
 
 	useEffect(() => {
 		if (imprimir === true) {
-			setTimeout(() => {
-				document.getElementById("print-button").click();
-			}, 100);
+			document.getElementById("print-button").click();
 		}
 	}, [imprimir]);
 	const afterPrint = () => {

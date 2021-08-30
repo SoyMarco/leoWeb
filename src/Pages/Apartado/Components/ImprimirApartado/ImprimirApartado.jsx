@@ -44,16 +44,16 @@ const ImprimirApartado = ({
 	useEffect(() => {
 		let sum = 0;
 		// let sumProd = 0;
-		for (let i = 0; i < productos.length; i++) {
-			sum += productos[i].totalArticulo;
+		for (let i = 0; i < productos?.length; i++) {
+			sum += productos[i]?.totalArticulo;
 			// sumProd += productos[i].cantidad;
 		}
 		settotalTotal(sum);
 		// settotalProductos(sumProd);
 
 		let sumAbo = 0;
-		for (let i = 0; i < abonos.length; i++) {
-			sumAbo += abonos[i].abono;
+		for (let i = 0; i < abonos?.length; i++) {
+			sumAbo += abonos[i]?.abono;
 		}
 		settotalAbonos(sumAbo);
 
@@ -174,7 +174,7 @@ const ImprimirApartado = ({
 						</span>
 					</Row>
 					<h3 className='tituloTicketApartado'>APARTADO</h3>
-					{entregado.status === true ? (
+					{entregado?.status === true ? (
 						<h3 className='tituloTicketApartado'>APARTADO</h3>
 					) : null}
 					{/* 	<!-- NOMBRE CLIENTE--> */}
@@ -230,7 +230,7 @@ const ImprimirApartado = ({
 					<h3 className='subtituloTicketApartado'>
 						<u> Productos</u>
 					</h3>
-					{productos.map((item) => {
+					{productos?.map((item) => {
 						return (
 							<table key='item.id' className='productosApartado'>
 								<tr>
@@ -258,7 +258,7 @@ const ImprimirApartado = ({
 					<h3 className='subtituloTicketApartado'>
 						<u>ABONOS</u>
 					</h3>
-					{abonos.map((item) => {
+					{abonos?.map((item) => {
 						return (
 							<table key='item._id' className='productosApartado'>
 								<tr>
