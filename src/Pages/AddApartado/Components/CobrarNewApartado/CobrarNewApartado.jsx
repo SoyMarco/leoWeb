@@ -206,20 +206,20 @@ const CobrarNewApartado = ({
 	};
 	return (
 		<>
-			{imprimir ? (
-				<ImprimirApartado
-					imprimir={imprimir}
-					setimprimir={setimprimir}
-					totalTotal={totalTotal}
-					listaCompras={listaCompras}
-					initialState={initialState}
-					calculateRestaria={calculateRestaria}
-					dataApartado={dataApartado}
-					auth={auth}
-					dinero={dinero}
-					cambio={cambio}
-				/>
-			) : null}
+			{/* {imprimir ? ( */}
+			<ImprimirApartado
+				imprimir={imprimir}
+				setimprimir={setimprimir}
+				totalTotal={totalTotal}
+				listaCompras={listaCompras}
+				initialState={initialState}
+				calculateRestaria={calculateRestaria}
+				dataApartado={dataApartado}
+				auth={auth}
+				dinero={dinero}
+				cambio={cambio}
+			/>
+			{/* ) : null} */}
 			<Modal
 				style={{ top: 25 }}
 				title={
