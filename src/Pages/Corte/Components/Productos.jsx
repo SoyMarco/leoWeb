@@ -44,7 +44,7 @@ export default function Productos({ stateRecord, loading }) {
 			title: "Nombre",
 			dataIndex: "nombre",
 			key: "nombre",
-			// width: "70px",
+			width: "120px",
 			ellipsis: true,
 			render: (nombre, record) => (
 				<Tooltip
@@ -87,24 +87,24 @@ export default function Productos({ stateRecord, loading }) {
 				</h3>
 			),
 		},
-		{
-			title: "Cantidad",
-			dataIndex: "cantidad",
-			key: "cantidad",
-			render: (cantidad, record) => (
-				<Row justify='space-around'>
-					<h3
-						style={{
-							textAlignLast: "center",
-							fontWeight: "revert",
-							// fontSize: "x-large",
-						}}
-					>
-						x{cantidad}
-					</h3>
-				</Row>
-			),
-		},
+		// {
+		// 	title: "Cantidad",
+		// 	dataIndex: "cantidad",
+		// 	key: "cantidad",
+		// 	render: (cantidad, record) => (
+		// 		<Row justify='space-around'>
+		// 			<h3
+		// 				style={{
+		// 					textAlignLast: "center",
+		// 					fontWeight: "revert",
+		// 					// fontSize: "x-large",
+		// 				}}
+		// 			>
+		// 				x{cantidad}
+		// 			</h3>
+		// 		</Row>
+		// 	),
+		// },
 		{
 			title: "Total",
 			dataIndex: "totalArticulo",

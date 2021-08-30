@@ -41,7 +41,6 @@ export default function BuscadorApartados() {
 					id='buscarApartadoInput'
 					loading={loading}
 					showSearch
-					style={{ width: 350 }}
 					placeholder='Busca Apartados'
 					optionFilterProp='children'
 					onSelect={(e) => selectItem(e)}
@@ -51,6 +50,7 @@ export default function BuscadorApartados() {
 						option.children[1].key.toLowerCase().indexOf(input.toLowerCase()) >=
 							0
 					}
+					style={{ width: 350 }}
 				>
 					{data?.getApartados.map((item) => {
 						return (

@@ -109,7 +109,10 @@ const ImprimirApartado = ({
 		// this.vence = fecha;
 		return fecha;
 	};
-
+	const initialStateImprimir = () => {
+		initialState();
+		setimprimir(false);
+	};
 	return (
 		<>
 			<ReactToPrint
@@ -118,7 +121,11 @@ const ImprimirApartado = ({
 				// onBeforePrint={() => antesDeImprimir()}
 				onAfterPrint={() => afterPrint()}
 			/>
-			<Modal visible={imprimir} width='229px' onCancel={() => initialState()}>
+			<Modal
+				visible={imprimir}
+				width='229px'
+				onCancel={() => initialStateImprimir()}
+			>
 				<input
 					id='inputPrincipalPrintESC'
 					ref={inputReprint}
@@ -131,7 +138,7 @@ const ImprimirApartado = ({
 						type='primary'
 						danger
 						shape='round'
-						onClick={() => initialState()}
+						onClick={() => initialStateImprimir()}
 					>
 						ESC
 					</Button>

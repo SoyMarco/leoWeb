@@ -152,14 +152,23 @@ export default function Ventas({
 			ellipsis: {
 				showTitle: false,
 			},
-			render: (total) => (
+			render: (total, record) => (
 				<Tooltip placement='topRight' title={total}>
 					<h3
-						style={{
-							textAlignLast: "right",
-							fontWeight: "revert",
-							fontSize: "large",
-						}}
+						style={
+							record?.productos[0]?.apartado > 0
+								? {
+										textAlignLast: "right",
+										fontWeight: "revert",
+										fontSize: "large",
+										color: "blue",
+								  }
+								: {
+										textAlignLast: "right",
+										fontWeight: "revert",
+										fontSize: "large",
+								  }
+						}
 					>
 						${total}
 					</h3>
@@ -184,28 +193,23 @@ export default function Ventas({
 								: "Reimprimir"
 						}
 					>
-						<Popconfirm
+						<Button
 							// disabled={record?.productos[0]?.apartado > 0 ? true : false}
-							title='¿Deseas reimprimir?'
-							onConfirm={() =>
+							icon={<AiFillPrinter style={{ fontSize: "25px" }} />}
+							shape='circle'
+							style={
+								record?.productos[0]?.apartado > 0
+									? { color: "blue" }
+									: { color: "limegreen" }
+							}
+							onClick={() =>
 								record?.productos[0]?.apartado > 0
 									? window.open(
 											`${UrlFrontend}apartado/${record?.productos[0]?.apartado}`
 									  )
 									: setimprimir(true)
 							}
-						>
-							<Button
-								// disabled={record?.productos[0]?.apartado > 0 ? true : false}
-								icon={<AiFillPrinter style={{ fontSize: "25px" }} />}
-								shape='circle'
-								style={{ color: "blue" }}
-								// onClick={() =>
-								// 	record.apartado > 0 &&
-								// 	window.open(`${UrlFrontend}apartado/${record.apartado}`)
-								// }
-							/>
-						</Popconfirm>
+						/>
 					</Tooltip>
 				</Row>
 			),
@@ -233,7 +237,7 @@ export default function Ventas({
 								: "Activo"
 						}
 					>
-						<Popconfirm
+						{/* <Popconfirm
 							disabled={
 								record?.productos[0]?.apartado > 0 && record.cancelado === true
 									? true
@@ -247,24 +251,32 @@ export default function Ventas({
 									  )
 									: cancelVenta(record)
 							}
-						>
-							<Switch
-								disabled={
-									record?.productos[0]?.apartado > 0 &&
-									record.cancelado === true
-										? true
-										: false
-								}
-								loading={loader}
-								checked={!record.cancelado}
-								size='small'
-								style={
-									record.cancelado
-										? { background: "red", marginTop: "5px" }
-										: { background: "limegreen", marginTop: "5px" }
-								}
-							/>
-						</Popconfirm>
+						> */}
+						<Switch
+							disabled={
+								record?.productos[0]?.apartado > 0 && record.cancelado === true
+									? true
+									: false
+							}
+							loading={loader}
+							checked={!record.cancelado}
+							size='small'
+							style={
+								record.cancelado
+									? { background: "red", marginTop: "5px" }
+									: record?.productos[0]?.apartado > 0
+									? { background: "blue", marginTop: "5px" }
+									: { background: "limegreen", marginTop: "5px" }
+							}
+							onClick={() =>
+								record?.productos[0]?.apartado > 0
+									? window.open(
+											`${UrlFrontend}apartado/${record?.productos[0]?.apartado}`
+									  )
+									: cancelVenta(record)
+							}
+						/>
+						{/* </Popconfirm> */}
 					</Tooltip>
 				</Row>
 			),

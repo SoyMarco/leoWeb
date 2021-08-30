@@ -30,10 +30,10 @@ const Login = () => {
 	const { setUser } = useAuth();
 	const { Header, Footer } = Layout;
 	const [form] = Form.useForm();
-	const vendedor = useRef();
+	const vendedorInput = useRef();
 	const contraseña = useRef();
 	useEffect(() => {
-		// vendedor.current.select();
+		document.querySelector("#inputLogin").select();
 	}, []);
 	const { Option } = Select;
 	const sendLogin = async () => {
@@ -160,14 +160,22 @@ const Login = () => {
 						>
 							<Form form={form}>
 								<Select
-									ref={vendedor}
 									disabled={loading}
 									id='inputLogin'
+									placeholder='Busca Apartados'
+									optionFilterProp='children'
 									prefix={<FaUserAlt />}
+									onKeyUp={pressKeyEnter}
+									onChange={(e) => setname(e)}
+									value={name}
+									showSearch
+									filterOption={(input, option) =>
+										option.key.toLowerCase().indexOf(input.toLowerCase()) >= 0
+									}
 									style={{
 										color: "#000058",
 										// fontSize: 30,
-										fontSize: "x-large",
+										fontSize: "large",
 										fontWeight: "bold",
 										borderRadius: "50px",
 										width: "60%",
@@ -175,17 +183,28 @@ const Login = () => {
 										border: "0 0 0 0",
 										margin: "10px",
 									}}
-									onKeyUp={pressKeyEnter}
-									onChange={(e) => setname(e)}
-									value={name}
 								>
-									<Option value='MARCO'>MARCO</Option>
-									<Option value='PAO'>PAO</Option>
-									<Option value='ISABEL LEÓN'>ISABEL LEÓN</Option>
-									<Option value='ISABEL SALAZAR'>ISABEL SALAZAR</Option>
-									<Option value='LUPITA'>LUPITA</Option>
-									<Option value='GABY'>GABY</Option>
-									<Option value='JESSICA'>JESSICA</Option>
+									<Option value='MARCO' key='MARCO'>
+										MARCO
+									</Option>
+									<Option value='PAO' key='PAO'>
+										PAO
+									</Option>
+									<Option value='ISABEL LEÓN' key='ISABEL LEÓN'>
+										ISABEL LEÓN
+									</Option>
+									<Option value='ISABEL SALAZAR' key='ISABEL SALAZAR'>
+										ISABEL SALAZAR
+									</Option>
+									<Option value='LUPITA' key='LUPITA'>
+										LUPITA
+									</Option>
+									<Option value='GABY' key='GABY'>
+										GABY
+									</Option>
+									<Option value='JESSICA' key='JESSICA'>
+										JESSICA
+									</Option>
 								</Select>
 								<Input
 									ref={contraseña}
@@ -193,6 +212,7 @@ const Login = () => {
 									prefix={<RiLockPasswordFill />}
 									disabled={loading}
 									type='password'
+									placeholder='Contraseña'
 									style={{
 										color: "#000058",
 										// fontSize: 30,

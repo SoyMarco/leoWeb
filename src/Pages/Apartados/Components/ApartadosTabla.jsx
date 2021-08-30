@@ -129,16 +129,12 @@ export default function ApartadosTabla({
 			width: "60px",
 			render: (totalArticulo, record) => (
 				<Row justify='center'>
-					<Popconfirm
-						title='¿Deseas reimprimir?'
-						onConfirm={() => setimprimir(true)}
-					>
-						<Button
-							icon={<AiFillPrinter style={{ fontSize: "25px" }} />}
-							shape='circle'
-							style={{ color: "blue" }}
-						/>
-					</Popconfirm>
+					<Button
+						icon={<AiFillPrinter style={{ fontSize: "25px" }} />}
+						shape='circle'
+						style={{ color: "blue" }}
+						onClick={setimprimir(true)}
+					/>
 				</Row>
 			),
 		},

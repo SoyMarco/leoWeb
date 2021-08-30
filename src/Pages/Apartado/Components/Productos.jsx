@@ -217,26 +217,24 @@ export default function Productos({
 			render: (idArray, record) => (
 				<Tooltip
 					placement='right'
-					title={record?.entregado[0]?.status !== true ? "Activo" : "Entregado"}
+					title={
+						record?.entregado[0]?.status !== true
+							? "Producto Activo"
+							: "Producto Entregado"
+					}
 				>
 					<Row justify='center'>
-						<Popconfirm
-							title={`¿${
-								record?.entregado[0]?.status !== true ? "Entregar" : "Regresar"
-							} venta?`}
-							onConfirm={() => borrarEntregarProduct(record, "entregar")}
-						>
-							<Switch
-								loading={loader}
-								checked={record?.entregado[0]?.status === true}
-								size='small'
-								style={
-									record?.entregado[0]?.status
-										? { background: "orange", marginTop: "5px" }
-										: { background: "limegreen", marginTop: "5px" }
-								}
-							/>
-						</Popconfirm>
+						<Switch
+							loading={loader}
+							checked={record?.entregado[0]?.status === true}
+							size='small'
+							style={
+								record?.entregado[0]?.status
+									? { background: "orange", marginTop: "5px" }
+									: { background: "limegreen", marginTop: "5px" }
+							}
+							onClick={() => borrarEntregarProduct(record, "entregar")}
+						/>
 					</Row>
 				</Tooltip>
 			),
