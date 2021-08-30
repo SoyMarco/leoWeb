@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { openNotification } from "../../../Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { CANCELAR_VENTA } from "../../../graphql/venta";
@@ -36,6 +36,14 @@ export default function Ventas({
 		setselectedRowKeys([]);
 		// setselectedRowKeys(selectedRowKeys);
 	};
+	useEffect(() => {
+		let numArray = getVentasDia.length - 1;
+		let lastFolio = getVentasDia[numArray]?.key;
+		setselectedRowKeys([lastFolio]);
+		setstateRecord(getVentasDia[numArray]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [getVentasDia]);
+
 	const rowSelection = {
 		selectedRowKeys,
 		onChange: onSelectChange,
@@ -166,6 +174,7 @@ export default function Ventas({
 										textAlignLast: "right",
 										fontWeight: "revert",
 										fontSize: "large",
+										color: "green",
 								  }
 						}
 					>
@@ -185,7 +194,7 @@ export default function Ventas({
 			render: (totalArticulo, record) => (
 				<Row justify='center'>
 					<Tooltip
-						placement='right'
+						placement='left'
 						title={
 							record?.productos[0]?.apartado > 0
 								? "Abre el apartado para Reimprimir"

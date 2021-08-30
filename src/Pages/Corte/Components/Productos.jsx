@@ -39,12 +39,13 @@ export default function Productos({ stateRecord, loading }) {
 			dataIndex: "key",
 			key: "key",
 			width: "35px",
+			ellipsis: true,
 		},
 		{
 			title: "Nombre",
 			dataIndex: "nombre",
 			key: "nombre",
-			width: "120px",
+			// width: "120px",
 			ellipsis: true,
 			render: (nombre, record) => (
 				<Tooltip
@@ -76,40 +77,25 @@ export default function Productos({ stateRecord, loading }) {
 			key: "precio",
 			ellipsis: true,
 			render: (precio) => (
-				<h3
-					style={{
-						textAlignLast: "right",
-						fontWeight: "revert",
-						fontSize: "large",
-					}}
-				>
-					${precio}
-				</h3>
+				<Tooltip placement='top' title={precio}>
+					<h3
+						style={{
+							textAlignLast: "right",
+							fontWeight: "revert",
+							fontSize: "large",
+						}}
+					>
+						${precio}
+					</h3>
+				</Tooltip>
 			),
 		},
-		// {
-		// 	title: "Cantidad",
-		// 	dataIndex: "cantidad",
-		// 	key: "cantidad",
-		// 	render: (cantidad, record) => (
-		// 		<Row justify='space-around'>
-		// 			<h3
-		// 				style={{
-		// 					textAlignLast: "center",
-		// 					fontWeight: "revert",
-		// 					// fontSize: "x-large",
-		// 				}}
-		// 			>
-		// 				x{cantidad}
-		// 			</h3>
-		// 		</Row>
-		// 	),
-		// },
 		{
-			title: "Total",
-			dataIndex: "totalArticulo",
-			key: "totalArticulo",
-			render: (totalArticulo, record) => (
+			title: "Cantidad",
+			dataIndex: "cantidad",
+			key: "cantidad",
+			ellipsis: true,
+			render: (cantidad, record) => (
 				<Row justify='space-around'>
 					<h3
 						style={{
@@ -118,9 +104,30 @@ export default function Productos({ stateRecord, loading }) {
 							// fontSize: "x-large",
 						}}
 					>
-						${totalArticulo}
+						x{cantidad}
 					</h3>
 				</Row>
+			),
+		},
+		{
+			title: "Total",
+			dataIndex: "totalArticulo",
+			key: "totalArticulo",
+			ellipsis: true,
+			render: (totalArticulo, record) => (
+				<Tooltip placement='top' title={totalArticulo}>
+					<Row justify='space-around'>
+						<h3
+							style={{
+								textAlignLast: "center",
+								fontWeight: "revert",
+								// fontSize: "x-large",
+							}}
+						>
+							${totalArticulo}
+						</h3>
+					</Row>
+				</Tooltip>
 			),
 		},
 	];
