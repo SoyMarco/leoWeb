@@ -8,12 +8,12 @@
 
 #inputLogin {
 	padding: 0;
-	border: none;
+	border: 10px;
 	outline: none;
 	text-align-last: center;
 	color: #000085;
 	border-radius: 50px;
-	font-size: x-large;
+	font-size: large;
 	font-weight: bold;
 	padding-left: 20px;
 }
@@ -30,4 +30,9 @@
 }
 #nameLogo {
 	color: white;
+}
+.ant-select-selector #inputLogin {
+	cursor: text;
+	height: 43px;
+	border-radius: 50px;
 }

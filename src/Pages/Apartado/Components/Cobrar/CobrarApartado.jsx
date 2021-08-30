@@ -30,6 +30,7 @@ const CobrarApartado = ({
 	const [cambio, setcambio] = useState(0);
 	const [imprimir, setimprimir] = useState(false);
 	const [btnLoading, setbtnLoading] = useState(false);
+	const [dataApartadoImprimir, setdataApartadoImprimir] = useState([]);
 	const [dinero, setdinero] = useState({
 		aCuenta: 0,
 		tarjeta: 0,
@@ -37,7 +38,11 @@ const CobrarApartado = ({
 	});
 	const { auth, logout } = useAuth();
 	const cobrarEfectivo = useRef();
-
+	useEffect(() => {
+		if (dataApartadoImprimir?.folio > 0) {
+			setimprimir(true);
+		}
+	}, [dataApartadoImprimir]);
 	useEffect(() => {
 		if (modalCobrar === true) {
 			form.setFieldsValue({ efectivo: totalTotal });
@@ -126,7 +131,7 @@ const CobrarApartado = ({
 				});
 				if (data) {
 					if (keyF === "F1") {
-						setimprimir(true);
+						setdataApartadoImprimir(data.addAbono);
 					} else if (keyF === "F2") {
 						openNotification("success", "Apartado guardado con exito");
 						initialState();
@@ -200,7 +205,7 @@ const CobrarApartado = ({
 					listaCompras={listaCompras}
 					initialState={initialState}
 					calculateRestaria={calculateRestaria}
-					dataApartado={dataApartado}
+					dataApartado={dataApartadoImprimir}
 					auth={auth}
 					dinero={dinero}
 					cambio={cambio}

@@ -168,6 +168,7 @@ export default function Apartado(props) {
 				history.push("/");
 			}
 		}
+
 		// Reimprimir
 		if (e.keyCode === 112) {
 			setmodalReimprimir(true);
@@ -263,14 +264,14 @@ export default function Apartado(props) {
 						dataApartado?.entregado[0]?.fecha
 					)}, por ${dataApartado?.entregado[0]?.vendedor?.toUpperCase()}`}
 					extra={
-						<Popconfirm
-							title='¿Borrar entrega?'
-							onConfirm={() => cancelEntrega()}
+						<Button
+							type='primary'
+							key='console'
+							loading={btnLoading}
+							onClick={cancelEntrega()}
 						>
-							<Button type='primary' key='console' loading={btnLoading}>
-								Quitar entrega
-							</Button>
-						</Popconfirm>
+							Quitar entrega
+						</Button>
 					}
 				/>
 			)}
@@ -367,7 +368,7 @@ export default function Apartado(props) {
 						<Tooltip
 							placement='top'
 							title={`
-							(F3)AÑADIR A CUENTA
+							(F1)Imprimir
 							  (F12)ENTREGAR`}
 						>
 							<Input
@@ -394,50 +395,40 @@ export default function Apartado(props) {
 							/>
 						</Tooltip>
 						<Row>
-							<Popconfirm
+							<Button
 								disabled={!statusApartado}
-								title='¿Deseas Reimprimir?'
-								onConfirm={() => setmodalReimprimir(true)}
+								shape='round'
+								style={
+									statusApartado
+										? {
+												background: "linear-gradient(#2196F3,#0000E6)",
+												marginTop: 5,
+												marginRight: 15,
+												color: "white",
+												border: 0,
+												// fontSize: "large",
+												fontWeight: "bold",
+										  }
+										: {
+												background: "gray",
+												marginTop: 5,
+												marginRight: 15,
+												color: "white",
+												border: 0,
+												// fontSize: "large",
+												fontWeight: "bold",
+										  }
+								}
+								onClick={() => setmodalReimprimir(true)}
 								icon={
 									<PrinterFilled
-										style={{ color: "blue", fontSize: "large", marginRight: 5 }}
+										style={{ fontSize: "large", marginRight: 5 }}
 									/>
 								}
 							>
-								<Button
-									disabled={!statusApartado}
-									shape='round'
-									style={
-										statusApartado
-											? {
-													background: "linear-gradient(#2196F3,#0000E6)",
-													marginTop: 5,
-													marginRight: 15,
-													color: "white",
-													border: 0,
-													// fontSize: "large",
-													fontWeight: "bold",
-											  }
-											: {
-													background: "gray",
-													marginTop: 5,
-													marginRight: 15,
-													color: "white",
-													border: 0,
-													// fontSize: "large",
-													fontWeight: "bold",
-											  }
-									}
-									// onClick={() => setmodalAddProduct(true)}
-									icon={
-										<PrinterFilled
-											style={{ fontSize: "large", marginRight: 5 }}
-										/>
-									}
-								>
-									Reimprimir
-								</Button>
-							</Popconfirm>
+								Reimprimir
+							</Button>
+
 							<Tooltip
 								placement='top'
 								title={statusApartado ? "APARTADO ACTIVO" : "APARTADO INACTIVO"}

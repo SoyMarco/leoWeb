@@ -55,6 +55,7 @@ export const keyBlock = (e) => {
 		e.preventDefault();
 	}
 	if (
+		e.keyCode === 27 ||
 		e.keyCode === 69 ||
 		e.keyCode === 73 ||
 		e.keyCode === 186 ||

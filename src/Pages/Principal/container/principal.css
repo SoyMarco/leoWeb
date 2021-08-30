@@ -10,8 +10,12 @@
 	padding-left: 20px;
 }
 .ant-input-affix-wrapper > input.ant-input:focus {
-	background: linear-gradient(14deg, #ffffff, #93ceff);
+	background: linear-gradient(14deg, #ffffff, #192f41);
 	box-shadow: 13px 13px 35px #7e9ab1, -13px -13px 35px #a7d4f8;
+}
+#inputPrecio:focus {
+	background: linear-gradient(#c6e1f7a8, #63b6faad);
+	color: green;
 }
 .ant-card-body {
 	padding: 5px;

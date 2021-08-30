@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import moment from "moment";
 import "moment/locale/es-us";
-import { Modal, Row } from "antd";
+import { Modal, Row, Divider, Button } from "antd";
 import "./imprimir.css";
 import { keyBlock } from "Utils";
 import ReactToPrint from "react-to-print";
@@ -58,9 +58,7 @@ const ImprimirApartado = ({
 		settotalAbonos(sumAbo);
 
 		if (imprimir === true) {
-			setTimeout(() => {
-				document.getElementById("print-button2").click();
-			}, 100);
+			document.getElementById("print-button2").click();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imprimir]);
@@ -71,8 +69,6 @@ const ImprimirApartado = ({
 			inputReprint.current.select();
 			setnumPrint(numPrint + 1);
 		} else if (numPrint === 1) {
-			openNotification("success", "Reimpreso con exito");
-
 			initialState();
 		}
 	};
@@ -113,7 +109,10 @@ const ImprimirApartado = ({
 		// this.vence = fecha;
 		return fecha;
 	};
-
+	const initialStateImprimir = () => {
+		initialState();
+		setimprimir(false);
+	};
 	return (
 		<>
 			<ReactToPrint
@@ -122,12 +121,37 @@ const ImprimirApartado = ({
 				// onBeforePrint={() => antesDeImprimir()}
 				onAfterPrint={() => afterPrint()}
 			/>
-			<Modal visible={imprimir} width='229px' onCancel={() => initialState()}>
+			<Modal
+				visible={imprimir}
+				width='229px'
+				onCancel={() => initialStateImprimir()}
+			>
 				<input
+					id='inputPrincipalPrintESC'
 					ref={inputReprint}
 					onKeyUp={pressKeyPrecio}
 					onKeyDown={keyBlock}
+					style={{ width: "180px", marginBottom: 10 }}
 				></input>
+				<Row justify='space-around'>
+					<Button
+						type='primary'
+						danger
+						shape='round'
+						onClick={() => initialStateImprimir()}
+					>
+						ESC
+					</Button>
+
+					<Button
+						type='primary'
+						shape='round'
+						onClick={() => document.getElementById("print-button2").click()}
+					>
+						Print(Enter)
+					</Button>
+				</Row>
+				<Divider />
 				<div
 					id='tickets'
 					className='ticket'
