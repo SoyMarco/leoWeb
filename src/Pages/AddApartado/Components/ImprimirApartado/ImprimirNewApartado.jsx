@@ -264,7 +264,8 @@ const ImprimirNewApartado = ({
 							<h1>${totalTotal - totalAbonos}</h1>
 						</row>
 					) : null}
-					<span>{`Pagó con:`}</span>
+					{dinero && <span>{`Pagó con:`}</span>}
+					<br></br>
 					{/* <!-- EFECTIVO --> */}
 					{dinero?.efectivo > 0 ? (
 						<row className='finalTicket'>
