@@ -84,11 +84,21 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 			key: "entSal",
 			render: (entSal) => (
 				<h3
-					style={{
-						textAlignLast: "right",
-						fontWeight: "revert",
-						fontSize: "large",
-					}}
+					style={
+						entSal > 0
+							? {
+									textAlignLast: "right",
+									fontWeight: "revert",
+									fontSize: "large",
+									color: "green",
+							  }
+							: {
+									textAlignLast: "right",
+									fontWeight: "revert",
+									fontSize: "large",
+									color: "red",
+							  }
+					}
 				>
 					${entSal}
 				</h3>
@@ -116,11 +126,20 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 			key: "tarjeta",
 			render: (tarjeta) => (
 				<h3
-					style={{
-						textAlignLast: "right",
-						fontWeight: "revert",
-						fontSize: "large",
-					}}
+					style={
+						tarjeta > 0
+							? {
+									textAlignLast: "right",
+									fontWeight: "revert",
+									fontSize: "large",
+									color: "green",
+							  }
+							: {
+									textAlignLast: "right",
+									fontWeight: "revert",
+									fontSize: "large",
+							  }
+					}
 				>
 					${tarjeta}
 				</h3>
@@ -163,16 +182,16 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 			dataIndex: "finCaja",
 			key: "finCaja",
 			render: (finCaja, record) => (
-				<h3
+				<h2
 					style={{
 						textAlignLast: "right",
 						color: "green",
 						fontWeight: "revert",
-						fontSize: "large",
+						fontSize: "x-large",
 					}}
 				>
 					${finCaja}
-				</h3>
+				</h2>
 			),
 		},
 	];

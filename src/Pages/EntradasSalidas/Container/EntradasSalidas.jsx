@@ -23,7 +23,7 @@ export default function EntradasSalidas() {
 		if (entradaSalida) inputCaja.current.select();
 	}, [entradaSalida]);
 
-	const sendLogin = async () => {
+	const sendEntradaSalida = async () => {
 		let monto = 0;
 		if (entradaSalida === "Entrada") {
 			monto = parseFloat(caja);
@@ -51,7 +51,7 @@ export default function EntradasSalidas() {
 	};
 	const pressKeyEnter = (e) => {
 		if (e.keyCode === 13) {
-			sendLogin();
+			sendEntradaSalida();
 		}
 	};
 	return (
@@ -157,7 +157,7 @@ export default function EntradasSalidas() {
 									fontSize: "large",
 									background: "linear-gradient(#2196F3,#0000E6)",
 								}}
-								onClick={() => setentradaSalida(null)}
+								onClick={() => sendEntradaSalida()}
 							>
 								Registrar
 							</Button>
