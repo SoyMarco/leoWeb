@@ -5,16 +5,7 @@ import { AiFillPrinter } from "react-icons/ai";
 import Imprimir from "Pages/Apartado/Components/ImprimirApartado/ImprimirApartado";
 import useAuth from "hooks/useAuth";
 import moment from "moment";
-import {
-	Table,
-	Result,
-	Col,
-	Divider,
-	Row,
-	Button,
-	Popconfirm,
-	Tooltip,
-} from "antd";
+import { Table, Result, Col, Divider, Row, Button, Tooltip } from "antd";
 import { useHistory } from "react-router-dom";
 
 export default function ApartadosTabla({

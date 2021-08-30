@@ -30,7 +30,6 @@ const Login = () => {
 	const { setUser } = useAuth();
 	const { Header, Footer } = Layout;
 	const [form] = Form.useForm();
-	const vendedorInput = useRef();
 	const contraseña = useRef();
 	useEffect(() => {
 		document.querySelector("#inputLogin").select();

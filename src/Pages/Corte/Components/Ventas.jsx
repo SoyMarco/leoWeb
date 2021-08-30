@@ -18,7 +18,6 @@ import {
 	Tooltip,
 	Button,
 	Switch,
-	Popconfirm,
 } from "antd";
 export default function Ventas({
 	loading,
