@@ -17,16 +17,16 @@ export default function Productos({ stateRecord, loading }) {
 		// selectLastRow();
 		let sum = 0;
 		let sumProd = 0;
-		for (let i = 0; i < productos.length; i++) {
-			sum += productos[i].totalArticulo;
-			sumProd += productos[i].cantidad;
+		for (let i = 0; i < productos?.length; i++) {
+			sum += productos[i]?.totalArticulo;
+			sumProd += productos[i]?.cantidad;
 		}
 		settotalTotal(sum);
 		settotalProductos(sumProd);
 
 		let sumAbo = 0;
-		for (let i = 0; i < abonos.length; i++) {
-			sumAbo += abonos[i].abono;
+		for (let i = 0; i < abonos?.length; i++) {
+			sumAbo += abonos[i]?.abono;
 		}
 		settotalAbonos(sumAbo);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -34,16 +34,21 @@ export default function Productos({ stateRecord, loading }) {
 
 	useEffect(() => {
 		if (stateRecord) {
-			let { productos } = stateRecord;
-			let listaProductos = productos.map((item) => {
-				return { ...item, key: item.idArray };
-			});
-			setproductos(listaProductos);
-			let { abonos } = stateRecord;
-			let listaAbonos = abonos.map((item2) => {
-				return { ...item2, key: item2.idArray };
-			});
-			setabonos(listaAbonos);
+			try {
+				let { productos } = stateRecord;
+				let listaProductos = productos?.map((item) => {
+					return { ...item, key: item.idArray };
+				});
+				setproductos(listaProductos);
+				let { abonos } = stateRecord;
+				let listaAbonos = abonos?.map((item2) => {
+					return { ...item2, key: item2.idArray };
+				});
+				setabonos(listaAbonos);
+			} catch (error) {
+				setproductos([]);
+				setabonos(0);
+			}
 		} else {
 			setproductos([]);
 			setabonos(0);

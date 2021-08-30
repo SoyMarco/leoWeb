@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MdLocalGroceryStore } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { AiFillPrinter } from "react-icons/ai";
-import Imprimir from "Pages/Apartado/Components/ImprimirApartado/ImprimirApartado";
+import ImprimirApartados from "../Components/Imprimir/ImprimirApartado";
 import useAuth from "hooks/useAuth";
 import moment from "moment";
 import { Table, Result, Col, Divider, Row, Button, Tooltip } from "antd";
@@ -124,7 +124,7 @@ export default function ApartadosTabla({
 						icon={<AiFillPrinter style={{ fontSize: "25px" }} />}
 						shape='circle'
 						style={{ color: "blue" }}
-						onClick={setimprimir(true)}
+						onClick={() => setimprimir(true)}
 					/>
 				</Row>
 			),
@@ -149,11 +149,13 @@ export default function ApartadosTabla({
 			),
 		},
 	];
-
+	useEffect(() => {
+		console.log("@@@@@@@@@@@@@@@@@@@@@@@@", stateRecord);
+	}, [stateRecord]);
 	return (
 		<>
-			{imprimir ? (
-				<Imprimir
+			{imprimir === true ? (
+				<ImprimirApartados
 					imprimir={imprimir}
 					setimprimir={setimprimir}
 					dataApartado={stateRecord}

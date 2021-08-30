@@ -11,7 +11,7 @@ import { UrlFrontend } from "config/apollo";
 
 export default function Apartados() {
 	let { data, loading, error, refetch } = useQuery(GET_APARTADOS);
-	const [stateRecord, setstateRecord] = useState(null);
+	const [stateRecord, setstateRecord] = useState({ abonos: {} });
 	const [getApartados, setgetApartados] = useState([]);
 	const [dataFilter, setdataFilter] = useState(null);
 	const [loader, setloader] = useState(false);
