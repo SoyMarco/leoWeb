@@ -27,10 +27,12 @@ export default function AddApartado() {
 	useEffect(() => {
 		inputNameClient.current.select();
 	}, []);
+
 	useEffect(() => {
 		setrestaria(totalTotal - abono);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [abono]);
+
 	useEffect(() => {
 		if (current === 2) {
 			inputAbono.current.select();
