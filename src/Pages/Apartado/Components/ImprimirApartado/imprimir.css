@@ -65,3 +65,8 @@ h6 {
 	font-weight: 500;
 	font-family: "Roboto", sans-serif;
 }
+#inputPrincipalPrintESC:focus {
+	background: linear-gradient(#ffffff, #93ceff);
+
+	/* box-shadow: 1px 1px 10px #7e9ab1, -1px -1px 10px #a7d4f8; */
+}

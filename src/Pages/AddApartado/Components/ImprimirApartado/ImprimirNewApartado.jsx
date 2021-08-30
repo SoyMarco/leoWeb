@@ -2,10 +2,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import moment from "moment";
 import "moment/locale/es-us";
-import { Modal, Row } from "antd";
+import { Modal, Row, Divider, Button } from "antd";
 import "./imprimir.css";
 import { useHistory } from "react-router-dom";
 import ReactToPrint from "react-to-print";
+import { keyBlock } from "Utils";
 import { openNotification } from "Utils/openNotification";
 
 const ImprimirNewApartado = ({
@@ -36,9 +37,7 @@ const ImprimirNewApartado = ({
 		}
 		settotalAbonos(sumAbo);
 		if (imprimir === true) {
-			setTimeout(() => {
-				document.getElementById("print-button").click();
-			}, 100);
+			document.getElementById("print-button").click();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imprimir]);
@@ -49,8 +48,6 @@ const ImprimirNewApartado = ({
 			inputReprint.current.select();
 			setnumPrint(numPrint + 1);
 		} else if (numPrint === 1) {
-			openNotification("success", "Reimpreso con exito");
-
 			history.push("/");
 		}
 	};
@@ -106,7 +103,33 @@ const ImprimirNewApartado = ({
 				width='229px'
 				onCancel={() => history.push("/")}
 			>
-				<input ref={inputReprint} onKeyUp={pressKeyPrecio}></input>
+				{/* <input ref={inputReprint} onKeyUp={pressKeyPrecio}></input> */}
+				<input
+					id='inputPrincipalPrintESC'
+					ref={inputReprint}
+					onKeyUp={pressKeyPrecio}
+					onKeyDown={keyBlock}
+					style={{ width: "180px", marginBottom: 10 }}
+				></input>
+				<Row justify='space-around'>
+					<Button
+						type='primary'
+						danger
+						shape='round'
+						onClick={() => history.push("/")}
+					>
+						ESC
+					</Button>
+
+					<Button
+						type='primary'
+						shape='round'
+						onClick={() => document.getElementById("print-button").click()}
+					>
+						Print(Enter)
+					</Button>
+				</Row>
+				<Divider />
 				<div
 					id='tickets'
 					className='ticket'
