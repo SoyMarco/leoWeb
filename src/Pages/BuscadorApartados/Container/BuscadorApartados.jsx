@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom";
 export default function BuscadorApartados() {
 	let { data, loading, refetch } = useQuery(GET_APARTADOS_BUSCADOR);
 	const [urlFolio, seturlFolio] = useState(0);
-	const [valueSearch, setvalueSearch] = useState("");
+	// const [valueSearch, setvalueSearch] = useState("");
 	const { Option } = Select;
 	const history = useHistory();
 
@@ -27,9 +27,9 @@ export default function BuscadorApartados() {
 	const selectItem = (e) => {
 		seturlFolio(e);
 	};
-	const changeValue = (e) => {
-		setvalueSearch(e);
-	};
+	// const changeValue = (e) => {
+	// 	// setvalueSearch(e);
+	// };
 	const onFocus = (e) => {
 		refetch();
 	};
@@ -48,7 +48,7 @@ export default function BuscadorApartados() {
 					placeholder='Busca Apartados'
 					optionFilterProp='children'
 					onSelect={(e) => selectItem(e)}
-					onSearch={changeValue}
+					// onSearch={changeValue}
 					onFocus={onFocus}
 					filterOption={(input, option) =>
 						option.children[0].key.indexOf(input) >= 0 ||
