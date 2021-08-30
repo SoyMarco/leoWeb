@@ -87,7 +87,7 @@ function LayoutForm({ children }) {
 						<div className='logo' />
 						<Menu
 							mode='inline'
-							onClick={handleClick}
+							onClick={() => handleClick}
 							defaultOpenKeys={["sub1"]}
 							selectedKeys={[currentMenu]}
 						>
@@ -136,7 +136,7 @@ function LayoutForm({ children }) {
 							>
 								Nuevo Apartado
 							</Menu.Item>
-							<Menu.Item
+							{/* <Menu.Item
 								key='4'
 								icon={
 									<Link
@@ -150,7 +150,7 @@ function LayoutForm({ children }) {
 								onClick={() => history.push("/apartados")}
 							>
 								Buscar Apartados
-							</Menu.Item>
+							</Menu.Item> */}
 							<Menu.Item
 								key='5'
 								icon={

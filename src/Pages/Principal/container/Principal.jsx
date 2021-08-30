@@ -380,7 +380,7 @@ function Principal() {
 							fontWeight: "bold",
 							marginTop: "-20px",
 						}}
-						onClick={pressEnter}
+						onClick={() => pressEnter}
 					>
 						{totalProductos ? `$ ${totalTotal}` : null}
 					</h1>,

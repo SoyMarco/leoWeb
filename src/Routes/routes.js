@@ -4,7 +4,7 @@ import LayoutForm from "Pages/Layout/Container/Layout";
 // Pages
 import Principal from "Pages/Principal/container/Principal";
 import Corte from "Pages/Corte/Container/Corte";
-import Apartados from "Pages/Apartados/Container/Apartados";
+// import Apartados from "Pages/Apartados/Container/Apartados";
 import Apartado from "Pages/Apartado/Container/Apartado";
 import Error from "Pages/Error/Error";
 import Prueba from "Pages/prueba";
@@ -25,12 +25,12 @@ const routes = [
 		component: Corte,
 		exact: true,
 	},
-	{
-		path: "/apartados",
-		layout: LayoutForm,
-		component: Apartados,
-		exact: true,
-	},
+	// {
+	// 	path: "/apartados",
+	// 	layout: LayoutForm,
+	// 	component: Apartados,
+	// 	exact: true,
+	// },
 	{
 		path: "/apartado/:folio",
 		layout: LayoutForm,

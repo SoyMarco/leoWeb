@@ -30,7 +30,7 @@ import {
 	Tooltip,
 	Result,
 } from "antd";
-
+import "./apartados.css";
 export default function Apartado(props) {
 	const history = useHistory();
 	const params = useParams();
@@ -268,7 +268,7 @@ export default function Apartado(props) {
 							type='primary'
 							key='console'
 							loading={btnLoading}
-							onClick={cancelEntrega()}
+							onClick={() => cancelEntrega()}
 						>
 							Quitar entrega
 						</Button>
@@ -328,7 +328,7 @@ export default function Apartado(props) {
 											fontWeight: "bold",
 									  }
 							}
-							onClick={pressEnter}
+							onClick={() => pressEnter}
 						>
 							{abono.abono > 0 ? `Restaría $${calculateRestaria()}` : null}
 						</h1>,
@@ -340,7 +340,7 @@ export default function Apartado(props) {
 									fontWeight: "bold",
 									marginTop: "-20px",
 								}}
-								onClick={pressEnter}
+								onClick={() => pressEnter}
 							>
 								{totalProductos ? `Resta $${totalTotal - totalAbonos}` : null}
 							</h1>

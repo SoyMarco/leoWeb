@@ -1,0 +1,26 @@
+.ant-input-affix-wrapper > input.ant-input {
+	padding: 0;
+	border: none;
+	outline: none;
+	text-align-last: center;
+	color: green;
+	border-radius: 50px;
+	font-size: x-large;
+	font-weight: bold;
+	padding-left: 20px;
+	margin-right: 40px;
+}
+.ant-input-affix-wrapper > input.ant-input:focus {
+	background: #b1dcff8a;
+	box-shadow: 13px 13px 35px #7e9ab1, -13px -13px 35px #a7d4f8;
+}
+.ant-card-body {
+	padding: 5px;
+}
+.ant-input-affix-wrapper > input.ant-input {
+	font-size: x-large;
+}
+
+.borrar {
+	color: "#c5221f";
+}
