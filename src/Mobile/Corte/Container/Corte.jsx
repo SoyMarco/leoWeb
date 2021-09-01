@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./corte.css";
-import { Row, Divider } from "antd";
+import { Row } from "antd";
 import { useQuery } from "@apollo/client";
 import { GET_VENTAS_DIA_ADMIN } from "../../../graphql/venta";
 import ErrorConection from "Utils/ErrorConection";
@@ -8,7 +8,7 @@ import useAuth from "hooks/useAuth";
 import "./corte.css";
 
 const Corte = () => {
-	let { data, loading, error, refetch } = useQuery(GET_VENTAS_DIA_ADMIN);
+	let { data, error, refetch } = useQuery(GET_VENTAS_DIA_ADMIN);
 	const [getVentasDiaAdmin, setgetVentasDiaAdmin] = useState([]);
 	const { logout } = useAuth();
 	useEffect(() => {
