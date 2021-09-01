@@ -145,46 +145,48 @@ const CobrarApartado = ({
 	};
 	//Guardar y/o Imprimir VENTA CON GraphQL
 	const savePrintNewV = async (keyF) => {
-		let efectivo = parseFloat(dinero.efectivo);
-		let tarjeta = parseFloat(dinero.tarjeta);
-		let aCuenta = parseFloat(dinero.aCuenta);
-		let total = parseFloat(totalTotal);
+		if (btnLoading === false) {
+			let efectivo = parseFloat(dinero.efectivo);
+			let tarjeta = parseFloat(dinero.tarjeta);
+			let aCuenta = parseFloat(dinero.aCuenta);
+			let total = parseFloat(totalTotal);
 
-		if (cambio >= 0) {
-			setbtnLoading(true);
-			let listaComprasNew = {
-				apartado: dataApartado.folio,
-				cantidad: 1,
-				idArray: dataApartado.folio,
-				nombre: "APARTADO",
-				precio: total,
-				refApartado: dataApartado.id,
-				totalArticulo: total,
-			};
+			if (cambio >= 0) {
+				setbtnLoading(true);
+				let listaComprasNew = {
+					apartado: dataApartado.folio,
+					cantidad: 1,
+					idArray: dataApartado.folio,
+					nombre: "APARTADO",
+					precio: total,
+					refApartado: dataApartado.id,
+					totalArticulo: total,
+				};
 
-			try {
-				const { data } = await mutateREGISTER_VENTA({
-					variables: {
-						input: {
-							productos: listaComprasNew,
-							vendedor: auth.name,
-							folio: 1,
-							total: total,
-							efectivo: efectivo,
-							tarjeta: tarjeta,
-							aCuenta: aCuenta,
-							pagoCon: 0,
-							referencia: dataApartado.id,
-							notas: "APARTADO",
+				try {
+					const { data } = await mutateREGISTER_VENTA({
+						variables: {
+							input: {
+								productos: listaComprasNew,
+								vendedor: auth.name,
+								folio: 1,
+								total: total,
+								efectivo: efectivo,
+								tarjeta: tarjeta,
+								aCuenta: aCuenta,
+								pagoCon: 0,
+								referencia: dataApartado.id,
+								notas: "APARTADO",
+							},
 						},
-					},
-				});
-				if (data) {
-					savePrintAbono(keyF, data.registerVenta);
+					});
+					if (data) {
+						savePrintAbono(keyF, data.registerVenta);
+					}
+				} catch (error) {
+					ErrorConection(logout);
+					return false;
 				}
-			} catch (error) {
-				ErrorConection(logout);
-				return false;
 			}
 		}
 	};

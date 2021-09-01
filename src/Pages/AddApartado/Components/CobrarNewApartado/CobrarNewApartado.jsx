@@ -110,54 +110,56 @@ const CobrarNewApartado = ({
 
 	//Guardar y/o Imprimir VENTA CON GraphQL
 	const savePrintNewV = async (keyF) => {
-		let efectivo = parseFloat(dinero.efectivo);
-		let tarjeta = parseFloat(dinero.tarjeta);
-		let aCuenta = parseFloat(dinero.aCuenta);
-		let total = parseFloat(totalTotal);
-		setbtnLoading(true);
-		if (cambio >= 0) {
-			try {
-				const { data: FolioMax } = await mutateGET_FOLIO_MAX_APARTADO({
-					variables: {
-						input: {
-							status: true,
-						},
-					},
-				});
-				let folioApartado = FolioMax?.getFolioMaxApartado?.folio;
-				let listaComprasNew = {
-					apartado: folioApartado,
-					cantidad: 1,
-					idArray: folioApartado,
-					nombre: "APARTADO",
-					precio: total,
-					refApartado: "Apartado",
-					totalArticulo: total,
-				};
-				if (folioApartado) {
-					const { data } = await mutateREGISTER_VENTA({
+		if (btnLoading === false) {
+			let efectivo = parseFloat(dinero.efectivo);
+			let tarjeta = parseFloat(dinero.tarjeta);
+			let aCuenta = parseFloat(dinero.aCuenta);
+			let total = parseFloat(totalTotal);
+			if (cambio >= 0) {
+				setbtnLoading(true);
+				try {
+					const { data: FolioMax } = await mutateGET_FOLIO_MAX_APARTADO({
 						variables: {
 							input: {
-								productos: listaComprasNew,
-								vendedor: auth.name,
-								folio: 1,
-								total: total,
-								efectivo: efectivo,
-								tarjeta: tarjeta,
-								aCuenta: aCuenta,
-								pagoCon: 0,
-								referencia: "Apartado",
-								notas: "APARTADO",
+								status: true,
 							},
 						},
 					});
-					if (await data) {
-						savePrintAbono(keyF, data.registerVenta);
+					let folioApartado = FolioMax?.getFolioMaxApartado?.folio;
+					let listaComprasNew = {
+						apartado: folioApartado,
+						cantidad: 1,
+						idArray: folioApartado,
+						nombre: "APARTADO",
+						precio: total,
+						refApartado: "Apartado",
+						totalArticulo: total,
+					};
+					if (folioApartado) {
+						const { data } = await mutateREGISTER_VENTA({
+							variables: {
+								input: {
+									productos: listaComprasNew,
+									vendedor: auth.name,
+									folio: 1,
+									total: total,
+									efectivo: efectivo,
+									tarjeta: tarjeta,
+									aCuenta: aCuenta,
+									pagoCon: 0,
+									referencia: "Apartado",
+									notas: "APARTADO",
+								},
+							},
+						});
+						if (await data) {
+							savePrintAbono(keyF, data.registerVenta);
+						}
 					}
+				} catch (error) {
+					ErrorConection(logout);
+					return false;
 				}
-			} catch (error) {
-				ErrorConection(logout);
-				return false;
 			}
 		}
 	};

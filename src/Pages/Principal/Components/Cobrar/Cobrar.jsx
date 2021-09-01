@@ -103,54 +103,56 @@ const Cobrar = ({
 
 	//Guardar y/o Imprimir VENTA CON GraphQL
 	const savePrintNewV = async (keyF) => {
-		let efectivo = parseFloat(dinero.efectivo);
-		let tarjeta = parseFloat(dinero.tarjeta);
-		let aCuenta = parseFloat(dinero.aCuenta);
-		let total = parseFloat(totalTotal);
+		if (btnLoading === false) {
+			let efectivo = parseFloat(dinero.efectivo);
+			let tarjeta = parseFloat(dinero.tarjeta);
+			let aCuenta = parseFloat(dinero.aCuenta);
+			let total = parseFloat(totalTotal);
 
-		if (cambio >= 0) {
-			setbtnLoading(true);
-			let listaComprasNew = listaCompras.map((item) => {
-				return {
-					apartado: item.apartado,
-					cantidad: item.cantidad,
-					idArray: item.key,
-					nombre: item.nombre,
-					precio: item.precio,
-					refApartado: item.refApartado,
-					totalArticulo: item.totalArticulo,
-				};
-			});
-
-			try {
-				const { data } = await mutateREGISTER_VENTA({
-					variables: {
-						input: {
-							productos: listaComprasNew,
-							vendedor: auth.name,
-							folio: 1,
-							total: total,
-							efectivo: efectivo,
-							tarjeta: tarjeta,
-							aCuenta: aCuenta,
-							pagoCon: 0,
-							referencia: "",
-							notas: "",
-						},
-					},
+			if (cambio >= 0) {
+				setbtnLoading(true);
+				let listaComprasNew = listaCompras.map((item) => {
+					return {
+						apartado: item.apartado,
+						cantidad: item.cantidad,
+						idArray: item.key,
+						nombre: item.nombre,
+						precio: item.precio,
+						refApartado: item.refApartado,
+						totalArticulo: item.totalArticulo,
+					};
 				});
-				if (data) {
-					if (keyF === "F1") {
-						setfolio(data.registerVenta.folio);
-						setimprimir(true);
-					} else if (keyF === "F2") {
-						openNotification("success", "Venta guardada con exito");
-						initialState();
+
+				try {
+					const { data } = await mutateREGISTER_VENTA({
+						variables: {
+							input: {
+								productos: listaComprasNew,
+								vendedor: auth.name,
+								folio: 1,
+								total: total,
+								efectivo: efectivo,
+								tarjeta: tarjeta,
+								aCuenta: aCuenta,
+								pagoCon: 0,
+								referencia: "",
+								notas: "",
+							},
+						},
+					});
+					if (data) {
+						if (keyF === "F1") {
+							setfolio(data.registerVenta.folio);
+							setimprimir(true);
+						} else if (keyF === "F2") {
+							openNotification("success", "Venta guardada con exito");
+							initialState();
+						}
 					}
+				} catch (error) {
+					setbtnLoading(false);
+					ErrorConection(logout);
 				}
-			} catch (error) {
-				setbtnLoading(false);
-				ErrorConection(logout);
 			}
 		}
 	};

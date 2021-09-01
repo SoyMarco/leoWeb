@@ -29,9 +29,12 @@ const Login = () => {
 	const [loading, setloading] = useState(false);
 	const { setUser } = useAuth();
 	const { Header, Footer } = Layout;
+	const [screenWidth, setscreenWidth] = useState(1000);
 	const [form] = Form.useForm();
 	const contraseña = useRef();
 	useEffect(() => {
+		var detectorPantalla = window.screen.width;
+		setscreenWidth(detectorPantalla);
 		document.querySelector("#inputLogin").select();
 	}, []);
 	const { Option } = Select;
@@ -48,7 +51,11 @@ const Login = () => {
 			});
 			if (data) {
 				setloading(false);
-				window.location.href = `${UrlFrontend}caja`;
+				if (screenWidth > 600) {
+					window.location.href = `${UrlFrontend}caja`;
+				} else {
+					window.location.href = `${UrlFrontend}mobile/corte`;
+				}
 				const { token } = data.login;
 				setToken(token);
 				let dataToken = await decodeToken(token);
@@ -70,6 +77,8 @@ const Login = () => {
 			}
 		}
 	};
+
+	console.log(navigator.userAgent);
 	return (
 		<>
 			<Layout>
@@ -133,7 +142,7 @@ const Login = () => {
 						height: "75vh",
 					}}
 				>
-					<Card id='cardLogin'>
+					<Card id={screenWidth > 600 ? "cardLogin" : "cardLoginMobile"}>
 						<div
 							style={{
 								background: "#000058",
@@ -149,7 +158,6 @@ const Login = () => {
 								<h1 style={{ color: "white" }}>Ingresa a tu cuenta</h1>
 							</Row>
 						</div>
-						{/* Ingresar Precio */}
 						<div
 							style={{
 								textAlign: "center",
@@ -177,7 +185,7 @@ const Login = () => {
 										fontSize: "large",
 										fontWeight: "bold",
 										borderRadius: "50px",
-										width: "60%",
+										width: "80%",
 										padding: "5",
 										border: "0 0 0 0",
 										margin: "10px",
@@ -218,7 +226,7 @@ const Login = () => {
 										fontSize: "x-large",
 										fontWeight: "bold",
 										borderRadius: "50px",
-										maxWidth: "60%",
+										maxWidth: "80%",
 										padding: "5",
 										border: "0 0 0 0",
 										margin: "10px",

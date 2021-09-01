@@ -15,6 +15,7 @@ export default function EntradasSalidas() {
 	const { logout } = useAuth();
 	const history = useHistory();
 
+	const [btnLoading, setbtnLoading] = useState(false);
 	const [caja, setcaja] = useState(0);
 	const [entradaSalida, setentradaSalida] = useState(null);
 	const inputCaja = useRef();
@@ -24,28 +25,31 @@ export default function EntradasSalidas() {
 	}, [entradaSalida]);
 
 	const sendEntradaSalida = async () => {
-		let monto = 0;
-		if (entradaSalida === "Entrada") {
-			monto = parseFloat(caja);
-		} else if (entradaSalida === "Salida") {
-			monto = parseFloat(-caja);
-		}
-		if (monto !== 0) {
-			try {
-				const { data } = await mutateREGISTER_CAJA({
-					variables: {
-						input: {
-							tipo: "entradaSalida",
-							monto: monto,
+		if (btnLoading === false) {
+			setbtnLoading(true);
+			let monto = 0;
+			if (entradaSalida === "Entrada") {
+				monto = parseFloat(caja);
+			} else if (entradaSalida === "Salida") {
+				monto = parseFloat(-caja);
+			}
+			if (monto !== 0) {
+				try {
+					const { data } = await mutateREGISTER_CAJA({
+						variables: {
+							input: {
+								tipo: "entradaSalida",
+								monto: monto,
+							},
 						},
-					},
-				});
-				if (data) {
-					history.push("/");
-					openNotification("success", `${entradaSalida} guardado con exito`);
+					});
+					if (data) {
+						history.push("/");
+						openNotification("success", `${entradaSalida} guardado con exito`);
+					}
+				} catch (error) {
+					ErrorConection(logout);
 				}
-			} catch (error) {
-				ErrorConection(logout);
 			}
 		}
 	};
@@ -113,6 +117,7 @@ export default function EntradasSalidas() {
 							id='inputLogin'
 							type='number'
 							prefix={<span className='material-icons'>payments</span>}
+							loading={btnLoading}
 							style={{
 								color: "#000058",
 								// fontSize: 30,
@@ -143,6 +148,7 @@ export default function EntradasSalidas() {
 									fontSize: "large",
 									background: "linear-gradient(#2196F3,#0000E6)",
 								}}
+								loading={btnLoading}
 								onClick={() => setentradaSalida(null)}
 							>
 								Cancelar
@@ -157,6 +163,7 @@ export default function EntradasSalidas() {
 									fontSize: "large",
 									background: "linear-gradient(#2196F3,#0000E6)",
 								}}
+								loading={btnLoading}
 								onClick={() => sendEntradaSalida()}
 							>
 								Registrar
