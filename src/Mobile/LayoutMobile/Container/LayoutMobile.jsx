@@ -1,26 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Layout, Menu } from "antd";
+import { Layout } from "antd";
 import "antd/dist/antd.css";
-import { MdLocalGroceryStore } from "react-icons/md";
-import { FaCashRegister, FaWindowRestore } from "react-icons/fa";
-import { IoIosCash } from "react-icons/io";
 import "./layout.css";
 import "material-design-icons-iconfont";
 import { openNotification } from "Utils/openNotification";
-import { useHistory, useLocation, Link } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import useAuth from "hooks/useAuth";
-import { UrlFrontend } from "config/apollo";
-import { GiLargeDress } from "react-icons/gi";
-// import { RiFileSearchFill } from "react-icons/ri";
 import Horizontal from "../Components/Horizontal";
 import FooterHorizontal from "../Components/Footer";
 
 function LayoutForm({ children }) {
-	const [collapsed, setcollapsed] = useState(true);
-	const { Header, Content, Footer, Sider } = Layout;
+	// const [collapsed, setcollapsed] = useState(true);
+	const { Header, Content, Footer } = Layout;
 	const { logout, auth } = useAuth();
 	const [swtichstate, setswtichstate] = useState(true);
-	const [currentMenu, setcurrentMenu] = useState(1);
+	// const [currentMenu, setcurrentMenu] = useState(1);
 	const [titleWeb, settitleWeb] = useState(null);
 	const history = useHistory();
 	const Location = useLocation();
@@ -43,13 +37,13 @@ function LayoutForm({ children }) {
 	}, [Location]);
 
 	// const { SubMenu } = Menu;
-	const onCollapse = () => {
-		setcollapsed(!collapsed);
-		let title = Location.pathname;
-		if (title === "/") {
-			document.querySelector("#inputPrecio").select();
-		}
-	};
+	// const onCollapse = () => {
+	// 	setcollapsed(!collapsed);
+	// 	let title = Location.pathname;
+	// 	if (title === "/") {
+	// 		document.querySelector("#inputPrecio").select();
+	// 	}
+	// };
 
 	const logoutApp = () => {
 		setswtichstate(!swtichstate);
@@ -60,9 +54,9 @@ function LayoutForm({ children }) {
 
 		// setAuth(null);
 	};
-	const handleClick = (e) => {
-		setcurrentMenu(e.key);
-	};
+	// const handleClick = (e) => {
+	// 	setcurrentMenu(e.key);
+	// };
 	return (
 		<>
 			{titleWeb ? <title>{titleWeb}</title> : null}
