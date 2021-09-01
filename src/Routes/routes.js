@@ -1,17 +1,19 @@
 // Layouts
 import LayoutForm from "Pages/Layout/Container/Layout";
+import LayoutMobile from "Mobile/LayoutMobile/Container/LayoutMobile";
 
 // Pages
 import Principal from "Pages/Principal/container/Principal";
 import Corte from "Pages/Corte/Container/Corte";
-// import Apartados from "Pages/Apartados/Container/Apartados";
+
 import Apartado from "Pages/Apartado/Container/Apartado";
 import Error from "Pages/Error/Error";
 import Prueba from "Pages/prueba";
 import AddApartado from "Pages/AddApartado/Container/AddApartado";
 import Caja from "Pages/Caja/Container/Caja";
 import EntradasSalidas from "Pages/EntradasSalidas/Container/EntradasSalidas";
-
+import CorteMobile from "Mobile/Corte/Container/Corte";
+// import Apartados from "Pages/Apartados/Container/Apartados";
 const routes = [
 	{
 		path: "/",
@@ -61,7 +63,12 @@ const routes = [
 		component: EntradasSalidas,
 		exact: true,
 	},
-
+	{
+		path: "/mobile/corte",
+		layout: LayoutMobile,
+		component: CorteMobile,
+		exact: true,
+	},
 	{
 		layout: LayoutForm,
 		component: Error,
