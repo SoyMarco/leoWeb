@@ -51,6 +51,10 @@ function Principal() {
 		}
 	}, [Location, totalTotal]);
 	useEffect(() => {
+		var detectorPantalla = window.screen.width;
+		if (detectorPantalla < 600) {
+			history.push(`mobile/corte`);
+		}
 		selectInputPrecio();
 	}, []);
 	useEffect(() => {

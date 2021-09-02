@@ -77,8 +77,6 @@ const Login = () => {
 			}
 		}
 	};
-
-	console.log(navigator.userAgent);
 	return (
 		<>
 			<Layout>
