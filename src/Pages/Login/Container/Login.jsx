@@ -189,9 +189,6 @@ const Login = () => {
 										margin: "10px",
 									}}
 								>
-									<Option value='MARCO' key='MARCO'>
-										MARCO
-									</Option>
 									<Option value='PAO' key='PAO'>
 										PAO
 									</Option>
@@ -209,6 +206,12 @@ const Login = () => {
 									</Option>
 									<Option value='JESSICA' key='JESSICA'>
 										JESSICA
+									</Option>
+									<Option value='ROCIO' key='ROCIO'>
+										ROCIO
+									</Option>
+									<Option value='MARCO' key='MARCO'>
+										MARCO
 									</Option>
 								</Select>
 								<Input

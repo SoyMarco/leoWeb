@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { TablaProductos, TablaTotales, TablaVentas } from "../Components";
 import "./corte.css";
-import { Row, Divider } from "antd";
+import { Row, Divider, Col } from "antd";
 import { useQuery } from "@apollo/client";
 import { GET_VENTAS_DIA } from "../../../graphql/venta";
 import { GET_CAJA_DIA } from "../../../graphql/caja";
@@ -44,6 +44,7 @@ const Corte = () => {
 			setcajaDia(listaCaja);
 		}
 	}, [data2]);
+
 	return (
 		<>
 			<Row justify='center'>
@@ -68,13 +69,11 @@ const Corte = () => {
 				Total del día
 			</Divider>
 
-			<Row>
-				<TablaTotales
-					getVentasDia={getVentasDia}
-					cajaDia={cajaDia}
-					loading={loading}
-				/>
-			</Row>
+			<TablaTotales
+				getVentasDia={getVentasDia}
+				cajaDia={cajaDia}
+				loading={loading}
+			/>
 		</>
 	);
 };
