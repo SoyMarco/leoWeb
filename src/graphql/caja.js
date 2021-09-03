@@ -22,3 +22,19 @@ export const GET_CAJA_DIA = gql`
 		}
 	}
 `;
+export const GET_CAJA_DIA_ADMIN = gql`
+	query getCajaDiaAdmin {
+		getCajaDiaAdmin {
+			_id
+			tipo
+			monto
+			vendedor
+			createAt
+			cancelado {
+				status
+				fecha
+				vendedor
+			}
+		}
+	}
+`;
