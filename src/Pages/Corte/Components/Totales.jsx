@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Col, Row } from "antd";
+import { Col, Row, Card } from "antd";
 
 export default function Ventas({ loading, getVentasDia, cajaDia }) {
 	const [totales, settotales] = useState([]);
@@ -89,149 +89,149 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 		currency: "USD",
 	});
 	/*COLUMNAS  TOTALES */
-	const colTotales = [
-		{
-			title: "Id",
-			dataIndex: "key",
-			key: "key",
-			width: "30px",
-		},
-		{
-			title: "Inicio Caja",
-			dataIndex: "inicioCaja",
-			key: "inicioCaja",
-			render: (inicioCaja) => (
-				<h3
-					style={{
-						textAlignLast: "right",
-						fontWeight: "revert",
-						fontSize: "large",
-					}}
-				>
-					${inicioCaja}
-				</h3>
-			),
-		},
-		{
-			title: "Entradas Salidas",
-			dataIndex: "entSal",
-			key: "entSal",
-			render: (entSal) => (
-				<h3
-					style={
-						entSal > 0
-							? {
-									textAlignLast: "right",
-									fontWeight: "revert",
-									fontSize: "large",
-									color: "green",
-							  }
-							: {
-									textAlignLast: "right",
-									fontWeight: "revert",
-									fontSize: "large",
-									color: "red",
-							  }
-					}
-				>
-					${entSal}
-				</h3>
-			),
-		},
-		// {
-		// 	title: "Efectivo",
-		// 	dataIndex: "efectivo",
-		// 	key: "efectivo",
-		// 	render: (efectivo) => (
-		// 		<h3
-		// 			style={{
-		// 				textAlignLast: "right",
-		// 				fontWeight: "revert",
-		// 				fontSize: "large",
-		// 			}}
-		// 		>
-		// 			${efectivo}
-		// 		</h3>
-		// 	),
-		// },
-		{
-			title: "Venta con Tarjeta",
-			dataIndex: "tarjeta",
-			key: "tarjeta",
-			render: (tarjeta) => (
-				<h3
-					style={
-						tarjeta > 0
-							? {
-									textAlignLast: "right",
-									fontWeight: "revert",
-									fontSize: "large",
-									color: "green",
-							  }
-							: {
-									textAlignLast: "right",
-									fontWeight: "revert",
-									fontSize: "large",
-							  }
-					}
-				>
-					${tarjeta}
-				</h3>
-			),
-		},
-		// {
-		// 	title: "A cuenta",
-		// 	dataIndex: "aCuenta",
-		// 	key: "aCuenta",
-		// 	render: (aCuenta) => (
-		// 		<h3
-		// 			style={{
-		// 				textAlignLast: "right",
-		// 				fontWeight: "revert",
-		// 				fontSize: "large",
-		// 			}}
-		// 		>
-		// 			${aCuenta}
-		// 		</h3>
-		// 	),
-		// },
-		{
-			title: "VENTA TOTAL",
-			dataIndex: "total",
-			key: "total",
-			render: (total) => (
-				<h3
-					style={{
-						textAlignLast: "right",
-						fontWeight: "revert",
-						fontSize: "large",
-					}}
-				>
-					${total}
-				</h3>
-			),
-		},
-		{
-			title: "Efectivo en Caja",
-			dataIndex: "finCaja",
-			key: "finCaja",
-			render: (finCaja, record) => (
-				<h2
-					style={{
-						textAlignLast: "right",
-						color: "green",
-						fontWeight: "revert",
-						fontSize: "x-large",
-					}}
-				>
-					${finCaja}
-				</h2>
-			),
-		},
-	];
+	// const colTotales = [
+	// 	{
+	// 		title: "Id",
+	// 		dataIndex: "key",
+	// 		key: "key",
+	// 		width: "30px",
+	// 	},
+	// 	{
+	// 		title: "Inicio Caja",
+	// 		dataIndex: "inicioCaja",
+	// 		key: "inicioCaja",
+	// 		render: (inicioCaja) => (
+	// 			<h3
+	// 				style={{
+	// 					textAlignLast: "right",
+	// 					fontWeight: "revert",
+	// 					fontSize: "large",
+	// 				}}
+	// 			>
+	// 				${inicioCaja}
+	// 			</h3>
+	// 		),
+	// 	},
+	// 	{
+	// 		title: "Entradas Salidas",
+	// 		dataIndex: "entSal",
+	// 		key: "entSal",
+	// 		render: (entSal) => (
+	// 			<h3
+	// 				style={
+	// 					entSal > 0
+	// 						? {
+	// 								textAlignLast: "right",
+	// 								fontWeight: "revert",
+	// 								fontSize: "large",
+	// 								color: "green",
+	// 						  }
+	// 						: {
+	// 								textAlignLast: "right",
+	// 								fontWeight: "revert",
+	// 								fontSize: "large",
+	// 								color: "red",
+	// 						  }
+	// 				}
+	// 			>
+	// 				${entSal}
+	// 			</h3>
+	// 		),
+	// 	},
+	// 	// {
+	// 	// 	title: "Efectivo",
+	// 	// 	dataIndex: "efectivo",
+	// 	// 	key: "efectivo",
+	// 	// 	render: (efectivo) => (
+	// 	// 		<h3
+	// 	// 			style={{
+	// 	// 				textAlignLast: "right",
+	// 	// 				fontWeight: "revert",
+	// 	// 				fontSize: "large",
+	// 	// 			}}
+	// 	// 		>
+	// 	// 			${efectivo}
+	// 	// 		</h3>
+	// 	// 	),
+	// 	// },
+	// 	{
+	// 		title: "Venta con Tarjeta",
+	// 		dataIndex: "tarjeta",
+	// 		key: "tarjeta",
+	// 		render: (tarjeta) => (
+	// 			<h3
+	// 				style={
+	// 					tarjeta > 0
+	// 						? {
+	// 								textAlignLast: "right",
+	// 								fontWeight: "revert",
+	// 								fontSize: "large",
+	// 								color: "green",
+	// 						  }
+	// 						: {
+	// 								textAlignLast: "right",
+	// 								fontWeight: "revert",
+	// 								fontSize: "large",
+	// 						  }
+	// 				}
+	// 			>
+	// 				${tarjeta}
+	// 			</h3>
+	// 		),
+	// 	},
+	// 	// {
+	// 	// 	title: "A cuenta",
+	// 	// 	dataIndex: "aCuenta",
+	// 	// 	key: "aCuenta",
+	// 	// 	render: (aCuenta) => (
+	// 	// 		<h3
+	// 	// 			style={{
+	// 	// 				textAlignLast: "right",
+	// 	// 				fontWeight: "revert",
+	// 	// 				fontSize: "large",
+	// 	// 			}}
+	// 	// 		>
+	// 	// 			${aCuenta}
+	// 	// 		</h3>
+	// 	// 	),
+	// 	// },
+	// 	{
+	// 		title: "VENTA TOTAL",
+	// 		dataIndex: "total",
+	// 		key: "total",
+	// 		render: (total) => (
+	// 			<h3
+	// 				style={{
+	// 					textAlignLast: "right",
+	// 					fontWeight: "revert",
+	// 					fontSize: "large",
+	// 				}}
+	// 			>
+	// 				${total}
+	// 			</h3>
+	// 		),
+	// 	},
+	// 	{
+	// 		title: "Efectivo en Caja",
+	// 		dataIndex: "finCaja",
+	// 		key: "finCaja",
+	// 		render: (finCaja, record) => (
+	// 			<h2
+	// 				style={{
+	// 					textAlignLast: "right",
+	// 					color: "green",
+	// 					fontWeight: "revert",
+	// 					fontSize: "x-large",
+	// 				}}
+	// 			>
+	// 				${finCaja}
+	// 			</h2>
+	// 		),
+	// 	},
+	// ];
 	return (
 		<>
-			<Row>
+			{/* <Row>
 				<Col xs={24} sm={24} md={16}>
 					<Table
 						columns={colTotales}
@@ -248,58 +248,65 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 						// size="small"
 					/>
 				</Col>
-			</Row>
-			<Row style={{ margin: "50px 50px 0 50px" }}>
-				<Col xs={3}>
-					<h3>Efectivo Caja</h3>
-					<h3>Venta efectivo </h3>
-					<h3>Venta tarjeta</h3>
-					<h3>Venta a cuenta</h3>
-					<h3>Total venta</h3>
-					<h3>Total efectivo</h3>
-					<br />
-					<h3>Entradas</h3>
-					<h3>Salidas</h3>
-					<h3>Efectivo</h3>
-					<br />
-				</Col>
-				<Col xs={3} style={{ textAlignLast: "end" }}>
-					<h3>{formatter.format(totales[0]?.inicioCaja)}</h3>
-					<h3>{formatter.format(totales[0]?.ventasEfectivo)}</h3>
-					<h3>{formatter.format(totales[0]?.tarjeta)}</h3>
-					<h3>{formatter.format(totales[0]?.aCuenta)}</h3>
-					<h3>{formatter.format(totales[0]?.total)}</h3>
-					<h3>{formatter.format(totales[0]?.totalEfectivo)}</h3>
-					<br />
-					<h3>{formatter.format(totales[0]?.entradas)}</h3>
-					<h3>{formatter.format(totales[0]?.salidas)}</h3>
-					<h3 style={{ borderTop: "solid" }}>
-						{formatter.format(totales[0]?.efectivoFinalCaja)}{" "}
-					</h3>
-					<br />
-				</Col>
-				<Col xs={8} style={{ textAlignLast: "end" }}>
-					<h3>Recargas</h3>
-					<h3>0000000000</h3>
-				</Col>
-			</Row>
-			<br />
-			<Row style={{ margin: "0px 50px " }}>
-				<Col xs={7}>
-					<h3>Dinero en efectivo que hay en caja</h3>
-				</Col>
-				<Col xs={7} style={{ textAlignLast: "end" }}>
-					<h4>0000000000</h4>
+			</Row> */}
+			<Card title='CORTE' bordered={false}>
+				<Row style={{ margin: "15px 50px 0 50px" }}>
+					<Col xs={3}>
+						<h3>Incio Caja</h3>
+						<h3>Venta efectivo </h3>
+						<h3>Venta tarjeta</h3>
+						<h3>Venta a cuenta</h3>
+						<h3 style={{ fontWeight: "bold" }}>Total venta</h3>
+						<h3 style={{ fontWeight: "bold" }}>Total efectivo</h3>
+						<br />
+						<h3>Entradas (+)</h3>
+						<h3>Salidas (-)</h3>
+						<h3 style={{ borderTop: "solid", fontWeight: "bold" }}>
+							Efectivo final
+						</h3>
+						<br />
+					</Col>
+					<Col xs={3} style={{ textAlignLast: "end" }}>
+						<h3>{formatter.format(totales[0]?.inicioCaja)}</h3>
+						<h3>{formatter.format(totales[0]?.ventasEfectivo)}</h3>
+						<h3>{formatter.format(totales[0]?.tarjeta)}</h3>
+						<h3>{formatter.format(totales[0]?.aCuenta)}</h3>
+						<h3 style={{ fontWeight: "bold" }}>
+							{formatter.format(totales[0]?.total)}
+						</h3>
+						<h3 style={{ fontWeight: "bold" }}>
+							{formatter.format(totales[0]?.totalEfectivo)}
+						</h3>
+						<br />
+						<h3>{formatter.format(totales[0]?.entradas)}</h3>
+						<h3>{formatter.format(totales[0]?.salidas)}</h3>
+						<h3 style={{ borderTop: "solid", fontWeight: "bold" }}>
+							{formatter.format(totales[0]?.efectivoFinalCaja)}{" "}
+						</h3>
+						<br />
+					</Col>
+					{/* <Col xs={8} style={{ textAlignLast: "end" }}>
+						<h3>Recargas</h3>
+						<h3>0000000000</h3>
+						<br />
+						<br />
+						<h3>Dinero en efectivo que hay en caja</h3>
+						<h4>$1000</h4>
+						<h4>$500</h4>
+						<h4>$200</h4>
+						<h4>$100</h4>
+						<h4>$50</h4>
+						<h4>$20</h4>
+						<h4>$10</h4>
+						<h4>$5</h4>
+						<h4>$2</h4>
+						<h4>$1</h4>
+						<h4>$0.50</h4>
 
-					<h4>0000000000</h4>
-					<h4>0000000000</h4>
-					<h4>0000000000</h4>
-					<h4>0000000000</h4>
-
-					<h3>0000000000</h3>
-				</Col>
-			</Row>
-			<br />
+						<h3>0000000000</h3>
+					</Col> */}
+				</Row>
+			</Card>
 		</>
 	);
 }
