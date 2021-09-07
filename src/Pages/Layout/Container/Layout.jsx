@@ -65,6 +65,8 @@ function LayoutForm({ children }) {
 	return (
 		<>
 			{titleWeb ? <title>{titleWeb}</title> : null}
+
+			{/* LAYOUT ESCRITORIO */}
 			<Layout
 				style={{
 					minHeight: "100vh",

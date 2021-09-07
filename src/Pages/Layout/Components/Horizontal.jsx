@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Menu, Switch, Popconfirm, Tooltip } from "antd";
 import { Avatar } from "antd";
 import LogoLeo from "assets/png/logo.png";
 import { FaUserAstronaut } from "react-icons/fa";
 import BuscadorApartados from "Pages/BuscadorApartados/Container/BuscadorApartados";
+import { SyncOutlined } from "@ant-design/icons";
+import GetVentasMobile from "Pages/GetVentasMobile/Container/GetVentasMobile";
+
 export default function Horizontal({
 	Header,
 	history,
@@ -11,8 +14,13 @@ export default function Horizontal({
 	logoutApp,
 	swtichstate,
 }) {
+	const [spinMobile, setspinMobile] = useState(false);
+
 	return (
 		<>
+			{/* GET VENTAS MOBILE */}
+			<GetVentasMobile spinMobile={spinMobile} />
+
 			{/* HORIZONTAL */}
 			<Header
 				style={{
@@ -71,6 +79,25 @@ export default function Horizontal({
 					>
 						{/* BUSCADOR RAPIDO DE APARTADOS */}
 						<BuscadorApartados />
+					</Menu.Item>
+					<Menu.Item
+						key='headerMobile'
+						// onClick={() => history.push("/")}
+						style={{
+							background: "transparent",
+							margin: "2px 40px",
+						}}
+					>
+						<Tooltip
+							placement='bottom'
+							title='Si estoy activo puedes imprimir las ventas en Mobile más rapido'
+						>
+							<SyncOutlined
+								style={{ fontSize: 25 }}
+								spin={spinMobile}
+								onClick={() => setspinMobile(!spinMobile)}
+							/>
+						</Tooltip>
 					</Menu.Item>
 					<Menu.Item
 						key='header4'
