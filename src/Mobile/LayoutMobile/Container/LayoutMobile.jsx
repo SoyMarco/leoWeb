@@ -7,6 +7,7 @@ import { openNotification } from "Utils/openNotification";
 import { useHistory, useLocation } from "react-router-dom";
 import useAuth from "hooks/useAuth";
 import Horizontal from "../Components/Horizontal";
+
 import FooterHorizontal from "../Components/Footer";
 
 function LayoutForm({ children }) {
@@ -76,7 +77,7 @@ function LayoutForm({ children }) {
 					swtichstate={swtichstate}
 				/>
 
-				{/* VERTICAL */}
+				{/* FOOTER HORIZONTAL*/}
 				<Layout>
 					<Layout>
 						{/* CONTENIDO DE VENTAS */}

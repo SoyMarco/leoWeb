@@ -13,6 +13,7 @@ import AddApartado from "Pages/AddApartado/Container/AddApartado";
 import Caja from "Pages/Caja/Container/Caja";
 import EntradasSalidas from "Pages/EntradasSalidas/Container/EntradasSalidas";
 import CorteMobile from "Mobile/Corte/Container/Corte";
+import VentaMobile from "Mobile/Ventas/Container/Ventas";
 // import Apartados from "Pages/Apartados/Container/Apartados";
 const routes = [
 	{
@@ -67,6 +68,12 @@ const routes = [
 		path: "/mobile/corte",
 		layout: LayoutMobile,
 		component: CorteMobile,
+		exact: true,
+	},
+	{
+		path: "/mobile/venta",
+		layout: LayoutMobile,
+		component: VentaMobile,
 		exact: true,
 	},
 	{

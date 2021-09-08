@@ -77,3 +77,36 @@ export const GET_HEROKU_DESPIERTO = gql`
 		}
 	}
 `;
+export const GET_VENTAS_MOBILE = gql`
+	query getVentasMobile {
+		getVentasMobile {
+			id
+			mobile
+			vendedor
+			createAt
+			folio
+			cancelado
+			total
+			efectivo
+			tarjeta
+			aCuenta
+			pagoCon
+			productos {
+				_id
+				idArray
+				nombre
+				precio
+				cantidad
+				cancelado
+				totalArticulo
+				apartado
+				refApartado
+			}
+		}
+	}
+`;
+export const VENTA_MOBILE_FALSE = gql`
+	mutation ventaMobileFalse($input: CancelarVentaInput) {
+		ventaMobileFalse(input: $input)
+	}
+`;

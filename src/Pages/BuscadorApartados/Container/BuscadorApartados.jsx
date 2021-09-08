@@ -3,24 +3,24 @@ import { Row, Select, ConfigProvider, Result } from "antd";
 import "./buscarApartados.css";
 import { useQuery } from "@apollo/client";
 import { GET_APARTADOS_BUSCADOR } from "graphql/apartado";
-import { GET_HEROKU_DESPIERTO } from "graphql/venta";
+// import { GET_HEROKU_DESPIERTO } from "graphql/venta";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
 
 export default function BuscadorApartados() {
 	let { data, loading, refetch } = useQuery(GET_APARTADOS_BUSCADOR);
-	let { startPolling, stopPolling } = useQuery(GET_HEROKU_DESPIERTO);
+	// let { startPolling, stopPolling } = useQuery(GET_HEROKU_DESPIERTO);
 	const [urlFolio, seturlFolio] = useState(0);
 	// const [valueSearch, setvalueSearch] = useState("");
 	const { Option } = Select;
 	const history = useHistory();
 
-	useEffect(() => {
-		startPolling(300000);
-		return () => {
-			stopPolling();
-		};
-	}, [startPolling, stopPolling]);
+	// useEffect(() => {
+	// 	startPolling(300000);
+	// 	return () => {
+	// 		stopPolling();
+	// 	};
+	// }, [startPolling, stopPolling]);
 
 	useEffect(() => {
 		console.log(urlFolio);
