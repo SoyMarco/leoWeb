@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Table, Input, Button, Result, Row } from "antd";
+import { Table, Input, Button, Result, Row, AutoComplete } from "antd";
 import { MdDelete, MdLocalGroceryStore } from "react-icons/md";
 import { DollarCircleOutlined } from "@ant-design/icons";
-import { GiLargeDress } from "react-icons/gi";
+// import { GiLargeDress } from "react-icons/gi";
 import { keyBlock } from "Utils";
 import useAuth from "hooks/useAuth";
 
@@ -11,6 +11,7 @@ export default function ProductsAddApartado({
 	prev,
 	setlistaCompras,
 	listaCompras,
+	getProductsName,
 }) {
 	const [idArticulo, setidArticulo] = useState(0);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
@@ -20,7 +21,7 @@ export default function ProductsAddApartado({
 	const { auth } = useAuth();
 
 	useEffect(() => {
-		document.querySelector("#inputNameProduct").select();
+		// document.querySelector("#inputNameProduct").select();
 	}, []);
 
 	const click = (record, rowIndex) => {
@@ -99,14 +100,14 @@ export default function ProductsAddApartado({
 		}
 	};
 	const columns = [
-		{
-			title: "ID",
-			dataIndex: "key",
-			key: "key",
-			sorter: (a, b) => b.key - a.key,
-			defaultSortOrder: "ascend",
-			width: "60px",
-		},
+		// {
+		// 	title: "ID",
+		// 	dataIndex: "key",
+		// 	key: "key",
+		// 	sorter: (a, b) => b.key - a.key,
+		// 	defaultSortOrder: "ascend",
+		// 	width: "60px",
+		// },
 		{
 			title: "Producto",
 			dataIndex: "nombre",
@@ -176,7 +177,8 @@ export default function ProductsAddApartado({
 				}}
 			>
 				{/* Ingresar Precio */}
-				<Input
+
+				{/* <Input
 					id='inputNameProduct'
 					// <GiLargeDress style={{ color: "darkblue" }} />
 					prefix={<GiLargeDress style={{ marginLeft: "20px" }} />}
@@ -195,6 +197,31 @@ export default function ProductsAddApartado({
 					value={nombre}
 					// onChange={handlePrecio}
 					onChange={(e) => setnombre(e.target.value.toUpperCase())}
+				/> */}
+				<AutoComplete
+					defaultActiveFirstOption={true}
+					id='inputNameProduct'
+					autoFocus={true}
+					backfill={true}
+					size='large'
+					onKeyUp={pressKeyEnter}
+					onKeyDown={keyNumber}
+					style={{
+						color: "green",
+						fontSize: "large",
+						fontWeight: "bold",
+						borderRadius: "50px",
+						width: "40%",
+						padding: "0 0 0 0px",
+						border: "0 0 0 0",
+					}}
+					value={nombre}
+					onChange={(e) => setnombre(e.toUpperCase())}
+					options={getProductsName}
+					placeholder='Ingresa la prenda'
+					filterOption={(inputValue, option) =>
+						option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+					}
 				/>
 				<Input
 					id='inputPriceProduct'

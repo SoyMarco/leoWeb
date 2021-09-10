@@ -190,12 +190,21 @@ const Cobrar = ({
 				footer={[
 					<Row justify='space-around'>
 						<Button
-							style={{
-								background: "linear-gradient(#32A632,#005800)",
-								color: "white",
-								fontWeight: "bold",
-								width: 230,
-							}}
+							style={
+								cambio < 0
+									? {
+											background: "grey",
+											color: "white",
+											fontWeight: "bold",
+											width: 230,
+									  }
+									: {
+											background: "linear-gradient(#32A632,#005800)",
+											color: "white",
+											fontWeight: "bold",
+											width: 230,
+									  }
+							}
 							shape='round'
 							// loading={loading}
 							// disabled={cambio < 0}
@@ -206,12 +215,21 @@ const Cobrar = ({
 							Imprimir F1
 						</Button>
 						<Button
-							style={{
-								background: "linear-gradient(#3232A6,#000058)",
-								color: "white",
-								fontWeight: "bold",
-								width: 230,
-							}}
+							style={
+								cambio < 0
+									? {
+											background: "grey",
+											color: "white",
+											fontWeight: "bold",
+											width: 230,
+									  }
+									: {
+											background: "linear-gradient(#3232A6,#000058)",
+											color: "white",
+											fontWeight: "bold",
+											width: 230,
+									  }
+							}
 							shape='round'
 							// loading={loading}
 							// disabled={cambio < 0}

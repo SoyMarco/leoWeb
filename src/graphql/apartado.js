@@ -168,7 +168,6 @@ export const GET_APARTADOS_BUSCADOR = gql`
 		}
 	}
 `;
-
 export const ADD_ABONO = gql`
 	mutation addAbono($input: AbonoApartadoInput) {
 		addAbono(input: $input) {
@@ -305,7 +304,6 @@ export const ADD_PRODUCTO = gql`
 		}
 	}
 `;
-
 export const CANCEL_ENTREGA = gql`
 	mutation cancelEntrega($input: cancelEntregaInput) {
 		cancelEntrega(input: $input)
@@ -412,6 +410,13 @@ export const REGISTER_APARTADO = gql`
 				fecha
 				vendedor
 			}
+		}
+	}
+`;
+export const GET_PRODUCTS_NAME = gql`
+	query getProductsName {
+		getProductsName {
+			value
 		}
 	}
 `;

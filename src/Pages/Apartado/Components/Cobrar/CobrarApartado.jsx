@@ -185,7 +185,7 @@ const CobrarApartado = ({
 					}
 				} catch (error) {
 					ErrorConection(logout);
-					return false;
+					setbtnLoading(false);
 				}
 			}
 		}
@@ -226,12 +226,21 @@ const CobrarApartado = ({
 				footer={[
 					<Row justify='space-around'>
 						<Button
-							style={{
-								background: "linear-gradient(#32A632,#005800)",
-								color: "white",
-								fontWeight: "bold",
-								width: 230,
-							}}
+							style={
+								cambio < 0
+									? {
+											background: "grey",
+											color: "white",
+											fontWeight: "bold",
+											width: 230,
+									  }
+									: {
+											background: "linear-gradient(#32A632,#005800)",
+											color: "white",
+											fontWeight: "bold",
+											width: 230,
+									  }
+							}
 							shape='round'
 							// loading={loading}
 							// disabled={cambio < 0}
@@ -242,12 +251,21 @@ const CobrarApartado = ({
 							Imprimir F1
 						</Button>
 						<Button
-							style={{
-								background: "linear-gradient(#3232A6,#000058)",
-								color: "white",
-								fontWeight: "bold",
-								width: 230,
-							}}
+							style={
+								cambio < 0
+									? {
+											background: "grey",
+											color: "white",
+											fontWeight: "bold",
+											width: 230,
+									  }
+									: {
+											background: "linear-gradient(#3232A6,#000058)",
+											color: "white",
+											fontWeight: "bold",
+											width: 230,
+									  }
+							}
 							shape='round'
 							// loading={loading}
 							// disabled={cambio < 0}
