@@ -136,6 +136,14 @@ const Imprimir = ({ imprimir, setimprimir, stateRecord, auth }) => {
 						<h3>Cambio: </h3>
 						<h2>${cambio}</h2>
 					</row>
+					<br></br>
+					<row className='cambio'>
+						<h3>.</h3>
+					</row>
+					<br></br>
+					<row className='cambio'>
+						<h3>.</h3>
+					</row>
 				</div>
 			</Modal>
 		</>

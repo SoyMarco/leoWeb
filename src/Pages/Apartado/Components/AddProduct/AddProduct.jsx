@@ -3,11 +3,12 @@ import { SaveFilled } from "@ant-design/icons";
 import { GiLargeDress } from "react-icons/gi";
 import { FaMoneyBillWave } from "react-icons/fa";
 import { keyBlock } from "Utils";
-import { Row, Button, Modal, Input, Form } from "antd";
+import { Row, Button, Modal, Input, Form, AutoComplete } from "antd";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import useAuth from "hooks/useAuth";
-
+import { useQuery } from "@apollo/client";
+import { GET_PRODUCTS_NAME } from "graphql/apartado";
 import { useMutation } from "@apollo/client";
 import { ADD_PRODUCTO } from "graphql/apartado";
 
@@ -18,6 +19,7 @@ export default function AddProduct({
 	dataApartado,
 }) {
 	const [mutateADD_PRODUCTO] = useMutation(ADD_PRODUCTO);
+	let { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
 	const { logout } = useAuth();
 	const [btnLoading, setbtnLoading] = useState(false);
 	const [btnDisabled, setbtnDisabled] = useState(true);
@@ -85,6 +87,11 @@ export default function AddProduct({
 	const pressKeyEnter = (e) => {
 		if (e.keyCode === 13) {
 			agregarProducto();
+		}
+	};
+	const keyNumber = (e) => {
+		if (e.keyCode >= 96 && e.keyCode <= 105) {
+			document.querySelector("#addProductPrecio").select();
 		}
 	};
 	return (
@@ -157,13 +164,41 @@ export default function AddProduct({
 					onChange={(e) => setnombre(e.target.value.toUpperCase())}
 					loading={btnLoading}
 				>
-					<Input
+					{/* <Input
 						value={nombre}
 						id='addProductNombre'
 						className='labelAddProducts'
 						prefix={<GiLargeDress style={{ color: "gray" }} />}
 						// onKeyUp={pressKeyPrecio}
 						// onKeyDown={keyBlock}
+					/> */}
+					<AutoComplete
+						defaultActiveFirstOption={true}
+						autoFocus={true}
+						backfill={true}
+						size='large'
+						onKeyUp={pressKeyEnter}
+						onKeyDown={keyNumber}
+						style={{
+							color: "green",
+							fontSize: "large",
+							fontWeight: "bold",
+							borderRadius: "50px",
+							width: "100%",
+							padding: "0 0 0 0px",
+							border: "0 0 0 0",
+						}}
+						value={nombre}
+						id='addProductNombre'
+						className='labelAddProducts'
+						prefix={<GiLargeDress style={{ color: "gray" }} />}
+						onChange={(e) => setnombre(e.toUpperCase())}
+						options={getProductsName?.getProductsName}
+						placeholder='Ingresa la prenda'
+						filterOption={(inputValue, option) =>
+							option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+							-1
+						}
 					/>
 				</Form.Item>
 

@@ -1,18 +1,23 @@
 import React, { useState, useRef, useEffect } from "react";
 import ProductsAddApartado from "../Components/ProductsAddApartado/ProductsAddApartado";
 import { SmileOutlined, DollarCircleOutlined } from "@ant-design/icons";
-import { Steps, Button, message, Card, Input, Row } from "antd";
+import { Steps, Button, message, Card, Input, Row, AutoComplete } from "antd";
 import ImprimirNewApartado from "../Components/ImprimirApartado/ImprimirNewApartado";
 import CobrarNewApartado from "../Components/CobrarNewApartado/CobrarNewApartado";
 import { useHistory } from "react-router-dom";
 import useAuth from "hooks/useAuth";
 import { keyBlock } from "Utils";
 import "./addApartado.css";
+import { useQuery } from "@apollo/client";
+import { GET_APARTADOS_BUSCADOR, GET_PRODUCTS_NAME } from "graphql/apartado";
 
 export default function AddApartado() {
+	let { data } = useQuery(GET_APARTADOS_BUSCADOR);
+	let { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
 	const history = useHistory();
 	const [current, setCurrent] = useState(0);
 	const [cliente, setcliente] = useState("");
+	const [optionsClientes, setoptionsClientes] = useState([]);
 	const [listaCompras, setlistaCompras] = useState([]);
 	const [modalCobrar, setmodalCobrar] = useState(false);
 	const [totalProductos, settotalProductos] = useState(0);
@@ -25,8 +30,29 @@ export default function AddApartado() {
 	const { auth } = useAuth();
 
 	useEffect(() => {
-		inputNameClient.current.select();
+		// inputNameClient.current.select();
 	}, []);
+
+	useEffect(() => {
+		if (data?.getApartados) {
+			let { getApartados } = data;
+			let listClientes = [];
+			for (let i = 0; i < getApartados.length; i++) {
+				const element = getApartados[i].cliente;
+				let repetido = false;
+				for (let x = 0; x < listClientes.length; x++) {
+					if (listClientes[x].value === element) {
+						repetido = true;
+					}
+				}
+				if (repetido === false) {
+					listClientes.push({ value: element });
+				}
+			}
+			setoptionsClientes(listClientes);
+		}
+	}, [data]);
+
 	useEffect(() => {
 		setrestaria(totalTotal - abono);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -35,7 +61,7 @@ export default function AddApartado() {
 		if (current === 2) {
 			inputAbono.current.select();
 		} else if (current === 0) {
-			inputNameClient.current.select();
+			// inputNameClient.current.select();
 		}
 	}, [current]);
 	useEffect(() => {
@@ -93,28 +119,65 @@ export default function AddApartado() {
 		{
 			title: cliente ? cliente : "Nombre cliente",
 			content: (
-				<Row justify='center'>
-					<Input
-						id='inputNameClient'
-						prefix={<SmileOutlined style={{ marginLeft: "20px" }} />}
-						style={{
-							color: "blue",
-							// fontSize: 30,
-							fontSize: "x-large",
-							fontWeight: "bold",
-							borderRadius: "50px",
-							maxWidth: "80%",
-							margin: "60px 0 ",
-						}}
-						onChange={(e) => setcliente(e.target.value.toUpperCase())}
-						value={cliente}
-						ref={inputNameClient}
-						onKeyUp={pressKeyEnter}
-						// onKeyDown={keyBlock}
-						// value={precio.precio}
-						// onChange={handlePrecio}
-					/>
-				</Row>
+				<>
+					{/* <Row justify='center'>
+						<Input
+							id='inputNameClient'
+							prefix={<SmileOutlined style={{ marginLeft: "20px" }} />}
+							style={{
+								color: "blue",
+								// fontSize: 30,
+								fontSize: "x-large",
+								fontWeight: "bold",
+								borderRadius: "50px",
+								maxWidth: "80%",
+								margin: "60px 0 ",
+							}}
+							onChange={(e) => setcliente(e.target.value.toUpperCase())}
+							value={cliente}
+							ref={inputNameClient}
+							onKeyUp={pressKeyEnter}
+							// onKeyDown={keyBlock}
+							// value={precio.precio}
+							// onChange={handlePrecio}
+						/>
+					</Row> */}
+					<Row justify='center'>
+						<SmileOutlined
+							style={{
+								color: "blue",
+								fontSize: "xx-large",
+								margin: "65px 10px ",
+							}}
+						/>
+						<AutoComplete
+							defaultActiveFirstOption={true}
+							id='inputNameClient'
+							ref={inputNameClient}
+							autoFocus={true}
+							backfill={true}
+							size='large'
+							onKeyUp={pressKeyEnter}
+							// onSelect={pressKeyEnter}
+							style={{
+								color: "blue",
+								fontSize: "x-large",
+								fontWeight: "bold",
+								borderRadius: "50px",
+								width: "80%",
+								margin: "60px 0 ",
+							}}
+							onChange={(e) => setcliente(e.toUpperCase())}
+							value={cliente}
+							options={optionsClientes}
+							placeholder='Ingresa el nombre de cliente'
+							filterOption={(inputValue, option) =>
+								option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+								-1
+							}
+						/>
+					</Row>
+				</>
 			),
 		},
 		{
@@ -159,6 +222,7 @@ export default function AddApartado() {
 						prev={prev}
 						setlistaCompras={setlistaCompras}
 						listaCompras={listaCompras}
+						getProductsName={getProductsName?.getProductsName}
 					/>
 				</Card>
 			),
@@ -281,7 +345,7 @@ export default function AddApartado() {
 							{current < steps.length - 1 && (
 								<Button
 									shape='round'
-									// onClick={() => next()}
+									onClick={() => next()}
 									style={{
 										background: "linear-gradient(#32A632,#005800)",
 										color: "white",

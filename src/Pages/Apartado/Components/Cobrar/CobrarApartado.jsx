@@ -185,7 +185,7 @@ const CobrarApartado = ({
 					}
 				} catch (error) {
 					ErrorConection(logout);
-					return false;
+					setbtnLoading(false);
 				}
 			}
 		}
