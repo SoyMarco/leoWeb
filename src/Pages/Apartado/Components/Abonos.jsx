@@ -75,8 +75,8 @@ export default function Abonos({
 				});
 				if (data) {
 					openNotification("success", `Abono borrado`);
-					refetch();
 					setloader(false);
+					refetch();
 				}
 			}
 		} catch (error) {
@@ -151,10 +151,12 @@ export default function Abonos({
 				<Tooltip placement='bottom' title='Borrar abono'>
 					<Row justify='center'>
 						<Popconfirm
+							disabled={loader || loading}
 							title='¿Deseas eliminarlo?'
 							onConfirm={() => borrarAbono(record, "borrar")}
 						>
 							<Button
+								loading={loader || loading}
 								shape='circle'
 								icon={<MdDelete style={{ color: "#c5221f" }} size='25px' />}
 							></Button>

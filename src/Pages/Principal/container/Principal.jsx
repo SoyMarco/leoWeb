@@ -10,8 +10,12 @@ import { keyBlock } from "Utils";
 import { useLocation } from "react-router-dom";
 import "./principal.css";
 import { UrlFrontend } from "config/apollo";
+import { useApolloClient } from "@apollo/client";
+import { VENTA_F3 } from "graphql/venta";
 
 function Principal() {
+	const client = useApolloClient();
+
 	const history = useHistory();
 
 	const Location = useLocation();
@@ -56,6 +60,44 @@ function Principal() {
 			history.push(`mobile/corte`);
 		}
 		selectInputPrecio();
+
+		// Venta F3
+
+		const ventaF3 = client.readQuery({
+			query: VENTA_F3,
+		});
+		if (ventaF3) {
+			let nuevaLista = [...listaCompras];
+			let idArray = idArticulo;
+			for (let i = 0; i < ventaF3?.ventaF3.length; i++) {
+				const element = ventaF3?.ventaF3[i];
+
+				let {
+					// aCuenta,
+					// efectivo,
+					folio,
+					// notas,
+					// pagoCon,
+					// productos,
+					referencia,
+					// tarjeta,
+					total,
+				} = element;
+
+				nuevaLista.push({
+					key: idArray + 1,
+					nombre: "APARTADO",
+					precio: Math.round(total * 100) / 100,
+					cantidad: 1,
+					apartado: folio,
+					refApartado: referencia,
+					totalArticulo: Math.round(total * 100) / 100,
+				});
+				idArray = idArray + 1;
+			}
+			setidArticulo(idArray);
+			setlistaCompras(nuevaLista);
+		}
 	}, []);
 	useEffect(() => {
 		selectLastRow();

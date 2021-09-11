@@ -8,7 +8,6 @@ export const REGISTER_VENTA = gql`
 		}
 	}
 `;
-
 export const GET_VENTAS_DIA = gql`
 	query getVentasDia {
 		getVentasDia {
@@ -35,7 +34,6 @@ export const GET_VENTAS_DIA = gql`
 		}
 	}
 `;
-
 export const GET_VENTAS_DIA_ADMIN = gql`
 	query getVentasDiaAdmin {
 		getVentasDiaAdmin {
@@ -63,13 +61,11 @@ export const GET_VENTAS_DIA_ADMIN = gql`
 		}
 	}
 `;
-
 export const CANCELAR_VENTA = gql`
 	mutation cancelarVenta($input: CancelarVentaInput) {
 		cancelarVenta(input: $input)
 	}
 `;
-
 export const GET_HEROKU_DESPIERTO = gql`
 	query getHerokuDespierto {
 		getHerokuDespierto {
@@ -108,5 +104,21 @@ export const GET_VENTAS_MOBILE = gql`
 export const VENTA_MOBILE_FALSE = gql`
 	mutation ventaMobileFalse($input: CancelarVentaInput) {
 		ventaMobileFalse(input: $input)
+	}
+`;
+export const VENTA_F3 = gql`
+	query ventaF3 {
+		ventaF3 {
+			productos
+			vendedor
+			folio
+			total
+			efectivo
+			tarjeta
+			aCuenta
+			pagoCon
+			referencia
+			notas
+		}
 	}
 `;

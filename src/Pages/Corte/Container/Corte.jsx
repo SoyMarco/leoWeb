@@ -10,7 +10,9 @@ import useAuth from "hooks/useAuth";
 import "./corte.css";
 
 const Corte = () => {
-	let { data, loading, error, refetch } = useQuery(GET_VENTAS_DIA);
+	let { data, loading, error, refetch } = useQuery(GET_VENTAS_DIA, {
+		notifyOnNetworkStatusChange: true,
+	});
 	let { data: data2, refetch: refetchCaja } = useQuery(GET_CAJA_DIA);
 	const [getVentasDia, setgetVentasDia] = useState([]);
 	const [cajaDia, setcajaDia] = useState([]);
