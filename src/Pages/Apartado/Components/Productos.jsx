@@ -68,36 +68,40 @@ export default function Productos({
 		return fecha;
 	};
 	const borrarEntregarProduct = async (item, borrarEntregar) => {
-		setloader(true);
-		let status = true;
-		if (item.entregado[0] && item.entregado[0].status) {
-			status = !item.entregado[0].status;
-		}
-		try {
-			if (item._id) {
-				const { data } = await mutateCANCELAR_PRODUCTO_APARTDO({
-					// Parameters
-					variables: {
-						input: {
-							_id: item._id,
-							status: status,
-							borrarEntregar: borrarEntregar,
-						},
-					},
-				});
-				if (data) {
-					if (borrarEntregar === "borrar") {
-						openNotification("success", `Articulo borrado con exito`);
-					} else if (borrarEntregar === "entregar") {
-						openNotification("success", `Articulo modificado con exito`);
-					}
-					refetch();
-					setloader(false);
-				}
+		if (loader === false) {
+			setloader(true);
+			let status = true;
+			if (item.entregado[0] && item.entregado[0].status) {
+				status = !item.entregado[0].status;
 			}
-		} catch (error) {
-			setloader(false);
-			ErrorConection(logout);
+			try {
+				if (item._id) {
+					const { data } = await mutateCANCELAR_PRODUCTO_APARTDO({
+						// Parameters
+						variables: {
+							input: {
+								_id: item._id,
+								status: status,
+								borrarEntregar: borrarEntregar,
+							},
+						},
+					});
+					if (data) {
+						if (borrarEntregar === "borrar") {
+							openNotification("success", `Articulo borrado con exito`);
+						} else if (borrarEntregar === "entregar") {
+							openNotification("success", `Articulo modificado con exito`);
+						}
+						refetch();
+						setTimeout(() => {
+							setloader(false);
+						}, 1000);
+					}
+				}
+			} catch (error) {
+				setloader(false);
+				ErrorConection(logout);
+			}
 		}
 	};
 
@@ -198,6 +202,7 @@ export default function Productos({
 							onConfirm={() => borrarEntregarProduct(record, "borrar")}
 						>
 							<Button
+								loading={loader}
 								shape='circle'
 								icon={<MdDelete style={{ color: "#c5221f" }} size='25px' />}
 							></Button>

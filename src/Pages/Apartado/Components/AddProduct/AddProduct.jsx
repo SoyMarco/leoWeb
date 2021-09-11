@@ -49,29 +49,31 @@ export default function AddProduct({
 	}, [nombre, precio]);
 
 	const addProducto = async () => {
-		setbtnLoading(true);
-		try {
-			if (idApartado) {
-				const { data } = await mutateADD_PRODUCTO({
-					// Parameters
-					variables: {
-						input: {
-							id: idApartado,
-							nombre: nombre,
-							precio: parseFloat(precio),
+		if (btnLoading === false) {
+			setbtnLoading(true);
+			try {
+				if (idApartado) {
+					const { data } = await mutateADD_PRODUCTO({
+						// Parameters
+						variables: {
+							input: {
+								id: idApartado,
+								nombre: nombre,
+								precio: parseFloat(precio),
+							},
 						},
-					},
-				});
-				if (data) {
-					openNotification("success", `Articulo agregado con exito`);
-					refetch();
-					setbtnLoading(false);
-					setmodalAddProduct(false);
+					});
+					if (data) {
+						openNotification("success", `Articulo agregado con exito`);
+						refetch();
+						setbtnLoading(false);
+						setmodalAddProduct(false);
+					}
 				}
+			} catch (error) {
+				setbtnLoading(false);
+				ErrorConection(logout);
 			}
-		} catch (error) {
-			setbtnLoading(false);
-			ErrorConection(logout);
 		}
 	};
 	const agregarProducto = () => {

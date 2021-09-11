@@ -6,10 +6,12 @@ import ImprimirApartado from "../ImprimirApartado/ImprimirApartado";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";
-import { useMutation } from "@apollo/client";
+import { useMutation, useApolloClient } from "@apollo/client";
 import { ADD_ABONO } from "graphql/apartado";
 import { REGISTER_VENTA } from "graphql/venta";
 import useAuth from "hooks/useAuth";
+import { VENTA_F3 } from "graphql/venta";
+import { useHistory } from "react-router-dom";
 
 // import "./cobrar.css";
 
@@ -24,6 +26,8 @@ const CobrarApartado = ({
 	inputAbono,
 	dataApartado,
 }) => {
+	const history = useHistory();
+	const client = useApolloClient();
 	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
 	const [mutateADD_ABONO] = useMutation(ADD_ABONO);
 	const [form] = Form.useForm();
@@ -82,7 +86,7 @@ const CobrarApartado = ({
 		}
 		// F3
 		if (e.keyCode === 114) {
-			document.querySelector("#cobrarTarjeta").select();
+			savePrintNewV("F3");
 		}
 	};
 
@@ -162,30 +166,58 @@ const CobrarApartado = ({
 					refApartado: dataApartado.id,
 					totalArticulo: total,
 				};
+				let ventaF123 = {
+					productos: listaComprasNew,
+					vendedor: auth.name,
+					folio: 1,
+					total: total,
+					efectivo: efectivo,
+					tarjeta: tarjeta,
+					aCuenta: aCuenta,
+					pagoCon: 0,
+					referencia: dataApartado.id,
+					notas: "APARTADO",
+				};
+				if (keyF === "F3") {
+					let queryF3 = client.readQuery({
+						query: VENTA_F3,
+					});
+					if (!queryF3) {
+						queryF3 = { ventaF3: [ventaF123] };
+					} else {
+						let arrayNew = [];
+						for (let i = 0; i < queryF3.ventaF3.length; i++) {
+							const element = queryF3.ventaF3[i];
+							arrayNew.push(element);
+						}
+						arrayNew.push(ventaF123);
 
-				try {
-					const { data } = await mutateREGISTER_VENTA({
+						queryF3 = { ventaF3: arrayNew };
+					}
+
+					client.writeQuery({
+						query: VENTA_F3,
+						data: queryF3,
 						variables: {
-							input: {
-								productos: listaComprasNew,
-								vendedor: auth.name,
-								folio: 1,
-								total: total,
-								efectivo: efectivo,
-								tarjeta: tarjeta,
-								aCuenta: aCuenta,
-								pagoCon: 0,
-								referencia: dataApartado.id,
-								notas: "APARTADO",
-							},
+							id: 5,
 						},
 					});
-					if (data) {
-						savePrintAbono(keyF, data.registerVenta);
+
+					history.push("/");
+				} else {
+					try {
+						const { data } = await mutateREGISTER_VENTA({
+							variables: {
+								input: ventaF123,
+							},
+						});
+						if (data) {
+							savePrintAbono(keyF, data.registerVenta);
+						}
+					} catch (error) {
+						ErrorConection(logout);
+						setbtnLoading(false);
 					}
-				} catch (error) {
-					ErrorConection(logout);
-					setbtnLoading(false);
 				}
 			}
 		}

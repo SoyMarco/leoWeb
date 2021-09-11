@@ -31,12 +31,15 @@ import {
 	Result,
 } from "antd";
 import "./apartados.css";
+// import { NetworkStatus } from "@apollo/client";
+
 export default function Apartado(props) {
 	const history = useHistory();
 	const params = useParams();
 	let urlFolio = parseInt(params.folio);
 	let { data, loading, error, refetch } = useQuery(GET_PRODUCTOS_FOLIO, {
 		variables: { folio: urlFolio },
+		notifyOnNetworkStatusChange: true,
 	});
 	const [titleWeb, settitleWeb] = useState("Apartado");
 	const [mutateCANCELAR_APARTADO] = useMutation(CANCELAR_APARTADO);
@@ -65,6 +68,17 @@ export default function Apartado(props) {
 		refetch();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
+
+	// useEffect(() => {
+	// 	console.log(
+	// 		"networkStatus ",
+	// 		networkStatus,
+	// 		NetworkStatus.refetch,
+	// 		loading
+	// 	);
+	// 	setloader(loading);
+	// }, [networkStatus, NetworkStatus.refetch]);
+
 	if (error) {
 		ErrorConection(logout);
 	}
@@ -129,31 +143,33 @@ export default function Apartado(props) {
 		}
 	};
 	const cancelarApartado = async () => {
-		setbtnLoading(true);
+		if (loader === false) {
+			setloader(true);
 
-		try {
-			if (dataApartado.id) {
-				let { data } = await mutateCANCELAR_APARTADO({
-					// Parameters
-					variables: {
-						input: {
-							id: dataApartado.id,
-							status: !statusApartado,
+			try {
+				if (dataApartado.id) {
+					let { data } = await mutateCANCELAR_APARTADO({
+						// Parameters
+						variables: {
+							input: {
+								id: dataApartado.id,
+								status: !statusApartado,
+							},
 						},
-					},
-				});
-				if (data) {
-					openNotification(
-						"success",
-						`Apartado ${statusApartado ? "CANCELADO" : "REACTIVADO"}`
-					);
-					refetch();
-					setbtnLoading(false);
+					});
+					if (data) {
+						openNotification(
+							"success",
+							`Apartado ${statusApartado ? "CANCELADO" : "REACTIVADO"}`
+						);
+						refetch();
+						setloader(false);
+					}
 				}
+			} catch (error) {
+				setloader(false);
+				ErrorConection(logout);
 			}
-		} catch (error) {
-			setbtnLoading(false);
-			ErrorConection(logout);
 		}
 	};
 	const pressKeyAbono = (e) => {
@@ -396,7 +412,8 @@ export default function Apartado(props) {
 						</Tooltip>
 						<Row>
 							<Button
-								disabled={!statusApartado}
+								disabled={!statusApartado || loader}
+								loading={loader}
 								shape='round'
 								style={
 									statusApartado
@@ -441,9 +458,11 @@ export default function Apartado(props) {
 									icon={
 										<DeleteFilled style={{ color: "red", fontSize: "large" }} />
 									}
-									loading={btnLoading}
+									loading={loader}
+									disabled={loader}
 								>
 									<Switch
+										loading={loader}
 										checked={statusApartado}
 										style={
 											statusApartado
