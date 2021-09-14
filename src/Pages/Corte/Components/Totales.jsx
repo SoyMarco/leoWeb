@@ -1,8 +1,25 @@
-import React, { useEffect, useState } from "react";
-import { Col, Row, Card } from "antd";
-
-export default function Ventas({ loading, getVentasDia, cajaDia }) {
+import React, { useEffect, useState, useRef } from "react";
+import { Col, Row, Card, InputNumber } from "antd";
+import { REGISTER_CAJA } from "graphql/caja";
+import { useMutation } from "@apollo/client";
+import { openNotification } from "Utils/openNotification";
+import ErrorConection from "Utils/ErrorConection";
+import useAuth from "hooks/useAuth";
+import { keyBlock } from "Utils";
+import { ImMobile } from "react-icons/im";
+export default function TotalesCorte({
+	loading,
+	loadingCaja,
+	getVentasDia,
+	cajaDia,
+	refetchCaja,
+}) {
+	const [mutateREGISTER_CAJA] = useMutation(REGISTER_CAJA);
 	const [totales, settotales] = useState([]);
+	const [recargas, setrecargas] = useState(null);
+	const inputRecargas = useRef();
+	const { logout } = useAuth();
+
 	useEffect(() => {
 		console.log("totales", totales);
 	}, [totales]);
@@ -20,6 +37,7 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 		let entradas = 0.0;
 		let salidas = 0.0;
 		let totales = [];
+		let recargasMonto = 0;
 		for (let i = 0; i < getVentasDia.length; i++) {
 			if (getVentasDia[i].cancelado === false) {
 				total = total + getVentasDia[i].total;
@@ -36,7 +54,7 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 				cajaDia[j].cancelado.length === 0
 			) {
 				if (cajaDia[j].tipo === "inicio") {
-					inicioCaja = inicioCaja + cajaDia[j].monto;
+					inicioCaja = cajaDia[j].monto;
 				}
 				if (cajaDia[j].tipo === "entradaSalida") {
 					if (cajaDia[j].monto > 0) {
@@ -44,6 +62,9 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 					} else if (cajaDia[j].monto < 0) {
 						salidas = salidas + cajaDia[j].monto;
 					}
+				}
+				if (cajaDia[j].tipo === "recargas") {
+					recargasMonto = cajaDia[j].monto;
 				}
 			}
 		}
@@ -68,6 +89,7 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 				aCuenta: aCuenta,
 				total: total,
 				finCaja: finCaja,
+				recargas: recargasMonto,
 			},
 			// <h3>Efectivo Caja</h3> inicioCaja
 			// <h3>Venta Efectivo </h3> ventasEfectivo
@@ -88,167 +110,42 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 		style: "currency",
 		currency: "USD",
 	});
-	/*COLUMNAS  TOTALES */
-	// const colTotales = [
-	// 	{
-	// 		title: "Id",
-	// 		dataIndex: "key",
-	// 		key: "key",
-	// 		width: "30px",
-	// 	},
-	// 	{
-	// 		title: "Inicio Caja",
-	// 		dataIndex: "inicioCaja",
-	// 		key: "inicioCaja",
-	// 		render: (inicioCaja) => (
-	// 			<h3
-	// 				style={{
-	// 					textAlignLast: "right",
-	// 					fontWeight: "revert",
-	// 					fontSize: "large",
-	// 				}}
-	// 			>
-	// 				${inicioCaja}
-	// 			</h3>
-	// 		),
-	// 	},
-	// 	{
-	// 		title: "Entradas Salidas",
-	// 		dataIndex: "entSal",
-	// 		key: "entSal",
-	// 		render: (entSal) => (
-	// 			<h3
-	// 				style={
-	// 					entSal > 0
-	// 						? {
-	// 								textAlignLast: "right",
-	// 								fontWeight: "revert",
-	// 								fontSize: "large",
-	// 								color: "green",
-	// 						  }
-	// 						: {
-	// 								textAlignLast: "right",
-	// 								fontWeight: "revert",
-	// 								fontSize: "large",
-	// 								color: "red",
-	// 						  }
-	// 				}
-	// 			>
-	// 				${entSal}
-	// 			</h3>
-	// 		),
-	// 	},
-	// 	// {
-	// 	// 	title: "Efectivo",
-	// 	// 	dataIndex: "efectivo",
-	// 	// 	key: "efectivo",
-	// 	// 	render: (efectivo) => (
-	// 	// 		<h3
-	// 	// 			style={{
-	// 	// 				textAlignLast: "right",
-	// 	// 				fontWeight: "revert",
-	// 	// 				fontSize: "large",
-	// 	// 			}}
-	// 	// 		>
-	// 	// 			${efectivo}
-	// 	// 		</h3>
-	// 	// 	),
-	// 	// },
-	// 	{
-	// 		title: "Venta con Tarjeta",
-	// 		dataIndex: "tarjeta",
-	// 		key: "tarjeta",
-	// 		render: (tarjeta) => (
-	// 			<h3
-	// 				style={
-	// 					tarjeta > 0
-	// 						? {
-	// 								textAlignLast: "right",
-	// 								fontWeight: "revert",
-	// 								fontSize: "large",
-	// 								color: "green",
-	// 						  }
-	// 						: {
-	// 								textAlignLast: "right",
-	// 								fontWeight: "revert",
-	// 								fontSize: "large",
-	// 						  }
-	// 				}
-	// 			>
-	// 				${tarjeta}
-	// 			</h3>
-	// 		),
-	// 	},
-	// 	// {
-	// 	// 	title: "A cuenta",
-	// 	// 	dataIndex: "aCuenta",
-	// 	// 	key: "aCuenta",
-	// 	// 	render: (aCuenta) => (
-	// 	// 		<h3
-	// 	// 			style={{
-	// 	// 				textAlignLast: "right",
-	// 	// 				fontWeight: "revert",
-	// 	// 				fontSize: "large",
-	// 	// 			}}
-	// 	// 		>
-	// 	// 			${aCuenta}
-	// 	// 		</h3>
-	// 	// 	),
-	// 	// },
-	// 	{
-	// 		title: "VENTA TOTAL",
-	// 		dataIndex: "total",
-	// 		key: "total",
-	// 		render: (total) => (
-	// 			<h3
-	// 				style={{
-	// 					textAlignLast: "right",
-	// 					fontWeight: "revert",
-	// 					fontSize: "large",
-	// 				}}
-	// 			>
-	// 				${total}
-	// 			</h3>
-	// 		),
-	// 	},
-	// 	{
-	// 		title: "Efectivo en Caja",
-	// 		dataIndex: "finCaja",
-	// 		key: "finCaja",
-	// 		render: (finCaja, record) => (
-	// 			<h2
-	// 				style={{
-	// 					textAlignLast: "right",
-	// 					color: "green",
-	// 					fontWeight: "revert",
-	// 					fontSize: "x-large",
-	// 				}}
-	// 			>
-	// 				${finCaja}
-	// 			</h2>
-	// 		),
-	// 	},
-	// ];
+
+	const pressKeyRecargas = (e) => {
+		if (e.keyCode === 13) {
+			sendRecargas();
+		}
+	};
+
+	const handleRecargas = (e) => {
+		setrecargas(Math.round(e * 100) / 100);
+	};
+	const sendRecargas = async () => {
+		if (loadingCaja === false) {
+			let monto = recargas;
+			if (monto > 0) {
+				try {
+					const { data } = await mutateREGISTER_CAJA({
+						variables: {
+							input: {
+								tipo: "recargas",
+								monto: monto,
+							},
+						},
+					});
+					if (data) {
+						openNotification("success", `Monto de recargas Guardado`);
+						setrecargas(null);
+						refetchCaja();
+					}
+				} catch (error) {
+					ErrorConection(logout);
+				}
+			}
+		}
+	};
 	return (
 		<>
-			{/* <Row>
-				<Col xs={24} sm={24} md={16}>
-					<Table
-						columns={colTotales}
-						dataSource={totales}
-						loading={loading}
-						pagination={false}
-						size='middle'
-						style={{
-							height: "100px",
-							borderRadius: "10px",
-							boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
-							margin: "10px",
-						}}
-						// size="small"
-					/>
-				</Col>
-			</Row> */}
 			<Card title='CORTE' bordered={false}>
 				<Row style={{ margin: "15px 50px 0 50px" }}>
 					<Col xs={3}>
@@ -285,26 +182,87 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 						</h3>
 						<br />
 					</Col>
-					{/* <Col xs={8} style={{ textAlignLast: "end" }}>
-						<h3>Recargas</h3>
-						<h3>0000000000</h3>
-						<br />
-						<br />
-						<h3>Dinero en efectivo que hay en caja</h3>
-						<h4>$1000</h4>
-						<h4>$500</h4>
-						<h4>$200</h4>
-						<h4>$100</h4>
-						<h4>$50</h4>
-						<h4>$20</h4>
-						<h4>$10</h4>
-						<h4>$5</h4>
-						<h4>$2</h4>
-						<h4>$1</h4>
-						<h4>$0.50</h4>
+					<Col xs={12} style={{ textAlignLast: "end" }}>
+						<Row justify='end'>
+							<Col xs={17} style={{ textAlignLast: "center" }}>
+								<h3>Recargas</h3>
+								<InputNumber
+									ref={inputRecargas}
+									type='number'
+									style={{
+										width: "50%",
+										height: "30px",
+										margin: "20px 0",
+										borderRadius: "50px",
+										fontSize: "large",
+										textAlignLast: "center",
+										fontWeight: "bold",
+									}}
+									onKeyUp={pressKeyRecargas}
+									onKeyDown={keyBlock}
+									value={recargas}
+									onChange={handleRecargas}
+									autoFocus
+								></InputNumber>
+							</Col>
+							<Col xs={7} style={{ textAlignLast: "start" }}>
+								<Row>
+									{totales[0]?.recargas > 0 ? (
+										<ImMobile style={{ margin: 10, fontSize: "x-large" }} />
+									) : null}
+									<h2
+										style={
+											totales[0]?.recargas > 0
+												? { fontWeight: "bold", marginTop: 5 }
+												: null
+										}
+									>
+										{formatter.format(totales[0]?.recargas ?? 0)}
+									</h2>
+								</Row>
+							</Col>
+						</Row>
 
-						<h3>0000000000</h3>
-					</Col> */}
+						{/* <Row justify='end'>
+							<Col xs={17} style={{ textAlignLast: "center" }}>
+								<h3>Dinero en efectivo que hay en caja</h3>
+								<InputNumber
+									ref={inputPrecio}
+									type='number'
+									style={{
+										width: "50%",
+										height: "35px",
+										margin: "20px 0",
+										borderRadius: "50px",
+										fontSize: "x-large",
+										textAlignLast: "center",
+										fontWeight: "bold",
+									}}
+									onKeyUp={pressKeyPrecio}
+									value={precio}
+									onChange={handlePrecio}
+								></InputNumber>
+							</Col>
+							<Col xs={7} style={{ textAlignLast: "end" }}>
+								<h4>$1000</h4>
+								<h4>$500</h4>
+								<h4>$200</h4>
+								<h4>$100</h4>
+								<h4>$50</h4>
+								<h4>$20</h4>
+								<h4>$10</h4>
+								<h4>$5</h4>
+								<h4>$2</h4>
+								<h4>$1</h4>
+								<h4>$0.50</h4>
+
+								<h3 style={{ borderTop: "solid", fontWeight: "bold" }}>
+									0000000000
+								</h3>
+							</Col>
+						</Row>
+					 */}
+					</Col>
 				</Row>
 			</Card>
 		</>
