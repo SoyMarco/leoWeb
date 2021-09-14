@@ -106,6 +106,8 @@ export const VENTA_MOBILE_FALSE = gql`
 		ventaMobileFalse(input: $input)
 	}
 `;
+
+//llamadas locales
 export const VENTA_F3 = gql`
 	query ventaF3 {
 		ventaF3 {

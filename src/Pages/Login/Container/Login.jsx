@@ -8,7 +8,6 @@ import { openNotification } from "Utils/openNotification";
 import { setToken, decodeToken } from "Utils/token";
 import useAuth from "hooks/useAuth";
 import "./login.css";
-import { UrlFrontend } from "config/apollo";
 import {
 	Card,
 	Form,
@@ -21,8 +20,11 @@ import {
 	Avatar,
 	Select,
 } from "antd";
+import { useApolloClient } from "@apollo/client";
+import { FIRST_LOGIN } from "graphql/user";
 
 const Login = () => {
+	const client = useApolloClient();
 	const [mutateLOGIN] = useMutation(LOGIN);
 	const [name, setname] = useState("");
 	const [password, setpassword] = useState("");
@@ -50,12 +52,13 @@ const Login = () => {
 				},
 			});
 			if (data) {
+				// Data GQL
 				setloading(false);
-				if (screenWidth > 600) {
-					window.location.href = `${UrlFrontend}caja`;
-				} else {
-					window.location.href = `${UrlFrontend}mobile/corte`;
-				}
+				client.writeQuery({
+					query: FIRST_LOGIN,
+					data: { firstLogin: { screenWidth } },
+				});
+				// Data Locale Storage
 				const { token } = data.login;
 				setToken(token);
 				let dataToken = await decodeToken(token);

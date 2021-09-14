@@ -129,6 +129,7 @@ const Corte = () => {
 		let ventasEfectivo = 0;
 		let sumaTotalEfectivo = 0;
 		let sumaEfectivoFinal = 0;
+		let recargasMonto = 0;
 		for (let it = 0; it < item.length; it++) {
 			sumaTarjeta = sumaTarjeta + item[it].tarjeta;
 			sumaTotal = sumaTotal + item[it].total;
@@ -157,6 +158,12 @@ const Corte = () => {
 				} else if (cajasDia[cd].monto < 0) {
 					cajaSalida = cajasDia[cd].monto;
 				}
+			}
+			if (
+				item[0].vendedor === cajasDia[cd].vendedor &&
+				cajasDia[cd].tipo === "recargas"
+			) {
+				recargasMonto = cajasDia[cd].monto;
 			}
 		}
 		sumaTotalEfectivo = ventasEfectivo + cajaInicio;
@@ -195,11 +202,11 @@ const Corte = () => {
 					</Col>
 					<Col xs={11} style={{ textAlignLast: "end" }}>
 						<h3>Recargas</h3>
-						<h3>0000000000</h3>
+						<h3>{formatter.format(recargasMonto)}</h3>
 					</Col>
 				</Row>
 				<br />
-				<Row>
+				{/* <Row>
 					<Col xs={10}>
 						<h3>Dinero en efectivo que hay en caja</h3>
 					</Col>
@@ -213,7 +220,7 @@ const Corte = () => {
 
 						<h3>0000000000</h3>
 					</Col>
-				</Row>
+				</Row> */}
 				<br />
 			</>
 		);

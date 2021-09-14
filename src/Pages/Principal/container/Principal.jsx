@@ -12,12 +12,21 @@ import "./principal.css";
 import { UrlFrontend } from "config/apollo";
 import { useApolloClient } from "@apollo/client";
 import { VENTA_F3 } from "graphql/venta";
+import { FIRST_LOGIN } from "graphql/user";
 
 function Principal() {
 	const client = useApolloClient();
-
 	const history = useHistory();
-
+	let firstLogin = client.readQuery({
+		query: FIRST_LOGIN,
+	});
+	if (firstLogin?.firstLogin?.screenWidth > 600) {
+		history.push("/caja");
+		client.writeQuery({
+			query: FIRST_LOGIN,
+			data: { firstLogin: null },
+		});
+	}
 	const Location = useLocation();
 	const [titleWeb, settitleWeb] = useState("Leo Web");
 	const [modalCobrar, setmodalCobrar] = useState(false);

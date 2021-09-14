@@ -13,7 +13,11 @@ const Corte = () => {
 	let { data, loading, error, refetch } = useQuery(GET_VENTAS_DIA, {
 		notifyOnNetworkStatusChange: true,
 	});
-	let { data: data2, refetch: refetchCaja } = useQuery(GET_CAJA_DIA);
+	let {
+		data: data2,
+		loading: loadingCaja,
+		refetch: refetchCaja,
+	} = useQuery(GET_CAJA_DIA);
 	const [getVentasDia, setgetVentasDia] = useState([]);
 	const [cajaDia, setcajaDia] = useState([]);
 	const [stateRecord, setstateRecord] = useState(null);
@@ -75,6 +79,8 @@ const Corte = () => {
 				getVentasDia={getVentasDia}
 				cajaDia={cajaDia}
 				loading={loading}
+				loadingCaja={loadingCaja}
+				refetchCaja={refetchCaja}
 			/>
 		</>
 	);
