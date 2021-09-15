@@ -46,8 +46,7 @@ export default function TotalesCorte({
 				aCuenta = aCuenta + getVentasDia[i].aCuenta;
 			}
 		}
-		ventasEfectivo = total - (tarjeta + aCuenta);
-		totalEfectivo = ventasEfectivo + inicioCaja;
+
 		for (let j = 0; j < cajaDia.length; j++) {
 			if (
 				cajaDia[j]?.cancelado === false ||
@@ -68,6 +67,8 @@ export default function TotalesCorte({
 				}
 			}
 		}
+		ventasEfectivo = total - (tarjeta + aCuenta);
+		totalEfectivo = ventasEfectivo + inicioCaja;
 		efectivoFinalCaja = totalEfectivo + entradas + salidas;
 		finCaja = efectivo + tarjeta + aCuenta;
 		finCaja = finCaja - total;
