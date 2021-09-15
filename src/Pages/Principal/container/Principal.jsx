@@ -163,6 +163,12 @@ function Principal() {
 		if (e.keyCode === 66) {
 			document.querySelector("#buscarApartadoInput").select();
 		}
+		if (e.keyCode === 67) {
+			history.push("/corte");
+		}
+		if (e.keyCode === 78) {
+			history.push("/add");
+		}
 		if (e.keyCode === 122) {
 			history.push("/add");
 		}
@@ -431,7 +437,7 @@ function Principal() {
 					<h1
 						style={{
 							color: "green",
-							fontSize: "xxx-large",
+							fontSize: "65px",
 							fontWeight: "bold",
 							marginTop: "-20px",
 						}}

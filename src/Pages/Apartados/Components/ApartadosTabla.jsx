@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { MdLocalGroceryStore } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { AiFillPrinter } from "react-icons/ai";
@@ -32,7 +32,6 @@ export default function ApartadosTabla({
 	};
 
 	const click = (record, rowIndex) => {
-		console.log(record);
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
 		document.querySelector("#inputSearch").select();
@@ -149,9 +148,7 @@ export default function ApartadosTabla({
 			),
 		},
 	];
-	useEffect(() => {
-		console.log("@@@@@@@@@@@@@@@@@@@@@@@@", stateRecord);
-	}, [stateRecord]);
+
 	return (
 		<>
 			{imprimir === true ? (

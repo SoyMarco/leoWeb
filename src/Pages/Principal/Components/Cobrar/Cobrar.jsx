@@ -176,8 +176,10 @@ const Cobrar = ({
 				folio={folio}
 				auth={auth}
 				initialState={initialState}
+				key='keyImprimir'
 			/>
 			<Modal
+				key='keyModal'
 				style={{ top: 25 }}
 				title={
 					<>
@@ -188,7 +190,7 @@ const Cobrar = ({
 				visible={modalCobrar}
 				onCancel={() => setmodalCobrar(!modalCobrar)}
 				footer={[
-					<Row justify='space-around'>
+					<Row justify='space-around' key='keyRowBtns'>
 						<Button
 							style={
 								cambio < 0
@@ -211,6 +213,7 @@ const Cobrar = ({
 							onClick={() => savePrintNewV("F1")}
 							icon={<PrinterFilled />}
 							loading={btnLoading}
+							key='keybtnf1'
 						>
 							Imprimir F1
 						</Button>
@@ -236,6 +239,7 @@ const Cobrar = ({
 							onClick={() => savePrintNewV("F2")}
 							icon={<SaveFilled />}
 							loading={btnLoading}
+							key='keybtnf2'
 						>
 							Guardar F2
 						</Button>
@@ -244,6 +248,7 @@ const Cobrar = ({
 			>
 				<div key='div1' style={{ textAlignLast: "center" }}>
 					<h1
+						key='div1h1'
 						style={{
 							fontWeight: "bold",
 							fontSize: "36px",
@@ -255,7 +260,7 @@ const Cobrar = ({
 					</h1>
 				</div>
 				<div key='div2' style={{ textAlignLast: "right" }}>
-					<Form form={form} onValuesChange={OnValuesChange}>
+					<Form form={form} onValuesChange={OnValuesChange} key='formPrincipal'>
 						<Form.Item
 							label='Efectivo'
 							name='efectivo'
@@ -276,6 +281,7 @@ const Cobrar = ({
 								prefix={<FaMoneyBillWave style={{ color: "gray" }} />}
 								onKeyUp={pressKeyPrecio}
 								onKeyDown={keyBlockCobrar}
+								key='keyInputEfectivo'
 							></Input>
 						</Form.Item>
 						<Form.Item
@@ -297,6 +303,7 @@ const Cobrar = ({
 								prefix={<FaCreditCard style={{ color: "gray" }} />}
 								onKeyUp={pressKeyPrecio}
 								onKeyDown={keyBlock}
+								key='keyInputTarjeta'
 							></Input>
 						</Form.Item>
 						<Form.Item
@@ -318,12 +325,14 @@ const Cobrar = ({
 								prefix={<FaStoreAlt style={{ color: "gray" }} />}
 								onKeyUp={pressKeyPrecio}
 								onKeyDown={keyBlock}
+								key='keyInputACuenta'
 							></Input>
 						</Form.Item>
 					</Form>
 				</div>
 				<div key='div3' style={{ textAlignLast: "center" }}>
 					<h1
+						key='keyh1Cambio'
 						style={
 							cambio >= 0
 								? {

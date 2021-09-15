@@ -28,9 +28,7 @@ export default function Ventas() {
 		settotalProductos(0);
 	};
 	const inputPrecio = useRef();
-	useEffect(() => {
-		console.log("inputPrecio", inputPrecio);
-	}, [inputPrecio]);
+	useEffect(() => {}, [inputPrecio]);
 	useEffect(() => {
 		selectInputPrecio();
 	}, []);
@@ -121,14 +119,11 @@ export default function Ventas() {
 		}
 	};
 	const pressKeyPrecio = (e) => {
-		console.log("inputPrecio", inputPrecio);
-
 		if (e.keyCode === 13) {
 			pressEnter();
 		}
 	};
 	const handlePrecio = (e) => {
-		console.log("e", e);
 		setprecio({
 			precio: e,
 		});

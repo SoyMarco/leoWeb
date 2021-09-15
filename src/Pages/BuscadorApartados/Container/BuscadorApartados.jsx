@@ -13,7 +13,6 @@ export default function BuscadorApartados() {
 	const history = useHistory();
 
 	useEffect(() => {
-		console.log(urlFolio);
 		if (urlFolio > 1) {
 			history.push(`/apartado/${urlFolio}`);
 		}
@@ -35,6 +34,12 @@ export default function BuscadorApartados() {
 			<Result status='warning' title='No tengo esos datos' />
 		</div>
 	);
+	const pressKeyBuscador = (e) => {
+		if (e.keyCode === 27) {
+			history.push("/");
+			document?.querySelector("#inputPrecio")?.select();
+		}
+	};
 	return (
 		<>
 			<ConfigProvider renderEmpty={customizeRenderEmpty}>
@@ -45,6 +50,7 @@ export default function BuscadorApartados() {
 					placeholder='Busca Apartados'
 					optionFilterProp='children'
 					onSelect={(e) => selectItem(e)}
+					onKeyUp={pressKeyBuscador}
 					// onSearch={changeValue}
 					onFocus={onFocus}
 					filterOption={(input, option) =>
@@ -56,7 +62,7 @@ export default function BuscadorApartados() {
 				>
 					{data?.getApartados.map((item) => {
 						return (
-							<Option value={item.folio}>
+							<Option value={item.folio} key={item.id}>
 								<Row justify='space-between' key={item.folio}>
 									<h3>{item.cliente}</h3>
 

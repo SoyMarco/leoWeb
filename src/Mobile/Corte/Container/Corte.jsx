@@ -76,11 +76,9 @@ const Corte = () => {
 					});
 				}
 			}
-			// console.log("vendedoresSeparados", vendedoresSeparados);
 			let datosSeparados = vendedoresSeparados.map((obj) => {
 				return obj[Object.keys(obj)[0]];
 			});
-			console.log("datosSeparados", datosSeparados);
 			setgetVentasDiaAdmin(datosSeparados);
 
 			// Calculos de cuentas

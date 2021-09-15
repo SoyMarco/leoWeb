@@ -68,7 +68,6 @@ const Login = () => {
 		} catch (error) {
 			openNotification("error", "Error en Usuario o Contraseña");
 			setloading(false);
-			console.log(error);
 		}
 	};
 	const pressKeyEnter = (e) => {

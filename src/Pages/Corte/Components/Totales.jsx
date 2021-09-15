@@ -7,6 +7,8 @@ import ErrorConection from "Utils/ErrorConection";
 import useAuth from "hooks/useAuth";
 import { keyBlock } from "Utils";
 import { ImMobile } from "react-icons/im";
+import { useHistory } from "react-router-dom";
+
 export default function TotalesCorte({
 	loading,
 	loadingCaja,
@@ -19,10 +21,8 @@ export default function TotalesCorte({
 	const [recargas, setrecargas] = useState(null);
 	const inputRecargas = useRef();
 	const { logout } = useAuth();
+	const history = useHistory();
 
-	useEffect(() => {
-		console.log("totales", totales);
-	}, [totales]);
 	useEffect(() => {
 		let efectivo = 0.0;
 		let ventasEfectivo = 0.0;
@@ -114,6 +114,9 @@ export default function TotalesCorte({
 	const pressKeyRecargas = (e) => {
 		if (e.keyCode === 13) {
 			sendRecargas();
+		}
+		if (e.keyCode === 27) {
+			history.push("/");
 		}
 	};
 

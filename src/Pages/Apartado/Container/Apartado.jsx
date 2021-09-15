@@ -70,12 +70,6 @@ export default function Apartado(props) {
 	}, []);
 
 	// useEffect(() => {
-	// 	console.log(
-	// 		"networkStatus ",
-	// 		networkStatus,
-	// 		NetworkStatus.refetch,
-	// 		loading
-	// 	);
 	// 	setloader(loading);
 	// }, [networkStatus, NetworkStatus.refetch]);
 

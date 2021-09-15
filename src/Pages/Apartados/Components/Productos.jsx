@@ -9,10 +9,7 @@ export default function Productos({ stateRecord, loading }) {
 	const [totalProductos, settotalProductos] = useState(0);
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
-	useEffect(() => {
-		console.log("productos", productos);
-		console.log("abonos", abonos);
-	}, [productos, abonos]);
+
 	useEffect(() => {
 		// selectLastRow();
 		let sum = 0;
