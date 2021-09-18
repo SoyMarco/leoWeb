@@ -176,28 +176,6 @@ export default function ProductsAddApartado({
 					borderRadius: "25px 25px 0 0",
 				}}
 			>
-				{/* Ingresar Precio */}
-
-				{/* <Input
-					id='inputNameProduct'
-					// <GiLargeDress style={{ color: "darkblue" }} />
-					prefix={<GiLargeDress style={{ marginLeft: "20px" }} />}
-					style={{
-						color: "green",
-						// fontSize: 30,
-						fontSize: "x-large",
-						fontWeight: "bold",
-						borderRadius: "50px",
-						maxWidth: "40%",
-						padding: "0 0 0 0px",
-						border: "0 0 0 0",
-					}}
-					onKeyUp={pressKeyEnter}
-					onKeyDown={keyNumber}
-					value={nombre}
-					// onChange={handlePrecio}
-					onChange={(e) => setnombre(e.target.value.toUpperCase())}
-				/> */}
 				<AutoComplete
 					defaultActiveFirstOption={true}
 					id='inputNameProduct'

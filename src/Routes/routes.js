@@ -14,6 +14,7 @@ import Caja from "Pages/Caja/Container/Caja";
 import EntradasSalidas from "Pages/EntradasSalidas/Container/EntradasSalidas";
 import CorteMobile from "Mobile/Corte/Container/Corte";
 import VentaMobile from "Mobile/Ventas/Container/Ventas";
+import Encargo from "Pages/Encargo/Container/Encargo";
 // import Apartados from "Pages/Apartados/Container/Apartados";
 const routes = [
 	{
@@ -64,6 +65,13 @@ const routes = [
 		component: EntradasSalidas,
 		exact: true,
 	},
+	{
+		path: "/encargo",
+		layout: LayoutForm,
+		component: Encargo,
+		exact: true,
+	},
+	// Mobiles
 	{
 		path: "/mobile/corte",
 		layout: LayoutMobile,

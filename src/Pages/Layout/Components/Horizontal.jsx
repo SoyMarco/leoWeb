@@ -90,7 +90,7 @@ export default function Horizontal({
 					>
 						<Tooltip
 							placement='bottom'
-							title='Si estoy activo puedes imprimir las ventas en Mobile más rapido'
+							title='Si esta activo puedes imprimir las ventas de Mobile más rapido'
 						>
 							<SyncOutlined
 								style={{ fontSize: 25 }}
