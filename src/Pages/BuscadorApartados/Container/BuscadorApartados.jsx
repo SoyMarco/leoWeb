@@ -9,6 +9,7 @@ import { useHistory } from "react-router-dom";
 export default function BuscadorApartados() {
 	let { data, loading, refetch } = useQuery(GET_APARTADOS_BUSCADOR);
 	const [urlFolio, seturlFolio] = useState(0);
+	// const [clienteName, setclienteName] = useState(null);
 	const { Option } = Select;
 	const history = useHistory();
 
@@ -40,6 +41,16 @@ export default function BuscadorApartados() {
 			document?.querySelector("#inputPrecio")?.select();
 		}
 	};
+	const fechaVenceEn = (item) => {
+		var fecha = moment.unix(item.vence / 1000).fromNow();
+		if (item.vence > Date.now()) {
+			fecha = `Vence ${fecha}`;
+		} else {
+			fecha = `Venció ${fecha}`;
+		}
+		// this.vence = fecha;
+		return fecha;
+	};
 	return (
 		<>
 			<ConfigProvider renderEmpty={customizeRenderEmpty}>
@@ -51,26 +62,62 @@ export default function BuscadorApartados() {
 					optionFilterProp='children'
 					onSelect={(e) => selectItem(e)}
 					onKeyUp={pressKeyBuscador}
-					// onSearch={changeValue}
+					// onSearch={(e) => setclienteName(e.toUpperCase())}
 					onFocus={onFocus}
 					filterOption={(input, option) =>
 						option.children[0].key.indexOf(input) >= 0 ||
 						option.children[1].key.toLowerCase().indexOf(input.toLowerCase()) >=
 							0
 					}
-					style={{ width: 350, fontWeight: "bold" }}
+					style={{
+						width: 400,
+						fontWeight: "bold",
+						textAlignLast: "center",
+						fontSize: "20px",
+					}}
+					// value={clienteName}
 				>
 					{data?.getApartados.map((item) => {
 						return (
-							<Option value={item.folio} key={item.id}>
+							<Option
+								value={item.folio}
+								key={item.id}
+								style={{ borderBottom: "solid gray" }}
+							>
 								<Row justify='space-between' key={item.folio}>
-									<h3>{item.cliente}</h3>
+									<h3
+										style={
+											item?.entregado[0]?.status === true ||
+											item?.cancelado[0]?.status === false
+												? { color: "red" }
+												: null
+										}
+									>
+										{item.cliente}
+									</h3>
 
-									<h3>Folio:{item.folio}</h3>
+									<h3
+										style={
+											item?.entregado[0]?.status === true ||
+											item?.cancelado[0]?.status === false
+												? { color: "red" }
+												: null
+										}
+									>
+										Folio: {item.folio}
+									</h3>
 								</Row>
-								<h5 key={item.cliente}>
-									Vence: {pasarAFechaVence(item.vence)}
-								</h5>
+								<h4
+									key={item.cliente}
+									style={
+										item?.entregado[0]?.status === true ||
+										item?.cancelado[0]?.status === false
+											? { color: "red" }
+											: null
+									}
+								>
+									<b>{fechaVenceEn(item)}</b>, {pasarAFechaVence(item.vence)}
+								</h4>
 							</Option>
 						);
 					})}

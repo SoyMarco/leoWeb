@@ -14,3 +14,6 @@
 	border-radius: 50px;
 	/* box-shadow: 1px 1px 10px #7e9ab1, -1px -1px 10px #a7d4f8; */
 }
+.ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+	background: linear-gradient(#ffffff, #abd5f8);
+}
