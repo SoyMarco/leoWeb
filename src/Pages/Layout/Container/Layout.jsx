@@ -66,6 +66,9 @@ function LayoutForm({ children }) {
 	const handleClick = (e) => {
 		setcurrentMenu(e.key);
 	};
+	// const algo = () => {
+	// 	console.log("algo");
+	// };
 	return (
 		<>
 			{titleWeb ? <title>{titleWeb}</title> : null}
@@ -96,6 +99,8 @@ function LayoutForm({ children }) {
 							onClick={(e) => handleClick(e)}
 							// defaultOpenKeys={[currentMenu]}
 							selectedKeys={[currentMenu]}
+							onMouseOver={() => setcollapsed(false)}
+							onMouseLeave={() => setcollapsed(true)}
 						>
 							<Menu.Item
 								key='/'

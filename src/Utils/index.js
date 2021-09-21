@@ -68,6 +68,10 @@ export const keyBlock = (e) => {
 		e.keyCode === 113 ||
 		e.keyCode === 114 ||
 		e.keyCode === 117 ||
+		e.keyCode === 118 ||
+		e.keyCode === 119 ||
+		e.keyCode === 120 ||
+		e.keyCode === 121 ||
 		e.keyCode === 122 ||
 		e.keyCode === 123 ||
 		e.keyCode === 191 ||
