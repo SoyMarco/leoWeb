@@ -12,6 +12,7 @@ import { REGISTER_VENTA } from "graphql/venta";
 import useAuth from "hooks/useAuth";
 import { VENTA_F3 } from "graphql/venta";
 import { useHistory } from "react-router-dom";
+import aceptar from "assets/sonido/Aceptar.wav";
 
 // import "./cobrar.css";
 
@@ -40,6 +41,8 @@ const CobrarApartado = ({
 		tarjeta: 0,
 		efectivo: 0,
 	});
+	const audio = new Audio(aceptar);
+
 	const { auth, logout } = useAuth();
 	const cobrarEfectivo = useRef();
 	useEffect(() => {
@@ -140,6 +143,7 @@ const CobrarApartado = ({
 						openNotification("success", "Apartado guardado con exito");
 						initialState();
 					}
+					audio.play();
 				}
 			} catch (error) {
 				setbtnLoading(false);

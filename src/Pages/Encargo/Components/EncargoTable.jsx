@@ -4,7 +4,6 @@ import { Table, Button, Result, Row } from "antd";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 
 export default function EncargoTable({ listaProductos, setlistaProductos }) {
-	console.log("listaProductos", listaProductos);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const onSelectChange = (selectedRowKeys) => {
 		setselectedRowKeys([]);

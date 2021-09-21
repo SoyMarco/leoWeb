@@ -10,6 +10,7 @@ import { useMutation } from "@apollo/client";
 import { REGISTER_APARTADO, GET_FOLIO_MAX_APARTADO } from "graphql/apartado";
 import { REGISTER_VENTA } from "graphql/venta";
 import useAuth from "hooks/useAuth";
+import aceptar from "assets/sonido/Aceptar.wav";
 
 // import "./cobrar.css";
 
@@ -39,6 +40,7 @@ const CobrarNewApartado = ({
 		tarjeta: 0,
 		efectivo: 0,
 	});
+	const audio = new Audio(aceptar);
 
 	useEffect(() => {
 		if (modalCobrar === true) {
@@ -199,6 +201,7 @@ const CobrarNewApartado = ({
 						openNotification("success", "Apartado guardado con exito");
 						initialState();
 					}
+					audio.play();
 				}
 			} catch (error) {
 				setbtnLoading(false);

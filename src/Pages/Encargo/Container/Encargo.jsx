@@ -11,6 +11,9 @@ import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import useAuth from "hooks/useAuth";
 import { useHistory } from "react-router-dom";
+import ModalAbonoEncargo from "../Components/ModalAbonoEncargo";
+import aceptar from "assets/sonido/Aceptar.wav";
+import ImprimirNewEncargo from "../Components/ImprimirEncargo/ImprimirNewEncargo";
 
 export default function Encargo() {
 	const [mutateREGISTER_ENCARGO] = useMutation(REGISTER_ENCARGO);
@@ -18,9 +21,14 @@ export default function Encargo() {
 	let apartadosBuscador = client.readQuery({
 		query: GET_APARTADOS_BUSCADOR,
 	});
+	const audio = new Audio(aceptar);
+
 	const history = useHistory();
 	const { auth, logout } = useAuth();
 	const [optionsClientes, setoptionsClientes] = useState([]);
+	const [abono, setabono] = useState(0);
+	const [modalAbono, setmodalAbono] = useState(false);
+	const [imprimirEncargo, setimprimirEncargo] = useState(false);
 	const [loader, setloader] = useState(false);
 	const refCliente = useRef();
 	const refProducto = useRef();
@@ -47,16 +55,11 @@ export default function Encargo() {
 			}
 			setoptionsClientes(listClientes);
 		}
-		console.log("apartadosBuscador", apartadosBuscador);
 	}, [apartadosBuscador]);
 	const [form] = Form.useForm();
 	const [listaProductos, setlistaProductos] = useState([]);
 	const [cliente, setcliente] = useState("");
 	const [keyCount, setkeyCount] = useState(0);
-	const onValuesChange = () => {
-		let unomas = form.getFieldsValue();
-		console.log("1", unomas);
-	};
 
 	const formItemLayout = {
 		labelCol: {
@@ -70,41 +73,66 @@ export default function Encargo() {
 		// eslint-disable-next-line no-template-curly-in-string
 		required: "El ${label} es requerido",
 	};
-	const onFinish = (values) => {
-		let productoEncargo = [
-			...listaProductos,
-			{
-				nombre: values.nombre,
-				talla: values.talla,
-				color: values.color,
-				genero: values.genero,
-				modelo: values.modelo,
-				cantidad: 1,
-				key: keyCount,
-				vendedor: auth.name,
-			},
-		];
-
-		console.log(productoEncargo);
-		setlistaProductos(productoEncargo);
-		setkeyCount(keyCount + 1);
-		form.resetFields();
-		if (cliente !== "") {
-			refProducto.current.select();
-		} else {
+	const onFinish = () => {
+		let values = form.getFieldsValue();
+		if (values.nombre) {
+			let productoEncargo = [
+				...listaProductos,
+				{
+					nombre: values.nombre,
+					talla: values.talla,
+					color: values.color,
+					genero: values.genero,
+					modelo: values.modelo,
+					cantidad: 1,
+					key: keyCount,
+					vendedor: auth.name,
+				},
+			];
+			setlistaProductos(productoEncargo);
+			setkeyCount(keyCount + 1);
+			form.resetFields();
+		}
+		if (!cliente) {
 			document.querySelector("#clienteNuevoEncargo").select();
 		}
 	};
 	const onFinishFailed = (errorInfo) => {
-		console.log("Failed:", errorInfo);
 		if (listaProductos.length > 0) {
 			refModelo.current.select();
 		}
 	};
 
 	const pressKeyEnter = (e) => {
-		if (e.keyCode === 13) {
+		if (e.keyCode === 13 && cliente) {
 			refProducto.current.select();
+		}
+	};
+	const pressKeyEnterEncargo = async (e) => {
+		if (e.keyCode === 13) {
+			let values = form.getFieldsValue();
+			if (e.target.id === "nombre" && values.nombre) {
+				refTalla.current.select();
+			}
+			if (!values.nombre && listaProductos.length > 0) {
+				setmodalAbono(true);
+				// guardarEncargo();
+			}
+			if (e.target.id === "talla") {
+				refColor.current.select();
+			}
+			if (e.target.id === "color") {
+				refGenero.current.select();
+			}
+			if (e.target.id === "genero") {
+				refModelo.current.select();
+			}
+			if (e.target.id === "modelo") {
+				onFinish();
+				setTimeout(() => {
+					refProducto.current.select();
+				}, 100);
+			}
 		}
 	};
 	const guardarEncargo = async () => {
@@ -114,12 +142,13 @@ export default function Encargo() {
 					variables: {
 						input: {
 							productos: listaProductos,
-							abonos: [{ abono: 10, vendedor: auth.name }],
+							abonos: [{ abono: abono, vendedor: auth.name }],
 							cliente: cliente,
 						},
 					},
 				});
 				if (data) {
+					audio.play();
 					openNotification("success", `Encargo guardado `);
 					setloader(false);
 					history.push("/");
@@ -161,7 +190,7 @@ export default function Encargo() {
 					// prefix={<GiLargeDress style={{ color: "gray" }} />}
 					onChange={(e) => setcliente(e.toUpperCase())}
 					options={optionsClientes}
-					placeholder='Ingresa la prenda'
+					placeholder='nombre de cliente'
 					filterOption={(inputValue, option) =>
 						option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
 					}
@@ -171,7 +200,7 @@ export default function Encargo() {
 				{...formItemLayout}
 				layout='vertial'
 				form={form}
-				onValuesChange={onValuesChange}
+				// onValuesChange={onValuesChange}
 				style={{ marginTop: 20 }}
 				onFinish={onFinish}
 				onFinishFailed={onFinishFailed}
@@ -188,7 +217,7 @@ export default function Encargo() {
 						},
 					]}
 				>
-					<Input ref={refProducto}></Input>
+					<Input ref={refProducto} onKeyUp={pressKeyEnterEncargo}></Input>
 				</Form.Item>
 
 				<Form.Item
@@ -196,28 +225,28 @@ export default function Encargo() {
 					name='talla'
 					tooltip='Opciones de tallas o tamaños'
 				>
-					<Input ref={refTalla}></Input>
+					<Input ref={refTalla} onKeyUp={pressKeyEnterEncargo}></Input>
 				</Form.Item>
 				<Form.Item
 					label={<h2>Color o Aroma</h2>}
 					name='color'
 					tooltip='Opciones de colores o aromas'
 				>
-					<Input ref={refColor}></Input>
+					<Input ref={refColor} onKeyUp={pressKeyEnterEncargo}></Input>
 				</Form.Item>
 				<Form.Item
 					label={<h2>Genero</h2>}
 					name='genero'
 					tooltip='Dama, Caballero, Niño, Niña, Bebé'
 				>
-					<Input ref={refGenero}></Input>
+					<Input ref={refGenero} onKeyUp={pressKeyEnterEncargo}></Input>
 				</Form.Item>
 				<Form.Item
 					label={<h2>Modelo</h2>}
-					tooltip='Describe el encargo'
+					tooltip='Describe el encargo (Marca, tipo, corte)'
 					name='modelo'
 				>
-					<Input ref={refModelo}></Input>
+					<Input ref={refModelo} onKeyUp={pressKeyEnterEncargo}></Input>
 				</Form.Item>
 
 				<Row justify='end' style={{ marginRight: 200 }}>
@@ -225,7 +254,8 @@ export default function Encargo() {
 						<Button
 							shape='round'
 							type='primary'
-							htmlType='submit'
+							// htmlType='submit'
+							onClick={onFinish}
 							icon={<BiAddToQueue style={{ margin: "5px 10px 0 0" }} />}
 						>
 							Añadir producto
@@ -281,6 +311,27 @@ export default function Encargo() {
 				listaProductos={listaProductos}
 				setlistaProductos={setlistaProductos}
 			/>
+			<ModalAbonoEncargo
+				modalAbono={modalAbono}
+				setmodalAbono={setmodalAbono}
+				setabono={setabono}
+				abono={abono}
+				loader={loader}
+				guardarEncargo={guardarEncargo}
+				setimprimirEncargo={setimprimirEncargo}
+			/>
+			{imprimirEncargo && (
+				<ImprimirNewEncargo
+					imprimir={imprimirEncargo}
+					setimprimir={setimprimirEncargo}
+					totalTotal={0}
+					auth={auth}
+					// listaCompras={listaCompras}
+					// dataApartado={dataApartado}
+					// dinero={dinero}
+					// cambio={cambio}
+				/>
+			)}
 		</>
 	);
 }

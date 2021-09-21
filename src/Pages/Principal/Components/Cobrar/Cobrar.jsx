@@ -10,6 +10,7 @@ import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
 import { REGISTER_VENTA } from "graphql/venta";
 import useAuth from "hooks/useAuth";
+import aceptar from "assets/sonido/Aceptar.wav";
 
 // import "./cobrar.css";
 
@@ -33,6 +34,8 @@ const Cobrar = ({
 	});
 	const cobrarEfectivo = useRef();
 	const { auth, logout } = useAuth();
+	const audio = new Audio(aceptar);
+
 	useEffect(() => {
 		cobrarEfectivo.current.select();
 	}, []);
@@ -148,6 +151,7 @@ const Cobrar = ({
 							openNotification("success", "Venta guardada con exito");
 							initialState();
 						}
+						audio.play();
 					}
 				} catch (error) {
 					setbtnLoading(false);
