@@ -24,28 +24,28 @@
 	font-family: "Roboto", sans-serif;
 	font-weight: bold;
 }
-.tituloTicketApartado {
+.tituloTicketEncargo {
 	text-align-last: center;
 	padding: 0px;
 	max-width: 190px;
 	font-family: "Roboto", sans-serif;
 	font-weight: bold;
 }
-.subtituloTicketApartado {
+.subtituloTicketEncargo {
 	padding: 0px;
 	max-width: 190px;
 	font-family: "Roboto", sans-serif;
 	font-weight: bold;
 	margin-top: 15px;
 }
-.productosApartado {
+.productosEncargo {
 	padding-bottom: 0px;
 	text-indent: initial;
 	border-bottom: 0.5px solid black;
 	width: 190px;
 	font-family: "Roboto", sans-serif;
 }
-.productosApartado td {
+.productosEncargo td {
 	padding: 0.2em 0.8em;
 	text-align: left;
 	padding-bottom: 0px;

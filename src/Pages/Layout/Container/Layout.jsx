@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Layout, Menu } from "antd";
 import "antd/dist/antd.css";
 import { MdLocalGroceryStore } from "react-icons/md";
-import { FaCashRegister, FaMoneyBillAlt /* FaBook  */ } from "react-icons/fa";
+import { FaCashRegister, FaMoneyBillAlt, FaBook } from "react-icons/fa";
 import { RiTerminalWindowFill } from "react-icons/ri";
 import "./layout.css";
 import "material-design-icons-iconfont";
@@ -171,7 +171,7 @@ function LayoutForm({ children }) {
 							>
 								<h3>Entradas / Salidas</h3>
 							</Menu.Item>
-							{/* <Menu.Item
+							<Menu.Item
 								key='/encargo'
 								icon={
 									<Link
@@ -190,7 +190,7 @@ function LayoutForm({ children }) {
 								onClick={() => history.push("/encargo")}
 							>
 								<h2>Encargos</h2>
-							</Menu.Item> */}
+							</Menu.Item>
 							<Menu.Item
 								key='7'
 								icon={

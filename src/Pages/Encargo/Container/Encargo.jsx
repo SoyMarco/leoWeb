@@ -14,6 +14,7 @@ import { useHistory } from "react-router-dom";
 import ModalAbonoEncargo from "../Components/ModalAbonoEncargo";
 import aceptar from "assets/sonido/Aceptar.wav";
 import ImprimirNewEncargo from "../Components/ImprimirEncargo/ImprimirNewEncargo";
+import { keyBlockFs } from "Utils";
 
 export default function Encargo() {
 	const [mutateREGISTER_ENCARGO] = useMutation(REGISTER_ENCARGO);
@@ -36,7 +37,11 @@ export default function Encargo() {
 	const refColor = useRef();
 	const refGenero = useRef();
 	const refModelo = useRef();
-
+	useEffect(() => {
+		if (modalAbono === false) {
+			refProducto.current.select();
+		}
+	}, [modalAbono]);
 	useEffect(() => {
 		if (apartadosBuscador?.getApartados) {
 			let { getApartados } = apartadosBuscador;
@@ -75,7 +80,7 @@ export default function Encargo() {
 	};
 	const onFinish = () => {
 		let values = form.getFieldsValue();
-		if (values.nombre) {
+		if (values.nombre && cliente) {
 			let productoEncargo = [
 				...listaProductos,
 				{
@@ -109,14 +114,13 @@ export default function Encargo() {
 		}
 	};
 	const pressKeyEnterEncargo = async (e) => {
+		let values = form.getFieldsValue();
 		if (e.keyCode === 13) {
-			let values = form.getFieldsValue();
 			if (e.target.id === "nombre" && values.nombre) {
 				refTalla.current.select();
 			}
 			if (!values.nombre && listaProductos.length > 0) {
 				setmodalAbono(true);
-				// guardarEncargo();
 			}
 			if (e.target.id === "talla") {
 				refColor.current.select();
@@ -129,6 +133,23 @@ export default function Encargo() {
 			}
 			if (e.target.id === "modelo") {
 				onFinish();
+				setTimeout(() => {
+					refProducto.current.select();
+				}, 100);
+			}
+		}
+		if (e.keyCode === 112 && listaProductos.length > 0) {
+			setmodalAbono(true);
+		}
+		if (e.keyCode === 113 && listaProductos.length > 0) {
+			guardarEncargo();
+		}
+		if (e.keyCode === 123 && cliente) {
+			if (!values.nombre) {
+				btnAddAbono();
+			} else {
+				onFinish();
+
 				setTimeout(() => {
 					refProducto.current.select();
 				}, 100);
@@ -159,6 +180,13 @@ export default function Encargo() {
 			}
 		}
 	};
+	const btnAddAbono = () => {
+		let values = form.getFieldsValue();
+		if (!values.nombre && listaProductos.length > 0) {
+			setmodalAbono(true);
+			// guardarEncargo();
+		}
+	};
 	return (
 		<>
 			<Row justify='center'>
@@ -175,6 +203,7 @@ export default function Encargo() {
 					backfill={true}
 					size='large'
 					onKeyUp={pressKeyEnter}
+					onKeyDown={keyBlockFs}
 					style={{
 						color: "blue",
 						fontSize: "large",
@@ -217,7 +246,11 @@ export default function Encargo() {
 						},
 					]}
 				>
-					<Input ref={refProducto} onKeyUp={pressKeyEnterEncargo}></Input>
+					<Input
+						ref={refProducto}
+						onKeyUp={pressKeyEnterEncargo}
+						onKeyDown={keyBlockFs}
+					></Input>
 				</Form.Item>
 
 				<Form.Item
@@ -225,40 +258,62 @@ export default function Encargo() {
 					name='talla'
 					tooltip='Opciones de tallas o tamaños'
 				>
-					<Input ref={refTalla} onKeyUp={pressKeyEnterEncargo}></Input>
+					<Input
+						ref={refTalla}
+						onKeyUp={pressKeyEnterEncargo}
+						onKeyDown={keyBlockFs}
+					></Input>
 				</Form.Item>
 				<Form.Item
 					label={<h2>Color o Aroma</h2>}
 					name='color'
 					tooltip='Opciones de colores o aromas'
 				>
-					<Input ref={refColor} onKeyUp={pressKeyEnterEncargo}></Input>
+					<Input
+						ref={refColor}
+						onKeyUp={pressKeyEnterEncargo}
+						onKeyDown={keyBlockFs}
+					></Input>
 				</Form.Item>
 				<Form.Item
 					label={<h2>Genero</h2>}
 					name='genero'
 					tooltip='Dama, Caballero, Niño, Niña, Bebé'
 				>
-					<Input ref={refGenero} onKeyUp={pressKeyEnterEncargo}></Input>
+					<Input
+						ref={refGenero}
+						onKeyUp={pressKeyEnterEncargo}
+						onKeyDown={keyBlockFs}
+					></Input>
 				</Form.Item>
 				<Form.Item
 					label={<h2>Modelo</h2>}
 					tooltip='Describe el encargo (Marca, tipo, corte)'
 					name='modelo'
 				>
-					<Input ref={refModelo} onKeyUp={pressKeyEnterEncargo}></Input>
+					<Input
+						ref={refModelo}
+						onKeyUp={pressKeyEnterEncargo}
+						onKeyDown={keyBlockFs}
+					></Input>
 				</Form.Item>
 
 				<Row justify='end' style={{ marginRight: 200 }}>
 					<Form.Item>
 						<Button
+							style={{
+								background: "linear-gradient(#3232A6,#000058)",
+								color: "white",
+								fontWeight: "bold",
+								width: 230,
+							}}
 							shape='round'
 							type='primary'
 							// htmlType='submit'
 							onClick={onFinish}
 							icon={<BiAddToQueue style={{ margin: "5px 10px 0 0" }} />}
 						>
-							Añadir producto
+							Añadir producto (F12)
 						</Button>
 					</Form.Item>
 					{listaProductos.length > 0 ? (
@@ -273,6 +328,7 @@ export default function Encargo() {
 									width: 230,
 								}}
 								icon={<PrinterFilled style={{ margin: "5px 10px 0 0" }} />}
+								onClick={() => setimprimirEncargo(true)}
 							>
 								Imprimir encargo (F1)
 							</Button>
@@ -300,6 +356,7 @@ export default function Encargo() {
 									width: 230,
 								}}
 								icon={<FaMoneyBillAlt style={{ margin: "5px 10px 0 0" }} />}
+								onClick={btnAddAbono}
 							>
 								Agregar abono (Enter)
 							</Button>
@@ -326,7 +383,9 @@ export default function Encargo() {
 					setimprimir={setimprimirEncargo}
 					totalTotal={0}
 					auth={auth}
-					// listaCompras={listaCompras}
+					listaProductos={listaProductos}
+					abono={abono}
+					cliente={cliente}
 					// dataApartado={dataApartado}
 					// dinero={dinero}
 					// cambio={cambio}

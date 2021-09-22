@@ -107,3 +107,23 @@ export const keyBlock = (e) => {
 		e.preventDefault();
 	}
 };
+
+export const keyBlockFs = (e) => {
+	if (e.shiftKey || (e.shiftKey && e.which === 51) || e.key === "Dead") {
+		e.preventDefault();
+	}
+	if (
+		e.keyCode === 112 ||
+		e.keyCode === 113 ||
+		e.keyCode === 114 ||
+		e.keyCode === 117 ||
+		e.keyCode === 118 ||
+		e.keyCode === 119 ||
+		e.keyCode === 120 ||
+		e.keyCode === 121 ||
+		e.keyCode === 122 ||
+		e.keyCode === 123
+	) {
+		e.preventDefault();
+	}
+};

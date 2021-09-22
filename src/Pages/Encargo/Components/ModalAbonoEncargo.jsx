@@ -11,6 +11,7 @@ export default function ModalAbonoEncargo({
 	abono,
 	loader,
 	guardarEncargo,
+	setimprimirEncargo,
 }) {
 	const refInputAbono = useRef();
 	useEffect(() => {
@@ -18,31 +19,26 @@ export default function ModalAbonoEncargo({
 			refInputAbono.current.select();
 		}
 	}, [modalAbono]);
-	const savePrint = (keyF) => {
-		if (keyF === "F1") {
-		}
-		if (keyF === "F2") {
-			guardarEncargo();
-		}
-	};
+
 	const pressKeyPrecio = (e) => {
 		if (abono > 0) {
 			// Enter
 			if (e.keyCode === 13) {
-				savePrint("F1");
+				setimprimirEncargo(true);
 			}
 			// 	F1
 			if (e.keyCode === 112) {
-				savePrint("F1");
+				setimprimirEncargo(true);
 			}
 			// F2
 			if (e.keyCode === 113) {
-				savePrint("F2");
+				guardarEncargo();
 			}
 		}
 	};
 	return (
 		<Modal
+			key='modalEncargoKey'
 			visible={modalAbono}
 			onCancel={() => setmodalAbono(false)}
 			style={{ top: 85 }}
@@ -53,10 +49,10 @@ export default function ModalAbonoEncargo({
 				</>
 			}
 			footer={[
-				<Row justify='space-around'>
+				<Row justify='space-around' key='rowFooterEncargo'>
 					<Button
 						style={
-							abono < 0
+							abono < 1
 								? {
 										background: "grey",
 										color: "white",
@@ -70,16 +66,18 @@ export default function ModalAbonoEncargo({
 										width: 230,
 								  }
 						}
+						key='btn1encargo'
 						shape='round'
-						// onClick={() => savePrint("F1")}
+						disabled={abono < 1}
 						icon={<PrinterFilled />}
 						loading={loader}
+						onClick={() => setimprimirEncargo(true)}
 					>
 						Imprimir (F1)
 					</Button>
 					<Button
 						style={
-							abono < 0
+							abono < 1
 								? {
 										background: "grey",
 										color: "white",
@@ -93,22 +91,23 @@ export default function ModalAbonoEncargo({
 										width: 230,
 								  }
 						}
+						key='btn2encargo'
 						shape='round'
-						// loading={loading}
-						// disabled={abono < 0}
-						// onClick={() => savePrint("F2")}
+						disabled={abono < 1}
 						icon={<SaveFilled />}
 						loading={loader}
+						onClick={() => guardarEncargo()}
 					>
 						Guardar (F2)
 					</Button>
 				</Row>,
 			]}
 		>
-			<h3>Abono:</h3>
+			<h3 key='h3Abono'>Abono:</h3>
 			<Input
 				id='abonoEncargo'
 				className='inputCobrar'
+				key="'abonoEncargo'"
 				ref={refInputAbono}
 				autoFocus
 				type='number'
