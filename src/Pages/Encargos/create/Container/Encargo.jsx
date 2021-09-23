@@ -2,7 +2,7 @@ import { Input, Form, Button, Row, AutoComplete } from "antd";
 import React, { useState, useEffect, useRef } from "react";
 import { BiAddToQueue } from "react-icons/bi";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
-import EncargoTable from "Pages/Encargo/Components/EncargoTable";
+import EncargoTable from "Pages/Encargos/create/Components/EncargoTable";
 import { useApolloClient, useMutation } from "@apollo/client";
 import { GET_APARTADOS_BUSCADOR } from "graphql/apartado";
 import { FaMoneyBillAlt } from "react-icons/fa";

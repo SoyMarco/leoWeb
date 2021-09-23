@@ -3,19 +3,53 @@ import { Row, Select, ConfigProvider, Result } from "antd";
 import "./buscarApartados.css";
 import { useQuery } from "@apollo/client";
 import { GET_APARTADOS_BUSCADOR } from "graphql/apartado";
+import { GET_ENCARGOS } from "graphql/encargo";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
+import { SyncOutlined } from "@ant-design/icons";
 
 export default function BuscadorApartados() {
-	let { data, loading, refetch } = useQuery(GET_APARTADOS_BUSCADOR);
-	const [urlFolio, seturlFolio] = useState(0);
+	let {
+		data: dataApartados,
+		loading,
+		refetch,
+	} = useQuery(GET_APARTADOS_BUSCADOR);
+	let {
+		data: dataEncargos,
+		loading: loadingEncargos,
+		refetch: refetchEncargos,
+	} = useQuery(GET_ENCARGOS);
+
+	const [listaBusqueda, setlistaBusqueda] = useState([]);
+	const [urlFolio, seturlFolio] = useState({ folio: 0, tipo: "" });
 	// const [clienteName, setclienteName] = useState(null);
 	const { Option } = Select;
 	const history = useHistory();
-
 	useEffect(() => {
-		if (urlFolio > 1) {
-			history.push(`/apartado/${urlFolio}`);
+		if (dataApartados && dataEncargos) {
+			let listaBusquedaMap = [];
+			let { getApartados } = dataApartados;
+			let listaApartadosMap = getApartados.map((item) => {
+				return { ...item, tipo: "apartado" };
+			});
+
+			console.log("listaApartadosMap", listaApartadosMap);
+
+			let { getEncargos } = dataEncargos;
+			let listaEncargosMap = getEncargos.map((item) => {
+				return { ...item, tipo: "encargo" };
+			});
+			console.log("listaEncargosMap", listaEncargosMap);
+			listaBusquedaMap.push(...listaApartadosMap);
+			listaBusquedaMap.push(...listaEncargosMap);
+			console.log("listaBusquedaMap", listaBusquedaMap);
+
+			setlistaBusqueda(listaBusquedaMap);
+		}
+	}, [dataApartados, dataEncargos]);
+	useEffect(() => {
+		if (urlFolio?.folio > 0) {
+			history.push(`/${urlFolio.tipo}/${urlFolio.folio}`);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [urlFolio]);
@@ -24,11 +58,13 @@ export default function BuscadorApartados() {
 		let fecha = moment.unix(item / 1000).format("LL");
 		return fecha;
 	};
-	const selectItem = (e) => {
-		seturlFolio(e);
+	const selectItem = (folio, item) => {
+		console.log(folio, item);
+		seturlFolio({ folio: folio, tipo: item?.children[2]?.key });
 	};
 	const onFocus = (e) => {
 		refetch();
+		refetchEncargos();
 	};
 	const customizeRenderEmpty = () => (
 		<div style={{ textAlign: "center" }}>
@@ -56,11 +92,17 @@ export default function BuscadorApartados() {
 			<ConfigProvider renderEmpty={customizeRenderEmpty}>
 				<Select
 					id='buscarApartadoInput'
-					loading={loading}
+					loading={loading || loadingEncargos}
 					showSearch
-					placeholder='Busca Apartados'
+					placeholder={
+						loading || loadingEncargos ? (
+							<SyncOutlined style={{ fontSize: 25 }} spin={true} />
+						) : (
+							"Busca Apartados y Encargos"
+						)
+					}
 					optionFilterProp='children'
-					onSelect={(e) => selectItem(e)}
+					onSelect={(folio, item) => selectItem(folio, item)}
 					onKeyUp={pressKeyBuscador}
 					// onSearch={(e) => setclienteName(e.toUpperCase())}
 					onFocus={onFocus}
@@ -80,7 +122,7 @@ export default function BuscadorApartados() {
 					}}
 					// value={clienteName}
 				>
-					{data?.getApartados.map((item) => {
+					{listaBusqueda?.map((item) => {
 						return (
 							<Option
 								value={item.folio}
@@ -107,7 +149,7 @@ export default function BuscadorApartados() {
 												: null
 										}
 									>
-										Folio: {item.folio}
+										{item?.tipo?.toUpperCase()}: {item.folio}
 									</h3>
 								</Row>
 								<h4
@@ -121,6 +163,7 @@ export default function BuscadorApartados() {
 								>
 									<b>{fechaVenceEn(item)}</b>, {pasarAFechaVence(item.vence)}
 								</h4>
+								<div key={item.tipo}></div>
 							</Option>
 						);
 					})}

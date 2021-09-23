@@ -14,8 +14,9 @@ import Caja from "Pages/Caja/Container/Caja";
 import EntradasSalidas from "Pages/EntradasSalidas/Container/EntradasSalidas";
 import CorteMobile from "Mobile/Corte/Container/Corte";
 import VentaMobile from "Mobile/Ventas/Container/Ventas";
-import Encargo from "Pages/Encargo/Container/Encargo";
-// import Apartados from "Pages/Apartados/Container/Apartados";
+import AddEncargo from "Pages/Encargos/create/Container/Encargo";
+import ReadEncargo from "Pages/Encargos/read/Container/ReadEncargo";
+import ReadEncargos from "Pages/Encargos/Encargos/container/ReadEncargos";
 const routes = [
 	{
 		path: "/",
@@ -66,9 +67,21 @@ const routes = [
 		exact: true,
 	},
 	{
-		path: "/encargo",
+		path: "/addencargo",
 		layout: LayoutForm,
-		component: Encargo,
+		component: AddEncargo,
+		exact: true,
+	},
+	{
+		path: "/encargos",
+		layout: LayoutForm,
+		component: ReadEncargos,
+		exact: true,
+	},
+	{
+		path: "/encargo/:folio",
+		layout: LayoutForm,
+		component: ReadEncargo,
 		exact: true,
 	},
 	// Mobiles

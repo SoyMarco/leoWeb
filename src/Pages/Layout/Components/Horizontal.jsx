@@ -34,11 +34,13 @@ export default function Horizontal({
 				<Menu
 					mode='horizontal'
 					style={{
-						background: "transparent",
+						background: "linear-gradient(#0000A6,#000066,#000058)",
 						margin: "-10px 0 0 0",
-						// height: "50px",
+						height: "60px",
 						color: "white",
 						width: "100%",
+						position: "fixed",
+						zIndex: "2",
 					}}
 				>
 					<Menu.Item

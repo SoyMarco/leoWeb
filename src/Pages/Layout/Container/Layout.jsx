@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Layout, Menu } from "antd";
 import "antd/dist/antd.css";
 import { MdLocalGroceryStore } from "react-icons/md";
-import { FaCashRegister, FaMoneyBillAlt, FaBook } from "react-icons/fa";
+import { FaCashRegister, FaMoneyBillAlt, FaPencilAlt } from "react-icons/fa";
 import { RiTerminalWindowFill } from "react-icons/ri";
+import { GiOpenBook } from "react-icons/gi";
 import "./layout.css";
 import "material-design-icons-iconfont";
 import { openNotification } from "Utils/openNotification";
@@ -93,116 +94,136 @@ function LayoutForm({ children }) {
 				{/* VERTICAL */}
 				<Layout>
 					<Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-						<div className='logo' />
-						<Menu
-							mode='inline'
-							onClick={(e) => handleClick(e)}
-							// defaultOpenKeys={[currentMenu]}
-							selectedKeys={[currentMenu]}
-							onMouseOver={() => setcollapsed(false)}
-							onMouseLeave={() => setcollapsed(true)}
-						>
-							<Menu.Item
-								key='/'
-								icon={
-									<Link
-										to={{
-											pathname: `/`,
-										}}
-									>
-										<MdLocalGroceryStore
-											style={{ color: "darkblue", fontSize: "25px" }}
-										/>
-									</Link>
-								}
-								onClick={() => history.push("/")}
+						<div>
+							<Menu
+								mode='inline'
+								onClick={(e) => handleClick(e)}
+								selectedKeys={[currentMenu]}
+								onMouseOver={() => setcollapsed(false)}
+								onMouseLeave={() => setcollapsed(true)}
 							>
-								<h2>Cuenta</h2>
-							</Menu.Item>
-							<Menu.Item
-								key='/corte'
-								icon={
-									<Link
-										to={{
-											pathname: `/corte`,
-										}}
-									>
-										<FaCashRegister
-											style={{ color: "darkblue", fontSize: "25px" }}
-										/>
-									</Link>
-								}
-								onClick={() => history.push("/corte")}
-							>
-								<h2>Corte</h2>
-							</Menu.Item>
-							<Menu.Item
-								key='/add'
-								icon={
-									<Link
-										to={{
-											pathname: `/add`,
-										}}
-									>
-										<GiLargeDress
-											style={{ color: "darkblue", fontSize: "25px" }}
-										/>
-									</Link>
-								}
-								onClick={() => history.push("/add")}
-							>
-								<h3>Nuevo Apartado</h3>
-							</Menu.Item>
-
-							<Menu.Item
-								key='/entradasSalidas'
-								icon={
-									<Link
-										to={{
-											pathname: `/entradasSalidas`,
-										}}
-									>
-										<FaMoneyBillAlt
-											style={{ color: "darkblue", fontSize: "25px" }}
-										/>
-									</Link>
-								}
-								onClick={() => history.push("/entradasSalidas")}
-							>
-								<h3>Entradas / Salidas</h3>
-							</Menu.Item>
-							<Menu.Item
-								key='/encargo'
-								icon={
-									<Link
-										to={{
-											pathname: `/encargo`,
-										}}
-									>
-										<FaBook
-											style={{
-												color: "darkblue",
-												fontSize: "25px",
+								<Menu.Item
+									key='/'
+									icon={
+										<Link
+											to={{
+												pathname: `/`,
 											}}
+										>
+											<MdLocalGroceryStore
+												style={{ color: "darkblue", fontSize: "25px" }}
+											/>
+										</Link>
+									}
+									onClick={() => history.push("/")}
+								>
+									<h2>Cuenta</h2>
+								</Menu.Item>
+								<Menu.Item
+									key='/corte'
+									icon={
+										<Link
+											to={{
+												pathname: `/corte`,
+											}}
+										>
+											<FaCashRegister
+												style={{ color: "darkblue", fontSize: "25px" }}
+											/>
+										</Link>
+									}
+									onClick={() => history.push("/corte")}
+								>
+									<h2>Corte</h2>
+								</Menu.Item>
+								<Menu.Item
+									key='/add'
+									icon={
+										<Link
+											to={{
+												pathname: `/add`,
+											}}
+										>
+											<GiLargeDress
+												style={{ color: "darkblue", fontSize: "25px" }}
+											/>
+										</Link>
+									}
+									onClick={() => history.push("/add")}
+								>
+									<h3>Nuevo Apartado</h3>
+								</Menu.Item>
+								<Menu.Item
+									key='/addencargo'
+									icon={
+										<Link
+											to={{
+												pathname: `/addencargo`,
+											}}
+										>
+											<FaPencilAlt
+												style={{
+													color: "darkblue",
+													fontSize: "25px",
+												}}
+											/>
+										</Link>
+									}
+									onClick={() => history.push("/addencargo")}
+								>
+									<h3>Nuevo Encargo</h3>
+								</Menu.Item>
+								<Menu.Item
+									key='/encargos'
+									icon={
+										<Link
+											to={{
+												pathname: `/encargos`,
+											}}
+										>
+											<GiOpenBook
+												style={{
+													color: "darkblue",
+													fontSize: "25px",
+												}}
+											/>
+										</Link>
+									}
+									onClick={() => history.push("/encargos")}
+								>
+									<h3>Encargos</h3>
+								</Menu.Item>
+								<Menu.Item
+									key='/entradasSalidas'
+									icon={
+										<Link
+											to={{
+												pathname: `/entradasSalidas`,
+											}}
+										>
+											<FaMoneyBillAlt
+												style={{ color: "darkblue", fontSize: "25px" }}
+											/>
+										</Link>
+									}
+									onClick={() => history.push("/entradasSalidas")}
+								>
+									<h3>Entrada / Salida</h3>
+								</Menu.Item>
+
+								<Menu.Item
+									key='7'
+									icon={
+										<RiTerminalWindowFill
+											style={{ color: "darkblue", fontSize: "30px" }}
 										/>
-									</Link>
-								}
-								onClick={() => history.push("/encargo")}
-							>
-								<h2>Encargos</h2>
-							</Menu.Item>
-							<Menu.Item
-								key='7'
-								icon={
-									<RiTerminalWindowFill
-										style={{ color: "darkblue", fontSize: "30px" }}
-									/>
-								}
-								onClick={() => window.open(UrlFrontend)}
-							>
-								<h3>Nueva ventana</h3>
-							</Menu.Item>
-						</Menu>
+									}
+									onClick={() => window.open(UrlFrontend)}
+								>
+									<h3>Nueva ventana</h3>
+								</Menu.Item>
+							</Menu>
+						</div>
 					</Sider>
 					<Layout>
 						{/* CONTENIDO DE VENTAS */}
