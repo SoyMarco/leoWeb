@@ -98,6 +98,12 @@ const routes = [
 		exact: true,
 	},
 	{
+		path: "/mobile/encargos",
+		layout: LayoutMobile,
+		component: ReadEncargos,
+		exact: true,
+	},
+	{
 		layout: LayoutForm,
 		component: Error,
 	},

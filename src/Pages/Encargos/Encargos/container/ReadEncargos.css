@@ -1,0 +1,44 @@
+.tablaEncargos {
+	/* border: gray solid 1px; */
+	width: 100%;
+	margin-top: 15px;
+	margin-bottom: 65px;
+
+	/* border-radius: 50px; */
+}
+.tablaEncargos td {
+	border-right: #abd5f8 solid 0.5px;
+}
+.tablaEncargos th {
+	border-right: white solid 0.5px;
+	background: linear-gradient(#3f698b, #013b6b);
+	color: white;
+}
+.tablaEncargos tr:nth-child(even) {
+	background: linear-gradient(#ffffff, #abd5f8);
+}
+.h4Encargos {
+	margin-top: 5px;
+}
+.titleCard {
+	margin: 10px 10px 0 15px;
+}
+.titulosActions {
+	width: 330px;
+	margin: 10px 0 0 0;
+}
+.colAntCard .ant-card-body {
+	padding: 0 0 5px 0;
+}
+.colAntCard .ant-card-actions {
+	padding: 0px;
+	border-radius: 10px;
+	position: absolute;
+	width: 100%;
+	bottom: 0;
+}
+.divAbrir :hover {
+	background: #f0f2f5;
+	color: darkblue;
+	border-radius: 10px;
+}

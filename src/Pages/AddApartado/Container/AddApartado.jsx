@@ -121,28 +121,6 @@ export default function AddApartado() {
 			title: cliente ? cliente : "Nombre cliente",
 			content: (
 				<>
-					{/* <Row justify='center'>
-						<Input
-							id='inputNameClient'
-							prefix={<SmileOutlined style={{ marginLeft: "20px" }} />}
-							style={{
-								color: "blue",
-								// fontSize: 30,
-								fontSize: "x-large",
-								fontWeight: "bold",
-								borderRadius: "50px",
-								maxWidth: "80%",
-								margin: "60px 0 ",
-							}}
-							onChange={(e) => setcliente(e.target.value.toUpperCase())}
-							value={cliente}
-							ref={inputNameClient}
-							onKeyUp={pressKeyEnter}
-							// onKeyDown={keyBlock}
-							// value={precio.precio}
-							// onChange={handlePrecio}
-						/>
-					</Row> */}
 					<Row justify='center'>
 						<SmileOutlined
 							style={{
@@ -159,7 +137,6 @@ export default function AddApartado() {
 							backfill={true}
 							size='large'
 							onKeyUp={pressKeyEnter}
-							// onSelect={pressKeyEnter}
 							style={{
 								color: "blue",
 								fontSize: "x-large",

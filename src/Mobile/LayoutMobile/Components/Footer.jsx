@@ -2,6 +2,7 @@ import React from "react";
 import { Row } from "antd";
 import { MdLocalGroceryStore } from "react-icons/md";
 import { FaCashRegister } from "react-icons/fa";
+import { GiOpenBook } from "react-icons/gi";
 
 export default function Horizontal({ history }) {
 	return (
@@ -24,6 +25,13 @@ export default function Horizontal({ history }) {
 							color: "darkblue",
 						}}
 						onClick={() => history.push("/mobile/corte")}
+					/>
+					<GiOpenBook
+						style={{
+							margin: "10px 30px",
+							color: "darkblue",
+						}}
+						onClick={() => history.push("/mobile/encargos")}
 					/>
 					<MdLocalGroceryStore
 						style={{

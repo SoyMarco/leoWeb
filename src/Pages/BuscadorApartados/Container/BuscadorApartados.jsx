@@ -33,16 +33,13 @@ export default function BuscadorApartados() {
 				return { ...item, tipo: "apartado" };
 			});
 
-			console.log("listaApartadosMap", listaApartadosMap);
-
 			let { getEncargos } = dataEncargos;
 			let listaEncargosMap = getEncargos.map((item) => {
 				return { ...item, tipo: "encargo" };
 			});
-			console.log("listaEncargosMap", listaEncargosMap);
+
 			listaBusquedaMap.push(...listaApartadosMap);
 			listaBusquedaMap.push(...listaEncargosMap);
-			console.log("listaBusquedaMap", listaBusquedaMap);
 
 			setlistaBusqueda(listaBusquedaMap);
 		}
@@ -55,7 +52,12 @@ export default function BuscadorApartados() {
 	}, [urlFolio]);
 
 	const pasarAFechaVence = (item) => {
-		let fecha = moment.unix(item / 1000).format("LL");
+		let fecha = "Sin fecha";
+		if (item?.vence) {
+			fecha = moment.unix(item.vence / 1000).format("LL");
+		} else {
+			fecha = moment.unix(item.createAt / 1000).format("LL");
+		}
 		return fecha;
 	};
 	const selectItem = (folio, item) => {
@@ -81,8 +83,11 @@ export default function BuscadorApartados() {
 		var fecha = moment.unix(item.vence / 1000).fromNow();
 		if (item.vence > Date.now()) {
 			fecha = `Vence ${fecha}`;
-		} else {
+		} else if (item.vence < Date.now()) {
 			fecha = `Venció ${fecha}`;
+		} else {
+			fecha = moment.unix(item.createAt / 1000).fromNow();
+			fecha = `Encargó ${fecha}`;
 		}
 		// this.vence = fecha;
 		return fecha;
@@ -133,7 +138,9 @@ export default function BuscadorApartados() {
 									<h3
 										style={
 											item?.entregado[0]?.status === true ||
-											item?.cancelado[0]?.status === false
+											item?.cancelado[0]?.status === false ||
+											item?.cancelado?.status === true ||
+											item?.entregado?.status === true
 												? { color: "red" }
 												: null
 										}
@@ -156,12 +163,14 @@ export default function BuscadorApartados() {
 									key={item.cliente}
 									style={
 										item?.entregado[0]?.status === true ||
-										item?.cancelado[0]?.status === false
+										item?.cancelado[0]?.status === false ||
+										item?.entregado?.status === true ||
+										item?.cancelado?.status === true
 											? { color: "red" }
 											: null
 									}
 								>
-									<b>{fechaVenceEn(item)}</b>, {pasarAFechaVence(item.vence)}
+									<b>{fechaVenceEn(item)}</b>, {pasarAFechaVence(item)}
 								</h4>
 								<div key={item.tipo}></div>
 							</Option>

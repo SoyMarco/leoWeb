@@ -165,10 +165,12 @@ export default function Encargo() {
 							productos: listaProductos,
 							abonos: [{ abono: abono, vendedor: auth.name }],
 							cliente: cliente,
+							vendedor: auth.name,
+							guardado: { vendedor: auth.name },
 						},
 					},
 				});
-				if (data) {
+				if (data.registerEncargo === true) {
 					audio.play();
 					openNotification("success", `Encargo guardado `);
 					setloader(false);
@@ -276,7 +278,7 @@ export default function Encargo() {
 					></Input>
 				</Form.Item>
 				<Form.Item
-					label={<h2>Genero</h2>}
+					label={<h2>Genero </h2>}
 					name='genero'
 					tooltip='Dama, Caballero, Niño, Niña, Bebé'
 				>
@@ -287,7 +289,7 @@ export default function Encargo() {
 					></Input>
 				</Form.Item>
 				<Form.Item
-					label={<h2>Modelo</h2>}
+					label={<h2>Modelo o Marca</h2>}
 					tooltip='Describe el encargo (Marca, tipo, corte)'
 					name='modelo'
 				>

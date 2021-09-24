@@ -1,34 +1,79 @@
-import { Row } from "antd";
 import React, { useState, useEffect } from "react";
-import EncargoTable from "Pages/Encargos/create/Components/EncargoTable";
-import { useApolloClient /* , useMutation  */ } from "@apollo/client";
-// import { openNotification } from "Utils/openNotification";
-// import ErrorConection from "Utils/ErrorConection";
-import useAuth from "hooks/useAuth";
-// import { useHistory } from "react-router-dom";
-// import aceptar from "assets/sonido/Aceptar.wav";
-import ImprimirNewEncargo from "../components/ImprimirEncargo/ImprimirNewEncargo";
+import { useQuery /* , useMutation  */ } from "@apollo/client";
 import { GET_ENCARGOS } from "graphql/encargo";
+import { Skeleton, Card, Row, Col, Switch } from "antd";
+import { AiFillFolderOpen } from "react-icons/ai";
+import moment from "moment";
+import "./ReadEncargos.css";
+import { useHistory } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { EDIT_GUARDAR_APARTADO } from "graphql/encargo";
+import { openNotification } from "Utils/openNotification";
+import ErrorConection from "Utils/ErrorConection";
+import useAuth from "hooks/useAuth";
+
 export default function ReadEncargo() {
-	const client = useApolloClient();
-	let getEncargos = client.readQuery({
-		query: GET_ENCARGOS,
+	let {
+		data: dataEncargos,
+		loading: loadingEncargos,
+		refetch: refetchEncargos,
+	} = useQuery(GET_ENCARGOS, {
+		notifyOnNetworkStatusChange: true,
 	});
+	const [mutateEDIT_GUARDAR_APARTADO] = useMutation(EDIT_GUARDAR_APARTADO);
+	const history = useHistory();
+	let widthPantalla = window.screen.width;
 
-	// const audio = new Audio(aceptar);
+	const { logout } = useAuth();
 
-	// const history = useHistory();
-	const { auth /* , logout  */ } = useAuth();
-	// const [abono, setabono] = useState(0);
-	// const [modalAbono, setmodalAbono] = useState(false);
-	const [imprimirEncargo, setimprimirEncargo] = useState(false);
-	// const [loader, setloader] = useState(false);
+	const { Meta } = Card;
+	const [btnLoading, setbtnLoading] = useState(false);
 
-	useEffect(() => {}, [getEncargos]);
+	const [encargos, setencargos] = useState([]);
+	useEffect(() => {
+		refetchEncargos();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
-	const [listaProductos, setlistaProductos] = useState([]);
-	// const [cliente, setcliente] = useState("");
-
+	useEffect(() => {
+		if (dataEncargos?.getEncargos) {
+			let { getEncargos } = dataEncargos;
+			console.log("getEncargos", getEncargos);
+			setencargos(getEncargos);
+		}
+	}, [dataEncargos]);
+	const pasarAFechaLLLL = (item) => {
+		let fecha = moment.unix(item / 1000).format("LLLL");
+		return fecha;
+	};
+	const guardarEncargo = async (e, item) => {
+		console.log("e", e);
+		setbtnLoading(true);
+		try {
+			if (item?.id) {
+				const { data } = await mutateEDIT_GUARDAR_APARTADO({
+					// Parameters
+					variables: {
+						input: {
+							id: item.id,
+							status: e,
+						},
+					},
+				});
+				if (data) {
+					console.log(data);
+					setencargos(data.editGuararEncargo);
+					// refetchEncargos();
+					openNotification("success", `Se modificó con exito`);
+					setbtnLoading(false);
+				}
+			}
+		} catch (error) {
+			console.log("error", error);
+			setbtnLoading(false);
+			ErrorConection(logout);
+		}
+	};
 	return (
 		<>
 			<Row justify='center'>
@@ -36,26 +81,92 @@ export default function ReadEncargo() {
 					ENCARGOS
 				</h1>
 			</Row>
-
-			<EncargoTable
-				listaProductos={listaProductos}
-				setlistaProductos={setlistaProductos}
-			/>
-
-			{imprimirEncargo && (
-				<ImprimirNewEncargo
-					imprimir={imprimirEncargo}
-					setimprimir={setimprimirEncargo}
-					totalTotal={0}
-					auth={auth}
-					listaProductos={listaProductos}
-					// abono={abono}
-					// cliente={cliente}
-					// dataApartado={dataApartado}
-					// dinero={dinero}
-					// cambio={cambio}
-				/>
-			)}
+			<Skeleton loading={loadingEncargos} avatar active>
+				<Row gutter={[20, 0]}>
+					{encargos?.map((item) => {
+						return (
+							<Col lg={8} xs={24} className='colAntCard'>
+								<Card
+									style={{
+										width: "100%",
+										height: "95%",
+										marginTop: 16,
+										borderRadius: 10,
+										boxShadow: "17px 17px 35px #7a7a7a,-7px -7px 30px #ffffff",
+									}}
+									actions={[
+										<div className='divAbrir'>
+											<div>
+												<p style={{ marginBottom: 0 }}>Guardado</p>
+												<Switch
+													checked={item?.guardado?.status === true}
+													disabled={loadingEncargos || btnLoading}
+													loading={loadingEncargos || btnLoading}
+													onClick={(e) => guardarEncargo(e, item)}
+													style={
+														item?.guardado?.status === true
+															? { background: "limeGreen", fontSize: "20px" }
+															: { background: "gray", fontSize: "20px" }
+													}
+												/>
+											</div>
+										</div>,
+										<div className='divAbrir'>
+											<div
+												onClick={() =>
+													history.push(
+														widthPantalla < 700
+															? `mobile/encargo/${item.folio}`
+															: `/encargo/${item.folio}`
+													)
+												}
+											>
+												<p style={{ marginBottom: 0 }}>Abrir</p>
+												<AiFillFolderOpen
+													key='abrir'
+													style={{ fontSize: "20px" }}
+												/>
+											</div>
+										</div>,
+									]}
+								>
+									<Meta
+										className='titleCard'
+										title={
+											<Row justify='space-between'>
+												<h3>{item.cliente}</h3>
+												<h4>Folio: {item.folio}</h4>
+											</Row>
+										}
+									/>
+									<h4 style={{ marginLeft: "15px" }}>
+										{pasarAFechaLLLL(item.createAt)}
+									</h4>
+									{/* <h4 className='h4Encargos'>Encargos:</h4> */}
+									<table className='tablaEncargos'>
+										<tr>
+											<th>Encargo</th>
+											<th>Color</th>
+											<th>Genero</th>
+										</tr>
+										{item?.productos?.map((producto) => {
+											return (
+												<>
+													<tr>
+														<td>{producto.nombre}</td>
+														<td>{producto.color}</td>
+														<td>{producto.genero}</td>
+													</tr>
+												</>
+											);
+										})}
+									</table>
+								</Card>
+							</Col>
+						);
+					})}
+				</Row>
+			</Skeleton>
 		</>
 	);
 }

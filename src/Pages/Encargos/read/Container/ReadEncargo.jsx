@@ -1,83 +1,44 @@
-import { Row } from "antd";
 import React, { useState, useEffect } from "react";
-import EncargoTable from "Pages/Encargos/create/Components/EncargoTable";
-import { useApolloClient, useMutation } from "@apollo/client";
-import { GET_APARTADOS_BUSCADOR } from "graphql/apartado";
-import { REGISTER_ENCARGO } from "graphql/encargo";
-import { openNotification } from "Utils/openNotification";
-import ErrorConection from "Utils/ErrorConection";
-import useAuth from "hooks/useAuth";
-import { useHistory } from "react-router-dom";
-import ModalAbonoEncargo from "../Components/ModalAbonoEncargo";
-import aceptar from "assets/sonido/Aceptar.wav";
-import ImprimirNewEncargo from "../Components/ImprimirEncargo/ImprimirNewEncargo";
-
+// import useAuth from "hooks/useAuth";
+// import { useHistory } from "react-router-dom";
+// import ModalAbonoEncargo from "../Components/ModalAbonoEncargo";
+// import aceptar from "assets/sonido/Aceptar.wav";
+// import ImprimirNewEncargo from "../Components/ImprimirEncargo/ImprimirNewEncargo";
+import moment from "moment";
+import { Card, Row, Col, Switch } from "antd";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { GET_ENCARGO_FOLIO } from "graphql/encargo";
 export default function ReadEncargo() {
-	const [mutateREGISTER_ENCARGO] = useMutation(REGISTER_ENCARGO);
-
-	const client = useApolloClient();
-	let apartadosBuscador = client.readQuery({
-		query: GET_APARTADOS_BUSCADOR,
+	const params = useParams();
+	let urlFolio = parseInt(params.folio);
+	console.log("urlFolio", urlFolio);
+	let {
+		data: dataEncargo,
+		// loading,
+		// error,
+		// refetch,
+	} = useQuery(GET_ENCARGO_FOLIO, {
+		variables: { folio: urlFolio },
+		notifyOnNetworkStatusChange: true,
 	});
-
-	const audio = new Audio(aceptar);
-
-	const history = useHistory();
-	const { auth, logout } = useAuth();
-	// const [optionsClientes, setoptionsClientes] = useState([]);
-	const [abono, setabono] = useState(0);
-	const [modalAbono, setmodalAbono] = useState(false);
-	const [imprimirEncargo, setimprimirEncargo] = useState(false);
-	const [loader, setloader] = useState(false);
-
+	const [EncargoFolio, setEncargoFolio] = useState({});
 	useEffect(() => {
-		if (apartadosBuscador?.getApartados) {
-			let { getApartados } = apartadosBuscador;
-			let listClientes = [];
-			for (let i = 0; i < getApartados.length; i++) {
-				const element = getApartados[i].cliente;
-				let repetido = false;
-				for (let x = 0; x < listClientes.length; x++) {
-					if (listClientes[x].value === element) {
-						repetido = true;
-					}
-				}
-				if (repetido === false) {
-					listClientes.push({ value: element });
-				}
-			}
-			// setoptionsClientes(listClientes);
+		if (dataEncargo) {
+			console.log(dataEncargo);
+			setEncargoFolio(dataEncargo?.getEncargoFolio[0]);
 		}
-	}, [apartadosBuscador]);
+	}, [dataEncargo]);
+	// const audio = new Audio(aceptar);
+	const { Meta } = Card;
 
-	const [listaProductos, setlistaProductos] = useState([]);
-	// const [cliente, setcliente] = useState("");
+	// const history = useHistory();
+	// const { auth, logout } = useAuth();
 
-	const guardarEncargo = async () => {
-		if (loader === false) {
-			try {
-				const { data } = await mutateREGISTER_ENCARGO({
-					variables: {
-						input: {
-							productos: listaProductos,
-							abonos: [{ abono: abono, vendedor: auth.name }],
-							// cliente: cliente,
-						},
-					},
-				});
-				if (data) {
-					audio.play();
-					openNotification("success", `Encargo guardado `);
-					setloader(false);
-					history.push("/");
-				}
-			} catch (error) {
-				setloader(false);
-				ErrorConection(logout);
-			}
-		}
+	const pasarAFechaLLLL = (item) => {
+		let fecha = moment.unix(item / 1000).format("LLLL");
+		return fecha;
 	};
-
 	return (
 		<>
 			<Row justify='center'>
@@ -86,33 +47,67 @@ export default function ReadEncargo() {
 				</h1>
 			</Row>
 
-			<EncargoTable
-				listaProductos={listaProductos}
-				setlistaProductos={setlistaProductos}
-			/>
-			<ModalAbonoEncargo
-				modalAbono={modalAbono}
-				setmodalAbono={setmodalAbono}
-				setabono={setabono}
-				abono={abono}
-				loader={loader}
-				guardarEncargo={guardarEncargo}
-				setimprimirEncargo={setimprimirEncargo}
-			/>
-			{imprimirEncargo && (
-				<ImprimirNewEncargo
-					imprimir={imprimirEncargo}
-					setimprimir={setimprimirEncargo}
-					totalTotal={0}
-					auth={auth}
-					listaProductos={listaProductos}
-					abono={abono}
-					// cliente={cliente}
-					// dataApartado={dataApartado}
-					// dinero={dinero}
-					// cambio={cambio}
-				/>
-			)}
+			<Col lg={8} xs={24} className='colAntCard'>
+				<Card
+					style={{
+						width: "100%",
+						height: "95%",
+						marginTop: 16,
+						borderRadius: 10,
+						boxShadow: "17px 17px 35px #7a7a7a,-7px -7px 30px #ffffff",
+					}}
+					actions={[
+						<div className='divAbrir'>
+							<div>
+								<p style={{ marginBottom: 0 }}>Guardado</p>
+								<Switch
+									checked={EncargoFolio?.guardado?.status === true}
+									// disabled={loadingEncargos || btnLoading}
+									// loading={loadingEncargos || btnLoading}
+									// onClick={(e) => guardarEncargo(e, EncargoFolio)}
+									style={
+										EncargoFolio?.guardado?.status === true
+											? { background: "limeGreen", fontSize: "20px" }
+											: { background: "gray", fontSize: "20px" }
+									}
+								/>
+							</div>
+						</div>,
+					]}
+				>
+					<Meta
+						className='titleCard'
+						title={
+							<Row justify='space-between'>
+								<h3>{EncargoFolio.cliente}</h3>
+								<h4>Folio: {EncargoFolio.folio}</h4>
+							</Row>
+						}
+					/>
+					<h4 style={{ marginLeft: "15px" }}>
+						{pasarAFechaLLLL(EncargoFolio.createAt)}
+					</h4>
+
+					<table className='tablaEncargos'>
+						<tr>
+							<th>Encargo</th>
+							<th>Color</th>
+							<th>Genero</th>
+						</tr>
+						{EncargoFolio?.productos?.map((producto) => {
+							return (
+								<>
+									<tr>
+										<td>{producto.nombre}</td>
+										<td>{producto.color}</td>
+										<td>{producto.genero}</td>
+									</tr>
+								</>
+							);
+						})}
+					</table>
+				</Card>
+			</Col>
 		</>
 	);
 }
