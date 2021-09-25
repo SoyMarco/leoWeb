@@ -1,41 +1,26 @@
 import React, { useEffect, useState, useRef } from "react";
 import ImprimirEncargo from "../Components/ImprimirEncargo/ImprimirEncargo";
 import ModalCalendar from "../Components/ModalCalendar/ModalCalendar";
-import { DollarCircleFilled, CalendarOutlined } from "@ant-design/icons";
+import { CalendarOutlined } from "@ant-design/icons";
 import CobrarEncargo from "../Components/Cobrar/CobrarEncargo";
-import { DeleteFilled, PrinterFilled } from "@ant-design/icons";
 import { TablaProductos, TablaAbonos } from "../Components";
 import { openNotification } from "Utils/openNotification";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import ErrorConection from "Utils/ErrorConection";
-import { UrlFrontend } from "config/apollo";
 import ErrorPage from "Pages/Error/Error";
 import useAuth from "hooks/useAuth";
-import { keyBlock } from "Utils";
 import moment from "moment";
 import {
 	GET_ENCARGO_FOLIO,
-	CANCELAR_ENCARGO,
 	CANCEL_ENTREGA,
 	EDIT_GUARDAR_ENCARGO,
 } from "graphql/encargo";
-import {
-	Row,
-	Card,
-	Input,
-	Skeleton,
-	Button,
-	Popconfirm,
-	Switch,
-	Tooltip,
-	Result,
-} from "antd";
+import { Row, Card, Skeleton, Button, Switch, Tooltip, Result } from "antd";
 import "./Encargo.css";
 // import { NetworkStatus } from "@apollo/client";
 
-export default function Encargo(props) {
-	const history = useHistory();
+export default function Encargo() {
 	const params = useParams();
 	let urlFolio = parseInt(params.folio);
 	let { data, loading, error, refetch } = useQuery(GET_ENCARGO_FOLIO, {
@@ -44,7 +29,6 @@ export default function Encargo(props) {
 	});
 	const [mutateEDIT_GUARDAR_ENCARGO] = useMutation(EDIT_GUARDAR_ENCARGO);
 	const [titleWeb, settitleWeb] = useState("Encargo");
-	const [mutateCANCELAR_ENCARGO] = useMutation(CANCELAR_ENCARGO);
 	const [mutateCANCEL_ENTREGA] = useMutation(CANCEL_ENTREGA);
 	const { logout, auth } = useAuth();
 	const [modalCobrar, setmodalCobrar] = useState(false);
@@ -61,7 +45,7 @@ export default function Encargo(props) {
 	const [totalProductos, settotalProductos] = useState(0);
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
-	const [venceEn, setvenceEn] = useState(null);
+	// const [venceEn, setvenceEn] = useState(null);
 	const inputAbono = useRef();
 	const [colorVence, setcolorVence] = useState(
 		"linear-gradient(#2196F3,#0000E6)"
@@ -81,8 +65,7 @@ export default function Encargo(props) {
 	useEffect(() => {
 		if (data?.getEncargoFolio[0]) {
 			setdataEncargo(data?.getEncargoFolio[0]);
-			let { productos, abonos, cliente, cancelado, guardado } =
-				data?.getEncargoFolio[0];
+			let { productos, abonos, cliente, guardado } = data?.getEncargoFolio[0];
 
 			let listaAbonos = abonos.map((item) => {
 				return { ...item, key: item._id };
@@ -180,11 +163,11 @@ export default function Encargo(props) {
 	const fechaVenceEn = () => {
 		var fecha = moment.unix(dataEncargo.vence / 1000).fromNow();
 		if (dataEncargo.vence > Date.now()) {
-			setvenceEn(`Vence ${fecha}`);
+			// setvenceEn(`Vence ${fecha}`);
 			//Color azul
 			setcolorVence("linear-gradient(#2196F3,#0000E6)");
 		} else {
-			setvenceEn(`Venció ${fecha}`);
+			// setvenceEn(`Venció ${fecha}`);
 			//Color rojo
 			setcolorVence("linear-gradient(#F53636,#D32F2F,#8B0000)");
 		}

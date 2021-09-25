@@ -1,22 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { CANCELAR_PRODUCTO_APARTDO } from "graphql/apartado";
 import { MdLocalGroceryStore, MdDelete } from "react-icons/md";
-import { FaShoppingCart } from "react-icons/fa";
 import { useMutation } from "@apollo/client";
 import useAuth from "hooks/useAuth";
 import moment from "moment";
-import {
-	Table,
-	Result,
-	Col,
-	Row,
-	Button,
-	Popconfirm,
-	Switch,
-	Tooltip,
-} from "antd";
+import { Table, Result, Col, Row, Button, Popconfirm, Tooltip } from "antd";
 import "./productos.css";
 import AddProduct from "./AddProduct/AddProduct";
 

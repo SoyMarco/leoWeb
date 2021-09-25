@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-import {
-	Table,
-	Result,
-	Col,
-	Row,
-	Tooltip,
-	Popconfirm,
-	Button,
-	Progress,
-} from "antd";
+import { Table, Result, Col, Row, Tooltip, Popconfirm, Button } from "antd";
 import { MdDelete } from "react-icons/md";
 import { SmileOutlined } from "@ant-design/icons";
 import moment from "moment";
@@ -166,16 +157,7 @@ export default function Abonos({
 			),
 		},
 	];
-	const calculatePorcent = () => {
-		let addAbono = 0;
-		if (parseInt(abono.abono) > 0) {
-			addAbono = parseInt(abono.abono);
-		}
-		let porcent = 0;
-		porcent = ((totalAbonos + addAbono) * 100) / totalTotal ?? 0;
 
-		return porcent;
-	};
 	return (
 		<>
 			<Col xs={24} sm={24} md={10}>
