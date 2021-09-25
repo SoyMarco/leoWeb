@@ -67,7 +67,7 @@ export const GET_ENCARGOS = gql`
 		}
 	}
 `;
-export const EDIT_GUARDAR_APARTADO = gql`
+export const EDIT_GUARDAR_ENCARGO = gql`
 	mutation editGuararEncargo($input: CancelarApartadoInput) {
 		editGuararEncargo(input: $input) {
 			id
@@ -189,5 +189,15 @@ export const GET_ENCARGO_FOLIO = gql`
 				}
 			}
 		}
+	}
+`;
+export const CANCELAR_ENCARGO = gql`
+	mutation cancelarApartado($input: CancelarApartadoInput) {
+		cancelarApartado(input: $input)
+	}
+`;
+export const CANCEL_ENTREGA = gql`
+	mutation cancelEntrega($input: cancelEntregaInput) {
+		cancelEntrega(input: $input)
 	}
 `;

@@ -169,7 +169,7 @@ const Corte = () => {
 		return (
 			<>
 				<Divider orientation='left' style={{ marginTop: 0 }}>
-					<h1 style={{ fontSize: "x-large", color: "darkblue" }}>
+					<h1 style={{ fontSize: "x-large", color: "#001e36" }}>
 						{item[0].vendedor}
 					</h1>
 				</Divider>
@@ -230,14 +230,14 @@ const Corte = () => {
 					style={{
 						fontSize: "x-large",
 						fontWeight: "bold",
-						color: "darkblue",
+						color: "#001e36",
 					}}
 				>
 					Corte
 				</h1>
 			</Row>
 			<Divider orientation='left' style={{ marginTop: 0 }}>
-				<h1 style={{ fontSize: "x-large", color: "darkblue" }}>Del día</h1>
+				<h1 style={{ fontSize: "x-large", color: "#001e36" }}>Del día</h1>
 			</Divider>
 			<Row>
 				<Col xs={8}>

@@ -192,7 +192,7 @@ export default function Encargo() {
 	return (
 		<>
 			<Row justify='center'>
-				<h1 style={{ fontSize: "25px", fontWeight: "bold", color: "darkblue" }}>
+				<h1 style={{ fontSize: "25px", fontWeight: "bold", color: "#001e36" }}>
 					ENCARGO NUEVO
 				</h1>
 			</Row>

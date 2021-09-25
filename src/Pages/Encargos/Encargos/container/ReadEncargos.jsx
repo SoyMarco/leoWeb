@@ -7,7 +7,7 @@ import moment from "moment";
 import "./ReadEncargos.css";
 import { useHistory } from "react-router-dom";
 import { useMutation } from "@apollo/client";
-import { EDIT_GUARDAR_APARTADO } from "graphql/encargo";
+import { EDIT_GUARDAR_ENCARGO } from "graphql/encargo";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import useAuth from "hooks/useAuth";
@@ -20,7 +20,7 @@ export default function ReadEncargo() {
 	} = useQuery(GET_ENCARGOS, {
 		notifyOnNetworkStatusChange: true,
 	});
-	const [mutateEDIT_GUARDAR_APARTADO] = useMutation(EDIT_GUARDAR_APARTADO);
+	const [mutateEDIT_GUARDAR_ENCARGO] = useMutation(EDIT_GUARDAR_ENCARGO);
 	const history = useHistory();
 	let widthPantalla = window.screen.width;
 
@@ -51,7 +51,7 @@ export default function ReadEncargo() {
 		setbtnLoading(true);
 		try {
 			if (item?.id) {
-				const { data } = await mutateEDIT_GUARDAR_APARTADO({
+				const { data } = await mutateEDIT_GUARDAR_ENCARGO({
 					// Parameters
 					variables: {
 						input: {
@@ -77,7 +77,7 @@ export default function ReadEncargo() {
 	return (
 		<>
 			<Row justify='center'>
-				<h1 style={{ fontSize: "25px", fontWeight: "bold", color: "darkblue" }}>
+				<h1 style={{ fontSize: "25px", fontWeight: "bold", color: "#001e36" }}>
 					ENCARGOS
 				</h1>
 			</Row>
@@ -95,6 +95,25 @@ export default function ReadEncargo() {
 										boxShadow: "17px 17px 35px #7a7a7a,-7px -7px 30px #ffffff",
 									}}
 									actions={[
+										widthPantalla < 700 ? null : (
+											<div className='divAbrir'>
+												<div
+													onClick={() =>
+														history.push(
+															widthPantalla < 700
+																? `/mobile/encargo/${item.folio}`
+																: `/encargo/${item.folio}`
+														)
+													}
+												>
+													<p style={{ marginBottom: 0 }}>Abrir</p>
+													<AiFillFolderOpen
+														key='abrir'
+														style={{ fontSize: "20px" }}
+													/>
+												</div>
+											</div>
+										),
 										<div className='divAbrir'>
 											<div>
 												<p style={{ marginBottom: 0 }}>Guardado</p>
@@ -108,23 +127,6 @@ export default function ReadEncargo() {
 															? { background: "limeGreen", fontSize: "20px" }
 															: { background: "gray", fontSize: "20px" }
 													}
-												/>
-											</div>
-										</div>,
-										<div className='divAbrir'>
-											<div
-												onClick={() =>
-													history.push(
-														widthPantalla < 700
-															? `mobile/encargo/${item.folio}`
-															: `/encargo/${item.folio}`
-													)
-												}
-											>
-												<p style={{ marginBottom: 0 }}>Abrir</p>
-												<AiFillFolderOpen
-													key='abrir'
-													style={{ fontSize: "20px" }}
 												/>
 											</div>
 										</div>,

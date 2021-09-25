@@ -42,12 +42,12 @@ export default function ReadEncargo() {
 	return (
 		<>
 			<Row justify='center'>
-				<h1 style={{ fontSize: "25px", fontWeight: "bold", color: "darkblue" }}>
+				<h1 style={{ fontSize: "25px", fontWeight: "bold", color: "#001e36" }}>
 					ENCARGO
 				</h1>
 			</Row>
 
-			<Col lg={8} xs={24} className='colAntCard'>
+			<Col lg={24} xs={24} className='colAntCard'>
 				<Card
 					style={{
 						width: "100%",
@@ -87,25 +87,50 @@ export default function ReadEncargo() {
 					<h4 style={{ marginLeft: "15px" }}>
 						{pasarAFechaLLLL(EncargoFolio.createAt)}
 					</h4>
-
-					<table className='tablaEncargos'>
-						<tr>
-							<th>Encargo</th>
-							<th>Color</th>
-							<th>Genero</th>
-						</tr>
-						{EncargoFolio?.productos?.map((producto) => {
-							return (
-								<>
-									<tr>
-										<td>{producto.nombre}</td>
-										<td>{producto.color}</td>
-										<td>{producto.genero}</td>
-									</tr>
-								</>
-							);
-						})}
-					</table>
+					<Row>
+						<Col lg={11} xs={24}>
+							{/* Tabla Encargos */}
+							<table className='tablaEncargos'>
+								<tr>
+									<th>Encargo</th>
+									<th>Color</th>
+									<th>Genero</th>
+								</tr>
+								{EncargoFolio?.productos?.map((producto) => {
+									return (
+										<>
+											<tr>
+												<td>{producto.nombre}</td>
+												<td>{producto.color}</td>
+												<td>{producto.genero}</td>
+											</tr>
+										</>
+									);
+								})}
+							</table>
+						</Col>
+						<Col lg={11} xs={24}>
+							{/* Tabla Abonos */}
+							<table className='tablaEncargos'>
+								<tr>
+									<th>Abono</th>
+									<th>Fecha</th>
+									<th>Vendedor</th>
+								</tr>
+								{EncargoFolio?.abonos?.map((abono) => {
+									return (
+										<>
+											<tr>
+												<td>{abono.abono}</td>
+												<td>{abono.createAt}</td>
+												<td>{abono.vendedor}</td>
+											</tr>
+										</>
+									);
+								})}
+							</table>
+						</Col>
+					</Row>
 				</Card>
 			</Col>
 		</>

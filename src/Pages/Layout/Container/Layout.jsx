@@ -29,13 +29,18 @@ function LayoutForm({ children }) {
 	useEffect(() => {
 		let titleUrl = Location.pathname;
 
-		let apartado = Location.pathname;
-		apartado = apartado.slice(0, 10);
+		let urlLocation = Location.pathname;
+		let apartado = "";
+		let encargo = "";
+		apartado = urlLocation.slice(0, 10);
+		encargo = urlLocation.slice(0, 9);
 		if (Location.pathname === "/") {
 			settitleWeb(null);
 		} else if (apartado === "/apartado/") {
 			settitleWeb(null);
-		} else if (apartado === "/add") {
+		} else if (urlLocation === "/add") {
+			settitleWeb(null);
+		} else if (encargo === "/encargo/") {
 			settitleWeb(null);
 		} else {
 			let title = Location.pathname;
@@ -78,7 +83,7 @@ function LayoutForm({ children }) {
 			<Layout
 				style={{
 					minHeight: "100vh",
-					background: "linear-gradient(#0000A6,#000066,#000058)",
+					background: "linear-gradient(#024e8b, darkblue, darkblue)",
 				}}
 				className='site-layout'
 			>
