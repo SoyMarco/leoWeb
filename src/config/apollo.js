@@ -6,15 +6,15 @@ import { getToken } from "../Utils/token";
 /* LOCAL */
 const baseUrlFront = window.location;
 /* LOCAL BACKEND*/
-export const UrlBackend = {
-	uri: "http://192.168.100.17:4000/",
-};
+// export const UrlBackend = {
+// 	uri: "http://192.168.100.17:4000/",
+// };
 export const UrlFrontend = `${baseUrlFront.origin}/`;
 
 /* HEROKU */
-// export const UrlBackend = {
-// 	uri: "https://leo-gql.herokuapp.com/",
-// };
+export const UrlBackend = {
+	uri: "https://leo-gql.herokuapp.com/",
+};
 /* HEROKU DEV*/
 // export const UrlBackend = {
 // 	uri: "https://leo-gql-dev.herokuapp.com/",
