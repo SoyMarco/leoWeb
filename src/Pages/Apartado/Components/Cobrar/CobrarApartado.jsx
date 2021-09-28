@@ -183,31 +183,28 @@ const CobrarApartado = ({
 					notas: "APARTADO",
 				};
 				if (keyF === "F3") {
-					let queryF3 = client.readQuery({
-						query: VENTA_F3,
-					});
-					if (!queryF3) {
-						queryF3 = { ventaF3: [ventaF123] };
-					} else {
-						let arrayNew = [];
-						for (let i = 0; i < queryF3.ventaF3.length; i++) {
-							const element = queryF3.ventaF3[i];
-							arrayNew.push(element);
-						}
-						arrayNew.push(ventaF123);
-
-						queryF3 = { ventaF3: arrayNew };
-					}
-
-					client.writeQuery({
-						query: VENTA_F3,
-						data: queryF3,
-						variables: {
-							id: 5,
-						},
-					});
-
-					history.push("/");
+					// let queryF3 = client.readQuery({
+					// 	query: VENTA_F3,
+					// });
+					// if (!queryF3) {
+					// 	queryF3 = { ventaF3: [ventaF123] };
+					// } else {
+					// 	let arrayNew = [];
+					// 	for (let i = 0; i < queryF3.ventaF3.length; i++) {
+					// 		const element = queryF3.ventaF3[i];
+					// 		arrayNew.push(element);
+					// 	}
+					// 	arrayNew.push(ventaF123);
+					// 	queryF3 = { ventaF3: arrayNew };
+					// }
+					// client.writeQuery({
+					// 	query: VENTA_F3,
+					// 	data: queryF3,
+					// 	variables: {
+					// 		id: 5,
+					// 	},
+					// });
+					// history.push("/");
 				} else {
 					try {
 						const { data } = await mutateREGISTER_VENTA({

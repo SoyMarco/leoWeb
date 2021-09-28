@@ -4,15 +4,15 @@ import { Card, Table, Tooltip, Input, Button, Result, Form, Row } from "antd";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { MdDelete, MdLocalGroceryStore } from "react-icons/md";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
-import Cobrar from "../Components/Cobrar/Cobrar";
 import { useHistory } from "react-router-dom";
 import { keyBlock } from "Utils";
 import { useLocation } from "react-router-dom";
-import "./principal.css";
 import { UrlFrontend } from "config/apollo";
 import { useApolloClient } from "@apollo/client";
 import { VENTA_F3 } from "graphql/venta";
 import { FIRST_LOGIN } from "graphql/user";
+import Cobrar from "../Components/Cobrar/Cobrar";
+import "./principal.css";
 
 function Principal() {
 	const client = useApolloClient();
@@ -71,7 +71,6 @@ function Principal() {
 		selectInputPrecio();
 
 		// Venta F3
-
 		const ventaF3 = client.readQuery({
 			query: VENTA_F3,
 		});
@@ -119,7 +118,6 @@ function Principal() {
 	}, [modalCobrar]);
 
 	useEffect(() => {
-		// selectLastRow();
 		let sum = 0;
 		let sumProd = 0;
 		for (let i = 0; i < listaCompras.length; i++) {
@@ -149,16 +147,135 @@ function Principal() {
 		selectedRowKeys,
 		onChange: onSelectChange,
 	};
+
 	const click = (record, rowIndex) => {
+		console.log(record, rowIndex);
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
 		selectInputPrecio();
-		// addArticulo(record, rowIndex);
 	};
 
+	const handlePrecio = (e) => {
+		setprecio({
+			precio: e.target.value,
+		});
+	};
+	const selectLastRow = () => {
+		let ultimoArray = listaCompras.length;
+		if (ultimoArray) {
+			setselectedRowKeys([listaCompras[ultimoArray - 1].key]);
+		}
+	};
+	const eliminarProducto = (item) => {
+		let i = listaCompras.indexOf(item);
+		if (i !== -1) {
+			let key = listaCompras.splice(i, 1);
+			setlistaCompras(listaCompras.filter((item) => item.key !== key));
+			selectLastRow();
+		} else if (item.key > 0) {
+			let key = item.key;
+			setlistaCompras(listaCompras.filter((item) => item.key !== key));
+			selectLastRow();
+		}
+	};
+	const pressEnter = () => {
+		if (precio.precio > 0) {
+			setlistaCompras([
+				...listaCompras,
+				{
+					key: idArticulo + 1,
+					nombre: "Articulo",
+					precio: Math.round(precio.precio * 100) / 100,
+					cantidad: 1,
+					apartado: 0,
+					refApartado: "0",
+					totalArticulo: Math.round(precio.precio * 100) / 100,
+				},
+			]);
+			setprecio({ precio: null });
+			setidArticulo(idArticulo + 1);
+		} else if (listaCompras.length > 0) {
+			setmodalCobrar(true);
+		}
+	};
+
+	const addArticulo = (record) => {
+		if (listaCompras.length > 0) {
+			const currentShopList = [...listaCompras];
+			const shopItem = currentShopList.find((item) => item.key === record.key);
+			shopItem.cantidad = shopItem.cantidad + 1;
+			shopItem.totalArticulo = shopItem.cantidad * shopItem.precio;
+			const newShopList = [...currentShopList];
+			setlistaCompras(newShopList);
+		}
+	};
+	const removeArticulo = (record) => {
+		if (listaCompras.length > 0) {
+			const currentShopList = [...listaCompras];
+			const shopItem = currentShopList.find((item) => item.key === record.key);
+
+			if (shopItem.cantidad > 1) {
+				shopItem.cantidad = shopItem.cantidad - 1;
+				shopItem.totalArticulo = shopItem.cantidad * shopItem.precio;
+				const newShopList = [...currentShopList];
+				setlistaCompras(newShopList);
+			} else if (shopItem.cantidad === 1) {
+				eliminarProducto(record);
+			}
+		}
+	};
+	const rowAbajo = () => {
+		// console.log(selectedRowKeys);
+		for (let i = 0; i < listaCompras.length; i++) {
+			const element = listaCompras[i].key;
+			// console.log("element", element);
+
+			if (element === selectedRowKeys[0]) {
+				let newRow = i - 1;
+				// console.log("newRow", newRow);
+
+				setselectedRowKeys([listaCompras[newRow]?.key]);
+				return;
+			}
+		}
+	};
+	const rowArriba = () => {
+		// console.log(selectedRowKeys);
+		for (let i = 0; i < listaCompras.length; i++) {
+			const element = listaCompras[i].key;
+			// console.log("element", element);
+
+			if (element === selectedRowKeys[0]) {
+				let newRow = i + 1;
+				// console.log("newRow", newRow);
+
+				setselectedRowKeys([listaCompras[newRow]?.key]);
+				return;
+			}
+		}
+	};
+	// Press Key Precio commands
 	const pressKeyPrecio = (e) => {
 		if (e.keyCode === 13) {
 			pressEnter();
+		}
+		// Tecla ⬆️
+		if (e.keyCode === 38) {
+			if (listaCompras.length > 1) {
+				let max = listaCompras.length - 1;
+				if (listaCompras[max].key !== selectedRowKeys[0]) {
+					rowArriba();
+				}
+			}
+		}
+		// Tecla ⬇️
+		if (e.keyCode === 40) {
+			if (listaCompras.length > 1) {
+				if (listaCompras[0].key !== selectedRowKeys[0]) {
+					// setselectedRowKeys([selectedRowKeys[0] - 1]);
+					rowAbajo();
+				}
+			}
 		}
 		if (e.keyCode === 66) {
 			document.querySelector("#buscarApartadoInput").select();
@@ -197,99 +314,9 @@ function Principal() {
 				removeArticulo(stateRecord);
 			}
 		}
-		if (e.keyCode === 38) {
-			if (listaCompras.length > 1) {
-				let max = listaCompras.length;
-				if (selectedRowKeys[0] < max) {
-					setselectedRowKeys([selectedRowKeys[0] + 1]);
-				}
-			}
-		}
-		if (e.keyCode === 40) {
-			if (listaCompras.length > 1) {
-				if (selectedRowKeys[0] > 1) {
-					setselectedRowKeys([selectedRowKeys[0] - 1]);
-				}
-			}
-		}
-	};
-	const handlePrecio = (e) => {
-		setprecio({
-			precio: e.target.value,
-		});
-	};
-	const selectLastRow = () => {
-		let ultimoArray = listaCompras.length;
-		if (ultimoArray) {
-			setselectedRowKeys([listaCompras[ultimoArray - 1].key]);
-		}
-	};
-	const eliminarProducto = (item) => {
-		let i = listaCompras.indexOf(item);
-		if (i !== -1) {
-			let key = listaCompras.splice(i, 1);
-			setlistaCompras(listaCompras.filter((item) => item.key !== key));
-			selectLastRow();
-		} else if (item.key > 0) {
-			let key = item.key;
-			setlistaCompras(listaCompras.filter((item) => item.key !== key));
-			selectLastRow();
-		}
-		// this.focusPrecio();
-	};
-	const pressEnter = () => {
-		if (precio.precio > 0) {
-			setlistaCompras([
-				...listaCompras,
-				{
-					key: idArticulo + 1,
-					nombre: "Articulo",
-					precio: Math.round(precio.precio * 100) / 100,
-					cantidad: 1,
-					apartado: 0,
-					refApartado: "0",
-					totalArticulo: Math.round(precio.precio * 100) / 100,
-				},
-			]);
-			setprecio({ precio: null });
-			// 	this.dialog = 0;
-			setidArticulo(idArticulo + 1);
-
-			// 	this.unaPrueba();
-			// } else if (!this.precio && this.cantidadAtirulos > 0) {
-			// 	this.abrirCobrar();
-			// } else {
-			// 	this.precio = "";
-		} else if (listaCompras.length > 0) {
-			setmodalCobrar(true);
-		}
 	};
 
-	const addArticulo = (record) => {
-		if (listaCompras.length > 0) {
-			const currentShopList = [...listaCompras];
-			const shopItem = currentShopList.find((item) => item.key === record.key);
-			shopItem.cantidad = shopItem.cantidad + 1;
-			shopItem.totalArticulo = shopItem.cantidad * shopItem.precio;
-			const newShopList = [...currentShopList];
-			setlistaCompras(newShopList);
-		}
-	};
-	const removeArticulo = (record) => {
-		if (listaCompras.length > 0) {
-			const currentShopList = [...listaCompras];
-			const shopItem = currentShopList.find((item) => item.key === record.key);
-
-			if (shopItem.cantidad > 1) {
-				shopItem.cantidad = shopItem.cantidad - 1;
-				shopItem.totalArticulo = shopItem.cantidad * shopItem.precio;
-				const newShopList = [...currentShopList];
-				setlistaCompras(newShopList);
-			} else if (shopItem.cantidad === 1) {
-				eliminarProducto(record);
-			}
-		}
-	};
+	// Columnas de tabla
 	const columns = [
 		{
 			title: "ID",
@@ -531,10 +558,3 @@ function Principal() {
 }
 
 export default Principal;
-// key: idArticulo + 1,
-// 					nombre: "Articulo",
-// 					precio: Math.round(precio.precio * 100) / 100,
-// 					cantidad: 1,
-// 					apartado: 0,
-// 					refApartado: 0,
-// 					totalArticulo: 0,

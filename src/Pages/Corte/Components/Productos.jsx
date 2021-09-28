@@ -40,6 +40,14 @@ export default function Productos({ stateRecord, loading }) {
 			key: "key",
 			width: "35px",
 			ellipsis: true,
+			render: (key, record) => (
+				<Tooltip
+					placement='topLeft'
+					title={`${record.nombre} folio: ${record.apartado}`}
+				>
+					<h3>key</h3>
+				</Tooltip>
+			),
 		},
 		{
 			title: "Nombre",

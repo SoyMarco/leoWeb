@@ -132,7 +132,7 @@ export default function BuscadorApartados() {
 							<Option
 								value={item.folio}
 								key={item.id}
-								style={{ borderBottom: "solid gray" }}
+								style={{ borderBottom: "solid #6893b4" }}
 							>
 								<Row justify='space-between' key={item.folio}>
 									<h3

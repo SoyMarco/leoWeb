@@ -4,8 +4,9 @@ import ErrorConection from "Utils/ErrorConection";
 import { CANCELAR_VENTA } from "../../../graphql/venta";
 import { MdLocalGroceryStore } from "react-icons/md";
 import { AiFillPrinter } from "react-icons/ai";
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import Imprimir from "./Imprimir/Imprimir";
+import ImprimirApartadoCorte from "./ImprimirApartado/ImprimirApartadoCorte";
 import useAuth from "../../../hooks/useAuth";
 import moment from "moment";
 import { UrlFrontend } from "config/apollo";
@@ -19,6 +20,7 @@ import {
 	Button,
 	Switch,
 } from "antd";
+import { GET_PRODUCTOS_FOLIO } from "graphql/apartado";
 export default function Ventas({
 	loading,
 	getVentasDia,
@@ -28,10 +30,31 @@ export default function Ventas({
 	setloader,
 	stateRecord,
 }) {
+	const [imprimirApartado, setimprimirApartado] = useState(0);
+	let {
+		data: dataGetApartado,
+		loading: loadGetApartado,
+		refetch: refetchGetApartado,
+	} = useQuery(GET_PRODUCTOS_FOLIO, {
+		variables: { folio: imprimirApartado },
+		notifyOnNetworkStatusChange: true,
+	});
+	useEffect(() => {
+		if (imprimirApartado) {
+			refetchGetApartado();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [imprimirApartado]);
 	const [mutateCANCELAR_VENTA] = useMutation(CANCELAR_VENTA);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
+	const [dataVenta, setdataVenta] = useState({});
 	const { auth, logout } = useAuth();
 	const [imprimir, setimprimir] = useState(false);
+
+	useEffect(() => {
+		console.log(dataGetApartado);
+	}, [dataGetApartado]);
+
 	const onSelectChange = (selectedRowKeys) => {
 		setselectedRowKeys([]);
 		// setselectedRowKeys(selectedRowKeys);
@@ -81,6 +104,11 @@ export default function Ventas({
 			setloader(false);
 			ErrorConection(logout);
 		}
+	};
+	const printApartado = (record) => {
+		console.log("record", record);
+		setdataVenta(record);
+		setimprimirApartado(record?.productos[0]?.apartado);
 	};
 	/* COLUMNAS VENTAS */
 	const colVentas = [
@@ -202,7 +230,8 @@ export default function Ventas({
 						}
 					>
 						<Button
-							// disabled={record?.productos[0]?.apartado > 0 ? true : false}
+							disabled={loadGetApartado}
+							loading={loadGetApartado}
 							icon={<AiFillPrinter style={{ fontSize: "25px" }} />}
 							shape='circle'
 							style={
@@ -212,9 +241,7 @@ export default function Ventas({
 							}
 							onClick={() =>
 								record?.productos[0]?.apartado > 0
-									? window.open(
-											`${UrlFrontend}apartado/${record?.productos[0]?.apartado}`
-									  )
+									? printApartado(record)
 									: setimprimir(true)
 							}
 						/>
@@ -245,28 +272,13 @@ export default function Ventas({
 								: "Activo"
 						}
 					>
-						{/* <Popconfirm
-							disabled={
-								record?.productos[0]?.apartado > 0 && record.cancelado === true
-									? true
-									: false
-							}
-							title='¿Cancelar Venta?'
-							onConfirm={() =>
-								record?.productos[0]?.apartado > 0
-									? window.open(
-											`${UrlFrontend}apartado/${record?.productos[0]?.apartado}`
-									  )
-									: cancelVenta(record)
-							}
-						> */}
 						<Switch
 							disabled={
 								record?.productos[0]?.apartado > 0 && record.cancelado === true
 									? true
 									: false
 							}
-							loading={loader}
+							loading={loader || loadGetApartado}
 							checked={!record.cancelado}
 							size='small'
 							style={
@@ -284,7 +296,6 @@ export default function Ventas({
 									: cancelVenta(record)
 							}
 						/>
-						{/* </Popconfirm> */}
 					</Tooltip>
 				</Row>
 			),
@@ -298,6 +309,15 @@ export default function Ventas({
 					imprimir={imprimir}
 					setimprimir={setimprimir}
 					stateRecord={stateRecord}
+					auth={auth}
+				/>
+			) : null}
+			{dataGetApartado?.getProductosFolio[0]?.folio > 1 ? (
+				<ImprimirApartadoCorte
+					imprimirApartado={imprimirApartado}
+					setimprimirApartado={setimprimirApartado}
+					dataApartado={dataGetApartado?.getProductosFolio[0]}
+					dinero={dataVenta}
 					auth={auth}
 				/>
 			) : null}

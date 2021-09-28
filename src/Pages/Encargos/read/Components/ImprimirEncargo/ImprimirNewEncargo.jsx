@@ -120,8 +120,8 @@ const ImprimirNewEncargo = ({
 					<Row justify='space-around' style={{ width: "190px" }}>
 						<span
 							style={{
-								"padding-left": "0px",
-								"text-align-last": "center",
+								paddingLeft: "0px",
+								textAlignLast: "center",
 								// width: "190px",
 							}}
 						>
@@ -136,7 +136,7 @@ const ImprimirNewEncargo = ({
 							padding: "0px",
 							background: "black",
 							marginBottom: "5px",
-							"justify-content": "center",
+							justifyContent: "center",
 							width: "190px",
 						}}
 					>
@@ -208,13 +208,13 @@ const ImprimirNewEncargo = ({
 						{pasarAFechaLL(Date.now())} <br />
 					</span>
 					<br></br>
-					<row className='cambio'>
+					<Row className='cambio'>
 						<h3>.</h3>
-					</row>
+					</Row>
 					<br></br>
-					<row className='cambio'>
+					<Row className='cambio'>
 						<h3>.</h3>
-					</row>
+					</Row>
 				</div>
 			</Modal>
 		</>
