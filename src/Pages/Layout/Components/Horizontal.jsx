@@ -34,7 +34,7 @@ export default function Horizontal({
 				<Menu
 					mode='horizontal'
 					style={{
-						background: "linear-gradient(#0000A6,#000066,#000058)",
+						background: "linear-gradient(#18364F, #001E36)",
 						margin: "-10px 0 0 0",
 						height: "60px",
 						color: "white",

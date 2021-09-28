@@ -469,7 +469,7 @@ function Principal() {
 			>
 				<div
 					style={{
-						background: "linear-gradient(#0000a6, #000066)",
+						background: "linear-gradient(#18364F, #001E36)",
 						textAlignLast: "center",
 						padding: "7px",
 						borderRadius: "25px 5px 0 0",
@@ -523,7 +523,7 @@ function Principal() {
 								<Result
 									icon={
 										<MdLocalGroceryStore
-											style={{ color: "blue", fontSize: "xxx-large" }}
+											style={{ color: "darkBlue", fontSize: "xxx-large" }}
 										/>
 									}
 									// status="500"
