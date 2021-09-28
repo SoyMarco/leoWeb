@@ -58,14 +58,13 @@ export default function Abonos({
 	};
 	const borrarAbono = async (record, borrarEditar) => {
 		setloader(true);
-
 		try {
-			if (record._id) {
+			if (record.idVenta) {
 				let { data } = await mutateBORRAR_EDITAR_ABONO({
 					// Parameters
 					variables: {
 						input: {
-							_id: record._id,
+							// _id: record.idVenta,
 							abono: 0,
 							borrarEditar: borrarEditar,
 							idVenta: record.idVenta,

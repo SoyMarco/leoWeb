@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { openNotification } from "../../../Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { CANCELAR_VENTA } from "../../../graphql/venta";
+import { BORRAR_EDITAR_ABONO } from "graphql/apartado";
 import { MdLocalGroceryStore } from "react-icons/md";
 import { AiFillPrinter } from "react-icons/ai";
 import { useMutation, useQuery } from "@apollo/client";
@@ -19,6 +20,7 @@ import {
 	Tooltip,
 	Button,
 	Switch,
+	Popconfirm,
 } from "antd";
 import { GET_PRODUCTOS_FOLIO } from "graphql/apartado";
 export default function Ventas({
@@ -46,6 +48,8 @@ export default function Ventas({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imprimirApartado]);
 	const [mutateCANCELAR_VENTA] = useMutation(CANCELAR_VENTA);
+	const [mutateBORRAR_EDITAR_ABONO] = useMutation(BORRAR_EDITAR_ABONO);
+
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [dataVenta, setdataVenta] = useState({});
 	const { auth, logout } = useAuth();
@@ -109,6 +113,35 @@ export default function Ventas({
 		console.log("record", record);
 		setdataVenta(record);
 		setimprimirApartado(record?.productos[0]?.apartado);
+	};
+	const borrarAbono = async (record, borrarEditar) => {
+		setloader(true);
+		try {
+			if (record?.productos[0]?.refApartado) {
+				let { data } = await mutateBORRAR_EDITAR_ABONO({
+					// Parameters
+					variables: {
+						input: {
+							// _id: record.productos[0]._id,
+							abono: 0,
+							borrarEditar: borrarEditar,
+							idVenta: record.id,
+							statusVenta: true,
+						},
+					},
+				});
+				if (data) {
+					openNotification("success", `Abono borrado`);
+					setloader(false);
+					refetch();
+				}
+			} else {
+				console.log("error");
+			}
+		} catch (error) {
+			setloader(false);
+			ErrorConection(logout);
+		}
 	};
 	/* COLUMNAS VENTAS */
 	const colVentas = [
@@ -225,7 +258,7 @@ export default function Ventas({
 						placement='left'
 						title={
 							record?.productos[0]?.apartado > 0
-								? "Abre el apartado para Reimprimir"
+								? "Reimprime el apartado"
 								: "Reimprimir"
 						}
 					>
@@ -263,39 +296,62 @@ export default function Ventas({
 						placement='right'
 						title={
 							record?.productos[0]?.apartado > 0 && record.cancelado === false
-								? "Abre el apartado para borrar"
+								? "Abono activo"
 								: record?.productos[0]?.apartado > 0 &&
 								  record.cancelado === true
 								? "No se puede activar, se borró el Abono vinculado"
 								: record.cancelado === true
-								? "Desactivado"
-								: "Activo"
+								? "Desactivada"
+								: "Activa"
 						}
 					>
-						<Switch
-							disabled={
-								record?.productos[0]?.apartado > 0 && record.cancelado === true
-									? true
-									: false
-							}
-							loading={loader || loadGetApartado}
-							checked={!record.cancelado}
-							size='small'
-							style={
-								record.cancelado
-									? { background: "red", marginTop: "5px" }
-									: record?.productos[0]?.apartado > 0
-									? { background: "blue", marginTop: "5px" }
-									: { background: "limegreen", marginTop: "5px" }
-							}
-							onClick={() =>
-								record?.productos[0]?.apartado > 0
-									? window.open(
-											`${UrlFrontend}apartado/${record?.productos[0]?.apartado}`
-									  )
-									: cancelVenta(record)
-							}
-						/>
+						{record?.productos[0]?.apartado > 0 ? (
+							// Switch para APARTADOS
+							<Popconfirm
+								title='Si borras este abono no se podrá recuperar'
+								onConfirm={() => borrarAbono(record, "borrar")}
+								placement='topRight'
+								disabled={
+									record?.productos[0]?.apartado > 0 &&
+									record.cancelado === true
+										? true
+										: false
+								}
+							>
+								<Switch
+									disabled={
+										record?.productos[0]?.apartado > 0 &&
+										record.cancelado === true
+											? true
+											: false
+									}
+									loading={loader || loadGetApartado}
+									checked={!record.cancelado}
+									size='small'
+									style={
+										record.cancelado
+											? { background: "red", marginTop: "5px" }
+											: record?.productos[0]?.apartado > 0
+											? { background: "blue", marginTop: "5px" }
+											: { background: "limegreen", marginTop: "5px" }
+									}
+								/>
+							</Popconfirm>
+						) : (
+							// Switch para VENTAS
+							<Switch
+								// disabled={record.cancelado === true ? true : false}
+								loading={loader || loadGetApartado}
+								checked={!record.cancelado}
+								size='small'
+								style={
+									record.cancelado
+										? { background: "red", marginTop: "5px" }
+										: { background: "limegreen", marginTop: "5px" }
+								}
+								onClick={() => cancelVenta(record)}
+							/>
+						)}
 					</Tooltip>
 				</Row>
 			),

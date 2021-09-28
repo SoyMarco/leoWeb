@@ -2,7 +2,7 @@
 	/* border: gray solid 1px; */
 	width: 100%;
 	margin-top: 15px;
-	margin-bottom: 65px;
+	margin-bottom: 15px;
 
 	/* border-radius: 50px; */
 }
@@ -15,6 +15,25 @@
 	color: white;
 }
 .tablaEncargos tr:nth-child(even) {
+	background: linear-gradient(#ffffff, #abd5f8);
+}
+.tablaEncargos2 {
+	/* border: gray solid 1px; */
+	width: 100%;
+	margin-top: 5px;
+	margin-bottom: 65px;
+
+	/* border-radius: 50px; */
+}
+.tablaEncargos2 td {
+	border-right: #abd5f8 solid 0.5px;
+}
+.tablaEncargos2 th {
+	border-right: white solid 0.5px;
+	background: linear-gradient(#3f698b, #013b6b);
+	color: white;
+}
+.tablaEncargos2 tr:nth-child(even) {
 	background: linear-gradient(#ffffff, #abd5f8);
 }
 .h4Encargos {

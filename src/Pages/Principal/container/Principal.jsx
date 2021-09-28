@@ -225,30 +225,20 @@ function Principal() {
 		}
 	};
 	const rowAbajo = () => {
-		// console.log(selectedRowKeys);
 		for (let i = 0; i < listaCompras.length; i++) {
 			const element = listaCompras[i].key;
-			// console.log("element", element);
-
 			if (element === selectedRowKeys[0]) {
 				let newRow = i - 1;
-				// console.log("newRow", newRow);
-
 				setselectedRowKeys([listaCompras[newRow]?.key]);
 				return;
 			}
 		}
 	};
 	const rowArriba = () => {
-		// console.log(selectedRowKeys);
 		for (let i = 0; i < listaCompras.length; i++) {
 			const element = listaCompras[i].key;
-			// console.log("element", element);
-
 			if (element === selectedRowKeys[0]) {
 				let newRow = i + 1;
-				// console.log("newRow", newRow);
-
 				setselectedRowKeys([listaCompras[newRow]?.key]);
 				return;
 			}

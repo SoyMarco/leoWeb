@@ -189,6 +189,12 @@ export default function Encargo() {
 			// guardarEncargo();
 		}
 	};
+	const onValuesChange = (e) => {
+		let keys = Object.keys(e);
+		let [key] = keys;
+		let value = e[key].toUpperCase();
+		form.setFieldsValue({ [key]: value });
+	};
 	return (
 		<>
 			<Row justify='center'>
@@ -221,7 +227,7 @@ export default function Encargo() {
 					// prefix={<GiLargeDress style={{ color: "gray" }} />}
 					onChange={(e) => setcliente(e.toUpperCase())}
 					options={optionsClientes}
-					placeholder='nombre de cliente'
+					placeholder='Nombre del cliente'
 					filterOption={(inputValue, option) =>
 						option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
 					}
@@ -231,7 +237,7 @@ export default function Encargo() {
 				{...formItemLayout}
 				layout='vertial'
 				form={form}
-				// onValuesChange={onValuesChange}
+				onValuesChange={onValuesChange}
 				style={{ marginTop: 20 }}
 				onFinish={onFinish}
 				onFinishFailed={onFinishFailed}
