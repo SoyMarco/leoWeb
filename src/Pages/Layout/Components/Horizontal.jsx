@@ -136,7 +136,11 @@ export default function Horizontal({
 					</Menu.Item>
 					<Menu.Item key='header6'>
 						{/* <h1></h1> */}
-						<Popconfirm title='¿Cerrar sesión?' onConfirm={() => logoutApp()}>
+						<Popconfirm
+							title='¿Cerrar sesión?'
+							onConfirm={() => logoutApp()}
+							placement='bottomRight'
+						>
 							<Switch
 								checked={swtichstate}
 								style={

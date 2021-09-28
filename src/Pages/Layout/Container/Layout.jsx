@@ -65,16 +65,12 @@ function LayoutForm({ children }) {
 		setTimeout(() => {
 			logout();
 			openNotification("success", "Espero verte pronto de nuevo.");
+			history.push("/");
 		}, 200);
-
-		// setAuth(null);
 	};
 	const handleClick = (e) => {
 		setcurrentMenu(e.key);
 	};
-	// const algo = () => {
-	// 	console.log("algo");
-	// };
 	return (
 		<>
 			{titleWeb ? <title>{titleWeb}</title> : null}
