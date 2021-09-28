@@ -6,12 +6,12 @@ import ImprimirApartado from "../ImprimirApartado/ImprimirApartado";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";
-import { useMutation, useApolloClient } from "@apollo/client";
+import { useMutation /* , useApolloClient */ } from "@apollo/client";
 import { ADD_ABONO } from "graphql/apartado";
 import { REGISTER_VENTA } from "graphql/venta";
 import useAuth from "hooks/useAuth";
-import { VENTA_F3 } from "graphql/venta";
-import { useHistory } from "react-router-dom";
+// import { VENTA_F3 } from "graphql/venta";
+// import { useHistory } from "react-router-dom";
 import aceptar from "assets/sonido/Aceptar.wav";
 
 // import "./cobrar.css";
@@ -27,8 +27,8 @@ const CobrarApartado = ({
 	inputAbono,
 	dataApartado,
 }) => {
-	const history = useHistory();
-	const client = useApolloClient();
+	// const history = useHistory();
+	// const client = useApolloClient();
 	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
 	const [mutateADD_ABONO] = useMutation(ADD_ABONO);
 	const [form] = Form.useForm();
