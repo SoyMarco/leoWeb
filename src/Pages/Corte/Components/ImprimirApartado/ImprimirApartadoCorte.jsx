@@ -18,7 +18,6 @@ const ImprimirApartadoCorte = ({
 	// const [totalProductos, settotalProductos] = useState(0);
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
-	const [numPrint, setnumPrint] = useState(0);
 
 	const { abonos, cliente, entregado, folio, productos, vence } = dataApartado;
 
