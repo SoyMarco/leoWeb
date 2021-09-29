@@ -34,6 +34,13 @@ export const GET_VENTAS_DIA = gql`
 		}
 	}
 `;
+export const GET_VENTAS_MES = gql`
+	query getVentasMes {
+		getVentasMes {
+			ventaMayor
+		}
+	}
+`;
 export const GET_VENTAS_DIA_ADMIN = gql`
 	query getVentasDiaAdmin {
 		getVentasDiaAdmin {
