@@ -3,9 +3,8 @@ import { Menu, Switch, Popconfirm, Tooltip } from "antd";
 import { Avatar } from "antd";
 import LogoLeo from "assets/png/logo.png";
 import { FaUserAstronaut } from "react-icons/fa";
-import { BsFillStarFill } from "react-icons/bs";
 import BuscadorApartados from "Pages/BuscadorApartados/Container/BuscadorApartados";
-import { SyncOutlined, StarFilled } from "@ant-design/icons";
+import { SyncOutlined /* , StarFilled  */ } from "@ant-design/icons";
 import GetVentasMobile from "Pages/GetVentasMobile/Container/GetVentasMobile";
 
 export default function Horizontal({
