@@ -535,7 +535,7 @@ function Principal() {
 					/>
 				</Form>
 			</Card>
-			<BarraMayorVenta modalCobrar={modalCobrar} />
+			<BarraMayorVenta modalCobrar={modalCobrar} totalTotal={totalTotal} />
 			{modalCobrar ? (
 				<Cobrar
 					modalCobrar={modalCobrar}

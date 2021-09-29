@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/client";
 import { GET_VENTAS_MES } from "graphql/venta";
 import { GET_VENTAS_DIA } from "graphql/venta";
 import { Row, Progress } from "antd";
-export default function BarraMayorVenta({ modalCobrar }) {
+export default function BarraMayorVenta({ modalCobrar, totalTotal }) {
 	let { data: getVentaMes, refetch: refetchMes } = useQuery(GET_VENTAS_MES);
 	let { data: getVentasDia, refetch: refetchDia } = useQuery(GET_VENTAS_DIA, {
 		notifyOnNetworkStatusChange: true,
@@ -36,18 +36,18 @@ export default function BarraMayorVenta({ modalCobrar }) {
 	}, [getVentaMes, getVentasDia]);
 	const calculatePorcent = () => {
 		let porcent = 0;
-		porcent = (totalVentasDia * 100) / ventaMayor ?? 0;
+		porcent = ((totalVentasDia + totalTotal) * 100) / ventaMayor ?? 0;
 
 		return porcent;
 	};
 	return (
-		<Row justify='center'>
+		<Row justify='center' style={{ marginTop: 25 }}>
 			<Progress
 				strokeColor={
 					calculatePorcent() < 40
 						? {
 								from: "red",
-								to: "limegreen",
+								to: "orange",
 						  }
 						: calculatePorcent() < 80
 						? {
@@ -55,13 +55,12 @@ export default function BarraMayorVenta({ modalCobrar }) {
 								to: "limegreen",
 						  }
 						: {
-								from: "dodgerblue",
-								to: "limegreen",
+								from: "limegreen",
+								to: "dodgerblue",
 						  }
 				}
 				percent={parseInt(calculatePorcent())}
 				status='active'
-				// style={{ width: "90%" }}
 			/>
 		</Row>
 	);
