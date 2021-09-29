@@ -10,7 +10,7 @@ import Imprimir from "./Imprimir/Imprimir";
 import ImprimirApartadoCorte from "./ImprimirApartado/ImprimirApartadoCorte";
 import useAuth from "../../../hooks/useAuth";
 import moment from "moment";
-import { UrlFrontend } from "config/apollo";
+// import { UrlFrontend } from "config/apollo";
 import {
 	Table,
 	Result,
