@@ -467,6 +467,7 @@ function Principal() {
 						{totalProductos ? `$ ${totalTotal}` : null}
 					</h1>,
 				]}
+				style={{ zIndex: 1 }}
 			>
 				<div
 					style={{
