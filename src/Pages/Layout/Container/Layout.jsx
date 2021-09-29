@@ -15,7 +15,7 @@ import { GiLargeDress } from "react-icons/gi";
 import Horizontal from "../Components/Horizontal";
 
 function LayoutForm({ children }) {
-	const [collapsed, setcollapsed] = useState(true);
+	const [collapsed, setcollapsed] = useState(false);
 	const { Header, Content, Footer, Sider } = Layout;
 	const { logout, auth } = useAuth();
 	const history = useHistory();
@@ -100,8 +100,8 @@ function LayoutForm({ children }) {
 								mode='inline'
 								onClick={(e) => handleClick(e)}
 								selectedKeys={[currentMenu]}
-								onMouseOver={() => setcollapsed(false)}
-								onMouseLeave={() => setcollapsed(true)}
+								// onMouseOver={() => setcollapsed(false)}
+								// onMouseLeave={() => setcollapsed(true)}
 							>
 								<Menu.Item
 									key='/'

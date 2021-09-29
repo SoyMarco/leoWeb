@@ -493,7 +493,7 @@ function Principal() {
 						onKeyDown={keyBlock}
 						value={precio.precio}
 						onChange={handlePrecio}
-						onMouseOver={() => document.querySelector("#inputPrecio").select()}
+						// onMouseOver={() => document.querySelector("#inputPrecio").select()}
 					/>
 				</div>
 				<Form form={form} component={false}>

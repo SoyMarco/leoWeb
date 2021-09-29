@@ -116,9 +116,9 @@ export default function BuscadorApartados() {
 						option.children[1].key.toLowerCase().indexOf(input.toLowerCase()) >=
 							0
 					}
-					onMouseOver={() =>
-						document.querySelector("#buscarApartadoInput").select()
-					}
+					// onMouseOver={() =>
+					// 	document.querySelector("#buscarApartadoInput").select()
+					// }
 					style={{
 						width: 400,
 						fontWeight: "bold",
