@@ -268,8 +268,7 @@ export default function Encargo() {
 					<Row
 						justify='space-around'
 						style={{
-							background:
-								"background: linear-gradient(#024e8b, #001e36, #001e36);",
+							background: "background: linear-gradient(#18364F, #001E36);",
 
 							padding: "7px",
 							borderRadius: "25px 5px 0 0",

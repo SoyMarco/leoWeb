@@ -15,7 +15,7 @@ import { GiLargeDress } from "react-icons/gi";
 import Horizontal from "../Components/Horizontal";
 
 function LayoutForm({ children }) {
-	const [collapsed, setcollapsed] = useState(true);
+	const [collapsed, setcollapsed] = useState(false);
 	const { Header, Content, Footer, Sider } = Layout;
 	const { logout, auth } = useAuth();
 	const history = useHistory();
@@ -79,7 +79,7 @@ function LayoutForm({ children }) {
 			<Layout
 				style={{
 					minHeight: "100vh",
-					background: "linear-gradient(#024e8b, darkblue, darkblue)",
+					background: "linear-gradient(#004882, #004882, #004882)",
 				}}
 				className='site-layout'
 			>
@@ -100,8 +100,8 @@ function LayoutForm({ children }) {
 								mode='inline'
 								onClick={(e) => handleClick(e)}
 								selectedKeys={[currentMenu]}
-								onMouseOver={() => setcollapsed(false)}
-								onMouseLeave={() => setcollapsed(true)}
+								// onMouseOver={() => setcollapsed(false)}
+								// onMouseLeave={() => setcollapsed(true)}
 							>
 								<Menu.Item
 									key='/'
@@ -112,7 +112,7 @@ function LayoutForm({ children }) {
 											}}
 										>
 											<MdLocalGroceryStore
-												style={{ color: "darkblue", fontSize: "25px" }}
+												style={{ color: "#004882", fontSize: "25px" }}
 											/>
 										</Link>
 									}
@@ -129,7 +129,7 @@ function LayoutForm({ children }) {
 											}}
 										>
 											<FaCashRegister
-												style={{ color: "darkblue", fontSize: "25px" }}
+												style={{ color: "#004882", fontSize: "25px" }}
 											/>
 										</Link>
 									}
@@ -146,7 +146,7 @@ function LayoutForm({ children }) {
 											}}
 										>
 											<GiLargeDress
-												style={{ color: "darkblue", fontSize: "25px" }}
+												style={{ color: "#004882", fontSize: "25px" }}
 											/>
 										</Link>
 									}
@@ -164,7 +164,7 @@ function LayoutForm({ children }) {
 										>
 											<FaPencilAlt
 												style={{
-													color: "darkblue",
+													color: "#004882",
 													fontSize: "25px",
 												}}
 											/>
@@ -184,7 +184,7 @@ function LayoutForm({ children }) {
 										>
 											<GiOpenBook
 												style={{
-													color: "darkblue",
+													color: "#004882",
 													fontSize: "25px",
 												}}
 											/>
@@ -203,7 +203,7 @@ function LayoutForm({ children }) {
 											}}
 										>
 											<FaMoneyBillAlt
-												style={{ color: "darkblue", fontSize: "25px" }}
+												style={{ color: "#004882", fontSize: "25px" }}
 											/>
 										</Link>
 									}
@@ -216,7 +216,7 @@ function LayoutForm({ children }) {
 									key='7'
 									icon={
 										<RiTerminalWindowFill
-											style={{ color: "darkblue", fontSize: "30px" }}
+											style={{ color: "#004882", fontSize: "30px" }}
 										/>
 									}
 									onClick={() => window.open(UrlFrontend)}

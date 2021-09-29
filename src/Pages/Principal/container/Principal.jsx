@@ -225,30 +225,20 @@ function Principal() {
 		}
 	};
 	const rowAbajo = () => {
-		// console.log(selectedRowKeys);
 		for (let i = 0; i < listaCompras.length; i++) {
 			const element = listaCompras[i].key;
-			// console.log("element", element);
-
 			if (element === selectedRowKeys[0]) {
 				let newRow = i - 1;
-				// console.log("newRow", newRow);
-
 				setselectedRowKeys([listaCompras[newRow]?.key]);
 				return;
 			}
 		}
 	};
 	const rowArriba = () => {
-		// console.log(selectedRowKeys);
 		for (let i = 0; i < listaCompras.length; i++) {
 			const element = listaCompras[i].key;
-			// console.log("element", element);
-
 			if (element === selectedRowKeys[0]) {
 				let newRow = i + 1;
-				// console.log("newRow", newRow);
-
 				setselectedRowKeys([listaCompras[newRow]?.key]);
 				return;
 			}
@@ -479,7 +469,7 @@ function Principal() {
 			>
 				<div
 					style={{
-						background: "linear-gradient(#0000a6, #000066)",
+						background: "linear-gradient(#18364F, #001E36)",
 						textAlignLast: "center",
 						padding: "7px",
 						borderRadius: "25px 5px 0 0",
@@ -503,7 +493,7 @@ function Principal() {
 						onKeyDown={keyBlock}
 						value={precio.precio}
 						onChange={handlePrecio}
-						onMouseOver={() => document.querySelector("#inputPrecio").select()}
+						// onMouseOver={() => document.querySelector("#inputPrecio").select()}
 					/>
 				</div>
 				<Form form={form} component={false}>
@@ -533,7 +523,7 @@ function Principal() {
 								<Result
 									icon={
 										<MdLocalGroceryStore
-											style={{ color: "blue", fontSize: "xxx-large" }}
+											style={{ color: "darkBlue", fontSize: "xxx-large" }}
 										/>
 									}
 									// status="500"

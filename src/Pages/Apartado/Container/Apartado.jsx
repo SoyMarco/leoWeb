@@ -361,8 +361,7 @@ export default function Apartado(props) {
 					<Row
 						justify='space-around'
 						style={{
-							background: "linear-gradient(#0000a6, #000066)",
-
+							background: "linear-gradient(#18364F, #001E36)",
 							padding: "7px",
 							borderRadius: "25px 5px 0 0",
 						}}

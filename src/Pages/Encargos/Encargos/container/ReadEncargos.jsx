@@ -163,6 +163,24 @@ export default function ReadEncargo() {
 											);
 										})}
 									</table>
+									<table className='tablaEncargos2'>
+										<tr>
+											<th>Talla</th>
+											<th>Modelo</th>
+											<th>Vendedor</th>
+										</tr>
+										{item?.productos?.map((producto) => {
+											return (
+												<>
+													<tr>
+														<td>{producto.talla}</td>
+														<td>{producto.modelo}</td>
+														<td>{producto.vendedor}</td>
+													</tr>
+												</>
+											);
+										})}
+									</table>
 								</Card>
 							</Col>
 						);
