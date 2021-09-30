@@ -4,8 +4,9 @@ import { Avatar } from "antd";
 import LogoLeo from "assets/png/logo.png";
 import { FaUserAstronaut } from "react-icons/fa";
 import BuscadorApartados from "Pages/BuscadorApartados/Container/BuscadorApartados";
-import { SyncOutlined /* , StarFilled  */ } from "@ant-design/icons";
+import { SyncOutlined } from "@ant-design/icons";
 import GetVentasMobile from "Pages/GetVentasMobile/Container/GetVentasMobile";
+import Estrellas from "./Estrellas/Estrellas";
 
 export default function Horizontal({
 	Header,
@@ -106,18 +107,10 @@ export default function Horizontal({
 						// onClick={() => history.push("/")}
 						style={{
 							background: "transparent",
-							margin: "5px 40px",
+							margin: "0 0 0 100px",
 						}}
 					>
-						<Tooltip
-							placement='bottom'
-							title='Si esta activo puedes imprimir las ventas de Mobile más rapido'
-						>
-							{/* <StarFilled
-								style={{ fontSize: 25, color: "gold" }}
-								spin={false}
-							/> */}
-						</Tooltip>
+						<Estrellas />
 					</Menu.Item>
 					<Menu.Item
 						key='header4'

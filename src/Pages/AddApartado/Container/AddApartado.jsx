@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import ProductsAddApartado from "../Components/ProductsAddApartado/ProductsAddApartado";
-import { SmileOutlined, DollarCircleOutlined } from "@ant-design/icons";
+import { DollarCircleOutlined } from "@ant-design/icons";
 import { Steps, Button, message, Card, Input, Row, AutoComplete } from "antd";
 import ImprimirNewApartado from "../Components/ImprimirApartado/ImprimirNewApartado";
 import CobrarNewApartado from "../Components/CobrarNewApartado/CobrarNewApartado";
@@ -30,10 +30,6 @@ export default function AddApartado() {
 	const { auth } = useAuth();
 
 	useEffect(() => {
-		// inputNameClient.current.select();
-	}, []);
-
-	useEffect(() => {
 		if (data?.getApartados) {
 			let { getApartados } = data;
 			let listClientes = [];
@@ -55,8 +51,7 @@ export default function AddApartado() {
 
 	useEffect(() => {
 		setrestaria(totalTotal - abono);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [abono]);
+	}, [abono, totalTotal]);
 
 	useEffect(() => {
 		if (current === 2) {
@@ -110,7 +105,7 @@ export default function AddApartado() {
 	};
 	const pressKeyEnterAbono = (e) => {
 		if (e.keyCode === 13) {
-			if (restaria > 0) {
+			if (restaria > 0 && abono > 0) {
 				setmodalCobrar(true);
 			}
 		}
@@ -122,13 +117,15 @@ export default function AddApartado() {
 			content: (
 				<>
 					<Row justify='center'>
-						<SmileOutlined
+						<h2
 							style={{
 								color: "blue",
 								fontSize: "xx-large",
-								margin: "65px 10px ",
+								margin: "55px 10px ",
 							}}
-						/>
+						>
+							Cliente:
+						</h2>
 						<AutoComplete
 							defaultActiveFirstOption={true}
 							id='inputNameClient'
@@ -213,24 +210,35 @@ export default function AddApartado() {
 						<h1
 							style={{
 								fontWeight: "bold",
-								fontSize: "x-large",
+								fontSize: "xx-large",
 							}}
 						>
-							Total ${totalTotal}
+							Total: ${totalTotal}
 						</h1>
 					</Row>
 
-					<Row justify='center' style={{ margin: "0 0 60px 0 " }}>
+					<Row justify='center' style={{ margin: "0 0 0 0 " }}>
+						<h2
+							style={{
+								color: "blue",
+								fontSize: "xx-large",
+								fontWeight: "bold",
+								margin: "0px 10px ",
+							}}
+						>
+							Abono:
+						</h2>
 						<Input
 							id='inputNameClient'
 							prefix={<DollarCircleOutlined style={{ marginLeft: "20px" }} />}
 							style={{
 								color: "blue",
 								// fontSize: 30,
-								fontSize: "x-large",
+								fontSize: "xx-large",
 								fontWeight: "bold",
 								borderRadius: "50px",
 								maxWidth: "80%",
+								height: "50px",
 							}}
 							onChange={(e) => setabono(e.target.value.toUpperCase())}
 							value={abono}
@@ -247,12 +255,12 @@ export default function AddApartado() {
 								restaria > 0
 									? {
 											fontWeight: "bold",
-											fontSize: "x-large",
+											fontSize: "xx-large",
 											color: "green",
 									  }
 									: {
 											fontWeight: "bold",
-											fontSize: "x-large",
+											fontSize: "xx-large",
 											color: "red",
 									  }
 							}

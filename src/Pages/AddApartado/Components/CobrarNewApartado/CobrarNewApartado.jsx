@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Modal, Input, Form, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
@@ -41,12 +41,12 @@ const CobrarNewApartado = ({
 		efectivo: 0,
 	});
 	const audio = new Audio(aceptar);
-
+	const inputEfectivo = useRef();
 	useEffect(() => {
 		if (modalCobrar === true) {
 			form.setFieldsValue({ efectivo: totalTotal });
 			OnValuesChange();
-			document.querySelector("#cobrarEfectivo").select();
+			inputEfectivo.current.select();
 		} else if (modalCobrar === false) {
 			inputAbono.current.select();
 		}
@@ -67,7 +67,7 @@ const CobrarNewApartado = ({
 		}
 		// E
 		if (e.keyCode === 69) {
-			document.querySelector("#cobrarEfectivo").select();
+			inputEfectivo.current.select();
 		}
 		// A
 		if (e.keyCode === 65) {
@@ -319,6 +319,8 @@ const CobrarNewApartado = ({
 							<Input
 								id='cobrarEfectivo'
 								className='inputCobrar'
+								ref={inputEfectivo}
+								autoFocus
 								type='number'
 								prefix={<FaMoneyBillWave style={{ color: "gray" }} />}
 								onKeyUp={pressKeyPrecio}
