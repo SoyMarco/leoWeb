@@ -1,3 +1,9 @@
+.inputCobrar {
+	width: 30px;
+}
+.labelCobrar {
+	font-weight: bold;
+}
 .ant-modal-header {
 	padding: 16px 24px !important;
 	color: white;
@@ -32,22 +38,20 @@
 	max-width: 360px;
 	text-align-last: center;
 	border-radius: 50px;
-	font-size: x-large;
+	font-size: 24px;
 	font-weight: bold;
 }
 .ant-form-item-label > label {
 	position: relative;
 	display: inline-flex;
 	align-items: center;
-	height: 32px;
-	color: grey;
-	font-size: 16px;
-	font-weight: bold;
-	text-align-last: right;
+	height: 30px;
+	color: rgba(0, 0, 0, 0.85);
+	font-size: 14px !important;
 }
 .ant-modal-body {
 	padding: 6px 24px 0px 24px;
-	font-size: 14px;
+	/* font-size: 14px; */
 	line-height: 1.5715;
 	word-wrap: break-word;
 }

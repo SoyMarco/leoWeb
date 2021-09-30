@@ -275,17 +275,17 @@ const Cobrar = ({
 									message: "Please input your username!",
 								},
 							]}
-							className='labelCobrar'
+							style={{ fontWeight: "bold", fontSize: "24px" }}
 						>
 							<Input
 								ref={cobrarEfectivo}
 								id='cobrarEfectivo'
-								className='inputCobrar'
 								type='number'
 								prefix={<FaMoneyBillWave style={{ color: "gray" }} />}
 								onKeyUp={pressKeyPrecio}
 								onKeyDown={keyBlockCobrar}
 								key='keyInputEfectivo'
+								style={{ width: 400 }}
 							></Input>
 						</Form.Item>
 						<Form.Item
@@ -308,6 +308,7 @@ const Cobrar = ({
 								onKeyUp={pressKeyPrecio}
 								onKeyDown={keyBlock}
 								key='keyInputTarjeta'
+								style={{ width: 400 }}
 							></Input>
 						</Form.Item>
 						<Form.Item
@@ -330,6 +331,7 @@ const Cobrar = ({
 								onKeyUp={pressKeyPrecio}
 								onKeyDown={keyBlock}
 								key='keyInputACuenta'
+								style={{ width: 400 }}
 							></Input>
 						</Form.Item>
 					</Form>

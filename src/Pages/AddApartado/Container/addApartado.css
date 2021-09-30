@@ -8,8 +8,25 @@
 	text-align-last: center;
 	color: blue;
 	border-radius: 50px;
-	font-size: x-large;
+	font-size: xx-large;
 	font-weight: bold;
-	padding-left: 20px;
-	margin-right: 40px;
+	padding-left: 0px;
+	margin-right: 70px;
+}
+.ant-steps-item-title:after {
+	position: absolute;
+	top: 16px;
+	left: 100%;
+	display: block;
+	width: 9999px;
+	height: 6px;
+	background: #f0f0f0;
+	content: "";
+}
+.ant-steps-item-finish
+	> .ant-steps-item-container
+	> .ant-steps-item-content
+	> .ant-steps-item-title {
+	color: blue;
+	font-weight: bold;
 }
