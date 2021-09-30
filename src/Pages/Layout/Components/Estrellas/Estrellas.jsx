@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_ESTRELLAS_VENDEDOR } from "graphql/estrella";
 import { StarFilled } from "@ant-design/icons";
-import { Row, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import { useApolloClient } from "@apollo/client";
 import { ADD_STARS_OK } from "graphql/estrella";
 
