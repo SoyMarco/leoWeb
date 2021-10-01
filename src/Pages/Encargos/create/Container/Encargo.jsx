@@ -28,7 +28,7 @@ export default function Encargo() {
 	const { auth, logout } = useAuth();
 	const [optionsClientes, setoptionsClientes] = useState([]);
 	const [abono, setabono] = useState(0);
-	const [modalAbono, setmodalAbono] = useState(false);
+	const [modalAbono, setmodalAbono] = useState(null);
 	const [imprimirEncargo, setimprimirEncargo] = useState(false);
 	const [loader, setloader] = useState(false);
 	const refCliente = useRef();
@@ -37,6 +37,9 @@ export default function Encargo() {
 	const refColor = useRef();
 	const refGenero = useRef();
 	const refModelo = useRef();
+	useEffect(() => {
+		document.querySelector("#clienteNuevoEncargo").select();
+	}, []);
 	useEffect(() => {
 		if (modalAbono === false) {
 			refProducto.current.select();
@@ -376,15 +379,17 @@ export default function Encargo() {
 				listaProductos={listaProductos}
 				setlistaProductos={setlistaProductos}
 			/>
-			<ModalAbonoEncargo
-				modalAbono={modalAbono}
-				setmodalAbono={setmodalAbono}
-				setabono={setabono}
-				abono={abono}
-				loader={loader}
-				guardarEncargo={guardarEncargo}
-				setimprimirEncargo={setimprimirEncargo}
-			/>
+			{modalAbono ? (
+				<ModalAbonoEncargo
+					modalAbono={modalAbono}
+					setmodalAbono={setmodalAbono}
+					setabono={setabono}
+					abono={abono}
+					loader={loader}
+					guardarEncargo={guardarEncargo}
+					setimprimirEncargo={setimprimirEncargo}
+				/>
+			) : null}
 			{imprimirEncargo && (
 				<ImprimirNewEncargo
 					imprimir={imprimirEncargo}

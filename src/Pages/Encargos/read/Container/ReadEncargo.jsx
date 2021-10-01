@@ -12,7 +12,6 @@ import { GET_ENCARGO_FOLIO } from "graphql/encargo";
 export default function ReadEncargo() {
 	const params = useParams();
 	let urlFolio = parseInt(params.folio);
-	console.log("urlFolio", urlFolio);
 	let {
 		data: dataEncargo,
 		// loading,
@@ -25,7 +24,6 @@ export default function ReadEncargo() {
 	const [EncargoFolio, setEncargoFolio] = useState({});
 	useEffect(() => {
 		if (dataEncargo) {
-			console.log(dataEncargo);
 			setEncargoFolio(dataEncargo?.getEncargoFolio[0]);
 		}
 	}, [dataEncargo]);

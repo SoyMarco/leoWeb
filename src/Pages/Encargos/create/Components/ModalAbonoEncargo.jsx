@@ -15,10 +15,10 @@ export default function ModalAbonoEncargo({
 }) {
 	const refInputAbono = useRef();
 	useEffect(() => {
-		if (modalAbono === true) {
-			refInputAbono.current.select();
-		}
-	}, [modalAbono]);
+		// if (modalAbono === true) {
+		refInputAbono.current.select();
+		// }
+	}, []);
 
 	const pressKeyPrecio = (e) => {
 		if (abono > 0) {

@@ -15,7 +15,6 @@ export default function Estrellas() {
 		query: ADD_STARS_OK,
 	});
 	if (addStarsOk?.addStarsOk === true) {
-		console.log("addStarsOk", addStarsOk);
 		refetchEV();
 		client.writeQuery({
 			query: ADD_STARS_OK,
@@ -31,14 +30,12 @@ export default function Estrellas() {
 			horaInicio.setHours(horaInicio.getHours() - 8);
 			let horaInicioUnix = horaInicio.getTime();
 			fechaEstrella = parseInt(getEV?.getEstrellasVendedor?.createAt);
-			console.log(horaInicioUnix, fechaEstrella);
 			if (horaInicioUnix < fechaEstrella && fechaEstrella !== 0) {
 				setestrellaHoy(true);
 			} else {
 				setestrellaHoy(false);
 			}
 		}
-		console.log("cambio GET Estrellas");
 	}, [getEV]);
 	useEffect(() => {
 		if (estrellaHoy === true) {

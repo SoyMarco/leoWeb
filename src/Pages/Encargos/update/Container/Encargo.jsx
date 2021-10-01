@@ -188,7 +188,6 @@ export default function Encargo() {
 					},
 				});
 				if (data) {
-					console.log(data);
 					refetch();
 					openNotification("success", `Se modificó con exito`);
 					setbtnLoading(false);

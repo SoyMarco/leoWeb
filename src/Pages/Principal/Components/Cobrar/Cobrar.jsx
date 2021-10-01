@@ -279,6 +279,7 @@ const Cobrar = ({
 						>
 							<Input
 								ref={cobrarEfectivo}
+								autoFocus={true}
 								id='cobrarEfectivo'
 								type='number'
 								prefix={<FaMoneyBillWave style={{ color: "gray" }} />}
