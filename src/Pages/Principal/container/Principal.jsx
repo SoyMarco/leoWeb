@@ -150,7 +150,6 @@ function Principal() {
 	};
 
 	const click = (record, rowIndex) => {
-		console.log(record, rowIndex);
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
 		selectInputPrecio();

@@ -61,7 +61,6 @@ export default function BuscadorApartados() {
 		return fecha;
 	};
 	const selectItem = (folio, item) => {
-		console.log(folio, item);
 		seturlFolio({ folio: folio, tipo: item?.children[2]?.key });
 	};
 	const onFocus = (e) => {

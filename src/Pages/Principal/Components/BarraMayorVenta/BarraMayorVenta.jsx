@@ -62,7 +62,6 @@ export default function BarraMayorVenta({ modalCobrar, totalTotal }) {
 	useEffect(() => {
 		if (porcentReal >= 100 && porcentReal < 300) {
 			addEstrella();
-			console.log("addEstrella Func", porcentReal);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [porcentReal]);
@@ -76,7 +75,6 @@ export default function BarraMayorVenta({ modalCobrar, totalTotal }) {
 				},
 			});
 			if (dataEstrella?.registerEstrella === true) {
-				console.log("ADD_STARS_OK de dataEstrella", dataEstrella);
 				client.writeQuery({
 					query: ADD_STARS_OK,
 					data: { addStarsOk: true },

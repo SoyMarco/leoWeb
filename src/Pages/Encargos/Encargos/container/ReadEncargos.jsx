@@ -38,7 +38,6 @@ export default function ReadEncargo() {
 	useEffect(() => {
 		if (dataEncargos?.getEncargos) {
 			let { getEncargos } = dataEncargos;
-			console.log("getEncargos", getEncargos);
 			setencargos(getEncargos);
 		}
 	}, [dataEncargos]);
@@ -47,7 +46,6 @@ export default function ReadEncargo() {
 		return fecha;
 	};
 	const guardarEncargo = async (e, item) => {
-		console.log("e", e);
 		setbtnLoading(true);
 		try {
 			if (item?.id) {
@@ -61,7 +59,6 @@ export default function ReadEncargo() {
 					},
 				});
 				if (data) {
-					console.log(data);
 					setencargos(data.editGuararEncargo);
 					// refetchEncargos();
 					openNotification("success", `Se modificó con exito`);

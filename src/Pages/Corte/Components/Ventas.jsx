@@ -55,10 +55,6 @@ export default function Ventas({
 	const { auth, logout } = useAuth();
 	const [imprimir, setimprimir] = useState(false);
 
-	useEffect(() => {
-		console.log(dataGetApartado);
-	}, [dataGetApartado]);
-
 	const onSelectChange = (selectedRowKeys) => {
 		setselectedRowKeys([]);
 		// setselectedRowKeys(selectedRowKeys);
@@ -110,7 +106,6 @@ export default function Ventas({
 		}
 	};
 	const printApartado = (record) => {
-		console.log("record", record);
 		setdataVenta(record);
 		setimprimirApartado(record?.productos[0]?.apartado);
 	};
