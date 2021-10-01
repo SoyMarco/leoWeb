@@ -12,7 +12,7 @@ import { useApolloClient } from "@apollo/client";
 import { VENTA_F3 } from "graphql/venta";
 import { FIRST_LOGIN } from "graphql/user";
 import Cobrar from "../Components/Cobrar/Cobrar";
-import BarraMayorVenta from "../Components/BarraMayorVenta/BarraMayorVenta";
+// import BarraMayorVenta from "../Components/BarraMayorVenta/BarraMayorVenta";
 import "./principal.css";
 
 function Principal() {
@@ -535,7 +535,7 @@ function Principal() {
 					/>
 				</Form>
 			</Card>
-			<BarraMayorVenta modalCobrar={modalCobrar} totalTotal={totalTotal} />
+			{/* <BarraMayorVenta modalCobrar={modalCobrar} totalTotal={totalTotal} /> */}
 			{modalCobrar ? (
 				<Cobrar
 					modalCobrar={modalCobrar}

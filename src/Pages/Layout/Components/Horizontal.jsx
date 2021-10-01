@@ -6,7 +6,7 @@ import { FaUserAstronaut } from "react-icons/fa";
 import BuscadorApartados from "Pages/BuscadorApartados/Container/BuscadorApartados";
 import { SyncOutlined } from "@ant-design/icons";
 import GetVentasMobile from "Pages/GetVentasMobile/Container/GetVentasMobile";
-import Estrellas from "./Estrellas/Estrellas";
+// import Estrellas from "./Estrellas/Estrellas";
 
 export default function Horizontal({
 	Header,
@@ -110,7 +110,7 @@ export default function Horizontal({
 							margin: "0 0 0 100px",
 						}}
 					>
-						<Estrellas />
+						{/* <Estrellas /> */}
 					</Menu.Item>
 					<Menu.Item
 						key='header4'
