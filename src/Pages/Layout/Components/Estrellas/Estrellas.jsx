@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_ESTRELLAS_VENDEDOR } from "graphql/estrella";
 import { StarFilled } from "@ant-design/icons";
 import { Tooltip } from "antd";
 
-export default function Estrellas() {
+const Estrellas = memo(() => {
 	let { data: getEV } = useQuery(GET_ESTRELLAS_VENDEDOR);
 	const [estrellasVendedor, setestrellasVendedor] = useState(0);
 	const [estrellaHoy, setestrellaHoy] = useState(false);
 	const [title, settitle] = useState(
 		"Para conseguir estrellas llena la barra al 100%"
 	);
-
+	useEffect(() => {
+		return () => {
+			setestrellaHoy(false);
+		};
+	}, []);
 	//Verifica si hoy se consiguieron estrellas
 	useEffect(() => {
 		let fechaEstrella = 0;
@@ -50,4 +54,5 @@ export default function Estrellas() {
 			/>
 		</Tooltip>
 	);
-}
+});
+export default Estrellas;

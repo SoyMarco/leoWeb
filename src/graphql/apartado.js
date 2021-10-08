@@ -417,6 +417,7 @@ export const GET_PRODUCTS_NAME = gql`
 	query getProductsName {
 		getProductsName {
 			value
+			key
 		}
 	}
 `;

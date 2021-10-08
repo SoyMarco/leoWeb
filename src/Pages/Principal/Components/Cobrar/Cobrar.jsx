@@ -37,11 +37,8 @@ const Cobrar = ({
 
 	useEffect(() => {
 		cobrarEfectivo.current.select();
-		console.log("cobrar");
 	}, []);
-	useEffect(() => {
-		console.log("cambio");
-	}, [cambio]);
+
 	useEffect(() => {
 		if (modalCobrar === true) {
 			form.setFieldsValue({ efectivo: totalTotal });
