@@ -7,7 +7,6 @@ import { BsSearch } from "react-icons/bs";
 import "./apartados.css";
 import ErrorConection from "Utils/ErrorConection";
 import useAuth from "hooks/useAuth";
-import { UrlFrontend } from "config/apollo";
 
 export default function Apartados() {
 	let { data, loading, error, refetch } = useQuery(GET_APARTADOS);
@@ -64,7 +63,7 @@ export default function Apartados() {
 	const pressKeyAbono = (e) => {
 		// F6 abrir ventana
 		if (e.keyCode === 117) {
-			window.open(UrlFrontend);
+			document.getElementById("linkNewWindow").click();
 		}
 	};
 	const keyBlock = (e) => {

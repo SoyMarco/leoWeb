@@ -9,7 +9,6 @@ import { openNotification } from "Utils/openNotification";
 import { useParams, useHistory } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import ErrorConection from "Utils/ErrorConection";
-import { UrlFrontend } from "config/apollo";
 import ErrorPage from "Pages/Error/Error";
 import useAuth from "hooks/useAuth";
 import { keyBlock } from "Utils";
@@ -188,7 +187,7 @@ export default function Apartado(props) {
 		}
 		// F6 abrir ventana
 		if (e.keyCode === 117) {
-			window.open(UrlFrontend);
+			document.getElementById("linkNewWindow").click();
 		}
 		// Cuenta
 		if (e.keyCode === 67) {
