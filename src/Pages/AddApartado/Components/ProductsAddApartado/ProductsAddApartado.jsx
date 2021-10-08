@@ -19,50 +19,11 @@ export default function ProductsAddApartado({
 	const [nombre, setnombre] = useState("");
 	const [precio, setprecio] = useState(null);
 	const { auth } = useAuth();
-	useEffect(() => {
-		if (getProductsName) {
-			console.log("algo");
 
-			// getProductsName.sort(function (a, b) {
-			// 	return b.value - a.value;
-			// });
-			let items = [
-				{ name: "Edward", value: 21 },
-				{ name: "Sharpe", value: 37 },
-				{ name: "And", value: 45 },
-				{ name: "The", value: -12 },
-				{ name: "Magnetic", value: 13 },
-				{ name: "Zeros", value: 37 },
-			];
-			console.log(getProductsName, items);
-			items.sort(function (a, b) {
-				console.log("a,b", a.value, b.value);
-				if (a.value > b.value) {
-					return 1;
-				}
-				if (a.value < b.value) {
-					return -1;
-				}
-				// a must be equal to b
-				return 0;
-			});
-			getProductsName.sort(function (a, b) {
-				console.log("a,b", a.value, b.value);
-				if (a.value > b.value) {
-					return 1;
-				}
-				if (a.value < b.value) {
-					return -1;
-				}
-				// a must be equal to b
-				return 0;
-			});
-			console.log(getProductsName, items);
-		}
-	}, [getProductsName]);
 	useEffect(() => {
 		// document.querySelector("#inputNameProduct").select();
-	}, []);
+		console.log(getProductsName, "111");
+	}, [getProductsName]);
 
 	const click = (record, rowIndex) => {
 		setselectedRowKeys([record.key]);
