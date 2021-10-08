@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_VENTAS_MES, GET_VENTAS_DIA } from "graphql/venta";
-import { REGISTER_ESTRELLA } from "graphql/estrella";
+import { REGISTER_ESTRELLA, GET_ESTRELLAS_VENDEDOR } from "graphql/estrella";
 import { Row, Progress } from "antd";
-import { useApolloClient } from "@apollo/client";
-import { ADD_STARS_OK } from "graphql/estrella";
 import "./BarraMayorVenta.css";
 
 export default function BarraMayorVenta({ modalCobrar, totalTotal }) {
+	let { refetch: refetchEV } = useQuery(GET_ESTRELLAS_VENDEDOR);
 	let { data: getVentaMes, refetch: refetchMes } = useQuery(GET_VENTAS_MES);
 	let { data: getVentasDia, refetch: refetchDia } = useQuery(GET_VENTAS_DIA, {
 		notifyOnNetworkStatusChange: true,
 	});
 	const [mutateREGISTER_ESTRELLA] = useMutation(REGISTER_ESTRELLA);
-	const client = useApolloClient();
+	const [ventaMayor, setventaMayor] = useState(0);
+	const [totalVentasDia, settotalVentasDia] = useState(0);
+	const [porcentReal, setporcentReal] = useState(0);
+	const [calculatePorcent, setcalculatePorcent] = useState(0);
 
 	useEffect(() => {
 		if (modalCobrar === false) {
@@ -22,10 +24,10 @@ export default function BarraMayorVenta({ modalCobrar, totalTotal }) {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [modalCobrar]);
-	const [ventaMayor, setventaMayor] = useState(0);
-	const [totalVentasDia, settotalVentasDia] = useState(0);
-	const [porcentReal, setporcentReal] = useState(0);
+
 	useEffect(() => {
+		console.log("barraCalculos");
+
 		if (getVentaMes) {
 			setventaMayor(getVentaMes?.getVentasMes?.ventaMayor);
 		}
@@ -40,16 +42,16 @@ export default function BarraMayorVenta({ modalCobrar, totalTotal }) {
 			settotalVentasDia(totalVentas);
 		}
 	}, [getVentaMes, getVentasDia]);
-	const calculatePorcent = () => {
+
+	useEffect(() => {
+		//Calcular porcentaje de barra con venta actual
 		let porcent = 0;
 		if (totalVentasDia && ventaMayor) {
 			porcent = ((totalVentasDia + totalTotal) * 100) / ventaMayor ?? 0;
 		}
-		return porcent;
-	};
+		setcalculatePorcent(porcent);
 
-	// GREGRAR ESTRELLAS
-	useEffect(() => {
+		// GREGRAR ESTRELLAS
 		if (totalVentasDia && ventaMayor) {
 			let porcent = 0;
 			porcent = (totalVentasDia * 100) / ventaMayor ?? 0;
@@ -58,13 +60,15 @@ export default function BarraMayorVenta({ modalCobrar, totalTotal }) {
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [totalVentasDia, ventaMayor]);
+	}, [totalTotal, totalVentasDia, ventaMayor]);
+
 	useEffect(() => {
 		if (porcentReal >= 100 && porcentReal < 300) {
 			addEstrella();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [porcentReal]);
+
 	const addEstrella = async () => {
 		try {
 			const { data: dataEstrella } = await mutateREGISTER_ESTRELLA({
@@ -75,10 +79,7 @@ export default function BarraMayorVenta({ modalCobrar, totalTotal }) {
 				},
 			});
 			if (dataEstrella?.registerEstrella === true) {
-				client.writeQuery({
-					query: ADD_STARS_OK,
-					data: { addStarsOk: true },
-				});
+				refetchEV();
 			}
 		} catch (error) {
 			console.log("error", error);
@@ -88,12 +89,12 @@ export default function BarraMayorVenta({ modalCobrar, totalTotal }) {
 		<Row justify='center' style={{ marginTop: 25 }}>
 			<Progress
 				strokeColor={
-					calculatePorcent() < 50
+					calculatePorcent < 50
 						? {
 								from: "red",
 								to: "orange",
 						  }
-						: calculatePorcent() < 80
+						: calculatePorcent < 80
 						? {
 								from: "orange",
 								to: "limegreen",
@@ -103,8 +104,8 @@ export default function BarraMayorVenta({ modalCobrar, totalTotal }) {
 								to: "dodgerblue",
 						  }
 				}
-				className={calculatePorcent() >= 100 ? "barraMayorVenta" : null}
-				percent={parseInt(calculatePorcent())}
+				className={calculatePorcent >= 100 ? "barraMayorVenta" : null}
+				percent={parseInt(calculatePorcent)}
 				status='active'
 			/>
 		</Row>

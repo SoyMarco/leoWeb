@@ -11,7 +11,6 @@ import { useMutation } from "@apollo/client";
 import { REGISTER_VENTA } from "graphql/venta";
 import useAuth from "hooks/useAuth";
 import aceptar from "assets/sonido/Aceptar.wav";
-
 // import "./cobrar.css";
 
 const Cobrar = ({
@@ -38,7 +37,11 @@ const Cobrar = ({
 
 	useEffect(() => {
 		cobrarEfectivo.current.select();
+		console.log("cobrar");
 	}, []);
+	useEffect(() => {
+		console.log("cambio");
+	}, [cambio]);
 	useEffect(() => {
 		if (modalCobrar === true) {
 			form.setFieldsValue({ efectivo: totalTotal });

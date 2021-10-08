@@ -4,7 +4,6 @@
 	place-content: flex-end;
 	padding: 0px;
 	max-width: 190px;
-	font-family: "Roboto", sans-serif;
 }
 .sumaTabla {
 	display: flex;
@@ -12,7 +11,7 @@
 	place-content: flex-end;
 	padding: 0px;
 	max-width: 190px;
-	font-family: "Roboto", sans-serif;
+
 	font-weight: bold;
 }
 .cambio {
@@ -21,20 +20,20 @@
 	place-content: flex-end;
 	padding-bottom: 15px;
 	max-width: 190px;
-	font-family: "Roboto", sans-serif;
+
 	font-weight: bold;
 }
 .tituloTicketApartado {
 	text-align-last: center;
 	padding: 0px;
 	max-width: 190px;
-	font-family: "Roboto", sans-serif;
+
 	font-weight: bold;
 }
 .subtituloTicketApartado {
 	padding: 0px;
 	max-width: 190px;
-	font-family: "Roboto", sans-serif;
+
 	font-weight: bold;
 	margin-top: 15px;
 }
@@ -43,14 +42,12 @@
 	text-indent: initial;
 	border-bottom: 0.5px solid black;
 	width: 190px;
-	font-family: "Roboto", sans-serif;
 }
 .productosApartado td {
 	padding: 0.2em 0.8em;
 	text-align: left;
 	padding-bottom: 0px;
 	padding-top: 0px;
-	font-family: "Roboto", sans-serif;
 }
 
 h1,
@@ -63,5 +60,4 @@ h6 {
 	margin-bottom: 0;
 	color: rgba(0, 0, 0, 0.85);
 	font-weight: 500;
-	font-family: "Roboto", sans-serif;
 }

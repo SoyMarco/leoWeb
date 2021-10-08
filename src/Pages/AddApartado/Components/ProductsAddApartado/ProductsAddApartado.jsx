@@ -46,7 +46,7 @@ export default function ProductsAddApartado({
 				// a must be equal to b
 				return 0;
 			});
-			getProductsName.sort(function (a, b) {
+			/* 	getProductsName.sort(function (a, b) {
 				console.log("a,b", a.value, b.value);
 				if (a.value > b.value) {
 					return 1;
@@ -56,7 +56,7 @@ export default function ProductsAddApartado({
 				}
 				// a must be equal to b
 				return 0;
-			});
+			}); */
 			console.log(getProductsName, items);
 		}
 	}, [getProductsName]);
