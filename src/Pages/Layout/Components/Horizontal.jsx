@@ -110,7 +110,7 @@ export default function Horizontal({
 							margin: "0 0 0 100px",
 						}}
 					>
-						<Estrellas />
+						{/* <Estrellas /> */}
 					</Menu.Item>
 					<Menu.Item
 						key='header4'

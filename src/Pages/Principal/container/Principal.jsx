@@ -537,11 +537,11 @@ function Principal() {
 					/>
 				</Form>
 			</Card>
-			<BarraMayorVenta
+			{/* <BarraMayorVenta
 				inicialStateTrue={inicialStateTrue}
 				setinicialStateTrue={setinicialStateTrue}
 				totalTotal={totalTotal}
-			/>
+			/> */}
 			{modalCobrar ? (
 				<Cobrar
 					modalCobrar={modalCobrar}
