@@ -10,7 +10,6 @@ import "material-design-icons-iconfont";
 import { openNotification } from "Utils/openNotification";
 import { useHistory, useLocation, Link } from "react-router-dom";
 import useAuth from "hooks/useAuth";
-import { UrlFrontend } from "config/apollo";
 import { GiLargeDress } from "react-icons/gi";
 import Horizontal from "../Components/Horizontal";
 
@@ -219,9 +218,10 @@ function LayoutForm({ children }) {
 											style={{ color: "#004882", fontSize: "30px" }}
 										/>
 									}
-									onClick={() => window.open(UrlFrontend)}
 								>
-									<h3>Nueva ventana</h3>
+									<a href='/' target='_blank' id='linkNewWindow'>
+										<h3>Nueva ventana</h3>
+									</a>
 								</Menu.Item>
 							</Menu>
 						</div>

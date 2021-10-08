@@ -7,7 +7,6 @@ import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import { useHistory } from "react-router-dom";
 import { keyBlock } from "Utils";
 import { useLocation } from "react-router-dom";
-import { UrlFrontend } from "config/apollo";
 import { useApolloClient } from "@apollo/client";
 import { VENTA_F3 } from "graphql/venta";
 import { FIRST_LOGIN } from "graphql/user";
@@ -290,7 +289,7 @@ function Principal() {
 		}
 		// F6 abrir ventana
 		if (e.keyCode === 117) {
-			window.open(UrlFrontend);
+			document.getElementById("linkNewWindow").click();
 		}
 		if (e.keyCode === 107) {
 			if (stateRecord) {
