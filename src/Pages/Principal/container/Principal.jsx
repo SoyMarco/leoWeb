@@ -11,7 +11,7 @@ import { useApolloClient } from "@apollo/client";
 import { VENTA_F3 } from "graphql/venta";
 import { FIRST_LOGIN } from "graphql/user";
 import Cobrar from "../Components/Cobrar/Cobrar";
-// import BarraMayorVenta from "../Components/BarraMayorVenta/BarraMayorVenta";
+import BarraMayorVenta from "../Components/BarraMayorVenta/BarraMayorVenta";
 import "./principal.css";
 
 function Principal() {
@@ -40,7 +40,7 @@ function Principal() {
 	const [totalTotal, settotalTotal] = useState(0);
 	const [totalProductos, settotalProductos] = useState(0);
 	const [stateRecord, setstateRecord] = useState(null);
-	// const [inicialStateTrue, setinicialStateTrue] = useState(false);
+	const [inicialStateTrue, setinicialStateTrue] = useState(false);
 
 	const initialState = () => {
 		setmodalCobrar(false);
@@ -53,8 +53,9 @@ function Principal() {
 		settotalTotal(0);
 		settotalProductos(0);
 		setstateRecord(null);
-		// setinicialStateTrue(true);
+		setinicialStateTrue(true);
 	};
+
 	/* Cambiar titulo de pagina */
 	useEffect(() => {
 		if (Location.pathname === "/") {
@@ -123,9 +124,10 @@ function Principal() {
 	useEffect(() => {
 		let sum = 0;
 		let sumProd = 0;
+
 		for (let i = 0; i < listaCompras.length; i++) {
-			sum += listaCompras[i].totalArticulo;
-			sumProd += listaCompras[i].cantidad;
+			sum += listaCompras[i]?.totalArticulo;
+			sumProd += listaCompras[i]?.cantidad;
 		}
 		settotalTotal(sum);
 		settotalProductos(sumProd);
@@ -150,13 +152,11 @@ function Principal() {
 		selectedRowKeys,
 		onChange: onSelectChange,
 	};
-
 	const click = (record, rowIndex) => {
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
 		selectInputPrecio();
 	};
-
 	const handlePrecio = (e) => {
 		setprecio({
 			precio: e.target.value,
@@ -200,7 +200,6 @@ function Principal() {
 			setmodalCobrar(true);
 		}
 	};
-
 	const addArticulo = (record) => {
 		if (listaCompras.length > 0) {
 			const currentShopList = [...listaCompras];
@@ -307,7 +306,6 @@ function Principal() {
 			}
 		}
 	};
-
 	// Columnas de tabla
 	const columns = [
 		{
@@ -537,11 +535,11 @@ function Principal() {
 					/>
 				</Form>
 			</Card>
-			{/* <BarraMayorVenta
+			<BarraMayorVenta
 				inicialStateTrue={inicialStateTrue}
 				setinicialStateTrue={setinicialStateTrue}
 				totalTotal={totalTotal}
-			/> */}
+			/>
 			{modalCobrar ? (
 				<Cobrar
 					modalCobrar={modalCobrar}
