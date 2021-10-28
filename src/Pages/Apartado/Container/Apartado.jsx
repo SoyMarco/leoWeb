@@ -119,11 +119,13 @@ export default function Apartado(props) {
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dataApartado?.vence]);
+
 	useEffect(() => {
 		if (dataApartado?.id) {
 			inputAbono.current.select();
 		}
 	}, [dataApartado?.id]);
+
 	useEffect(() => {
 		let sum = 0;
 		let sumProd = 0;

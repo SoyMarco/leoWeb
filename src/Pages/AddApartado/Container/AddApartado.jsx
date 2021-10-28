@@ -18,7 +18,6 @@ export default function AddApartado() {
 	const [current, setCurrent] = useState(0);
 	const [cliente, setcliente] = useState("");
 	const [titulo2, settitulo2] = useState("Productos");
-	const [optionsClientes, setoptionsClientes] = useState([]);
 	const [listaCompras, setlistaCompras] = useState([]);
 	const [modalCobrar, setmodalCobrar] = useState(false);
 	const [totalProductos, settotalProductos] = useState(0);
@@ -26,13 +25,10 @@ export default function AddApartado() {
 	const [abono, setabono] = useState(null);
 	const [restaria, setrestaria] = useState(0);
 	const [imprimirNewApartado, setimprimirNewApartado] = useState(false);
+
 	const inputNameClient = useRef();
 	const inputAbono = useRef();
 	const { auth } = useAuth();
-
-	useEffect(() => {
-		setoptionsClientes(getClientsNames?.getClientsNames);
-	}, [getClientsNames]);
 
 	useEffect(() => {
 		setrestaria(totalTotal - abono);
@@ -41,13 +37,10 @@ export default function AddApartado() {
 	useEffect(() => {
 		if (current === 2) {
 			inputAbono.current.select();
-		} else if (current === 0) {
-			// inputNameClient.current.select();
 		}
 	}, [current]);
 
 	useEffect(() => {
-		// selectLastRow();
 		let sum = 0;
 		let sumProd = 0;
 		for (const articulo of listaCompras) {
@@ -338,16 +331,6 @@ export default function AddApartado() {
 									>
 										Cobrar (Enter)
 									</Button>
-									{/* <Button
-										shape='round'
-										onClick={() => message.success("Processing complete!")}
-										style={{
-											background: "linear-gradient(#32A632,#005800)",
-											color: "white",
-										}}
-									>
-										F2 Guardar
-									</Button> */}
 								</>
 							)}
 						</div>
