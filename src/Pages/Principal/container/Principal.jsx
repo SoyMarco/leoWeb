@@ -4,9 +4,8 @@ import { Card, Table, Tooltip, Input, Button, Result, Form, Row } from "antd";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { MdDelete, MdLocalGroceryStore } from "react-icons/md";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { keyBlock } from "Utils";
-import { useLocation } from "react-router-dom";
 import { useApolloClient } from "@apollo/client";
 import { VENTA_F3 } from "graphql/venta";
 import { FIRST_LOGIN } from "graphql/user";
@@ -125,9 +124,9 @@ function Principal() {
 		let sum = 0;
 		let sumProd = 0;
 
-		for (let i = 0; i < listaCompras.length; i++) {
-			sum += listaCompras[i]?.totalArticulo;
-			sumProd += listaCompras[i]?.cantidad;
+		for (const itemComprar of listaCompras) {
+			sum += itemComprar?.totalArticulo;
+			sumProd += itemComprar?.cantidad;
 		}
 		settotalTotal(sum);
 		settotalProductos(sumProd);
@@ -137,9 +136,8 @@ function Principal() {
 		setstateRecord({ key: selectedRowKeys[0] });
 	}, [selectedRowKeys]);
 
-	const onSelectChange = (selectedRowKeys) => {
+	const onSelectChange = () => {
 		setselectedRowKeys([]);
-		// setselectedRowKeys(selectedRowKeys);
 	};
 
 	const selectInputPrecio = () => {
@@ -172,11 +170,11 @@ function Principal() {
 		let i = listaCompras.indexOf(item);
 		if (i !== -1) {
 			let key = listaCompras.splice(i, 1);
-			setlistaCompras(listaCompras.filter((item) => item.key !== key));
+			setlistaCompras(listaCompras.filter((item2) => item2.key !== key));
 			selectLastRow();
 		} else if (item.key > 0) {
 			let key = item.key;
-			setlistaCompras(listaCompras.filter((item) => item.key !== key));
+			setlistaCompras(listaCompras.filter((item2) => item2.key !== key));
 			selectLastRow();
 		}
 	};
@@ -263,7 +261,6 @@ function Principal() {
 		if (e.keyCode === 40) {
 			if (listaCompras.length > 1) {
 				if (listaCompras[0].key !== selectedRowKeys[0]) {
-					// setselectedRowKeys([selectedRowKeys[0] - 1]);
 					rowAbajo();
 				}
 			}
@@ -327,7 +324,7 @@ function Principal() {
 			dataIndex: "precio",
 			key: "precio",
 			ellipsis: true,
-			render: (precio) => (
+			render: (precioRender) => (
 				<h3
 					style={{
 						textAlignLast: "right",
@@ -335,7 +332,7 @@ function Principal() {
 						fontSize: "large",
 					}}
 				>
-					${precio}
+					${precioRender}
 				</h3>
 			),
 		},
@@ -535,6 +532,7 @@ function Principal() {
 					/>
 				</Form>
 			</Card>
+
 			<BarraMayorVenta
 				inicialStateTrue={inicialStateTrue}
 				setinicialStateTrue={setinicialStateTrue}

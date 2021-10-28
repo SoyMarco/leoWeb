@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, memo } from "react";
-import { useQuery, useMutation } from "@apollo/client";
-import { GET_VENTAS_MES, GET_VENTAS_DIA } from "graphql/venta";
 import { REGISTER_ESTRELLA, GET_ESTRELLAS_VENDEDOR } from "graphql/estrella";
+import { GET_VENTAS_MES, GET_VENTAS_DIA } from "graphql/venta";
+import { useQuery, useMutation } from "@apollo/client";
 import { Row, Progress } from "antd";
 import "./BarraMayorVenta.css";
 
@@ -18,13 +18,7 @@ const BarraMayorVenta = memo(
 		const [totalVentasDia, settotalVentasDia] = useState(0);
 		const [porcentReal, setporcentReal] = useState(0);
 		const [calculatePorcent, setcalculatePorcent] = useState(0);
-		console.log(
-			ventaMayor,
-			totalVentasDia,
-			porcentReal,
-			calculatePorcent,
-			totalTotal
-		);
+
 		useEffect(() => {
 			if (inicialStateTrue === true) {
 				refetchDia();
@@ -41,9 +35,10 @@ const BarraMayorVenta = memo(
 			if (getVentasDia) {
 				let arrayVentas = getVentasDia?.getVentasDia;
 				let totalVentas = 0;
-				for (let i = 0; i < arrayVentas.length; i++) {
-					if (arrayVentas[i].cancelado === false) {
-						totalVentas = arrayVentas[i].total + totalVentas;
+
+				for (const ventaOf of arrayVentas) {
+					if (ventaOf.cancelado === false) {
+						totalVentas = ventaOf.total + totalVentas;
 					}
 				}
 				settotalVentasDia(totalVentas);
@@ -101,27 +96,31 @@ const BarraMayorVenta = memo(
 
 		return (
 			<Row justify='center' style={{ marginTop: 25 }}>
-				<Progress
-					strokeColor={
-						calculatePorcent > 0 && calculatePorcent < 50
-							? {
-									from: "red",
-									to: "orange",
-							  }
-							: calculatePorcent >= 50 && calculatePorcent < 80
-							? {
-									from: "orange",
-									to: "limegreen",
-							  }
-							: {
-									from: "limegreen",
-									to: "dodgerblue",
-							  }
-					}
-					className={calculatePorcent >= 100 ? "barraMayorVenta" : "sinEstilo"}
-					percent={calculatePorcent}
-					status='active'
-				/>
+				{calculatePorcent > 0 ? (
+					<Progress
+						strokeColor={
+							calculatePorcent > 0 && calculatePorcent < 50
+								? {
+										from: "red",
+										to: "orange",
+								  }
+								: calculatePorcent >= 50 && calculatePorcent < 80
+								? {
+										from: "orange",
+										to: "limegreen",
+								  }
+								: {
+										from: "limegreen",
+										to: "dodgerblue",
+								  }
+						}
+						className={
+							calculatePorcent >= 100 ? "barraMayorVenta" : "sinEstilo"
+						}
+						percent={calculatePorcent}
+						status='active'
+					/>
+				) : null}
 			</Row>
 		);
 	}

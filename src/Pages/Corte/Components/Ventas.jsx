@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { openNotification } from "../../../Utils/openNotification";
-import ErrorConection from "Utils/ErrorConection";
-import { CANCELAR_VENTA } from "../../../graphql/venta";
-import { BORRAR_EDITAR_ABONO } from "graphql/apartado";
-import { MdLocalGroceryStore } from "react-icons/md";
-import { AiFillPrinter } from "react-icons/ai";
-import { useMutation, useQuery } from "@apollo/client";
-import Imprimir from "./Imprimir/Imprimir";
+import { BORRAR_EDITAR_ABONO, GET_PRODUCTOS_FOLIO } from "graphql/apartado";
 import ImprimirApartadoCorte from "./ImprimirApartado/ImprimirApartadoCorte";
+import { openNotification } from "../../../Utils/openNotification";
+import { CANCELAR_VENTA } from "../../../graphql/venta";
+import { useMutation, useQuery } from "@apollo/client";
+import { MdLocalGroceryStore } from "react-icons/md";
+import ErrorConection from "Utils/ErrorConection";
+import { AiFillPrinter } from "react-icons/ai";
 import useAuth from "../../../hooks/useAuth";
+import Imprimir from "./Imprimir/Imprimir";
 import moment from "moment";
-// import { UrlFrontend } from "config/apollo";
 import {
 	Table,
 	Result,
@@ -22,7 +21,7 @@ import {
 	Switch,
 	Popconfirm,
 } from "antd";
-import { GET_PRODUCTOS_FOLIO } from "graphql/apartado";
+
 export default function Ventas({
 	loading,
 	getVentasDia,
@@ -55,9 +54,8 @@ export default function Ventas({
 	const { auth, logout } = useAuth();
 	const [imprimir, setimprimir] = useState(false);
 
-	const onSelectChange = (selectedRowKeys) => {
+	const onSelectChange = () => {
 		setselectedRowKeys([]);
-		// setselectedRowKeys(selectedRowKeys);
 	};
 	useEffect(() => {
 		let numArray = getVentasDia.length - 1;
@@ -75,7 +73,6 @@ export default function Ventas({
 	const click = (record, rowIndex) => {
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
-		// addArticulo(record, rowIndex);
 	};
 	const pasarAFecha = (item) => {
 		let fecha = moment.unix(item / 1000).format("LTS");
@@ -130,14 +127,41 @@ export default function Ventas({
 					setloader(false);
 					refetch();
 				}
-			} else {
-				console.log("error");
 			}
 		} catch (error) {
 			setloader(false);
 			ErrorConection(logout);
+			console.log("error", error);
 		}
 	};
+	const tooltipStatusAbono = (record) => {
+		let title = "";
+		if (record?.productos[0]?.apartado > 0 && record.cancelado === false) {
+			title = "Abono activo";
+		} else if (
+			record?.productos[0]?.apartado > 0 &&
+			record.cancelado === true
+		) {
+			title = "No se puede activar, se borró el Abono vinculado";
+		} else if (record.cancelado === true) {
+			title = "Desactivada";
+		} else {
+			title = "Activa";
+		}
+
+		return title;
+	};
+	// Funcion de estilos
+	// const styleSwitch = (record) => {
+	// 	let styleStatus = "{ background: 'limegreen', marginTop: '5px' }";
+	// 	if (record?.cancelado) {
+	// 		styleStatus = "{ background: 'red', marginTop: '5px' }";
+	// 	} else if (record?.productos[0]?.apartado > 0) {
+	// 		styleStatus = "{ background: 'blue', marginTop: '5px' }";
+	// 	}
+	// 	return styleStatus;
+	// };
+
 	/* COLUMNAS VENTAS */
 	const colVentas = [
 		{
@@ -287,19 +311,7 @@ export default function Ventas({
 			width: "60px",
 			render: (totalArticulo, record) => (
 				<Row justify='center'>
-					<Tooltip
-						placement='right'
-						title={
-							record?.productos[0]?.apartado > 0 && record.cancelado === false
-								? "Abono activo"
-								: record?.productos[0]?.apartado > 0 &&
-								  record.cancelado === true
-								? "No se puede activar, se borró el Abono vinculado"
-								: record.cancelado === true
-								? "Desactivada"
-								: "Activa"
-						}
-					>
+					<Tooltip placement='right' title={() => tooltipStatusAbono(record)}>
 						{record?.productos[0]?.apartado > 0 ? (
 							// Switch para APARTADOS
 							<Popconfirm
@@ -308,17 +320,13 @@ export default function Ventas({
 								placement='topRight'
 								disabled={
 									record?.productos[0]?.apartado > 0 &&
-									record.cancelado === true
-										? true
-										: false
+									record?.cancelado === true
 								}
 							>
 								<Switch
 									disabled={
 										record?.productos[0]?.apartado > 0 &&
-										record.cancelado === true
-											? true
-											: false
+										record?.cancelado === true
 									}
 									loading={loader || loadGetApartado}
 									checked={!record.cancelado}
@@ -339,11 +347,10 @@ export default function Ventas({
 								loading={loader || loadGetApartado}
 								checked={!record.cancelado}
 								size='small'
-								style={
-									record.cancelado
-										? { background: "red", marginTop: "5px" }
-										: { background: "limegreen", marginTop: "5px" }
-								}
+								style={{
+									background: record.cancelado ? "red" : "limegreen",
+									marginTop: "5px",
+								}}
 								onClick={() => cancelVenta(record)}
 							/>
 						)}

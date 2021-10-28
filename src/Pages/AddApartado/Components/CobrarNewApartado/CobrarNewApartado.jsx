@@ -155,17 +155,21 @@ const CobrarNewApartado = ({
 				cambio={cambio}
 			/>
 			<Modal
+				key='modalCobrarNewApatado'
 				style={{ top: 25 }}
 				title={
 					<>
-						<FaMoneyBillWave style={{ marginRight: "10px" }} />
+						<FaMoneyBillWave
+							style={{ marginRight: "10px" }}
+							key='iconCobrarCobrarNewApatado'
+						/>
 						Cobrar
 					</>
 				}
 				visible={modalCobrar}
 				onCancel={() => cerrarCobrar()}
 				footer={[
-					<Row justify='space-around'>
+					<Row justify='space-around' key='RowCobrarNewApatado'>
 						<Button
 							style={
 								cambio < 0
@@ -184,7 +188,7 @@ const CobrarNewApartado = ({
 							}
 							shape='round'
 							onClick={() => savePrintAbono("F1")}
-							icon={<PrinterFilled />}
+							icon={<PrinterFilled key='iconF1CobrarNewApatado' />}
 							loading={btnLoading}
 							key='btnF1'
 						>
@@ -208,7 +212,7 @@ const CobrarNewApartado = ({
 							}
 							shape='round'
 							onClick={() => savePrintAbono("F2")}
-							icon={<SaveFilled />}
+							icon={<SaveFilled key='iconF2CobrarNewApatado' />}
 							loading={btnLoading}
 							key='btnF2'
 						>
@@ -225,6 +229,7 @@ const CobrarNewApartado = ({
 							color: "#00000099",
 							margin: 0,
 						}}
+						key='h1CobrarCobrarNewApatado'
 					>
 						Abono: ${totalTotal}
 					</h1>
@@ -234,7 +239,6 @@ const CobrarNewApartado = ({
 						<Form.Item
 							label='Efectivo'
 							name='efectivo'
-							key='formItem1'
 							rules={[
 								{
 									required: false,
@@ -242,6 +246,7 @@ const CobrarNewApartado = ({
 								},
 							]}
 							className='labelCobrar'
+							key='formItem1'
 						>
 							<Input
 								id='cobrarEfectivo'
@@ -252,12 +257,12 @@ const CobrarNewApartado = ({
 								prefix={<FaMoneyBillWave style={{ color: "gray" }} />}
 								onKeyUp={pressKeyPrecio}
 								onKeyDown={keyBlock}
+								key='inputEfectivoCobrarNewApatado'
 							></Input>
 						</Form.Item>
 						<Form.Item
 							label='Tarjeta'
 							name='tarjeta'
-							key='formItem2'
 							rules={[
 								{
 									required: false,
@@ -265,6 +270,7 @@ const CobrarNewApartado = ({
 								},
 							]}
 							className='labelCobrar'
+							key='formItem2'
 						>
 							<Input
 								id='cobrarTarjeta'
@@ -273,12 +279,12 @@ const CobrarNewApartado = ({
 								prefix={<FaCreditCard style={{ color: "gray" }} />}
 								onKeyUp={pressKeyPrecio}
 								onKeyDown={keyBlock}
+								key='inputTarjetaCobrarNewApatado'
 							></Input>
 						</Form.Item>
 						<Form.Item
 							label='A cuenta'
 							name='aCuenta'
-							key='formItem3'
 							rules={[
 								{
 									required: false,
@@ -286,6 +292,7 @@ const CobrarNewApartado = ({
 								},
 							]}
 							className='labelCobrar'
+							key='formItem3'
 						>
 							<Input
 								id='cobraraCuenta'
@@ -294,6 +301,7 @@ const CobrarNewApartado = ({
 								prefix={<FaStoreAlt style={{ color: "gray" }} />}
 								onKeyUp={pressKeyPrecio}
 								onKeyDown={keyBlock}
+								key='inputACuentaCobrarNewApatado'
 							></Input>
 						</Form.Item>
 					</Form>
@@ -315,6 +323,7 @@ const CobrarNewApartado = ({
 										margin: "-20px 0 0 0",
 								  }
 						}
+						key='h1CambioNewApatado'
 					>
 						{cambio >= 0 ? `Cambio: $${cambio}` : `Faltan: $${cambio}`}
 					</h1>

@@ -6,7 +6,6 @@ import { openNotification } from "Utils/openNotification";
 import { Modal, Input, Form, Button, Row } from "antd";
 import ErrorConection from "Utils/ErrorConection";
 import aceptar from "assets/sonido/Aceptar.wav";
-import { REGISTER_VENTA } from "graphql/venta";
 import { ADD_ABONO } from "graphql/apartado";
 import { useMutation } from "@apollo/client";
 import useAuth from "hooks/useAuth";
@@ -23,7 +22,6 @@ const CobrarApartado = ({
 	inputAbono,
 	dataApartado,
 }) => {
-	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
 	const [mutateADD_ABONO] = useMutation(ADD_ABONO);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);
@@ -54,10 +52,11 @@ const CobrarApartado = ({
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [modalCobrar]);
+
 	const pressKeyPrecio = (e) => {
 		// Enter
 		if (e.keyCode === 13) {
-			savePrintNewV("F1");
+			savePrintAbono("F1");
 		}
 
 		// E
@@ -75,15 +74,15 @@ const CobrarApartado = ({
 
 		// 	F1
 		if (e.keyCode === 112) {
-			savePrintNewV("F1");
+			savePrintAbono("F1");
 		}
 		// F2
 		if (e.keyCode === 113) {
-			savePrintNewV("F2");
+			savePrintAbono("F2");
 		}
 		// F3
 		if (e.keyCode === 114) {
-			savePrintNewV("F3");
+			savePrintAbono("F3");
 		}
 	};
 
@@ -113,16 +112,16 @@ const CobrarApartado = ({
 		setcambio(resultado);
 	};
 
-	//Guardar y/o Imprimir APARTADO CON GraphQL
-	const savePrintAbono = async (keyF, dataVenta) => {
-		// SIMPLIFICAR ESTA PARTE, QUITAR EL DATAVENTA Y ACTUALIZAR GRAPHQL
-		if (cambio >= 0) {
+	//Guardar e Imprimir APARTADO CON GraphQL
+	const savePrintAbono = async (keyF) => {
+		if (cambio >= 0 && btnLoading === false) {
 			setbtnLoading(true);
 			let ventaEfectivo = parseFloat(dinero.efectivo);
 			let ventaTarjeta = parseFloat(dinero.tarjeta);
 			let ventaACuenta = parseFloat(dinero.aCuenta);
 			let total = parseFloat(totalTotal);
 			let resta = parseFloat(calculateRestaria());
+
 			try {
 				const { data } = await mutateADD_ABONO({
 					variables: {
@@ -130,12 +129,11 @@ const CobrarApartado = ({
 							id: listaCompras.id,
 							abono: total,
 							resta: resta,
-							idVenta: dataVenta.id,
-							folioVenta: dataVenta.folio,
 							ventaEfectivo: ventaEfectivo,
 							ventaTarjeta: ventaTarjeta,
 							ventaACuenta: ventaACuenta,
-							referencia: dataApartado.id,
+							folioApartado: dataApartado.folio,
+							idApartado: dataApartado.id,
 						},
 					},
 				});
@@ -144,61 +142,13 @@ const CobrarApartado = ({
 						setdataApartadoImprimir(data.addAbono);
 					} else if (keyF === "F2") {
 						openNotification("success", "Apartado guardado con exito");
-						initialState();
+						initialState(data);
 					}
 					audio.play();
 				}
 			} catch (error) {
 				setbtnLoading(false);
 				ErrorConection(logout);
-			}
-		}
-	};
-	//Guardar y/o Imprimir VENTA CON GraphQL
-	const savePrintNewV = async (keyF) => {
-		if (btnLoading === false) {
-			let efectivo = parseFloat(dinero.efectivo);
-			let tarjeta = parseFloat(dinero.tarjeta);
-			let aCuenta = parseFloat(dinero.aCuenta);
-			let total = parseFloat(totalTotal);
-
-			if (cambio >= 0) {
-				setbtnLoading(true);
-				let listaComprasNew = {
-					apartado: dataApartado.folio,
-					cantidad: 1,
-					idArray: dataApartado.folio,
-					nombre: "APARTADO",
-					precio: total,
-					refApartado: dataApartado.id,
-					totalArticulo: total,
-				};
-				let ventaF123 = {
-					productos: listaComprasNew,
-					vendedor: auth.name,
-					folio: 1,
-					total: total,
-					efectivo: efectivo,
-					tarjeta: tarjeta,
-					aCuenta: aCuenta,
-					pagoCon: 0,
-					referencia: dataApartado.id,
-					notas: "APARTADO",
-				};
-
-				try {
-					const { data } = await mutateREGISTER_VENTA({
-						variables: {
-							input: ventaF123,
-						},
-					});
-					if (data) {
-						savePrintAbono(keyF, data.registerVenta);
-					}
-				} catch (error) {
-					ErrorConection(logout);
-					setbtnLoading(false);
-				}
 			}
 		}
 	};
@@ -212,7 +162,6 @@ const CobrarApartado = ({
 	};
 	return (
 		<>
-			{/* {imprimir ? ( */}
 			<ImprimirApartado
 				imprimir={imprimir}
 				setimprimir={setimprimir}
@@ -225,19 +174,23 @@ const CobrarApartado = ({
 				dinero={dinero}
 				cambio={cambio}
 			/>
-			{/* ) : null} */}
+
 			<Modal
+				key='modalCobrarAbonoApartado'
 				style={{ top: 25 }}
 				title={
 					<>
-						<FaMoneyBillWave style={{ marginRight: "10px" }} />
+						<FaMoneyBillWave
+							style={{ marginRight: "10px" }}
+							key='iconCobrarAbonoApartado'
+						/>
 						Cobrar
 					</>
 				}
 				visible={modalCobrar}
 				onCancel={() => cerrarCobrar()}
 				footer={[
-					<Row justify='space-around'>
+					<Row justify='space-around' key='rowCobrarAbonoApartado'>
 						<Button
 							style={
 								cambio < 0
@@ -255,11 +208,10 @@ const CobrarApartado = ({
 									  }
 							}
 							shape='round'
-							// loading={loading}
-							// disabled={cambio < 0}
-							onClick={() => savePrintNewV("F1")}
-							icon={<PrinterFilled />}
+							onClick={() => savePrintAbono("F1")}
+							icon={<PrinterFilled key='iconF1AbonoApartado' />}
 							loading={btnLoading}
+							key='btnAbonoApartadoF1'
 						>
 							Imprimir F1
 						</Button>
@@ -280,18 +232,17 @@ const CobrarApartado = ({
 									  }
 							}
 							shape='round'
-							// loading={loading}
-							// disabled={cambio < 0}
-							onClick={() => savePrintNewV("F2")}
-							icon={<SaveFilled />}
+							onClick={() => savePrintAbono("F2")}
+							icon={<SaveFilled key='iconF2AbonoApartado' />}
 							loading={btnLoading}
+							key='btnAbonoApartadoF2'
 						>
 							Guardar F2
 						</Button>
 					</Row>,
 				]}
 			>
-				<div key='div1' style={{ textAlignLast: "center" }}>
+				<div key='div1AbonoApartado' style={{ textAlignLast: "center" }}>
 					<h1
 						style={{
 							fontWeight: "bold",
@@ -299,16 +250,17 @@ const CobrarApartado = ({
 							color: "#00000099",
 							margin: 0,
 						}}
+						key='h1TotalTotalAbonoApartado'
 					>
 						Total: ${totalTotal}
 					</h1>
 				</div>
-				<div key='div2' style={{ textAlignLast: "right" }}>
+				<div key='div2AbonoApartado' style={{ textAlignLast: "right" }}>
 					<Form form={form} onValuesChange={OnValuesChange}>
 						<Form.Item
 							label='Efectivo'
 							name='efectivo'
-							key='1'
+							key='FormItem1AbonoApartado'
 							rules={[
 								{
 									required: false,
@@ -330,7 +282,7 @@ const CobrarApartado = ({
 						<Form.Item
 							label='Tarjeta'
 							name='tarjeta'
-							key='2'
+							key='FormItem2AbonoApartado'
 							rules={[
 								{
 									required: false,
@@ -351,7 +303,7 @@ const CobrarApartado = ({
 						<Form.Item
 							label='A cuenta'
 							name='aCuenta'
-							key='3'
+							key='FormItem3AbonoApartado'
 							rules={[
 								{
 									required: false,
@@ -371,7 +323,7 @@ const CobrarApartado = ({
 						</Form.Item>
 					</Form>
 				</div>
-				<div key='div3' style={{ textAlignLast: "center" }}>
+				<div key='div3AbonoApartado' style={{ textAlignLast: "center" }}>
 					<h1
 						style={
 							cambio >= 0
@@ -388,6 +340,7 @@ const CobrarApartado = ({
 										margin: "-20px 0 0 0",
 								  }
 						}
+						key='h1CambioAbonoApartado'
 					>
 						{cambio >= 0 ? `Cambio: $${cambio}` : `Faltan: $${cambio}`}
 					</h1>
