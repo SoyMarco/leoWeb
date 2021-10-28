@@ -1,9 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import ImprimirApartado from "Pages/Apartado/Components/ImprimirApartado/ImprimirApartado";
 import ModalCalendar from "Pages/Apartado/Components/ModalCalendar/ModalCalendar";
-import { DollarCircleFilled, CalendarOutlined } from "@ant-design/icons";
+import {
+	DollarCircleFilled,
+	CalendarOutlined,
+	DeleteFilled,
+	PrinterFilled,
+} from "@ant-design/icons";
 import CobrarApartado from "../Components/Cobrar/CobrarApartado";
-import { DeleteFilled, PrinterFilled } from "@ant-design/icons";
 import { TablaProductos, TablaAbonos } from "../Components";
 import { openNotification } from "Utils/openNotification";
 import { useParams, useHistory } from "react-router-dom";
@@ -30,7 +34,6 @@ import {
 	Result,
 } from "antd";
 import "./apartados.css";
-// import { NetworkStatus } from "@apollo/client";
 
 export default function Apartado(props) {
 	const history = useHistory();
@@ -68,10 +71,6 @@ export default function Apartado(props) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	// useEffect(() => {
-	// 	setloader(loading);
-	// }, [networkStatus, NetworkStatus.refetch]);
-
 	if (error) {
 		ErrorConection(logout);
 	}
@@ -82,15 +81,19 @@ export default function Apartado(props) {
 	useEffect(() => {
 		if (data?.getProductosFolio[0]) {
 			setdataApartado(data?.getProductosFolio[0]);
-			let { productos, abonos, cliente, cancelado } =
-				data?.getProductosFolio[0];
+			let {
+				productos: productosGet,
+				abonos: abonosGet,
+				cliente,
+				cancelado,
+			} = data?.getProductosFolio[0];
 
-			let listaAbonos = abonos.map((item) => {
+			let listaAbonos = abonosGet.map((item) => {
 				return { ...item, key: item._id };
 			});
 			setabonos(listaAbonos);
 
-			let listaProductos = productos.map((item) => {
+			let listaProductos = productosGet.map((item) => {
 				return { ...item, key: item._id };
 			});
 			setproductos(listaProductos);
@@ -112,19 +115,19 @@ export default function Apartado(props) {
 		}
 	}, [dataApartado?.id]);
 	useEffect(() => {
-		// selectLastRow();
 		let sum = 0;
 		let sumProd = 0;
-		for (let i = 0; i < productos.length; i++) {
-			sum += productos[i].totalArticulo;
-			sumProd += productos[i].cantidad;
+		for (const iterator of productos) {
+			sum += iterator.totalArticulo;
+			sumProd += iterator.cantidad;
 		}
 		settotalTotal(sum);
 		settotalProductos(sumProd);
 
 		let sumAbo = 0;
-		for (let i = 0; i < abonos.length; i++) {
-			sumAbo += abonos[i].abono;
+
+		for (const abn of abonos) {
+			sumAbo += abn.abono;
 		}
 		settotalAbonos(sumAbo);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -141,7 +144,7 @@ export default function Apartado(props) {
 
 			try {
 				if (dataApartado.id) {
-					let { data } = await mutateCANCELAR_APARTADO({
+					let { data: dataCancelApartado } = await mutateCANCELAR_APARTADO({
 						// Parameters
 						variables: {
 							input: {
@@ -150,7 +153,7 @@ export default function Apartado(props) {
 							},
 						},
 					});
-					if (data) {
+					if (dataCancelApartado) {
 						openNotification(
 							"success",
 							`Apartado ${statusApartado ? "CANCELADO" : "REACTIVADO"}`
@@ -159,7 +162,7 @@ export default function Apartado(props) {
 						setloader(false);
 					}
 				}
-			} catch (error) {
+			} catch (err) {
 				setloader(false);
 				ErrorConection(logout);
 			}
@@ -223,7 +226,7 @@ export default function Apartado(props) {
 		let status = dataApartado?.entregado[0]?.status ?? false;
 		try {
 			if (dataApartado.id) {
-				let { data } = await mutateCANCEL_ENTREGA({
+				let { data: dataCancelEntrega } = await mutateCANCEL_ENTREGA({
 					// Parameters
 					variables: {
 						input: {
@@ -232,7 +235,7 @@ export default function Apartado(props) {
 						},
 					},
 				});
-				if (data) {
+				if (dataCancelEntrega) {
 					openNotification(
 						"success",
 						`Apartado ${status ? "ENTREGADO" : "REACTIVADO"}`
@@ -241,7 +244,7 @@ export default function Apartado(props) {
 					setbtnLoading(false);
 				}
 			}
-		} catch (error) {
+		} catch (err) {
 			setbtnLoading(false);
 			ErrorConection(logout);
 		}
@@ -257,7 +260,6 @@ export default function Apartado(props) {
 			//Color rojo
 			setcolorVence("linear-gradient(#F53636,#D32F2F,#8B0000)");
 		}
-		// this.vence = fecha;
 		return fecha;
 	};
 

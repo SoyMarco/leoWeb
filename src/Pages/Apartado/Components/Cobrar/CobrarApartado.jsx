@@ -1,20 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Modal, Input, Form, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
-import { SaveFilled, PrinterFilled } from "@ant-design/icons";
 import ImprimirApartado from "../ImprimirApartado/ImprimirApartado";
+import { SaveFilled, PrinterFilled } from "@ant-design/icons";
 import { openNotification } from "Utils/openNotification";
+import { Modal, Input, Form, Button, Row } from "antd";
 import ErrorConection from "Utils/ErrorConection";
-import { keyBlock } from "Utils";
-import { useMutation /* , useApolloClient */ } from "@apollo/client";
-import { ADD_ABONO } from "graphql/apartado";
-import { REGISTER_VENTA } from "graphql/venta";
-import useAuth from "hooks/useAuth";
-// import { VENTA_F3 } from "graphql/venta";
-// import { useHistory } from "react-router-dom";
 import aceptar from "assets/sonido/Aceptar.wav";
-
-// import "./cobrar.css";
+import { REGISTER_VENTA } from "graphql/venta";
+import { ADD_ABONO } from "graphql/apartado";
+import { useMutation } from "@apollo/client";
+import useAuth from "hooks/useAuth";
+import { keyBlock } from "Utils";
 
 const CobrarApartado = ({
 	modalCobrar,
@@ -27,8 +23,6 @@ const CobrarApartado = ({
 	inputAbono,
 	dataApartado,
 }) => {
-	// const history = useHistory();
-	// const client = useApolloClient();
 	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
 	const [mutateADD_ABONO] = useMutation(ADD_ABONO);
 	const [form] = Form.useForm();
@@ -121,18 +115,27 @@ const CobrarApartado = ({
 
 	//Guardar y/o Imprimir APARTADO CON GraphQL
 	const savePrintAbono = async (keyF, dataVenta) => {
+		// SIMPLIFICAR ESTA PARTE, QUITAR EL DATAVENTA Y ACTUALIZAR GRAPHQL
 		if (cambio >= 0) {
 			setbtnLoading(true);
-
+			let ventaEfectivo = parseFloat(dinero.efectivo);
+			let ventaTarjeta = parseFloat(dinero.tarjeta);
+			let ventaACuenta = parseFloat(dinero.aCuenta);
+			let total = parseFloat(totalTotal);
+			let resta = parseFloat(calculateRestaria());
 			try {
 				const { data } = await mutateADD_ABONO({
 					variables: {
 						input: {
 							id: listaCompras.id,
-							abono: parseFloat(totalTotal),
-							resta: parseFloat(calculateRestaria()),
+							abono: total,
+							resta: resta,
 							idVenta: dataVenta.id,
 							folioVenta: dataVenta.folio,
+							ventaEfectivo: ventaEfectivo,
+							ventaTarjeta: ventaTarjeta,
+							ventaACuenta: ventaACuenta,
+							referencia: dataApartado.id,
 						},
 					},
 				});
@@ -182,47 +185,24 @@ const CobrarApartado = ({
 					referencia: dataApartado.id,
 					notas: "APARTADO",
 				};
-				if (keyF === "F3") {
-					// let queryF3 = client.readQuery({
-					// 	query: VENTA_F3,
-					// });
-					// if (!queryF3) {
-					// 	queryF3 = { ventaF3: [ventaF123] };
-					// } else {
-					// 	let arrayNew = [];
-					// 	for (let i = 0; i < queryF3.ventaF3.length; i++) {
-					// 		const element = queryF3.ventaF3[i];
-					// 		arrayNew.push(element);
-					// 	}
-					// 	arrayNew.push(ventaF123);
-					// 	queryF3 = { ventaF3: arrayNew };
-					// }
-					// client.writeQuery({
-					// 	query: VENTA_F3,
-					// 	data: queryF3,
-					// 	variables: {
-					// 		id: 5,
-					// 	},
-					// });
-					// history.push("/");
-				} else {
-					try {
-						const { data } = await mutateREGISTER_VENTA({
-							variables: {
-								input: ventaF123,
-							},
-						});
-						if (data) {
-							savePrintAbono(keyF, data.registerVenta);
-						}
-					} catch (error) {
-						ErrorConection(logout);
-						setbtnLoading(false);
+
+				try {
+					const { data } = await mutateREGISTER_VENTA({
+						variables: {
+							input: ventaF123,
+						},
+					});
+					if (data) {
+						savePrintAbono(keyF, data.registerVenta);
 					}
+				} catch (error) {
+					ErrorConection(logout);
+					setbtnLoading(false);
 				}
 			}
 		}
 	};
+
 	const keyBlockCobrar = (e) => {
 		let dataForm = form.getFieldsValue();
 		if (totalTotal === dataForm.efectivo) {
@@ -418,3 +398,27 @@ const CobrarApartado = ({
 };
 
 export default CobrarApartado;
+/* 
+Example code:
+let queryF3 = client.readQuery({
+	query: VENTA_F3,
+});
+if (!queryF3) {
+	queryF3 = { ventaF3: [ventaF123] };
+} else {
+	let arrayNew = [];
+	for (let i = 0; i < queryF3.ventaF3.length; i++) {
+		const element = queryF3.ventaF3[i];
+		arrayNew.push(element);
+	}
+	arrayNew.push(ventaF123);
+	queryF3 = { ventaF3: arrayNew };
+}
+client.writeQuery({
+	query: VENTA_F3,
+	data: queryF3,
+	variables: {
+		id: 5,
+	},
+});
+history.push("/"); */

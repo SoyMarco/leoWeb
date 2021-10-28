@@ -39,9 +39,8 @@ export default function Productos({
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [modalAddProduct, setmodalAddProduct] = useState(false);
 	const { logout } = useAuth();
-	const onSelectChange = (selectedRowKeys) => {
+	const onSelectChange = () => {
 		setselectedRowKeys([]);
-		// setselectedRowKeys(selectedRowKeys);
 	};
 	const rowSelection = {
 		selectedRowKeys,
@@ -55,8 +54,6 @@ export default function Productos({
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
 		inputAbono.current.select();
-
-		// addArticulo(record, rowIndex);
 	};
 	const pasarAFecha = (item) => {
 		let fecha = moment.unix(item / 1000).format("ll");

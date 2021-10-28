@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 import { keyBlock } from "Utils";
 import { openNotification } from "Utils/openNotification";
+import aceptar from "assets/sonido/Aceptar.wav";
 
 const ImprimirNewApartado = ({
 	imprimir,
@@ -24,6 +25,7 @@ const ImprimirNewApartado = ({
 	const imprimirNewApartado = useRef();
 	const inputReprint = useRef();
 	const history = useHistory();
+	const audio = new Audio(aceptar);
 
 	useEffect(() => {
 		let sum = 0;
@@ -47,6 +49,7 @@ const ImprimirNewApartado = ({
 		if (numPrint === 0) {
 			inputReprint.current.select();
 			setnumPrint(numPrint + 1);
+			audio.play();
 		} else if (numPrint === 1) {
 			history.push("/");
 		}
@@ -85,7 +88,6 @@ const ImprimirNewApartado = ({
 		} else {
 			fecha = `Venció ${fecha}`;
 		}
-		// this.vence = fecha;
 		return fecha;
 	};
 

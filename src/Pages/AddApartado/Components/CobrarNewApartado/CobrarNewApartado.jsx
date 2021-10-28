@@ -7,16 +7,12 @@ import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
-import { REGISTER_APARTADO, GET_FOLIO_MAX_APARTADO } from "graphql/apartado";
-import { REGISTER_VENTA } from "graphql/venta";
+import { REGISTER_APARTADO } from "graphql/apartado";
 import useAuth from "hooks/useAuth";
 import aceptar from "assets/sonido/Aceptar.wav";
 
-// import "./cobrar.css";
-
 const CobrarNewApartado = ({
 	modalCobrar,
-	setmodalCobrar,
 	cerrarCobrar,
 	totalTotal,
 	listaCompras,
@@ -25,10 +21,7 @@ const CobrarNewApartado = ({
 	inputAbono,
 	cliente,
 }) => {
-	let [mutateGET_FOLIO_MAX_APARTADO] = useMutation(GET_FOLIO_MAX_APARTADO);
 	const { auth, logout } = useAuth();
-
-	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
 	const [mutateREGISTER_APARTADO] = useMutation(REGISTER_APARTADO);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);
@@ -55,15 +48,15 @@ const CobrarNewApartado = ({
 	const pressKeyPrecio = (e) => {
 		// Enter
 		if (e.keyCode === 13) {
-			savePrintNewV("F1");
+			savePrintAbono("F1");
 		}
 		// 	F1
 		if (e.keyCode === 112) {
-			savePrintNewV("F1");
+			savePrintAbono("F1");
 		}
 		// F2
 		if (e.keyCode === 113) {
-			savePrintNewV("F2");
+			savePrintAbono("F2");
 		}
 		// E
 		if (e.keyCode === 69) {
@@ -110,86 +103,23 @@ const CobrarNewApartado = ({
 		setcambio(resultado);
 	};
 
-	//Guardar y/o Imprimir VENTA CON GraphQL
-	const savePrintNewV = async (keyF) => {
-		if (btnLoading === false) {
-			let efectivo = parseFloat(dinero.efectivo);
-			let tarjeta = parseFloat(dinero.tarjeta);
-			let aCuenta = parseFloat(dinero.aCuenta);
-			let total = parseFloat(totalTotal);
-			if (cambio >= 0) {
-				setbtnLoading(true);
-				try {
-					const { data: FolioMax } = await mutateGET_FOLIO_MAX_APARTADO({
-						variables: {
-							input: {
-								status: true,
-							},
-						},
-					});
-					let folioApartado = FolioMax?.getFolioMaxApartado?.folio;
-					let listaComprasNew = {
-						apartado: folioApartado,
-						cantidad: 1,
-						idArray: folioApartado,
-						nombre: "APARTADO",
-						precio: total,
-						refApartado: "Apartado",
-						totalArticulo: total,
-					};
-					if (folioApartado) {
-						const { data } = await mutateREGISTER_VENTA({
-							variables: {
-								input: {
-									productos: listaComprasNew,
-									vendedor: auth.name,
-									folio: 1,
-									total: total,
-									efectivo: efectivo,
-									tarjeta: tarjeta,
-									aCuenta: aCuenta,
-									pagoCon: 0,
-									referencia: "Apartado",
-									notas: "APARTADO",
-								},
-							},
-						});
-						if (await data) {
-							savePrintAbono(keyF, data.registerVenta);
-						}
-					}
-				} catch (error) {
-					ErrorConection(logout);
-					setbtnLoading(false);
-				}
-			}
-		}
-	};
-
 	//Guardar y/o Imprimir APARTADO CON GraphQL
-	const savePrintAbono = async (keyF, dataVenta) => {
-		let abonos = [
-			{
-				abono: parseFloat(totalTotal),
-				vendedor: auth.name,
-				idVenta: dataVenta.id,
-				folioVenta: dataVenta.folio,
-			},
-		];
-		if (cambio >= 0) {
+	const savePrintAbono = async (keyF) => {
+		if (cambio >= 0 && auth.name && btnLoading === false) {
 			setbtnLoading(true);
+			let ventaEfectivo = parseFloat(dinero.efectivo);
+			let ventaTarjeta = parseFloat(dinero.tarjeta);
+			let ventaACuenta = parseFloat(dinero.aCuenta);
 			try {
 				const { data } = await mutateREGISTER_APARTADO({
 					variables: {
 						input: {
 							productos: listaCompras,
-							vendedor: auth.name,
 							cliente: cliente,
-							abonos: abonos,
-							folio: 1,
 							total: parseFloat(totalTotal),
-							referencia: "",
-							notas: "",
+							ventaEfectivo: ventaEfectivo,
+							ventaTarjeta: ventaTarjeta,
+							ventaACuenta: ventaACuenta,
 						},
 					},
 				});
@@ -200,8 +130,9 @@ const CobrarNewApartado = ({
 					} else if (keyF === "F2") {
 						openNotification("success", "Apartado guardado con exito");
 						initialState();
+						audio.play();
 					}
-					audio.play();
+					setbtnLoading(false);
 				}
 			} catch (error) {
 				setbtnLoading(false);
@@ -211,7 +142,6 @@ const CobrarNewApartado = ({
 	};
 	return (
 		<>
-			{/* {imprimir ? ( */}
 			<ImprimirApartado
 				imprimir={imprimir}
 				setimprimir={setimprimir}
@@ -224,7 +154,6 @@ const CobrarNewApartado = ({
 				dinero={dinero}
 				cambio={cambio}
 			/>
-			{/* ) : null} */}
 			<Modal
 				style={{ top: 25 }}
 				title={
@@ -254,11 +183,10 @@ const CobrarNewApartado = ({
 									  }
 							}
 							shape='round'
-							// loading={loading}
-							// disabled={cambio < 0}
-							onClick={() => savePrintNewV("F1")}
+							onClick={() => savePrintAbono("F1")}
 							icon={<PrinterFilled />}
 							loading={btnLoading}
+							key='btnF1'
 						>
 							Imprimir F1
 						</Button>
@@ -279,11 +207,10 @@ const CobrarNewApartado = ({
 									  }
 							}
 							shape='round'
-							// loading={loading}
-							// disabled={cambio < 0}
-							onClick={() => savePrintNewV("F2")}
+							onClick={() => savePrintAbono("F2")}
 							icon={<SaveFilled />}
 							loading={btnLoading}
+							key='btnF2'
 						>
 							Guardar F2
 						</Button>
