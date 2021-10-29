@@ -18,7 +18,7 @@ const Corte = () => {
 		loading: loadingCaja,
 		refetch: refetchCaja,
 	} = useQuery(GET_CAJA_DIA);
-	const [getVentasDia, setgetVentasDia] = useState([]);
+	const [dataVentasDia, setdataVentasDia] = useState([]);
 	const [cajaDia, setcajaDia] = useState([]);
 	const [stateRecord, setstateRecord] = useState(null);
 	const [loader, setloader] = useState(false);
@@ -38,7 +38,7 @@ const Corte = () => {
 			let listaVentas = getVentasDia.map((item) => {
 				return { ...item, key: item.folio };
 			});
-			setgetVentasDia(listaVentas);
+			setdataVentasDia(listaVentas);
 		}
 	}, [data]);
 	useEffect(() => {
@@ -58,9 +58,9 @@ const Corte = () => {
 					Corte
 				</h1>
 			</Row>
-			<Row>
+			<Row style={{ border: 0, margin: 0, padding: 0 }}>
 				<TablaVentas
-					getVentasDia={getVentasDia}
+					getVentasDia={dataVentasDia}
 					loading={loading}
 					loader={loader}
 					setloader={setloader}
@@ -76,7 +76,7 @@ const Corte = () => {
 			</Divider> */}
 
 			<TablaTotales
-				getVentasDia={getVentasDia}
+				getVentasDia={dataVentasDia}
 				cajaDia={cajaDia}
 				loading={loading}
 				loadingCaja={loadingCaja}

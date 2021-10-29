@@ -38,12 +38,18 @@ const ImprimirNewApartado = ({
 			sumAbo += abonos[i]?.abono;
 		}
 		settotalAbonos(sumAbo);
-		if (imprimir === true) {
-			document.getElementById("print-button").click();
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [imprimir, abonos, productos]);
+
+	useEffect(() => {
+		if (totalAbonos || totalTotal) {
+			if (imprimir === true) {
+				document.getElementById("print-button").click();
+			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [imprimir]);
-
+	}, [totalAbonos, totalTotal]);
 	const afterPrint = () => {
 		openNotification("success", "Apartado guardado con exito");
 		if (numPrint === 0) {

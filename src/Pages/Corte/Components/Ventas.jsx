@@ -151,16 +151,6 @@ export default function Ventas({
 
 		return title;
 	};
-	// Funcion de estilos
-	// const styleSwitch = (record) => {
-	// 	let styleStatus = "{ background: 'limegreen', marginTop: '5px' }";
-	// 	if (record?.cancelado) {
-	// 		styleStatus = "{ background: 'red', marginTop: '5px' }";
-	// 	} else if (record?.productos[0]?.apartado > 0) {
-	// 		styleStatus = "{ background: 'blue', marginTop: '5px' }";
-	// 	}
-	// 	return styleStatus;
-	// };
 
 	/* COLUMNAS VENTAS */
 	const colVentas = [
@@ -171,24 +161,43 @@ export default function Ventas({
 			sorter: (a, b) => b.key - a.key,
 			defaultSortOrder: "ascend",
 			width: "70px",
+			render: (folio, record) => (
+				<h4
+					style={{
+						color: record?.productos[0]?.apartado > 0 ? "darkblue" : "green",
+					}}
+				>
+					{folio}
+				</h4>
+			),
 		},
 		{
 			title: "Hora",
 			dataIndex: "createAt",
 			key: "createAt",
-			render: (createAt) => <h1>{pasarAFecha(createAt)}</h1>,
+			width: "60px",
+			ellipsis: true,
+			render: (createAt, record) => (
+				<h4
+					style={{
+						color: record?.productos[0]?.apartado > 0 ? "darkblue" : "green",
+					}}
+				>
+					{pasarAFecha(createAt)}
+				</h4>
+			),
 		},
 		{
 			title: "Efectivo",
 			dataIndex: "efectivo",
 			key: "efectivo",
+			width: "70px",
 			ellipsis: true,
-			render: (efectivo) => (
+			render: (efectivo, record) => (
 				<h3
 					style={{
 						textAlignLast: "right",
-						// fontWeight: "revert",
-						// fontSize: "large",
+						color: record?.productos[0]?.apartado > 0 ? "darkblue" : "green",
 					}}
 				>
 					${efectivo}
@@ -199,13 +208,14 @@ export default function Ventas({
 			title: "Tajeta",
 			dataIndex: "tarjeta",
 			key: "tarjeta",
+			width: "70px",
+			ellipsis: true,
 			render: (tarjeta, record) => (
 				<Row justify='space-around'>
 					<h3
 						style={{
 							textAlignLast: "center",
-							// fontWeight: "revert",
-							// fontSize: "x-large",
+							color: record?.productos[0]?.apartado > 0 ? "darkblue" : "green",
 						}}
 					>
 						${tarjeta}
@@ -214,18 +224,16 @@ export default function Ventas({
 			),
 		},
 		{
-			title: "A cuenta",
+			title: "aCuenta",
 			dataIndex: "aCuenta",
 			key: "aCuenta",
-			ellipsis: {
-				showTitle: false,
-			},
-			render: (aCuenta) => (
+			width: "70px",
+			ellipsis: true,
+			render: (aCuenta, record) => (
 				<h3
 					style={{
 						textAlignLast: "right",
-						// fontWeight: "revert",
-						// fontSize: "large",
+						color: record?.productos[0]?.apartado > 0 ? "darkblue" : "green",
 					}}
 				>
 					${aCuenta}
@@ -236,27 +244,17 @@ export default function Ventas({
 			title: "Total",
 			dataIndex: "total",
 			key: "total",
-			ellipsis: {
-				showTitle: false,
-			},
+			width: "90px",
+			ellipsis: true,
 			render: (total, record) => (
 				<Tooltip placement='topRight' title={total}>
 					<h3
-						style={
-							record?.productos[0]?.apartado > 0
-								? {
-										textAlignLast: "right",
-										fontWeight: "revert",
-										fontSize: "large",
-										color: "blue",
-								  }
-								: {
-										textAlignLast: "right",
-										fontWeight: "revert",
-										fontSize: "large",
-										color: "green",
-								  }
-						}
+						style={{
+							textAlignLast: "right",
+							fontWeight: "revert",
+							fontSize: "large",
+							color: record?.productos[0]?.apartado > 0 ? "darkblue" : "green",
+						}}
 					>
 						${total}
 					</h3>
@@ -286,11 +284,10 @@ export default function Ventas({
 							loading={loadGetApartado}
 							icon={<AiFillPrinter style={{ fontSize: "25px" }} />}
 							shape='circle'
-							style={
-								record?.productos[0]?.apartado > 0
-									? { color: "blue" }
-									: { color: "limegreen" }
-							}
+							style={{
+								color:
+									record?.productos[0]?.apartado > 0 ? "blue" : "limegreen",
+							}}
 							onClick={() =>
 								record?.productos[0]?.apartado > 0
 									? printApartado(record)
@@ -362,24 +359,26 @@ export default function Ventas({
 
 	return (
 		<>
-			{imprimir ? (
-				<Imprimir
-					imprimir={imprimir}
-					setimprimir={setimprimir}
-					stateRecord={stateRecord}
-					auth={auth}
-				/>
-			) : null}
-			{dataGetApartado?.getProductosFolio[0]?.folio > 1 ? (
-				<ImprimirApartadoCorte
-					imprimirApartado={imprimirApartado}
-					setimprimirApartado={setimprimirApartado}
-					dataApartado={dataGetApartado?.getProductosFolio[0]}
-					dinero={dataVenta}
-					auth={auth}
-				/>
-			) : null}
-			<Col xs={24} sm={24} md={16}>
+			<Col xs={24} sm={24} md={24}>
+				{imprimir ? (
+					<Imprimir
+						imprimir={imprimir}
+						setimprimir={setimprimir}
+						stateRecord={stateRecord}
+						auth={auth}
+					/>
+				) : null}
+				{dataGetApartado?.getProductosFolio[0]?.folio > 1 ? (
+					<ImprimirApartadoCorte
+						imprimirApartado={imprimirApartado}
+						setimprimirApartado={setimprimirApartado}
+						dataApartado={dataGetApartado?.getProductosFolio[0]}
+						dinero={dataVenta}
+						auth={auth}
+					/>
+				) : null}
+			</Col>
+			<Col xs={24} sm={24} md={15}>
 				<Divider orientation='left' style={{ marginTop: 0 }}>
 					Ventas
 				</Divider>
@@ -394,13 +393,16 @@ export default function Ventas({
 						height: "300px",
 						borderRadius: "10px",
 						boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
-						margin: "10px",
+						margin: "0 10px 10px 0",
 					}}
 					rowSelection={rowSelection}
 					size='small'
 					onRow={(record, rowIndex) => {
 						return {
 							onClick: (e) => {
+								click(record, rowIndex);
+							},
+							onMouseEnter: (event) => {
 								click(record, rowIndex);
 							},
 						};
