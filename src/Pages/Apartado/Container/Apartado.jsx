@@ -298,6 +298,7 @@ export default function Apartado(props) {
 						loader={loader}
 						setloader={setloader}
 						refetch={refetch}
+						initialState={initialState}
 						setstateRecord={setstateRecord}
 						stateRecord={stateRecord}
 						dataApartado={dataApartado}

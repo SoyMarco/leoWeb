@@ -37,12 +37,15 @@ const ImprimirApartado = ({
 			sumAbo += abonos[i]?.abono;
 		}
 		settotalAbonos(sumAbo);
-
-		if (imprimir === true) {
-			document.getElementById("print-button2").click();
-		}
 	}, [imprimir, abonos, productos]);
-
+	useEffect(() => {
+		if (totalAbonos || totalTotal) {
+			if (imprimir === true) {
+				document.getElementById("print-button2").click();
+			}
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [totalAbonos, totalTotal]);
 	const afterPrint = () => {
 		openNotification("success", "Reimpreso con exito");
 		if (numPrint === 0) {
@@ -50,8 +53,8 @@ const ImprimirApartado = ({
 			setnumPrint(numPrint + 1);
 		} else if (numPrint === 1) {
 			let data = { addAbono: dataApartado };
-
 			initialState(data);
+			setimprimir(false);
 		}
 	};
 	const pressKeyPrecio = (e) => {
@@ -104,7 +107,7 @@ const ImprimirApartado = ({
 				// onBeforePrint={() => antesDeImprimir()}
 				onAfterPrint={() => afterPrint()}
 			/>
-			)
+
 			<Modal
 				visible={imprimir}
 				width='229px'

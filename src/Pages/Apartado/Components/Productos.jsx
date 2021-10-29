@@ -32,6 +32,7 @@ export default function Productos({
 	totalProductos,
 	totalTotal,
 	inputAbono,
+	initialState,
 }) {
 	const [mutateCANCELAR_PRODUCTO_APARTDO] = useMutation(
 		CANCELAR_PRODUCTO_APARTDO
@@ -337,6 +338,7 @@ export default function Productos({
 					setmodalAddProduct={setmodalAddProduct}
 					modalAddProduct={modalAddProduct}
 					refetch={refetch}
+					initialState={initialState}
 					dataApartado={dataApartado}
 				/>
 			)}
