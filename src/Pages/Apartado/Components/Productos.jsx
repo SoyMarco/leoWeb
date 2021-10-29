@@ -32,6 +32,7 @@ export default function Productos({
 	totalProductos,
 	totalTotal,
 	inputAbono,
+	initialState,
 }) {
 	const [mutateCANCELAR_PRODUCTO_APARTDO] = useMutation(
 		CANCELAR_PRODUCTO_APARTDO
@@ -39,9 +40,8 @@ export default function Productos({
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [modalAddProduct, setmodalAddProduct] = useState(false);
 	const { logout } = useAuth();
-	const onSelectChange = (selectedRowKeys) => {
+	const onSelectChange = () => {
 		setselectedRowKeys([]);
-		// setselectedRowKeys(selectedRowKeys);
 	};
 	const rowSelection = {
 		selectedRowKeys,
@@ -55,8 +55,6 @@ export default function Productos({
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
 		inputAbono.current.select();
-
-		// addArticulo(record, rowIndex);
 	};
 	const pasarAFecha = (item) => {
 		let fecha = moment.unix(item / 1000).format("ll");
@@ -340,6 +338,7 @@ export default function Productos({
 					setmodalAddProduct={setmodalAddProduct}
 					modalAddProduct={modalAddProduct}
 					refetch={refetch}
+					initialState={initialState}
 					dataApartado={dataApartado}
 				/>
 			)}

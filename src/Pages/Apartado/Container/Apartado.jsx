@@ -1,9 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import ImprimirApartado from "Pages/Apartado/Components/ImprimirApartado/ImprimirApartado";
 import ModalCalendar from "Pages/Apartado/Components/ModalCalendar/ModalCalendar";
-import { DollarCircleFilled, CalendarOutlined } from "@ant-design/icons";
+import {
+	DollarCircleFilled,
+	CalendarOutlined,
+	DeleteFilled,
+	PrinterFilled,
+} from "@ant-design/icons";
 import CobrarApartado from "../Components/Cobrar/CobrarApartado";
-import { DeleteFilled, PrinterFilled } from "@ant-design/icons";
 import { TablaProductos, TablaAbonos } from "../Components";
 import { openNotification } from "Utils/openNotification";
 import { useParams, useHistory } from "react-router-dom";
@@ -30,13 +34,17 @@ import {
 	Result,
 } from "antd";
 import "./apartados.css";
-// import { NetworkStatus } from "@apollo/client";
 
 export default function Apartado(props) {
 	const history = useHistory();
 	const params = useParams();
 	let urlFolio = parseInt(params.folio);
-	let { data, loading, error, refetch } = useQuery(GET_PRODUCTOS_FOLIO, {
+	let {
+		data: getApartadoFolio,
+		loading,
+		error,
+		refetch,
+	} = useQuery(GET_PRODUCTOS_FOLIO, {
 		variables: { folio: urlFolio },
 		notifyOnNetworkStatusChange: true,
 	});
@@ -68,10 +76,6 @@ export default function Apartado(props) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	// useEffect(() => {
-	// 	setloader(loading);
-	// }, [networkStatus, NetworkStatus.refetch]);
-
 	if (error) {
 		ErrorConection(logout);
 	}
@@ -79,18 +83,26 @@ export default function Apartado(props) {
 		setmodalCobrar(false);
 		inputAbono.current.select();
 	};
-	useEffect(() => {
-		if (data?.getProductosFolio[0]) {
-			setdataApartado(data?.getProductosFolio[0]);
-			let { productos, abonos, cliente, cancelado } =
-				data?.getProductosFolio[0];
 
-			let listaAbonos = abonos.map((item) => {
+	useEffect(() => {
+		setdataApartado(getApartadoFolio?.getProductosFolio[0]);
+	}, [getApartadoFolio]);
+
+	useEffect(() => {
+		if (dataApartado) {
+			let {
+				productos: productosGet,
+				abonos: abonosGet,
+				cliente,
+				cancelado,
+			} = dataApartado;
+
+			let listaAbonos = abonosGet.map((item) => {
 				return { ...item, key: item._id };
 			});
 			setabonos(listaAbonos);
 
-			let listaProductos = productos.map((item) => {
+			let listaProductos = productosGet.map((item) => {
 				return { ...item, key: item._id };
 			});
 			setproductos(listaProductos);
@@ -99,32 +111,35 @@ export default function Apartado(props) {
 			let cancel = cancelado[0]?.status ?? true;
 			setstatusApartado(cancel);
 		}
-	}, [data]);
+	}, [dataApartado]);
+
 	useEffect(() => {
 		if (dataApartado?.vence) {
 			fechaVenceEn();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dataApartado?.vence]);
+
 	useEffect(() => {
 		if (dataApartado?.id) {
 			inputAbono.current.select();
 		}
 	}, [dataApartado?.id]);
+
 	useEffect(() => {
-		// selectLastRow();
 		let sum = 0;
 		let sumProd = 0;
-		for (let i = 0; i < productos.length; i++) {
-			sum += productos[i].totalArticulo;
-			sumProd += productos[i].cantidad;
+		for (const iterator of productos) {
+			sum += iterator.totalArticulo;
+			sumProd += iterator.cantidad;
 		}
 		settotalTotal(sum);
 		settotalProductos(sumProd);
 
 		let sumAbo = 0;
-		for (let i = 0; i < abonos.length; i++) {
-			sumAbo += abonos[i].abono;
+
+		for (const abn of abonos) {
+			sumAbo += abn.abono;
 		}
 		settotalAbonos(sumAbo);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -141,7 +156,7 @@ export default function Apartado(props) {
 
 			try {
 				if (dataApartado.id) {
-					let { data } = await mutateCANCELAR_APARTADO({
+					let { data: dataCancelApartado } = await mutateCANCELAR_APARTADO({
 						// Parameters
 						variables: {
 							input: {
@@ -150,7 +165,7 @@ export default function Apartado(props) {
 							},
 						},
 					});
-					if (data) {
+					if (dataCancelApartado) {
 						openNotification(
 							"success",
 							`Apartado ${statusApartado ? "CANCELADO" : "REACTIVADO"}`
@@ -159,7 +174,7 @@ export default function Apartado(props) {
 						setloader(false);
 					}
 				}
-			} catch (error) {
+			} catch (err) {
 				setloader(false);
 				ErrorConection(logout);
 			}
@@ -194,9 +209,9 @@ export default function Apartado(props) {
 			history.push("/");
 		}
 	};
-	const initialState = () => {
-		refetch();
-		setmodalCobrar();
+	const initialState = (data) => {
+		setdataApartado(data.addAbono);
+		setmodalCobrar(false);
 		setabono({ abono: null });
 		inputAbono.current.select();
 	};
@@ -223,7 +238,7 @@ export default function Apartado(props) {
 		let status = dataApartado?.entregado[0]?.status ?? false;
 		try {
 			if (dataApartado.id) {
-				let { data } = await mutateCANCEL_ENTREGA({
+				let { data: dataCancelEntrega } = await mutateCANCEL_ENTREGA({
 					// Parameters
 					variables: {
 						input: {
@@ -232,7 +247,7 @@ export default function Apartado(props) {
 						},
 					},
 				});
-				if (data) {
+				if (dataCancelEntrega) {
 					openNotification(
 						"success",
 						`Apartado ${status ? "ENTREGADO" : "REACTIVADO"}`
@@ -241,7 +256,7 @@ export default function Apartado(props) {
 					setbtnLoading(false);
 				}
 			}
-		} catch (error) {
+		} catch (err) {
 			setbtnLoading(false);
 			ErrorConection(logout);
 		}
@@ -257,10 +272,70 @@ export default function Apartado(props) {
 			//Color rojo
 			setcolorVence("linear-gradient(#F53636,#D32F2F,#8B0000)");
 		}
-		// this.vence = fecha;
 		return fecha;
 	};
-
+	const titlePopconfirm = () => {
+		let title = "¿Deseas  RECUPERAR este apartado?";
+		if (statusApartado) {
+			title = "¿Deseas  DESACTIVAR este apartado?";
+		}
+		return title;
+	};
+	const titleTooltip = () => {
+		let title = "APARTADO INACTIVO";
+		if (statusApartado) {
+			title = "APARTADO ACTIVO";
+		}
+		return title;
+	};
+	const renderTablaProductosAbonos = () => {
+		if (statusApartado) {
+			return (
+				<Row>
+					<TablaProductos
+						productos={productos}
+						loading={loading}
+						loader={loader}
+						setloader={setloader}
+						refetch={refetch}
+						initialState={initialState}
+						setstateRecord={setstateRecord}
+						stateRecord={stateRecord}
+						dataApartado={dataApartado}
+						totalProductos={totalProductos}
+						totalTotal={totalTotal}
+						inputAbono={inputAbono}
+					/>
+					<TablaAbonos
+						abonos={abonos}
+						abono={abono}
+						loading={loading}
+						loader={loader}
+						setloader={setloader}
+						totalAbonos={totalAbonos}
+						inputAbono={inputAbono}
+						totalTotal={totalTotal}
+						refetch={refetch}
+					/>
+				</Row>
+			);
+		} else {
+			return (
+				<Result
+					status='error'
+					title={`Este apartado se canceló el día ${pasarAFecha(
+						dataApartado?.cancelado[0]?.fecha
+					)}, por ${dataApartado?.cancelado[0]?.vendedor?.toUpperCase()}`}
+				/>
+			);
+		}
+	};
+	const renderLoading = () => {
+		if (loading) {
+			return <Skeleton active />;
+		}
+		return <ErrorPage />;
+	};
 	return (
 		<>
 			<title>{titleWeb}</title>
@@ -285,137 +360,24 @@ export default function Apartado(props) {
 				/>
 			)}
 
-			{/* INFO APARTADO */}
-			{dataApartado?.id ? (
-				<Card
-					disabled={true}
-					actions={[
-						<Button
-							disabled={!statusApartado}
-							shape='round'
-							style={
-								statusApartado
-									? {
-											background: colorVence,
-											marginTop: 5,
-											marginRight: 15,
-											color: "white",
-											border: 0,
-											fontSize: "large",
-											fontWeight: "bold",
-									  }
-									: {
-											background: "gray",
-											marginTop: 5,
-											marginRight: 15,
-											color: "white",
-											border: 0,
-											// fontSize: "large",
-											fontWeight: "bold",
-									  }
-							}
-							onClick={() => setmodalCalendar(true)}
-							icon={
-								<CalendarOutlined
-									style={{ fontSize: "large", marginRight: 5 }}
-								/>
-							}
-						>
-							{`${venceEn}, ${pasarAFechaLL(dataApartado.vence)}`}
-						</Button>,
-						<h1
-							style={
-								calculateRestaria() >= 0
-									? {
-											color: "green",
-											fontSize: "x-large",
-											fontWeight: "bold",
-									  }
-									: {
-											color: "red",
-											fontSize: "x-large",
-											fontWeight: "bold",
-									  }
-							}
-							onClick={() => pressEnter}
-						>
-							{abono.abono > 0 ? `Restaría $${calculateRestaria()}` : null}
-						</h1>,
-						<>
-							<h1
-								style={{
-									color: "green",
-									fontSize: "xxx-large",
-									fontWeight: "bold",
-									marginTop: "-20px",
-								}}
-								onClick={() => pressEnter}
-							>
-								{totalProductos ? `Resta $${totalTotal - totalAbonos}` : null}
-							</h1>
-						</>,
-					]}
-				>
-					{/* Header Card */}
-					<Row
-						justify='space-around'
-						style={{
-							background: "linear-gradient(#000066, #000058, #000036)",
-							padding: "7px",
-							borderRadius: "25px 5px 0 0",
-						}}
-					>
-						{/* Ingresar Abono */}
-						<h1
-							style={{
-								color: "white",
-								fontSize: "x-large",
-								fontWeight: "bold",
-							}}
-						>{`Folio: ${dataApartado.folio}`}</h1>
-						<Tooltip
-							placement='top'
-							title={`
-							(F1)Imprimir
-							  (F12)ENTREGAR`}
-						>
-							<Input
-								// id='inputAbono'
-								ref={inputAbono}
-								placeholder='Abono'
-								disabled={!statusApartado}
-								// prefix={<AiFillDollarCircle style={{ marginLeft: "20px" }} />}
-								style={{
-									color: "green",
-									// fontSize: 30,
-									fontSize: "x-large",
-									fontWeight: "bold",
-									borderRadius: "50px",
-									maxWidth: "60%",
-									padding: "0 0 0 0px",
-									border: "0 0 0 0",
-								}}
-								prefix={<DollarCircleFilled style={{ marginLeft: "10px" }} />}
-								onKeyUp={pressKeyAbono}
-								onKeyDown={keyBlock}
-								value={abono.abono}
-								onChange={(e) => setabono({ abono: e.target.value })}
-							/>
-						</Tooltip>
-						<Row>
+			{
+				/* INFO APARTADO */
+				dataApartado?.id ? (
+					<Card
+						disabled={true}
+						actions={[
 							<Button
-								disabled={!statusApartado || loader}
-								loading={loader}
+								disabled={!statusApartado}
 								shape='round'
 								style={
 									statusApartado
 										? {
-												background: "linear-gradient(#2196F3,#0000E6)",
+												background: colorVence,
 												marginTop: 5,
 												marginRight: 15,
 												color: "white",
 												border: 0,
-												// fontSize: "large",
+												fontSize: "large",
 												fontWeight: "bold",
 										  }
 										: {
@@ -428,141 +390,208 @@ export default function Apartado(props) {
 												fontWeight: "bold",
 										  }
 								}
-								onClick={() => setmodalReimprimir(true)}
+								onClick={() => setmodalCalendar(true)}
 								icon={
-									<PrinterFilled
+									<CalendarOutlined
 										style={{ fontSize: "large", marginRight: 5 }}
 									/>
 								}
 							>
-								Reimprimir
-							</Button>
-
+								{`${venceEn}, ${pasarAFechaLL(dataApartado.vence)}`}
+							</Button>,
+							<h1
+								style={
+									calculateRestaria() >= 0
+										? {
+												color: "green",
+												fontSize: "x-large",
+												fontWeight: "bold",
+										  }
+										: {
+												color: "red",
+												fontSize: "x-large",
+												fontWeight: "bold",
+										  }
+								}
+								onClick={() => pressEnter}
+							>
+								{abono.abono > 0 ? `Restaría $${calculateRestaria()}` : null}
+							</h1>,
+							<>
+								<h1
+									style={{
+										color: "green",
+										fontSize: "xxx-large",
+										fontWeight: "bold",
+										marginTop: "-20px",
+									}}
+									onClick={() => pressEnter}
+								>
+									{totalProductos ? `Resta $${totalTotal - totalAbonos}` : null}
+								</h1>
+							</>,
+						]}
+					>
+						{/* Header Card */}
+						<Row
+							justify='space-around'
+							style={{
+								background: "linear-gradient(#000066, #000058, #000036)",
+								padding: "7px",
+								borderRadius: "25px 5px 0 0",
+							}}
+						>
+							{/* Ingresar Abono */}
+							<h1
+								style={{
+									color: "white",
+									fontSize: "x-large",
+									fontWeight: "bold",
+								}}
+							>{`Folio: ${dataApartado.folio}`}</h1>
 							<Tooltip
 								placement='top'
-								title={statusApartado ? "APARTADO ACTIVO" : "APARTADO INACTIVO"}
+								title={`
+							(F1)Imprimir
+							  (F12)ENTREGAR`}
 							>
-								<Popconfirm
-									title={`¿Deseas ${
-										statusApartado ? "DESACTIVAR" : "RECUPERAR"
-									} este apartado?`}
-									onConfirm={() => cancelarApartado()}
-									icon={
-										<DeleteFilled style={{ color: "red", fontSize: "large" }} />
-									}
-									loading={loader}
-									disabled={loader}
-								>
-									<Switch
-										loading={loader}
-										checked={statusApartado}
-										style={
-											statusApartado
-												? {
-														background: "limegreen",
-														boxShadow:
-															"5px 5px 29px #b3b3b3, -5px -5px 29px #ffffff",
-														marginTop: 10,
-														marginRight: 5,
-												  }
-												: {
-														marginTop: 10,
-														marginRight: 5,
-														background: "red", // boxShadow: "5px 5px 19px #b3b3b3, -5px -5px 19px #ffffff",
-												  }
-										}
-										// onChange={logoutApp}
-										defaultChecked
-									></Switch>
-								</Popconfirm>
+								<Input
+									// id='inputAbono'
+									ref={inputAbono}
+									placeholder='Abono'
+									disabled={!statusApartado}
+									// prefix={<AiFillDollarCircle style={{ marginLeft: "20px" }} />}
+									style={{
+										color: "green",
+										// fontSize: 30,
+										fontSize: "x-large",
+										fontWeight: "bold",
+										borderRadius: "50px",
+										maxWidth: "60%",
+										padding: "0 0 0 0px",
+										border: "0 0 0 0",
+									}}
+									prefix={<DollarCircleFilled style={{ marginLeft: "10px" }} />}
+									onKeyUp={pressKeyAbono}
+									onKeyDown={keyBlock}
+									value={abono.abono}
+									onChange={(e) => setabono({ abono: e.target.value })}
+								/>
 							</Tooltip>
+							<Row>
+								<Button
+									disabled={!statusApartado || loader}
+									loading={loader}
+									shape='round'
+									style={{
+										background: statusApartado
+											? "linear-gradient(#2196F3,#0000E6)"
+											: "gray",
+										marginTop: 5,
+										marginRight: 15,
+										color: "white",
+										border: 0,
+										fontWeight: "bold",
+									}}
+									onClick={() => setmodalReimprimir(true)}
+									icon={
+										<PrinterFilled
+											style={{ fontSize: "large", marginRight: 5 }}
+										/>
+									}
+								>
+									Reimprimir
+								</Button>
+
+								<Tooltip placement='top' title={() => titleTooltip()}>
+									<Popconfirm
+										title={() => titlePopconfirm()}
+										onConfirm={() => cancelarApartado()}
+										icon={
+											<DeleteFilled
+												style={{ color: "red", fontSize: "large" }}
+											/>
+										}
+										loading={loader}
+										disabled={loader}
+									>
+										<Switch
+											loading={loader}
+											checked={statusApartado}
+											style={{
+												marginTop: 10,
+												marginRight: 5,
+												background: statusApartado ? "limegreen" : "red",
+												boxShadow: statusApartado
+													? "5px 5px 29px #b3b3b3, -5px -5px 29px #ffffff"
+													: null,
+											}}
+											defaultChecked
+										></Switch>
+									</Popconfirm>
+								</Tooltip>
+							</Row>
 						</Row>
-					</Row>
-					<h1
-						style={{ fontSize: "x-large", fontWeight: "bold" }}
-					>{`Cliente: ${dataApartado?.cliente}`}</h1>
+						<h1
+							style={{ fontSize: "x-large", fontWeight: "bold" }}
+						>{`Cliente: ${dataApartado?.cliente}`}</h1>
 
-					{/* Tablas PRODUCTOS ABONOS*/}
-					{statusApartado ? (
-						<Row>
-							<TablaProductos
-								productos={productos}
-								loading={loading}
-								loader={loader}
-								setloader={setloader}
-								refetch={refetch}
-								setstateRecord={setstateRecord}
-								stateRecord={stateRecord}
-								dataApartado={dataApartado}
-								totalProductos={totalProductos}
-								totalTotal={totalTotal}
-								inputAbono={inputAbono}
-							/>
-							<TablaAbonos
-								abonos={abonos}
-								abono={abono}
-								loading={loading}
-								loader={loader}
-								setloader={setloader}
-								totalAbonos={totalAbonos}
-								inputAbono={inputAbono}
-								totalTotal={totalTotal}
-								refetch={refetch}
-							/>
-						</Row>
-					) : (
-						<Result
-							status='error'
-							title={`Este apartado se canceló el día ${pasarAFecha(
-								dataApartado?.cancelado[0]?.fecha
-							)}, por ${dataApartado?.cancelado[0]?.vendedor?.toUpperCase()}`}
-						/>
-					)}
-				</Card>
-			) : loading ? (
-				<Skeleton active />
-			) : (
-				<ErrorPage />
-			)}
+						{
+							/* Tablas PRODUCTOS ABONOS*/
+							renderTablaProductosAbonos()
+						}
+					</Card>
+				) : (
+					renderLoading()
+				)
+			}
 
-			{/* MODAL APARTADO */}
-			{modalCobrar ? (
-				<CobrarApartado
-					modalCobrar={modalCobrar}
-					setmodalCobrar={setmodalCobrar}
-					cerrarCobrar={cerrarCobrar}
-					totalTotal={abono.abono}
-					listaCompras={dataApartado}
-					initialState={initialState}
-					calculateRestaria={calculateRestaria}
-					dataApartado={dataApartado}
-					inputAbono={inputAbono}
-				></CobrarApartado>
-			) : null}
+			{}
+			{
+				/* MODAL APARTADO */
+				modalCobrar ? (
+					<CobrarApartado
+						modalCobrar={modalCobrar}
+						setmodalCobrar={setmodalCobrar}
+						cerrarCobrar={cerrarCobrar}
+						totalTotal={abono.abono}
+						listaCompras={dataApartado}
+						initialState={initialState}
+						calculateRestaria={calculateRestaria}
+						dataApartado={dataApartado}
+						inputAbono={inputAbono}
+					></CobrarApartado>
+				) : null
+			}
 
-			{/* MODAL CALENDARIO */}
-			{modalCalendar && (
-				<ModalCalendar
-					setmodalCalendar={setmodalCalendar}
-					modalCalendar={modalCalendar}
-					refetch={refetch}
-					dataApartado={dataApartado}
-				/>
-			)}
+			{
+				/* MODAL CALENDARIO */
+				modalCalendar && (
+					<ModalCalendar
+						setmodalCalendar={setmodalCalendar}
+						modalCalendar={modalCalendar}
+						refetch={refetch}
+						dataApartado={dataApartado}
+					/>
+				)
+			}
 
-			{/* MODAL REIMPRIMIR */}
-			{modalReimprimir ? (
-				<ImprimirApartado
-					imprimir={modalReimprimir}
-					setimprimir={setmodalReimprimir}
-					totalTotal={abono.abono}
-					listaCompras={dataApartado}
-					initialState={initialState}
-					calculateRestaria={calculateRestaria}
-					dataApartado={dataApartado}
-					auth={auth}
-				/>
-			) : null}
+			{}
+			{
+				/* MODAL REIMPRIMIR */
+				modalReimprimir ? (
+					<ImprimirApartado
+						imprimir={modalReimprimir}
+						setimprimir={setmodalReimprimir}
+						totalTotal={abono.abono}
+						listaCompras={dataApartado}
+						initialState={initialState}
+						calculateRestaria={calculateRestaria}
+						dataApartado={dataApartado}
+						auth={auth}
+					/>
+				) : null
+			}
 		</>
 	);
 }

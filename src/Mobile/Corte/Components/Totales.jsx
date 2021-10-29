@@ -12,25 +12,22 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 		let inicioCaja = 0;
 		let entSal = 0;
 		let finCaja = 0.0;
-		let totales = [];
-		for (let i = 0; i < getVentasDia.length; i++) {
-			if (getVentasDia[i].cancelado === false) {
-				total = total + getVentasDia[i].total;
-				efectivo = efectivo + getVentasDia[i].efectivo;
-				tarjeta = tarjeta + getVentasDia[i].tarjeta;
-				aCuenta = aCuenta + getVentasDia[i].aCuenta;
+		let totalesSet = [];
+		for (const ventaDia of getVentasDia) {
+			if (ventaDia.cancelado === false) {
+				total = total + ventaDia.total;
+				efectivo = efectivo + ventaDia.efectivo;
+				tarjeta = tarjeta + ventaDia.tarjeta;
+				aCuenta = aCuenta + ventaDia.aCuenta;
 			}
 		}
-		for (let j = 0; j < cajaDia.length; j++) {
-			if (
-				cajaDia[j]?.cancelado === false ||
-				cajaDia[j].cancelado.length === 0
-			) {
-				if (cajaDia[j].tipo === "inicio") {
-					inicioCaja = inicioCaja + cajaDia[j].monto;
+		for (const cajaD of cajaDia) {
+			if (cajaD?.cancelado === false || cajaD.cancelado.length === 0) {
+				if (cajaD.tipo === "inicio") {
+					inicioCaja = inicioCaja + cajaD.monto;
 				}
-				if (cajaDia[j].tipo === "entradaSalida") {
-					entSal = entSal + cajaDia[j].monto;
+				if (cajaD.tipo === "entradaSalida") {
+					entSal = entSal + cajaD.monto;
 				}
 			}
 		}
@@ -39,7 +36,7 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 		finCaja = efectivo - finCaja;
 		finCaja = finCaja + inicioCaja;
 		finCaja = finCaja + entSal;
-		totales = [
+		totalesSet = [
 			{
 				key: 1,
 				inicioCaja: inicioCaja,
@@ -51,7 +48,7 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 				finCaja: finCaja,
 			},
 		];
-		settotales(totales);
+		settotales(totalesSet);
 	}, [getVentasDia, cajaDia]);
 
 	/*COLUMNAS  TOTALES */
@@ -84,83 +81,36 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 			key: "entSal",
 			render: (entSal) => (
 				<h3
-					style={
-						entSal > 0
-							? {
-									textAlignLast: "right",
-									fontWeight: "revert",
-									fontSize: "large",
-									color: "green",
-							  }
-							: {
-									textAlignLast: "right",
-									fontWeight: "revert",
-									fontSize: "large",
-									color: "red",
-							  }
-					}
+					style={{
+						textAlignLast: "right",
+						fontWeight: "revert",
+						fontSize: "large",
+						color: entSal > 0 ? "green" : "red",
+					}}
 				>
 					${entSal}
 				</h3>
 			),
 		},
-		// {
-		// 	title: "Efectivo",
-		// 	dataIndex: "efectivo",
-		// 	key: "efectivo",
-		// 	render: (efectivo) => (
-		// 		<h3
-		// 			style={{
-		// 				textAlignLast: "right",
-		// 				fontWeight: "revert",
-		// 				fontSize: "large",
-		// 			}}
-		// 		>
-		// 			${efectivo}
-		// 		</h3>
-		// 	),
-		// },
+
 		{
 			title: "Venta con Tarjeta",
 			dataIndex: "tarjeta",
 			key: "tarjeta",
 			render: (tarjeta) => (
 				<h3
-					style={
-						tarjeta > 0
-							? {
-									textAlignLast: "right",
-									fontWeight: "revert",
-									fontSize: "large",
-									color: "green",
-							  }
-							: {
-									textAlignLast: "right",
-									fontWeight: "revert",
-									fontSize: "large",
-							  }
-					}
+					style={{
+						textAlignLast: "right",
+						fontWeight: "revert",
+						fontSize: "large",
+						color: tarjeta > 0 ? "green" : "black",
+					}}
 				>
 					${tarjeta}
 				</h3>
 			),
 		},
-		// {
-		// 	title: "A cuenta",
-		// 	dataIndex: "aCuenta",
-		// 	key: "aCuenta",
-		// 	render: (aCuenta) => (
-		// 		<h3
-		// 			style={{
-		// 				textAlignLast: "right",
-		// 				fontWeight: "revert",
-		// 				fontSize: "large",
-		// 			}}
-		// 		>
-		// 			${aCuenta}
-		// 		</h3>
-		// 	),
-		// },
+
 		{
 			title: "VENTA TOTAL",
 			dataIndex: "total",
@@ -210,7 +160,6 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 						boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
 						margin: "10px",
 					}}
-					// size="small"
 				/>
 			</Col>
 		</>

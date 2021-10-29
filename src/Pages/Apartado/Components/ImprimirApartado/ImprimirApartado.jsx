@@ -1,12 +1,12 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useState, useRef } from "react";
-import moment from "moment";
-import "moment/locale/es-us";
-import { Modal, Row, Divider, Button } from "antd";
-import "./imprimir.css";
-import { keyBlock } from "Utils";
-import ReactToPrint from "react-to-print";
 import { openNotification } from "Utils/openNotification";
+import { Modal, Row, Divider, Button } from "antd";
+import ReactToPrint from "react-to-print";
+import { keyBlock } from "Utils";
+import "moment/locale/es-us";
+import moment from "moment";
+import "./imprimir.css";
 
 const ImprimirApartado = ({
 	imprimir,
@@ -17,11 +17,9 @@ const ImprimirApartado = ({
 	cambio,
 	initialState,
 }) => {
-	// const [totalProductos, settotalProductos] = useState(0);
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
 	const [numPrint, setnumPrint] = useState(0);
-
 	const { abonos, cliente, entregado, folio, productos, vence } = dataApartado;
 
 	const ReimprimirApartado = useRef();
@@ -29,33 +27,34 @@ const ImprimirApartado = ({
 
 	useEffect(() => {
 		let sum = 0;
-		// let sumProd = 0;
 		for (let i = 0; i < productos?.length; i++) {
 			sum += productos[i]?.totalArticulo;
-			// sumProd += productos[i].cantidad;
 		}
 		settotalTotal(sum);
-		// settotalProductos(sumProd);
 
 		let sumAbo = 0;
 		for (let i = 0; i < abonos?.length; i++) {
 			sumAbo += abonos[i]?.abono;
 		}
 		settotalAbonos(sumAbo);
-
-		if (imprimir === true) {
-			document.getElementById("print-button2").click();
+	}, [imprimir, abonos, productos]);
+	useEffect(() => {
+		if (totalAbonos || totalTotal) {
+			if (imprimir === true) {
+				document.getElementById("print-button2").click();
+			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [imprimir]);
-
+	}, [totalAbonos, totalTotal]);
 	const afterPrint = () => {
 		openNotification("success", "Reimpreso con exito");
 		if (numPrint === 0) {
 			inputReprint.current.select();
 			setnumPrint(numPrint + 1);
 		} else if (numPrint === 1) {
-			initialState();
+			let data = { addAbono: dataApartado };
+			initialState(data);
+			setimprimir(false);
 		}
 	};
 	const pressKeyPrecio = (e) => {
@@ -92,11 +91,12 @@ const ImprimirApartado = ({
 		} else {
 			fecha = `Venció ${fecha}`;
 		}
-		// this.vence = fecha;
 		return fecha;
 	};
 	const initialStateImprimir = () => {
-		initialState();
+		let data = { addAbono: dataApartado };
+
+		initialState(data);
 		setimprimir(false);
 	};
 	return (
@@ -107,6 +107,7 @@ const ImprimirApartado = ({
 				// onBeforePrint={() => antesDeImprimir()}
 				onAfterPrint={() => afterPrint()}
 			/>
+
 			<Modal
 				visible={imprimir}
 				width='229px'
@@ -212,22 +213,24 @@ const ImprimirApartado = ({
 					{productos?.map((item) => {
 						return (
 							<table key={`${item._id}table`} className='productosApartado'>
-								<tr key={`${item._id}tr`}>
-									<td key={`${item._id}nombre`}>{item.nombre}</td>
-									<td key={`${item._id}cantidad`}>
-										<h3 className={item.cantidad > 1 ? null : "finalTicket"}>
-											${item.precio}
-										</h3>
-									</td>
-								</tr>
-								{item.cantidad > 1 ? (
-									<tr>
-										<td>X{item.cantidad}</td>
-										<td>
-											<h3 className='finalTicket'>${item.totalArticulo}</h3>
+								<tbody>
+									<tr key={`${item._id}tr`}>
+										<td key={`${item._id}nombre`}>{item.nombre}</td>
+										<td key={`${item._id}cantidad`}>
+											<h3 className={item.cantidad > 1 ? null : "finalTicket"}>
+												${item.precio}
+											</h3>
 										</td>
 									</tr>
-								) : null}
+									{item.cantidad > 1 ? (
+										<tr>
+											<td>X{item.cantidad}</td>
+											<td>
+												<h3 className='finalTicket'>${item.totalArticulo}</h3>
+											</td>
+										</tr>
+									) : null}
+								</tbody>
 							</table>
 						);
 					})}
@@ -240,14 +243,16 @@ const ImprimirApartado = ({
 					{abonos?.map((item) => {
 						return (
 							<table key={`${item._id}table`} className='productosApartado'>
-								<tr key={`${item._id}tr`}>
-									<td style={{ padding: "0px" }} key={`${item._id}fecha`}>
-										{pasarAFechaCorta(item.createAt)}
-									</td>
-									<td key={`${item._id}abono`}>
-										<h3 className={"finalTicket"}>${item.abono}</h3>
-									</td>
-								</tr>
+								<tbody>
+									<tr key={`${item._id}tr`}>
+										<td style={{ padding: "0px" }} key={`${item._id}fecha`}>
+											{pasarAFechaCorta(item.createAt)}
+										</td>
+										<td key={`${item._id}abono`}>
+											<h3 className={"finalTicket"}>${item.abono}</h3>
+										</td>
+									</tr>
+								</tbody>
 							</table>
 						);
 					})}

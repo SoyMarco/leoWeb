@@ -9,15 +9,15 @@ import useAuth from "hooks/useAuth";
 import { keyBlock } from "Utils";
 import "./addApartado.css";
 import { useQuery } from "@apollo/client";
-import { GET_APARTADOS_BUSCADOR, GET_PRODUCTS_NAME } from "graphql/apartado";
+import { GET_CLIENTS_NAMES, GET_PRODUCTS_NAME } from "graphql/apartado";
 
 export default function AddApartado() {
-	let { data } = useQuery(GET_APARTADOS_BUSCADOR);
+	let { data: getClientsNames } = useQuery(GET_CLIENTS_NAMES);
 	let { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
 	const history = useHistory();
 	const [current, setCurrent] = useState(0);
 	const [cliente, setcliente] = useState("");
-	const [optionsClientes, setoptionsClientes] = useState([]);
+	const [titulo2, settitulo2] = useState("Productos");
 	const [listaCompras, setlistaCompras] = useState([]);
 	const [modalCobrar, setmodalCobrar] = useState(false);
 	const [totalProductos, settotalProductos] = useState(0);
@@ -25,29 +25,10 @@ export default function AddApartado() {
 	const [abono, setabono] = useState(null);
 	const [restaria, setrestaria] = useState(0);
 	const [imprimirNewApartado, setimprimirNewApartado] = useState(false);
+
 	const inputNameClient = useRef();
 	const inputAbono = useRef();
 	const { auth } = useAuth();
-
-	useEffect(() => {
-		if (data?.getApartados) {
-			let { getApartados } = data;
-			let listClientes = [];
-			for (let i = 0; i < getApartados.length; i++) {
-				const element = getApartados[i].cliente;
-				let repetido = false;
-				for (let x = 0; x < listClientes.length; x++) {
-					if (listClientes[x].value === element) {
-						repetido = true;
-					}
-				}
-				if (repetido === false) {
-					listClientes.push({ value: element });
-				}
-			}
-			setoptionsClientes(listClientes);
-		}
-	}, [data]);
 
 	useEffect(() => {
 		setrestaria(totalTotal - abono);
@@ -56,21 +37,21 @@ export default function AddApartado() {
 	useEffect(() => {
 		if (current === 2) {
 			inputAbono.current.select();
-		} else if (current === 0) {
-			// inputNameClient.current.select();
 		}
 	}, [current]);
+
 	useEffect(() => {
-		// selectLastRow();
 		let sum = 0;
 		let sumProd = 0;
-		for (let i = 0; i < listaCompras.length; i++) {
-			sum += listaCompras[i].totalArticulo;
-			sumProd += listaCompras[i].cantidad;
+		for (const articulo of listaCompras) {
+			sum += articulo.totalArticulo;
+			sumProd += articulo.cantidad;
 		}
 		settotalTotal(sum);
 		settotalProductos(sumProd);
+		settitulo2(`Productos: ${listaCompras.length}`);
 	}, [listaCompras]);
+
 	const { Step } = Steps;
 	const next = () => {
 		setCurrent(current + 1);
@@ -144,7 +125,7 @@ export default function AddApartado() {
 							}}
 							onChange={(e) => setcliente(e.toUpperCase())}
 							value={cliente}
-							options={optionsClientes}
+							options={getClientsNames?.getClientsNames}
 							placeholder='Ingresa el nombre de cliente'
 							filterOption={(inputValue, option) =>
 								option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
@@ -156,9 +137,7 @@ export default function AddApartado() {
 			),
 		},
 		{
-			title: `Productos ${
-				listaCompras.length > 0 ? `: ${listaCompras.length}` : ""
-			}`,
+			title: titulo2,
 			content: (
 				<Card
 					style={{
@@ -352,16 +331,6 @@ export default function AddApartado() {
 									>
 										Cobrar (Enter)
 									</Button>
-									{/* <Button
-										shape='round'
-										onClick={() => message.success("Processing complete!")}
-										style={{
-											background: "linear-gradient(#32A632,#005800)",
-											color: "white",
-										}}
-									>
-										F2 Guardar
-									</Button> */}
 								</>
 							)}
 						</div>

@@ -5,7 +5,7 @@ import { UrlFrontend } from "config/apollo";
 
 export default function Productos({ stateRecord, loading }) {
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
-	const [productos, setproductos] = useState([]);
+	const [dataProductos, setdataProductos] = useState([]);
 
 	useEffect(() => {
 		if (stateRecord) {
@@ -13,13 +13,12 @@ export default function Productos({ stateRecord, loading }) {
 			let listaProductos = productos.map((item) => {
 				return { ...item, key: item.idArray };
 			});
-			setproductos(listaProductos);
+			setdataProductos(listaProductos);
 		}
 	}, [stateRecord]);
 
-	const onSelectChange = (selectedRowKeys) => {
+	const onSelectChange = () => {
 		setselectedRowKeys([]);
-		// setselectedRowKeys(selectedRowKeys);
 	};
 	const rowSelection = {
 		selectedRowKeys,
@@ -28,8 +27,6 @@ export default function Productos({ stateRecord, loading }) {
 
 	const click = (record, rowIndex) => {
 		setselectedRowKeys([record.key]);
-		// setstateRecord(record);
-		// addArticulo(record, rowIndex);
 	};
 
 	/* COLUMNAS PRODUCTOS */
@@ -142,14 +139,14 @@ export default function Productos({ stateRecord, loading }) {
 
 	return (
 		<>
-			<Col xs={24} sm={24} md={8}>
+			<Col xs={24} sm={24} md={9}>
 				<Divider orientation='left' style={{ marginTop: 0 }}>
 					Productos
 				</Divider>
 				{/* PRODUCTOS */}
 				<Table
 					columns={colProductos}
-					dataSource={productos}
+					dataSource={dataProductos}
 					pagination={false}
 					loading={loading}
 					bordered
@@ -160,7 +157,7 @@ export default function Productos({ stateRecord, loading }) {
 						height: "300px",
 						borderRadius: "10px",
 						boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
-						margin: "10px",
+						// margin: "10px",
 					}}
 					onRow={(record, rowIndex) => {
 						return {

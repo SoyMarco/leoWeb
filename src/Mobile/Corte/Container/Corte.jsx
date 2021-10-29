@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
-import "./corte.css";
-import { Row, Divider, Col } from "antd";
-import { useQuery } from "@apollo/client";
-import { GET_VENTAS_DIA_ADMIN } from "../../../graphql/venta";
-import { GET_CAJA_DIA_ADMIN } from "../../../graphql/caja";
+import { GET_VENTAS_DIA_ADMIN } from "graphql/venta";
+import { GET_CAJA_DIA_ADMIN } from "graphql/caja";
 import ErrorConection from "Utils/ErrorConection";
+import { useQuery } from "@apollo/client";
+import { Row, Divider, Col } from "antd";
 import useAuth from "hooks/useAuth";
 import "./corte.css";
 
 const Corte = () => {
 	let { data, error, refetch } = useQuery(GET_VENTAS_DIA_ADMIN);
 	let { data: getCajas, refetch: refetchCaja } = useQuery(GET_CAJA_DIA_ADMIN);
-	const [getVentasDiaAdmin, setgetVentasDiaAdmin] = useState([]);
+	const [dataVentasDiaAdmin, setdataVentasDiaAdmin] = useState([]);
 	const [cajasDia, setcajasDia] = useState([]);
 	const [ventaEfectivo, setventaEfectivo] = useState(0);
 	const [ventaTarjeta, setventaTarjeta] = useState(0);
@@ -35,17 +34,7 @@ const Corte = () => {
 	useEffect(() => {
 		if (data) {
 			let { getVentasDiaAdmin } = data;
-			let vendedoresSeparados = [
-				// { "ISABEL LEÓN": [] },
-				// { PAO: [] },
-				// { MARCO: [] },
-				// { PAO: [] },
-				// { "ISABEL LEÓN": [] },
-				// { "ISABEL SALAZAR": [] },
-				// { LUPITA: [] },
-				// { GABY: [] },
-				// { JESSICA: [] },
-			];
+			let vendedoresSeparados = [];
 
 			for (let i = 0; i < getVentasDiaAdmin.length; i++) {
 				const vendedor = getVentasDiaAdmin[i].vendedor;
@@ -76,10 +65,11 @@ const Corte = () => {
 					});
 				}
 			}
+
 			let datosSeparados = vendedoresSeparados.map((obj) => {
 				return obj[Object.keys(obj)[0]];
 			});
-			setgetVentasDiaAdmin(datosSeparados);
+			setdataVentasDiaAdmin(datosSeparados);
 
 			// Calculos de cuentas
 			let sumasTotales = 0;
@@ -174,7 +164,7 @@ const Corte = () => {
 					</h1>
 				</Divider>
 				<Row>
-					<Col xs={8}>
+					<Col xs={10}>
 						<h3>Efectivo Caja</h3>
 						<h3>Venta Efectivo </h3>
 						<h3>Venta tarjeta</h3>
@@ -198,7 +188,7 @@ const Corte = () => {
 						<h3>{formatter.format(sumaEfectivoFinal)} </h3>
 						<br />
 					</Col>
-					<Col xs={11} style={{ textAlignLast: "end" }}>
+					<Col xs={9} style={{ textAlignLast: "end" }}>
 						<h3>Recargas</h3>
 						<h3>{formatter.format(recargasMonto)}</h3>
 					</Col>
@@ -255,7 +245,7 @@ const Corte = () => {
 			</Row>
 			<br />
 
-			{getVentasDiaAdmin?.map((item) => {
+			{dataVentasDiaAdmin?.map((item) => {
 				return (
 					<>
 						{sumarTotales(item)} <br />

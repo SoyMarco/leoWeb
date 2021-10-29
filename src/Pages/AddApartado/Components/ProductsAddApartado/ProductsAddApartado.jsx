@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Table, Input, Button, Result, Row, AutoComplete } from "antd";
 import { MdDelete, MdLocalGroceryStore } from "react-icons/md";
 import { DollarCircleOutlined } from "@ant-design/icons";
-// import { GiLargeDress } from "react-icons/gi";
 import { keyBlock } from "Utils";
 import useAuth from "hooks/useAuth";
 
@@ -15,25 +14,15 @@ export default function ProductsAddApartado({
 }) {
 	const [idArticulo, setidArticulo] = useState(0);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
-	// const [stateRecord, setstateRecord] = useState(null);
 	const [nombre, setnombre] = useState("");
 	const [precio, setprecio] = useState(null);
 	const { auth } = useAuth();
 
-	useEffect(() => {
-		// document.querySelector("#inputNameProduct").select();
-		console.log(getProductsName, "111");
-	}, [getProductsName]);
-
 	const click = (record, rowIndex) => {
 		setselectedRowKeys([record.key]);
-		// setstateRecord(record);
-		// selectInputPrecio();
-		// addArticulo(record, rowIndex);
 	};
-	const onSelectChange = (selectedRowKeys) => {
+	const onSelectChange = () => {
 		setselectedRowKeys([]);
-		// setselectedRowKeys(selectedRowKeys);
 	};
 
 	const rowSelection = {
@@ -50,21 +39,20 @@ export default function ProductsAddApartado({
 		let i = listaCompras.indexOf(item);
 		if (i !== -1) {
 			let key = listaCompras.splice(i, 1);
-			setlistaCompras(listaCompras.filter((item) => item.key !== key));
+			setlistaCompras(listaCompras.filter((itemF) => itemF.key !== key));
 			selectLastRow();
 		} else if (item.key > 0) {
 			let key = item.key;
-			setlistaCompras(listaCompras.filter((item) => item.key !== key));
+			setlistaCompras(listaCompras.filter((itemF) => itemF.key !== key));
 			selectLastRow();
 		}
-		// this.focusPrecio();
 	};
 	const addProducto = () => {
 		if (precio > 0 && nombre) {
 			setlistaCompras([
 				...listaCompras,
 				{
-					// key: idArticulo + 1,
+					key: idArticulo + 1,
 					idArray: idArticulo + 1,
 					vendedor: auth.name,
 					nombre: nombre,
@@ -114,14 +102,14 @@ export default function ProductsAddApartado({
 			dataIndex: "nombre",
 			key: "nombre",
 			// width: "90px",
-			render: (nombre) => (
+			render: (nombreRender) => (
 				<h3
 					style={{
 						fontWeight: "revert",
 						fontSize: "large",
 					}}
 				>
-					{nombre}
+					{nombreRender}
 				</h3>
 			),
 		},
@@ -130,7 +118,7 @@ export default function ProductsAddApartado({
 			dataIndex: "precio",
 			key: "precio",
 			ellipsis: true,
-			render: (precio) => (
+			render: (precioRender) => (
 				<h3
 					style={{
 						textAlignLast: "center",
@@ -139,7 +127,7 @@ export default function ProductsAddApartado({
 						color: "green",
 					}}
 				>
-					${precio}
+					${precioRender}
 				</h3>
 			),
 		},

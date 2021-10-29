@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
+import { Row, Button, Modal, Input, Form, AutoComplete } from "antd";
+import { GET_PRODUCTS_NAME, ADD_PRODUCTO } from "graphql/apartado";
+import { openNotification } from "Utils/openNotification";
+import { useQuery, useMutation } from "@apollo/client";
+import ErrorConection from "Utils/ErrorConection";
+import { FaMoneyBillWave } from "react-icons/fa";
 import { SaveFilled } from "@ant-design/icons";
 import { GiLargeDress } from "react-icons/gi";
-import { FaMoneyBillWave } from "react-icons/fa";
-import { keyBlock } from "Utils";
-import { Row, Button, Modal, Input, Form, AutoComplete } from "antd";
-import { openNotification } from "Utils/openNotification";
-import ErrorConection from "Utils/ErrorConection";
 import useAuth from "hooks/useAuth";
-import { useQuery } from "@apollo/client";
-import { GET_PRODUCTS_NAME } from "graphql/apartado";
-import { useMutation } from "@apollo/client";
-import { ADD_PRODUCTO } from "graphql/apartado";
+import { keyBlock } from "Utils";
 
 export default function AddProduct({
 	setmodalAddProduct,
 	modalAddProduct,
 	refetch,
 	dataApartado,
+	initialState,
 }) {
 	const [mutateADD_PRODUCTO] = useMutation(ADD_PRODUCTO);
 	let { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
@@ -49,11 +48,11 @@ export default function AddProduct({
 	}, [nombre, precio]);
 
 	const addProducto = async () => {
+		setbtnLoading(true);
 		if (btnLoading === false) {
-			setbtnLoading(true);
 			try {
 				if (idApartado) {
-					const { data } = await mutateADD_PRODUCTO({
+					const { data: dataAddProd } = await mutateADD_PRODUCTO({
 						// Parameters
 						variables: {
 							input: {
@@ -63,10 +62,11 @@ export default function AddProduct({
 							},
 						},
 					});
-					if (data) {
+					if (dataAddProd) {
+						let data = { addAbono: dataAddProd.addProducto };
+
 						openNotification("success", `Articulo agregado con exito`);
-						refetch();
-						setbtnLoading(false);
+						initialState(data);
 						setmodalAddProduct(false);
 					}
 				}
@@ -83,7 +83,6 @@ export default function AddProduct({
 			document.querySelector("#addProductNombre").select();
 		} else if (nombre && !precio) {
 			document.querySelector("#addProductPrecio").select();
-		} else {
 		}
 	};
 	const pressKeyEnter = (e) => {
@@ -98,12 +97,13 @@ export default function AddProduct({
 	};
 	return (
 		<Modal
+			key='modalAddProduct'
 			title='Agregar producto'
 			visible={modalAddProduct}
 			onOk={() => agregarProducto()}
 			onCancel={() => setmodalAddProduct(false)}
 			footer={[
-				<Row justify='space-around'>
+				<Row justify='space-around' key='rowModalAddProduct'>
 					<Button
 						style={{
 							//Boton Rojo
@@ -113,47 +113,39 @@ export default function AddProduct({
 							width: 230,
 						}}
 						shape='round'
-						// loading={loading}
-						// disabled={cambio < 0}
 						onClick={() => setmodalAddProduct(false)}
-						// icon={<PrinterFilled />}
 						loading={btnLoading}
+						key='btnCancelarAddProduct'
 					>
 						Cancelar
 					</Button>
 					<Button
-						style={
-							btnDisabled === false
-								? {
-										//Boton Verde
-										background: "linear-gradient(#32A632,#005800)",
-										color: "white",
-										fontWeight: "bold",
-										width: 230,
-								  }
-								: {
-										background: "grey",
-										color: "white",
-										fontWeight: "bold",
-										width: 230,
-								  }
-						}
+						style={{
+							//Boton Verde
+							background:
+								btnDisabled === false
+									? "linear-gradient(#32A632,#005800)"
+									: "grey",
+							color: "white",
+							fontWeight: "bold",
+							width: 230,
+						}}
 						shape='round'
 						disabled={btnDisabled}
 						onClick={() => agregarProducto()}
-						icon={<SaveFilled />}
+						icon={<SaveFilled key='iconguardarProduct' />}
 						loading={btnLoading}
+						key='btnGuardarProduct'
 					>
-						{`Guardar (Enter)`}
+						Guardar (Enter)
 					</Button>
 				</Row>,
 			]}
 		>
-			<Form form={form}>
+			<Form form={form} key='FormAddProduct'>
 				<Form.Item
 					label='Articulo'
 					name='Articulo'
-					key='1'
 					rules={[
 						{
 							required: false,
@@ -162,18 +154,9 @@ export default function AddProduct({
 					]}
 					className='labelCobrar'
 					id='inputAddProduct'
-					onKeyUp={pressKeyEnter}
 					onChange={(e) => setnombre(e.target.value.toUpperCase())}
-					loading={btnLoading}
+					key='FormItemArticulo'
 				>
-					{/* <Input
-						value={nombre}
-						id='addProductNombre'
-						className='labelAddProducts'
-						prefix={<GiLargeDress style={{ color: "gray" }} />}
-						// onKeyUp={pressKeyPrecio}
-						// onKeyDown={keyBlock}
-					/> */}
 					<AutoComplete
 						defaultActiveFirstOption={true}
 						autoFocus={true}
@@ -193,7 +176,12 @@ export default function AddProduct({
 						value={nombre}
 						id='addProductNombre'
 						className='labelAddProducts'
-						prefix={<GiLargeDress style={{ color: "gray" }} />}
+						prefix={
+							<GiLargeDress
+								style={{ color: "gray" }}
+								key='iconautompleteProduct'
+							/>
+						}
 						onChange={(e) => setnombre(e.toUpperCase())}
 						options={getProductsName?.getProductsName}
 						placeholder='Ingresa la prenda'
@@ -201,13 +189,13 @@ export default function AddProduct({
 							option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
 							-1
 						}
+						key='nameAutocompleteAddProduct'
 					/>
 				</Form.Item>
 
 				<Form.Item
 					label='Precio'
 					name='Precio'
-					key='2'
 					rules={[
 						{
 							required: false,
@@ -218,16 +206,20 @@ export default function AddProduct({
 					onKeyUp={pressKeyEnter}
 					onChange={(e) => setprecio(e.target.value)}
 					onKeyDown={keyBlock}
+					key='FormItemPrecio'
 				>
 					<Input
 						id='addProductPrecio'
 						className='labelAddProducts'
 						type='number'
 						min={0}
-						// style={{ borderRadius: 50 }}
-						prefix={<FaMoneyBillWave style={{ color: "gray" }} />}
-						// onKeyUp={pressKeyPrecio}
-						// onKeyDown={keyBlock}
+						prefix={
+							<FaMoneyBillWave
+								style={{ color: "gray" }}
+								key='iconinputprecioProduct'
+							/>
+						}
+						key='inputprecioProduct'
 					/>
 				</Form.Item>
 			</Form>

@@ -421,3 +421,11 @@ export const GET_PRODUCTS_NAME = gql`
 		}
 	}
 `;
+export const GET_CLIENTS_NAMES = gql`
+	query getClientsNames {
+		getClientsNames {
+			value
+			key
+		}
+	}
+`;
