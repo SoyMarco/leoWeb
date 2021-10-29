@@ -36,7 +36,7 @@ export default function TotalesCorte({
 		let finCaja = 0.0;
 		let entradas = 0.0;
 		let salidas = 0.0;
-		let totales = [];
+		let totalesSet = [];
 		let recargasMonto = 0;
 		for (let i = 0; i < getVentasDia.length; i++) {
 			if (getVentasDia[i].cancelado === false) {
@@ -75,7 +75,7 @@ export default function TotalesCorte({
 		finCaja = efectivo - finCaja;
 		finCaja = finCaja + inicioCaja;
 		finCaja = finCaja + entSal;
-		totales = [
+		totalesSet = [
 			{
 				key: 1,
 				inicioCaja: inicioCaja,
@@ -105,7 +105,7 @@ export default function TotalesCorte({
 
 			// <h3>Efectivo</h3>
 		];
-		settotales(totales);
+		settotales(totalesSet);
 	}, [getVentasDia, cajaDia]);
 	var formatter = new Intl.NumberFormat("en-US", {
 		style: "currency",

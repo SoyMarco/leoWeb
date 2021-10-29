@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { TablaProductos, TablaTotales, TablaVentas } from "../Components";
-import "./corte.css";
-import { Row } from "antd";
-import { useQuery } from "@apollo/client";
-import { GET_VENTAS_DIA } from "../../../graphql/venta";
+import { GET_VENTAS_DIA, GET_CORTE } from "../../../graphql/venta";
 import { GET_CAJA_DIA } from "../../../graphql/caja";
 import ErrorConection from "Utils/ErrorConection";
+import { useQuery } from "@apollo/client";
 import useAuth from "hooks/useAuth";
+import { Row } from "antd";
 import "./corte.css";
 
 const Corte = () => {
 	let { data, loading, error, refetch } = useQuery(GET_VENTAS_DIA, {
 		notifyOnNetworkStatusChange: true,
 	});
+	let { data: getCorteData } = useQuery(GET_CORTE, {
+		notifyOnNetworkStatusChange: true,
+	});
+	console.log(getCorteData);
 	let {
 		data: data2,
 		loading: loadingCaja,

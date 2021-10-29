@@ -131,3 +131,49 @@ export const VENTA_F3 = gql`
 		}
 	}
 `;
+
+export const GET_CORTE = gql`
+	query getCorte {
+		getCorte {
+			ventas {
+				key
+				id
+				createAt
+				folio
+				cancelado
+				total
+				efectivo
+				tarjeta
+				aCuenta
+				pagoCon
+				productos {
+					_id
+					idArray
+					nombre
+					precio
+					cantidad
+					cancelado
+					totalArticulo
+					apartado
+					refApartado
+				}
+			}
+			totales {
+				key
+				inicioCaja
+				ventasEfectivo
+				totalEfectivo
+				efectivoFinalCaja
+				entSal
+				entradas
+				salidas
+				efectivo
+				tarjeta
+				aCuenta
+				total
+				finCaja
+				recargas
+			}
+		}
+	}
+`;
