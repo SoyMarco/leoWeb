@@ -70,7 +70,47 @@ export const GET_VENTAS_DIA_ADMIN = gql`
 `;
 export const CANCELAR_VENTA = gql`
 	mutation cancelarVenta($input: CancelarVentaInput) {
-		cancelarVenta(input: $input)
+		cancelarVenta(input: $input) {
+			ventas {
+				key
+				id
+				createAt
+				folio
+				cancelado
+				total
+				efectivo
+				tarjeta
+				aCuenta
+				pagoCon
+				productos {
+					_id
+					idArray
+					nombre
+					precio
+					cantidad
+					cancelado
+					totalArticulo
+					apartado
+					refApartado
+				}
+			}
+			totales {
+				key
+				inicioCaja
+				ventasEfectivo
+				totalEfectivo
+				efectivoFinalCaja
+				entSal
+				entradas
+				salidas
+				efectivo
+				tarjeta
+				aCuenta
+				total
+				finCaja
+				recargas
+			}
+		}
 	}
 `;
 export const GET_HEROKU_DESPIERTO = gql`
@@ -111,24 +151,6 @@ export const GET_VENTAS_MOBILE = gql`
 export const VENTA_MOBILE_FALSE = gql`
 	mutation ventaMobileFalse($input: CancelarVentaInput) {
 		ventaMobileFalse(input: $input)
-	}
-`;
-
-//llamadas locales
-export const VENTA_F3 = gql`
-	query ventaF3 {
-		ventaF3 {
-			productos
-			vendedor
-			folio
-			total
-			efectivo
-			tarjeta
-			aCuenta
-			pagoCon
-			referencia
-			notas
-		}
 	}
 `;
 
@@ -174,6 +196,24 @@ export const GET_CORTE = gql`
 				finCaja
 				recargas
 			}
+		}
+	}
+`;
+
+//llamadas locales
+export const VENTA_F3 = gql`
+	query ventaF3 {
+		ventaF3 {
+			productos
+			vendedor
+			folio
+			total
+			efectivo
+			tarjeta
+			aCuenta
+			pagoCon
+			referencia
+			notas
 		}
 	}
 `;

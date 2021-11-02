@@ -15,7 +15,6 @@ const ImprimirApartadoCorte = ({
 	dataApartado,
 	dinero,
 }) => {
-	// const [totalProductos, settotalProductos] = useState(0);
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
 
@@ -26,25 +25,26 @@ const ImprimirApartadoCorte = ({
 
 	useEffect(() => {
 		let sum = 0;
-		// let sumProd = 0;
 		for (let i = 0; i < productos?.length; i++) {
 			sum += productos[i]?.totalArticulo;
-			// sumProd += productos[i].cantidad;
 		}
 		settotalTotal(sum);
-		// settotalProductos(sumProd);
 
 		let sumAbo = 0;
 		for (let i = 0; i < abonos?.length; i++) {
 			sumAbo += abonos[i]?.abono;
 		}
 		settotalAbonos(sumAbo);
+	}, [imprimirApartado, abonos, productos]);
 
-		if (imprimirApartado > 1) {
-			document.getElementById("printApartado-button-corte").click();
+	useEffect(() => {
+		if (totalAbonos || totalTotal) {
+			if (imprimirApartado) {
+				document.getElementById("printApartado-button-corte").click();
+			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [imprimirApartado]);
+	}, [totalAbonos, totalTotal]);
 
 	const afterPrint = () => {
 		openNotification("success", "Reimpreso con exito");
@@ -84,7 +84,6 @@ const ImprimirApartadoCorte = ({
 		} else {
 			fecha = `Venció ${fecha}`;
 		}
-		// this.vence = fecha;
 		return fecha;
 	};
 	const initialStateImprimir = () => {

@@ -1,59 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { TablaProductos, TablaTotales, TablaVentas } from "../Components";
-import { GET_VENTAS_DIA, GET_CORTE } from "../../../graphql/venta";
-import { GET_CAJA_DIA } from "../../../graphql/caja";
 import ErrorConection from "Utils/ErrorConection";
+import { GET_CORTE } from "graphql/venta";
 import { useQuery } from "@apollo/client";
 import useAuth from "hooks/useAuth";
 import { Row } from "antd";
 import "./corte.css";
 
 const Corte = () => {
-	let { data, loading, error, refetch } = useQuery(GET_VENTAS_DIA, {
-		notifyOnNetworkStatusChange: true,
-	});
-	let { data: getCorteData } = useQuery(GET_CORTE, {
-		notifyOnNetworkStatusChange: true,
-	});
-	console.log(getCorteData);
 	let {
-		data: data2,
-		loading: loadingCaja,
-		refetch: refetchCaja,
-	} = useQuery(GET_CAJA_DIA);
-	const [dataVentasDia, setdataVentasDia] = useState([]);
-	const [cajaDia, setcajaDia] = useState([]);
+		data: getCorteData,
+		error,
+		loading,
+		refetch,
+	} = useQuery(GET_CORTE, {
+		notifyOnNetworkStatusChange: true,
+	});
+
 	const [stateRecord, setstateRecord] = useState(null);
 	const [loader, setloader] = useState(false);
-	const { logout } = useAuth();
-	useEffect(() => {
-		refetch();
-		refetchCaja();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+	const [getTotales, setgetTotales] = useState({});
+	const [getVentas, setgetVentas] = useState([]);
 
+	const { logout } = useAuth();
 	if (error) {
 		ErrorConection(logout);
 	}
-	useEffect(() => {
-		if (data) {
-			let { getVentasDia } = data;
-			let listaVentas = getVentasDia.map((item) => {
-				return { ...item, key: item.folio };
-			});
-			setdataVentasDia(listaVentas);
-		}
-	}, [data]);
-	useEffect(() => {
-		if (data2) {
-			let { getCajaDia } = data2;
-			let listaCaja = getCajaDia.map((item) => {
-				return { ...item, key: item._id };
-			});
-			setcajaDia(listaCaja);
-		}
-	}, [data2]);
 
+	useEffect(() => {
+		refetch();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	useEffect(() => {
+		if (getCorteData) {
+			refetchCorte(getCorteData.getCorte);
+		}
+	}, [getCorteData]);
+
+	const refetchCorte = (getData) => {
+		let { totales, ventas } = getData;
+		setgetTotales(totales);
+		setgetVentas(ventas);
+	};
 	return (
 		<>
 			<Row justify='center'>
@@ -63,13 +52,13 @@ const Corte = () => {
 			</Row>
 			<Row style={{ border: 0, margin: 0, padding: 0 }}>
 				<TablaVentas
-					getVentasDia={dataVentasDia}
+					getVentas={getVentas}
 					loading={loading}
 					loader={loader}
 					setloader={setloader}
-					refetch={refetch}
 					setstateRecord={setstateRecord}
 					stateRecord={stateRecord}
+					refetchCorte={refetchCorte}
 				/>
 				<TablaProductos stateRecord={stateRecord} loading={loading} />
 			</Row>
@@ -78,13 +67,7 @@ const Corte = () => {
 				Total del día
 			</Divider> */}
 
-			<TablaTotales
-				getVentasDia={dataVentasDia}
-				cajaDia={cajaDia}
-				loading={loading}
-				loadingCaja={loadingCaja}
-				refetchCaja={refetchCaja}
-			/>
+			<TablaTotales getTotales={getTotales} loading={loading} />
 		</>
 	);
 };
