@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { Col, Row, Card, InputNumber } from "antd";
 import { REGISTER_CAJA } from "graphql/caja";
 import { useMutation } from "@apollo/client";
@@ -9,104 +9,13 @@ import { keyBlock } from "Utils";
 import { ImMobile } from "react-icons/im";
 import { useHistory } from "react-router-dom";
 
-export default function TotalesCorte({
-	loading,
-	loadingCaja,
-	getVentasDia,
-	cajaDia,
-	refetchCaja,
-}) {
+export default function TotalesCorte({ loading, getTotales, refetch }) {
 	const [mutateREGISTER_CAJA] = useMutation(REGISTER_CAJA);
-	const [totales, settotales] = useState([]);
 	const [recargas, setrecargas] = useState(null);
 	const inputRecargas = useRef();
 	const { logout } = useAuth();
 	const history = useHistory();
 
-	useEffect(() => {
-		let efectivo = 0.0;
-		let ventasEfectivo = 0.0;
-		let totalEfectivo = 0.0;
-		let efectivoFinalCaja = 0.0;
-		let tarjeta = 0.0;
-		let aCuenta = 0.0;
-		let total = 0.0;
-		let inicioCaja = 0;
-		let entSal = 0;
-		let finCaja = 0.0;
-		let entradas = 0.0;
-		let salidas = 0.0;
-		let totales = [];
-		let recargasMonto = 0;
-		for (let i = 0; i < getVentasDia.length; i++) {
-			if (getVentasDia[i].cancelado === false) {
-				total = total + getVentasDia[i].total;
-				efectivo = efectivo + getVentasDia[i].efectivo;
-				tarjeta = tarjeta + getVentasDia[i].tarjeta;
-				aCuenta = aCuenta + getVentasDia[i].aCuenta;
-			}
-		}
-
-		for (let j = 0; j < cajaDia.length; j++) {
-			if (
-				cajaDia[j]?.cancelado === false ||
-				cajaDia[j].cancelado.length === 0
-			) {
-				if (cajaDia[j].tipo === "inicio") {
-					inicioCaja = cajaDia[j].monto;
-				}
-				if (cajaDia[j].tipo === "entradaSalida") {
-					if (cajaDia[j].monto > 0) {
-						entradas = entradas + cajaDia[j].monto;
-					} else if (cajaDia[j].monto < 0) {
-						salidas = salidas + cajaDia[j].monto;
-					}
-				}
-				if (cajaDia[j].tipo === "recargas") {
-					recargasMonto = cajaDia[j].monto;
-				}
-			}
-		}
-		ventasEfectivo = total - (tarjeta + aCuenta);
-		totalEfectivo = ventasEfectivo + inicioCaja;
-		efectivoFinalCaja = totalEfectivo + entradas + salidas;
-		finCaja = efectivo + tarjeta + aCuenta;
-		finCaja = finCaja - total;
-		finCaja = efectivo - finCaja;
-		finCaja = finCaja + inicioCaja;
-		finCaja = finCaja + entSal;
-		totales = [
-			{
-				key: 1,
-				inicioCaja: inicioCaja,
-				ventasEfectivo: ventasEfectivo,
-				totalEfectivo: totalEfectivo,
-				efectivoFinalCaja: efectivoFinalCaja,
-				entSal: entSal,
-				entradas: entradas,
-				salidas: salidas,
-				efectivo: efectivo,
-				tarjeta: tarjeta,
-				aCuenta: aCuenta,
-				total: total,
-				finCaja: finCaja,
-				recargas: recargasMonto,
-			},
-			// <h3>Efectivo Caja</h3> inicioCaja
-			// <h3>Venta Efectivo </h3> ventasEfectivo
-
-			// <h3>Entradas</h3> entradas
-			// <h3>Salidas</h3> salidas
-
-			// <h3>Venta tarjeta</h3>
-			// <h3>Total Venta</h3>
-			// <h3>Total Efectivo</h3>
-			// <br />
-
-			// <h3>Efectivo</h3>
-		];
-		settotales(totales);
-	}, [getVentasDia, cajaDia]);
 	var formatter = new Intl.NumberFormat("en-US", {
 		style: "currency",
 		currency: "USD",
@@ -125,7 +34,7 @@ export default function TotalesCorte({
 		setrecargas(Math.round(e * 100) / 100);
 	};
 	const sendRecargas = async () => {
-		if (loadingCaja === false) {
+		if (loading === false) {
 			let monto = recargas;
 			if (monto > 0) {
 				try {
@@ -140,7 +49,7 @@ export default function TotalesCorte({
 					if (data) {
 						openNotification("success", `Monto de recargas Guardado`);
 						setrecargas(null);
-						refetchCaja();
+						refetch();
 					}
 				} catch (error) {
 					ErrorConection(logout);
@@ -168,21 +77,21 @@ export default function TotalesCorte({
 						<br />
 					</Col>
 					<Col xs={3} style={{ textAlignLast: "end" }}>
-						<h3>{formatter.format(totales[0]?.inicioCaja)}</h3>
-						<h3>{formatter.format(totales[0]?.ventasEfectivo)}</h3>
-						<h3>{formatter.format(totales[0]?.tarjeta)}</h3>
-						<h3>{formatter.format(totales[0]?.aCuenta)}</h3>
+						<h3>{formatter.format(getTotales?.inicioCaja)}</h3>
+						<h3>{formatter.format(getTotales?.ventasEfectivo)}</h3>
+						<h3>{formatter.format(getTotales?.tarjeta)}</h3>
+						<h3>{formatter.format(getTotales?.aCuenta)}</h3>
 						<h3 style={{ fontWeight: "bold" }}>
-							{formatter.format(totales[0]?.total)}
+							{formatter.format(getTotales?.total)}
 						</h3>
 						<h3 style={{ fontWeight: "bold" }}>
-							{formatter.format(totales[0]?.totalEfectivo)}
+							{formatter.format(getTotales?.totalEfectivo)}
 						</h3>
 						<br />
-						<h3>{formatter.format(totales[0]?.entradas)}</h3>
-						<h3>{formatter.format(totales[0]?.salidas)}</h3>
+						<h3>{formatter.format(getTotales?.entradas)}</h3>
+						<h3>{formatter.format(getTotales?.salidas)}</h3>
 						<h3 style={{ borderTop: "solid", fontWeight: "bold" }}>
-							{formatter.format(totales[0]?.efectivoFinalCaja)}{" "}
+							{formatter.format(getTotales?.efectivoFinalCaja)}
 						</h3>
 						<br />
 					</Col>
@@ -206,22 +115,22 @@ export default function TotalesCorte({
 									onKeyDown={keyBlock}
 									value={recargas}
 									onChange={handleRecargas}
-									autoFocus
+									// autoFocus
 								></InputNumber>
 							</Col>
 							<Col xs={7} style={{ textAlignLast: "start" }}>
 								<Row>
-									{totales[0]?.recargas > 0 ? (
+									{getTotales?.recargas > 0 ? (
 										<ImMobile style={{ margin: 10, fontSize: "x-large" }} />
 									) : null}
 									<h2
 										style={
-											totales[0]?.recargas > 0
+											getTotales?.recargas > 0
 												? { fontWeight: "bold", marginTop: 5 }
 												: null
 										}
 									>
-										{formatter.format(totales[0]?.recargas ?? 0)}
+										{formatter.format(getTotales?.recargas ?? 0)}
 									</h2>
 								</Row>
 							</Col>

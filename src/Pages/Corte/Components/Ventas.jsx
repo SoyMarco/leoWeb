@@ -3,7 +3,7 @@ import { BORRAR_EDITAR_ABONO, GET_PRODUCTOS_FOLIO } from "graphql/apartado";
 import ImprimirApartadoCorte from "./ImprimirApartado/ImprimirApartadoCorte";
 import { openNotification } from "../../../Utils/openNotification";
 import { CANCELAR_VENTA } from "../../../graphql/venta";
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation, useLazyQuery } from "@apollo/client";
 import { MdLocalGroceryStore } from "react-icons/md";
 import ErrorConection from "Utils/ErrorConection";
 import { AiFillPrinter } from "react-icons/ai";
@@ -23,20 +23,20 @@ import {
 } from "antd";
 
 export default function Ventas({
+	getVentas,
 	loading,
-	getVentasDia,
 	refetch,
 	setstateRecord,
 	loader,
 	setloader,
 	stateRecord,
+	refetchCorte,
 }) {
 	const [imprimirApartado, setimprimirApartado] = useState(0);
-	let {
-		data: dataGetApartado,
-		loading: loadGetApartado,
-		refetch: refetchGetApartado,
-	} = useQuery(GET_PRODUCTOS_FOLIO, {
+	const [
+		refetchGetApartado,
+		{ data: dataGetApartado, loading: loadGetApartado },
+	] = useLazyQuery(GET_PRODUCTOS_FOLIO, {
 		variables: { folio: imprimirApartado },
 		notifyOnNetworkStatusChange: true,
 	});
@@ -58,12 +58,15 @@ export default function Ventas({
 		setselectedRowKeys([]);
 	};
 	useEffect(() => {
-		let numArray = getVentasDia.length - 1;
-		let lastFolio = getVentasDia[numArray]?.key;
-		setselectedRowKeys([lastFolio]);
-		setstateRecord(getVentasDia[numArray]);
+		if (getVentas) {
+			let numArray = getVentas?.length - 1;
+			let lastFolio = getVentas[numArray]?.key;
+			setselectedRowKeys([lastFolio]);
+			setstateRecord(getVentas[numArray]);
+		}
+		console.log("getVentas", getVentas);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [getVentasDia]);
+	}, [getVentas]);
 
 	const rowSelection = {
 		selectedRowKeys,
@@ -94,8 +97,8 @@ export default function Ventas({
 					"success",
 					`Venta ${item.cancelado ? "recuperada" : "cancelada"} con exito`
 				);
-				refetch();
 				setloader(false);
+				refetchCorte(data.cancelarVenta);
 			}
 		} catch (error) {
 			setloader(false);
@@ -281,7 +284,7 @@ export default function Ventas({
 					>
 						<Button
 							disabled={loadGetApartado}
-							loading={loadGetApartado}
+							loading={loadGetApartado || loader}
 							icon={<AiFillPrinter style={{ fontSize: "25px" }} />}
 							shape='circle'
 							style={{
@@ -384,7 +387,7 @@ export default function Ventas({
 				</Divider>
 				<Table
 					columns={colVentas}
-					dataSource={getVentasDia}
+					dataSource={getVentas}
 					pagination={false}
 					bordered
 					loading={loading}

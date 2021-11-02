@@ -50,6 +50,7 @@ const ImprimirNewApartado = ({
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [totalAbonos, totalTotal]);
+
 	const afterPrint = () => {
 		openNotification("success", "Apartado guardado con exito");
 		if (numPrint === 0) {
