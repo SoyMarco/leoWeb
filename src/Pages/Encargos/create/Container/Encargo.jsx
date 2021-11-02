@@ -189,7 +189,6 @@ export default function Encargo() {
 		let values = form.getFieldsValue();
 		if (!values.nombre && listaProductos.length > 0) {
 			setmodalAbono(true);
-			// guardarEncargo();
 		}
 	};
 	const onValuesChange = (e) => {
@@ -399,9 +398,6 @@ export default function Encargo() {
 					listaProductos={listaProductos}
 					abono={abono}
 					cliente={cliente}
-					// dataApartado={dataApartado}
-					// dinero={dinero}
-					// cambio={cambio}
 				/>
 			)}
 		</>

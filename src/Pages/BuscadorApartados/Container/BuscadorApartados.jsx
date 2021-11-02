@@ -22,7 +22,6 @@ export default function BuscadorApartados() {
 
 	const [listaBusqueda, setlistaBusqueda] = useState([]);
 	const [urlFolio, seturlFolio] = useState({ folio: 0, tipo: "" });
-	// const [clienteName, setclienteName] = useState(null);
 	const { Option } = Select;
 	const history = useHistory();
 	useEffect(() => {
@@ -40,7 +39,7 @@ export default function BuscadorApartados() {
 
 			listaBusquedaMap.push(...listaApartadosMap);
 			listaBusquedaMap.push(...listaEncargosMap);
-
+			console.log("listaBusquedaMap", listaBusquedaMap);
 			setlistaBusqueda(listaBusquedaMap);
 		}
 	}, [dataApartados, dataEncargos]);
@@ -52,7 +51,7 @@ export default function BuscadorApartados() {
 	}, [urlFolio]);
 
 	const pasarAFechaVence = (item) => {
-		let fecha = "Sin fecha";
+		let fecha = "";
 		if (item?.vence) {
 			fecha = moment.unix(item.vence / 1000).format("LL");
 		} else {
@@ -88,7 +87,6 @@ export default function BuscadorApartados() {
 			fecha = moment.unix(item.createAt / 1000).fromNow();
 			fecha = `Encargó ${fecha}`;
 		}
-		// this.vence = fecha;
 		return fecha;
 	};
 	return (
