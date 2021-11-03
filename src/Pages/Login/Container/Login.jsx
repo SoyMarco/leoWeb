@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
-import LogoLeo from "assets/png/logo.png";
-import { useMutation } from "@apollo/client";
-import { LOGIN } from "graphql/user";
-import { FaUserAlt } from "react-icons/fa";
 import { RiShieldUserFill, RiLockPasswordFill } from "react-icons/ri";
+import { useMutation, useApolloClient } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import { setToken, decodeToken } from "Utils/token";
+import { LOGIN, FIRST_LOGIN } from "graphql/user";
+import { FaUserAlt } from "react-icons/fa";
+import LogoLeo from "assets/png/logo.png";
 import useAuth from "hooks/useAuth";
 import "./login.css";
 import {
@@ -20,8 +20,6 @@ import {
 	Avatar,
 	Select,
 } from "antd";
-import { useApolloClient } from "@apollo/client";
-import { FIRST_LOGIN } from "graphql/user";
 
 const Login = () => {
 	const client = useApolloClient();

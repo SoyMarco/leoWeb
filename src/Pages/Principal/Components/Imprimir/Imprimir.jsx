@@ -11,7 +11,6 @@ const Imprimir = ({
 	imprimir,
 	cambio,
 	totalTotal,
-	setimprimir,
 	dinero,
 	listaCompras,
 	folio,
@@ -26,6 +25,7 @@ const Imprimir = ({
 			document.getElementById("print-button").click();
 		}
 	}, [imprimir]);
+
 	const afterPrint = () => {
 		initialState();
 		openNotification("success", "Venta guardada con exito");

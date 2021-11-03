@@ -4,7 +4,6 @@ import ErrorConection from "Utils/ErrorConection";
 import { CANCELAR_PRODUCTO_APARTDO } from "graphql/apartado";
 import { MdLocalGroceryStore, MdDelete } from "react-icons/md";
 import { useMutation } from "@apollo/client";
-import useAuth from "hooks/useAuth";
 import moment from "moment";
 import { Table, Result, Col, Row, Button, Popconfirm, Tooltip } from "antd";
 import "./productos.css";
@@ -28,25 +27,18 @@ export default function Productos({
 	);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [modalAddProduct, setmodalAddProduct] = useState(false);
-	const { logout } = useAuth();
-	const onSelectChange = (selectedRowKeys) => {
+	const onSelectChange = () => {
 		setselectedRowKeys([]);
-		// setselectedRowKeys(selectedRowKeys);
 	};
 	const rowSelection = {
 		selectedRowKeys,
 		onChange: onSelectChange,
 	};
-	// useEffect(() => {
-	// 	if (modalAddProduct === false) inputAbono.current.select();
-	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, [modalAddProduct]);
+
 	const click = (record, rowIndex) => {
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
 		inputAbono.current.select();
-
-		// addArticulo(record, rowIndex);
 	};
 	const pasarAFecha = (item) => {
 		let fecha = moment.unix(item / 1000).format("ll");
@@ -90,7 +82,7 @@ export default function Productos({
 				}
 			} catch (error) {
 				setloader(false);
-				ErrorConection(logout);
+				ErrorConection();
 			}
 		}
 	};

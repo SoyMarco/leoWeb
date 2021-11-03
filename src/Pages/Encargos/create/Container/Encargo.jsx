@@ -25,7 +25,7 @@ export default function Encargo() {
 	const audio = new Audio(aceptar);
 
 	const history = useHistory();
-	const { auth, logout } = useAuth();
+	const { auth } = useAuth();
 	const [optionsClientes, setoptionsClientes] = useState([]);
 	const [abono, setabono] = useState(0);
 	const [modalAbono, setmodalAbono] = useState(null);
@@ -181,7 +181,7 @@ export default function Encargo() {
 				}
 			} catch (error) {
 				setloader(false);
-				ErrorConection(logout);
+				ErrorConection();
 			}
 		}
 	};

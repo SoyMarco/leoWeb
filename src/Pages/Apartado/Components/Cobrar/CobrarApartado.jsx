@@ -35,7 +35,7 @@ const CobrarApartado = ({
 	});
 	const audio = new Audio(aceptar);
 
-	const { auth, logout } = useAuth();
+	const { auth } = useAuth();
 	const cobrarEfectivo = useRef();
 	useEffect(() => {
 		if (dataApartadoImprimir?.folio > 0) {
@@ -148,7 +148,7 @@ const CobrarApartado = ({
 				}
 			} catch (error) {
 				setbtnLoading(false);
-				ErrorConection(logout);
+				ErrorConection();
 			}
 		}
 	};

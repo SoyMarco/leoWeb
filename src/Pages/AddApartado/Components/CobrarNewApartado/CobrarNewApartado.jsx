@@ -21,7 +21,7 @@ const CobrarNewApartado = ({
 	inputAbono,
 	cliente,
 }) => {
-	const { auth, logout } = useAuth();
+	const { auth } = useAuth();
 	const [mutateREGISTER_APARTADO] = useMutation(REGISTER_APARTADO);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);
@@ -136,7 +136,7 @@ const CobrarNewApartado = ({
 				}
 			} catch (error) {
 				setbtnLoading(false);
-				ErrorConection(logout);
+				ErrorConection();
 			}
 		}
 	};

@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from "react";
-import { useQuery } from "@apollo/client";
-import { GET_VENTAS_MOBILE } from "graphql/venta";
-import { Button, notification } from "antd";
 import { SmileOutlined, PrinterFilled } from "@ant-design/icons";
 import { VENTA_MOBILE_FALSE } from "../../../graphql/venta";
-import { useMutation } from "@apollo/client";
-import ErrorConection from "Utils/ErrorConection";
-import useAuth from "hooks/useAuth";
+import { useQuery, useMutation } from "@apollo/client";
 import Imprimir from "../Components/Imprimir/Imprimir";
+import { GET_VENTAS_MOBILE } from "graphql/venta";
+import ErrorConection from "Utils/ErrorConection";
+import { Button, notification } from "antd";
+import useAuth from "hooks/useAuth";
 
 export default function GetVentasMobile({ spinMobile }) {
-	const { auth, logout } = useAuth();
+	const { auth } = useAuth();
 
-	let { data, startPolling, stopPolling } = useQuery(GET_VENTAS_MOBILE);
+	let {
+		data,
+		error: errorGetVentas,
+		startPolling,
+		stopPolling,
+	} = useQuery(GET_VENTAS_MOBILE);
 	const [mutateVENTA_MOBILE_FALSE] = useMutation(VENTA_MOBILE_FALSE);
+
+	if (errorGetVentas) {
+		ErrorConection();
+	}
 
 	const [loader, setloader] = useState(false);
 	const [imprimir, setimprimir] = useState(false);
@@ -23,8 +31,9 @@ export default function GetVentasMobile({ spinMobile }) {
 	useEffect(() => {
 		if (data?.getVentasMobile) {
 			let { getVentasMobile } = data;
-			for (let g = 0; g < getVentasMobile.length; g++) {
-				const element = getVentasMobile[g];
+
+			for (const iterator of getVentasMobile) {
+				const element = iterator;
 				const key = element.id;
 				const btn = (
 					<>
@@ -89,20 +98,20 @@ export default function GetVentasMobile({ spinMobile }) {
 	const ventaMobileToFalse = async (key) => {
 		setloader(true);
 		try {
-			const { data } = await mutateVENTA_MOBILE_FALSE({
+			const { data: dataMobile } = await mutateVENTA_MOBILE_FALSE({
 				variables: {
 					input: {
 						id: key,
 					},
 				},
 			});
-			if (data) {
+			if (dataMobile) {
 				notification.close(key);
 				setloader(false);
 			}
 		} catch (error) {
 			setloader(false);
-			ErrorConection(logout);
+			ErrorConection();
 		}
 	};
 	const printMobile = (element) => {

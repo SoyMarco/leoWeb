@@ -30,7 +30,7 @@ const Cobrar = ({
 		efectivo: 0,
 	});
 	const cobrarEfectivo = useRef();
-	const { auth, logout } = useAuth();
+	const { auth } = useAuth();
 	const audio = new Audio(aceptar);
 
 	useEffect(() => {
@@ -153,7 +153,7 @@ const Cobrar = ({
 					}
 				} catch (error) {
 					setbtnLoading(false);
-					ErrorConection(logout);
+					ErrorConection();
 				}
 			}
 		}
@@ -171,7 +171,6 @@ const Cobrar = ({
 				imprimir={imprimir}
 				totalTotal={totalTotal}
 				cambio={cambio}
-				setimprimir={setimprimir}
 				dinero={dinero}
 				listaCompras={listaCompras}
 				setmodalCobrar={setmodalCobrar}

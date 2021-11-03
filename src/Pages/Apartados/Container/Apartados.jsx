@@ -6,7 +6,6 @@ import { GET_APARTADOS } from "graphql/apartado";
 import { BsSearch } from "react-icons/bs";
 import "./apartados.css";
 import ErrorConection from "Utils/ErrorConection";
-import useAuth from "hooks/useAuth";
 
 export default function Apartados() {
 	let { data, loading, error, refetch } = useQuery(GET_APARTADOS);
@@ -14,7 +13,6 @@ export default function Apartados() {
 	const [getApartados, setgetApartados] = useState([]);
 	const [dataFilter, setdataFilter] = useState(null);
 	const [loader, setloader] = useState(false);
-	const { logout } = useAuth();
 
 	const onChangeFilter = (e) => {
 		setdataFilter(null);
@@ -40,7 +38,6 @@ export default function Apartados() {
 		}
 
 		setdataFilter(newArray);
-		// setstateRecord(null);
 	};
 	useEffect(() => {
 		refetch();
@@ -49,12 +46,12 @@ export default function Apartados() {
 	}, []);
 
 	if (error) {
-		ErrorConection(logout);
+		ErrorConection();
 	}
 	useEffect(() => {
 		if (data) {
-			let { getApartados } = data;
-			let listaApartados = getApartados.map((item) => {
+			let { getApartados: arrayMap } = data;
+			let listaApartados = arrayMap.map((item) => {
 				return { ...item, key: item.folio };
 			});
 			setgetApartados(listaApartados);

@@ -8,13 +8,10 @@ import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";
 import { useMutation, useApolloClient } from "@apollo/client";
 import { ADD_ABONO } from "graphql/apartado";
-import { REGISTER_VENTA } from "graphql/venta";
+import { REGISTER_VENTA, VENTA_F3 } from "graphql/venta";
 import useAuth from "hooks/useAuth";
-import { VENTA_F3 } from "graphql/venta";
 import { useHistory } from "react-router-dom";
 import aceptar from "assets/sonido/Aceptar.wav";
-
-// import "./cobrar.css";
 
 const CobrarApartado = ({
 	modalCobrar,
@@ -43,7 +40,7 @@ const CobrarApartado = ({
 	});
 	const audio = new Audio(aceptar);
 
-	const { auth, logout } = useAuth();
+	const { auth } = useAuth();
 	const cobrarEfectivo = useRef();
 	useEffect(() => {
 		if (dataApartadoImprimir?.folio > 0) {
@@ -147,7 +144,7 @@ const CobrarApartado = ({
 				}
 			} catch (error) {
 				setbtnLoading(false);
-				ErrorConection(logout);
+				ErrorConection();
 			}
 		}
 	};
@@ -219,7 +216,7 @@ const CobrarApartado = ({
 							savePrintAbono(keyF, data.registerVenta);
 						}
 					} catch (error) {
-						ErrorConection(logout);
+						ErrorConection();
 						setbtnLoading(false);
 					}
 				}

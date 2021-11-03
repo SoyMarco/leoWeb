@@ -7,7 +7,6 @@ import { BORRAR_EDITAR_ABONO } from "graphql/apartado";
 import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
-import useAuth from "hooks/useAuth";
 
 export default function Abonos({
 	abonos,
@@ -22,11 +21,9 @@ export default function Abonos({
 }) {
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [mutateBORRAR_EDITAR_ABONO] = useMutation(BORRAR_EDITAR_ABONO);
-	const { logout } = useAuth();
 
-	const onSelectChange = (selectedRowKeys) => {
+	const onSelectChange = () => {
 		setselectedRowKeys([]);
-		// setselectedRowKeys(selectedRowKeys);
 	};
 	const rowSelection = {
 		selectedRowKeys,
@@ -36,8 +33,6 @@ export default function Abonos({
 	const click = (record, rowIndex) => {
 		setselectedRowKeys([record.key]);
 		inputAbono.current.select();
-		// setstateRecord(record);
-		// addArticulo(record, rowIndex);
 	};
 	const pasarAFecha = (item) => {
 		let fecha = moment.unix(item / 1000).format("L");
@@ -72,7 +67,7 @@ export default function Abonos({
 			}
 		} catch (error) {
 			setloader(false);
-			ErrorConection(logout);
+			ErrorConection();
 		}
 	};
 	/* COLUMNAS ABONOS */
@@ -116,7 +111,7 @@ export default function Abonos({
 			title: "Abono",
 			dataIndex: "abono",
 			key: "abono",
-			render: (abono, record) => (
+			render: (abonoRender, record) => (
 				<Row justify='space-around'>
 					<h3
 						style={{
@@ -125,7 +120,7 @@ export default function Abonos({
 							fontSize: "large",
 						}}
 					>
-						${abono}
+						${abonoRender}
 					</h3>
 				</Row>
 			),

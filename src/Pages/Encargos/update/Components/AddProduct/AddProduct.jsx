@@ -6,11 +6,8 @@ import { keyBlock } from "Utils";
 import { Row, Button, Modal, Input, Form, AutoComplete } from "antd";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
-import useAuth from "hooks/useAuth";
-import { useQuery } from "@apollo/client";
-import { GET_PRODUCTS_NAME } from "graphql/apartado";
-import { useMutation } from "@apollo/client";
-import { ADD_PRODUCTO } from "graphql/apartado";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_PRODUCTS_NAME, ADD_PRODUCTO } from "graphql/apartado";
 
 export default function AddProduct({
 	setmodalAddProduct,
@@ -20,7 +17,6 @@ export default function AddProduct({
 }) {
 	const [mutateADD_PRODUCTO] = useMutation(ADD_PRODUCTO);
 	let { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
-	const { logout } = useAuth();
 	const [btnLoading, setbtnLoading] = useState(false);
 	const [btnDisabled, setbtnDisabled] = useState(true);
 	const [idApartado, setidApartado] = useState(null);
@@ -72,7 +68,7 @@ export default function AddProduct({
 				}
 			} catch (error) {
 				setbtnLoading(false);
-				ErrorConection(logout);
+				ErrorConection();
 			}
 		}
 	};
@@ -83,7 +79,6 @@ export default function AddProduct({
 			document.querySelector("#addProductNombre").select();
 		} else if (nombre && !precio) {
 			document.querySelector("#addProductPrecio").select();
-		} else {
 		}
 	};
 	const pressKeyEnter = (e) => {
@@ -224,10 +219,7 @@ export default function AddProduct({
 						className='labelAddProducts'
 						type='number'
 						min={0}
-						// style={{ borderRadius: 50 }}
 						prefix={<FaMoneyBillWave style={{ color: "gray" }} />}
-						// onKeyUp={pressKeyPrecio}
-						// onKeyDown={keyBlock}
 					/>
 				</Form.Item>
 			</Form>

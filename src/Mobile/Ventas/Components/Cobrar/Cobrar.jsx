@@ -9,7 +9,6 @@ import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
 import { REGISTER_VENTA } from "graphql/venta";
 import useAuth from "hooks/useAuth";
-// import "./cobrar.css";
 
 const Cobrar = ({
 	modalCobrar,
@@ -28,7 +27,7 @@ const Cobrar = ({
 		efectivo: 0,
 	});
 	const cobrarEfectivo = useRef();
-	const { auth, logout } = useAuth();
+	const { auth } = useAuth();
 	useEffect(() => {
 		cobrarEfectivo.current.select();
 	}, []);
@@ -130,7 +129,7 @@ const Cobrar = ({
 					}
 				} catch (error) {
 					setbtnLoading(false);
-					ErrorConection(logout);
+					ErrorConection();
 				}
 			}
 		}

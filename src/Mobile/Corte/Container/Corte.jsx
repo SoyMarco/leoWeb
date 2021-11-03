@@ -4,7 +4,6 @@ import { GET_CAJA_DIA_ADMIN } from "graphql/caja";
 import ErrorConection from "Utils/ErrorConection";
 import { useQuery } from "@apollo/client";
 import { Row, Divider, Col } from "antd";
-import useAuth from "hooks/useAuth";
 import "./corte.css";
 
 const Corte = () => {
@@ -15,7 +14,7 @@ const Corte = () => {
 	const [ventaEfectivo, setventaEfectivo] = useState(0);
 	const [ventaTarjeta, setventaTarjeta] = useState(0);
 	const [totalVenta, settotalVenta] = useState(0);
-	const { logout } = useAuth();
+
 	useEffect(() => {
 		refetch();
 		refetchCaja();
@@ -23,7 +22,7 @@ const Corte = () => {
 	}, []);
 
 	if (error) {
-		ErrorConection(logout);
+		ErrorConection();
 	}
 	useEffect(() => {
 		if (getCajas) {
