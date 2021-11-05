@@ -8,16 +8,22 @@ import ErrorConection from "Utils/ErrorConection";
 import { Button, notification } from "antd";
 import useAuth from "hooks/useAuth";
 
-export default function GetVentasF3() {
+export default function GetVentasF3({
+	refetchVentaMobile,
+	setrefetchVentaMobile,
+}) {
 	const { auth } = useAuth();
 
 	let {
 		data,
 		error: errorGetVentas,
+		loading: loadingVM,
+		refetch: refetchVM,
 		startPolling,
 		stopPolling,
 	} = useQuery(GET_VENTAS_MOBILE);
 	const [mutateVENTA_MOBILE_FALSE] = useMutation(VENTA_MOBILE_FALSE);
+	console.log("loadingVM", loadingVM);
 
 	if (errorGetVentas) {
 		ErrorConection();
@@ -32,7 +38,15 @@ export default function GetVentasF3() {
 	const [loader, setloader] = useState(false);
 	const [imprimir, setimprimir] = useState(false);
 	const [stateRecord, setstateRecord] = useState([]);
-
+	useEffect(() => {
+		if (refetchVentaMobile === true) {
+			refetchVM();
+			setTimeout(() => {
+				setrefetchVentaMobile(false);
+			}, 1000);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [refetchVentaMobile]);
 	useEffect(() => {
 		if (data?.getVentasMobile) {
 			let { getVentasMobile } = data;

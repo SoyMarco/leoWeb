@@ -24,16 +24,11 @@ const ImprimirApartadoCorte = ({
 	const inputReprint = useRef();
 
 	useEffect(() => {
-		let sum = 0;
-		for (let i = 0; i < productos?.length; i++) {
-			sum += productos[i]?.totalArticulo;
-		}
+		let sum = productos.reduce((a, b) => a + b.totalArticulo, 0);
 		settotalTotal(sum);
 
-		let sumAbo = 0;
-		for (let i = 0; i < abonos?.length; i++) {
-			sumAbo += abonos[i]?.abono;
-		}
+		let sumAbo = abonos.reduce((a, b) => a + b.abono, 0);
+
 		settotalAbonos(sumAbo);
 	}, [imprimirApartado, abonos, productos]);
 
