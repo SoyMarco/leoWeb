@@ -8,7 +8,7 @@ import ErrorConection from "Utils/ErrorConection";
 import { Button, notification } from "antd";
 import useAuth from "hooks/useAuth";
 
-export default function GetVentasMobile({ spinMobile }) {
+export default function GetVentasF3() {
 	const { auth } = useAuth();
 
 	let {
@@ -22,11 +22,16 @@ export default function GetVentasMobile({ spinMobile }) {
 	if (errorGetVentas) {
 		ErrorConection();
 	}
+	useEffect(() => {
+		startPolling(300000);
+		return () => {
+			stopPolling();
+		};
+	}, [startPolling, stopPolling]);
 
 	const [loader, setloader] = useState(false);
 	const [imprimir, setimprimir] = useState(false);
 	const [stateRecord, setstateRecord] = useState([]);
-	const [timePolling, settimePolling] = useState(300000);
 
 	useEffect(() => {
 		if (data?.getVentasMobile) {
@@ -81,20 +86,6 @@ export default function GetVentasMobile({ spinMobile }) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data]);
 
-	useEffect(() => {
-		if (spinMobile === true) {
-			settimePolling(5000);
-		} else {
-			settimePolling(300000);
-		}
-	}, [spinMobile]);
-
-	useEffect(() => {
-		startPolling(timePolling);
-		return () => {
-			stopPolling();
-		};
-	}, [startPolling, stopPolling, timePolling]);
 	const ventaMobileToFalse = async (key) => {
 		setloader(true);
 		try {

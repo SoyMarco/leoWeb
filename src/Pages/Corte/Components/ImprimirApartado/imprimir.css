@@ -50,7 +50,7 @@
 	padding-top: 0px;
 }
 
-h1,
+/* h1,
 h2,
 h3,
 h4,
@@ -60,7 +60,7 @@ h6 {
 	margin-bottom: 0;
 	color: rgba(0, 0, 0, 0.85);
 	font-weight: 500;
-}
+} */
 #inputPrincipalPrintESC:focus {
 	background: linear-gradient(#ffffff, #93ceff);
 

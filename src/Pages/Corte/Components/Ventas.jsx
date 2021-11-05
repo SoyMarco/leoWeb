@@ -64,7 +64,6 @@ export default function Ventas({
 			setselectedRowKeys([lastFolio]);
 			setstateRecord(getVentas[numArray]);
 		}
-		console.log("getVentas", getVentas);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [getVentas]);
 

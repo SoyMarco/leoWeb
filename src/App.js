@@ -9,7 +9,6 @@ import Login from "Pages/Login/Container/Login";
 import { openNotification } from "Utils/openNotification";
 
 function App({ token }) {
-	console.log("TOKEN", token);
 	const [auth, setAuth] = useState(undefined);
 	const timeLogout = () => {
 		if (token) {

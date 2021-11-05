@@ -48,7 +48,6 @@ export default function BuscadorApartados() {
 			listaBusquedaMap.push(...listaEncargosMap);
 			setlistaBusqueda(listaBusquedaMap);
 		}
-		console.log("dataApartados", dataApartados);
 	}, [dataApartados, dataEncargos]);
 	useEffect(() => {
 		if (urlFolio?.folio > 0) {
@@ -120,16 +119,12 @@ export default function BuscadorApartados() {
 						option.children[1].key.toLowerCase().indexOf(input.toLowerCase()) >=
 							0
 					}
-					// onMouseOver={() =>
-					// 	document.querySelector("#buscarApartadoInput").select()
-					// }
 					style={{
-						width: 400,
+						width: 500,
 						fontWeight: "bold",
 						textAlignLast: "center",
 						fontSize: "20px",
 					}}
-					// value={clienteName}
 				>
 					{listaBusqueda?.map((item) => {
 						return (

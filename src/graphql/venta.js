@@ -200,6 +200,11 @@ export const GET_CORTE = gql`
 	}
 `;
 
+export const GET_TOTAL_VENTAS_DIA = gql`
+	query getTotalVentasDia {
+		getTotalVentasDia
+	}
+`;
 //llamadas locales
 export const VENTA_F3 = gql`
 	query ventaF3 {
