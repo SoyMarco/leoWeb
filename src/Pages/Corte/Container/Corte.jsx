@@ -3,7 +3,6 @@ import { TablaProductos, TablaTotales, TablaVentas } from "../Components";
 import ErrorConection from "Utils/ErrorConection";
 import { GET_CORTE } from "graphql/venta";
 import { useQuery } from "@apollo/client";
-import useAuth from "hooks/useAuth";
 import { Row } from "antd";
 import "./corte.css";
 
@@ -22,9 +21,8 @@ const Corte = () => {
 	const [getTotales, setgetTotales] = useState({});
 	const [getVentas, setgetVentas] = useState([]);
 
-	const { logout } = useAuth();
 	if (error) {
-		ErrorConection(logout);
+		ErrorConection();
 	}
 
 	useEffect(() => {
@@ -66,8 +64,9 @@ const Corte = () => {
 			{/* <Divider orientation='left' style={{ marginBottom: 0 }}>
 				Total del día
 			</Divider> */}
-
-			<TablaTotales getTotales={getTotales} loading={loading} />
+			{getTotales ? (
+				<TablaTotales getTotales={getTotales} loading={loading} />
+			) : null}
 		</>
 	);
 };

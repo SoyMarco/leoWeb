@@ -4,7 +4,6 @@ import { REGISTER_CAJA } from "graphql/caja";
 import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
-import useAuth from "hooks/useAuth";
 import { keyBlock } from "Utils";
 import { ImMobile } from "react-icons/im";
 import { useHistory } from "react-router-dom";
@@ -13,7 +12,6 @@ export default function TotalesCorte({ loading, getTotales, refetch }) {
 	const [mutateREGISTER_CAJA] = useMutation(REGISTER_CAJA);
 	const [recargas, setrecargas] = useState(null);
 	const inputRecargas = useRef();
-	const { logout } = useAuth();
 	const history = useHistory();
 
 	var formatter = new Intl.NumberFormat("en-US", {
@@ -52,7 +50,7 @@ export default function TotalesCorte({ loading, getTotales, refetch }) {
 						refetch();
 					}
 				} catch (error) {
-					ErrorConection(logout);
+					ErrorConection();
 				}
 			}
 		}

@@ -1,12 +1,9 @@
-import React, { useState } from "react";
-import { Menu, Switch, Popconfirm, Tooltip } from "antd";
-import { Avatar } from "antd";
-import LogoLeo from "assets/png/logo.png";
-import { FaUserAstronaut } from "react-icons/fa";
+import React from "react";
 import BuscadorApartados from "Pages/BuscadorApartados/Container/BuscadorApartados";
-import { SyncOutlined } from "@ant-design/icons";
-import GetVentasMobile from "Pages/GetVentasMobile/Container/GetVentasMobile";
-// import Estrellas from "./Estrellas/Estrellas";
+import { Menu, Switch, Popconfirm, Tooltip, Avatar } from "antd";
+import { FaUserAstronaut } from "react-icons/fa";
+import Estrellas from "./Estrellas/Estrellas";
+import LogoLeo from "assets/png/logo.png";
 
 export default function Horizontal({
 	Header,
@@ -15,13 +12,8 @@ export default function Horizontal({
 	logoutApp,
 	swtichstate,
 }) {
-	const [spinMobile, setspinMobile] = useState(false);
-
 	return (
 		<>
-			{/* GET VENTAS MOBILE */}
-			<GetVentasMobile spinMobile={spinMobile} />
-
 			{/* HORIZONTAL */}
 			<Header
 				style={{
@@ -84,33 +76,13 @@ export default function Horizontal({
 						<BuscadorApartados />
 					</Menu.Item>
 					<Menu.Item
-						key='headerMobile'
-						// onClick={() => history.push("/")}
-						style={{
-							background: "transparent",
-							margin: "2px 40px",
-						}}
-					>
-						<Tooltip
-							placement='bottom'
-							title='Si esta activo puedes imprimir las ventas de Mobile más rapido'
-						>
-							<SyncOutlined
-								style={{ fontSize: 25 }}
-								spin={spinMobile}
-								onClick={() => setspinMobile(!spinMobile)}
-							/>
-						</Tooltip>
-					</Menu.Item>
-					<Menu.Item
 						key='star'
-						// onClick={() => history.push("/")}
 						style={{
 							background: "transparent",
 							margin: "0 0 0 100px",
 						}}
 					>
-						{/* <Estrellas /> */}
+						<Estrellas />
 					</Menu.Item>
 					<Menu.Item
 						key='header4'

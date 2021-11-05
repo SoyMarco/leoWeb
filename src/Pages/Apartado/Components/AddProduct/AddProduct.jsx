@@ -7,7 +7,6 @@ import ErrorConection from "Utils/ErrorConection";
 import { FaMoneyBillWave } from "react-icons/fa";
 import { SaveFilled } from "@ant-design/icons";
 import { GiLargeDress } from "react-icons/gi";
-import useAuth from "hooks/useAuth";
 import { keyBlock } from "Utils";
 
 export default function AddProduct({
@@ -19,7 +18,6 @@ export default function AddProduct({
 }) {
 	const [mutateADD_PRODUCTO] = useMutation(ADD_PRODUCTO);
 	let { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
-	const { logout } = useAuth();
 	const [btnLoading, setbtnLoading] = useState(false);
 	const [btnDisabled, setbtnDisabled] = useState(true);
 	const [idApartado, setidApartado] = useState(null);
@@ -72,7 +70,7 @@ export default function AddProduct({
 				}
 			} catch (error) {
 				setbtnLoading(false);
-				ErrorConection(logout);
+				ErrorConection();
 			}
 		}
 	};

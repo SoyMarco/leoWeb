@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react";
+import { GiLargeDress /* , GiOpenBook  */ } from "react-icons/gi";
+import { useHistory, useLocation, Link } from "react-router-dom";
+import { FaCashRegister, FaMoneyBillAlt } from "react-icons/fa";
+import { openNotification } from "Utils/openNotification";
+import { RiTerminalWindowFill } from "react-icons/ri";
+import { MdLocalGroceryStore } from "react-icons/md";
+import Horizontal from "../Components/Horizontal";
+import "material-design-icons-iconfont";
+import useAuth from "hooks/useAuth";
 import { Layout, Menu } from "antd";
 import "antd/dist/antd.css";
-import { MdLocalGroceryStore } from "react-icons/md";
-import { FaCashRegister, FaMoneyBillAlt, FaPencilAlt } from "react-icons/fa";
-import { RiTerminalWindowFill } from "react-icons/ri";
-import { GiOpenBook } from "react-icons/gi";
 import "./layout.css";
-import "material-design-icons-iconfont";
-import { openNotification } from "Utils/openNotification";
-import { useHistory, useLocation, Link } from "react-router-dom";
-import useAuth from "hooks/useAuth";
-import { GiLargeDress } from "react-icons/gi";
-import Horizontal from "../Components/Horizontal";
-
+/* , FaPencilAlt */
 function LayoutForm({ children }) {
 	const [collapsed, setcollapsed] = useState(false);
 	const { Header, Content, Footer, Sider } = Layout;
@@ -50,7 +49,6 @@ function LayoutForm({ children }) {
 		setcurrentMenu(titleUrl);
 	}, [Location]);
 
-	// const { SubMenu } = Menu;
 	const onCollapse = () => {
 		setcollapsed(!collapsed);
 		let title = Location.pathname;
@@ -153,7 +151,7 @@ function LayoutForm({ children }) {
 								>
 									<h3>Nuevo Apartado</h3>
 								</Menu.Item>
-								<Menu.Item
+								{/* <Menu.Item
 									key='/addencargo'
 									icon={
 										<Link
@@ -192,7 +190,7 @@ function LayoutForm({ children }) {
 									onClick={() => history.push("/encargos")}
 								>
 									<h3>Encargos</h3>
-								</Menu.Item>
+								</Menu.Item> */}
 								<Menu.Item
 									key='/entradasSalidas'
 									icon={

@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useQuery /* , useMutation  */ } from "@apollo/client";
-import { GET_ENCARGOS } from "graphql/encargo";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_ENCARGOS, EDIT_GUARDAR_ENCARGO } from "graphql/encargo";
 import { Skeleton, Card, Row, Col, Switch } from "antd";
 import { AiFillFolderOpen } from "react-icons/ai";
 import moment from "moment";
 import "./ReadEncargos.css";
 import { useHistory } from "react-router-dom";
-import { useMutation } from "@apollo/client";
-import { EDIT_GUARDAR_ENCARGO } from "graphql/encargo";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
-import useAuth from "hooks/useAuth";
 
 export default function ReadEncargo() {
 	let {
@@ -23,8 +20,6 @@ export default function ReadEncargo() {
 	const [mutateEDIT_GUARDAR_ENCARGO] = useMutation(EDIT_GUARDAR_ENCARGO);
 	const history = useHistory();
 	let widthPantalla = window.screen.width;
-
-	const { logout } = useAuth();
 
 	const { Meta } = Card;
 	const [btnLoading, setbtnLoading] = useState(false);
@@ -60,7 +55,6 @@ export default function ReadEncargo() {
 				});
 				if (data) {
 					setencargos(data.editGuararEncargo);
-					// refetchEncargos();
 					openNotification("success", `Se modificó con exito`);
 					setbtnLoading(false);
 				}
@@ -68,7 +62,7 @@ export default function ReadEncargo() {
 		} catch (error) {
 			console.log("error", error);
 			setbtnLoading(false);
-			ErrorConection(logout);
+			ErrorConection();
 		}
 	};
 	return (

@@ -30,11 +30,10 @@ export default function Ventas({
 }) {
 	const [mutateCANCELAR_VENTA] = useMutation(CANCELAR_VENTA);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
-	const { auth, logout } = useAuth();
+	const { auth } = useAuth();
 	const [imprimir, setimprimir] = useState(false);
-	const onSelectChange = (selectedRowKeys) => {
+	const onSelectChange = () => {
 		setselectedRowKeys([]);
-		// setselectedRowKeys(selectedRowKeys);
 	};
 	useEffect(() => {
 		let numArray = getVentasDia.length - 1;
@@ -52,7 +51,6 @@ export default function Ventas({
 	const click = (record, rowIndex) => {
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
-		// addArticulo(record, rowIndex);
 	};
 	const pasarAFecha = (item) => {
 		let fecha = moment.unix(item / 1000).format("LTS");
@@ -79,7 +77,7 @@ export default function Ventas({
 			}
 		} catch (error) {
 			setloader(false);
-			ErrorConection(logout);
+			ErrorConection();
 		}
 	};
 	/* COLUMNAS VENTAS */

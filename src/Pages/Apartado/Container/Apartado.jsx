@@ -51,7 +51,7 @@ export default function Apartado(props) {
 	const [titleWeb, settitleWeb] = useState("Apartado");
 	const [mutateCANCELAR_APARTADO] = useMutation(CANCELAR_APARTADO);
 	const [mutateCANCEL_ENTREGA] = useMutation(CANCEL_ENTREGA);
-	const { logout, auth } = useAuth();
+	const { auth } = useAuth();
 	const [modalCobrar, setmodalCobrar] = useState(false);
 	const [modalCalendar, setmodalCalendar] = useState(false);
 	const [modalReimprimir, setmodalReimprimir] = useState(false);
@@ -77,7 +77,7 @@ export default function Apartado(props) {
 	}, []);
 
 	if (error) {
-		ErrorConection(logout);
+		ErrorConection();
 	}
 	const cerrarCobrar = () => {
 		setmodalCobrar(false);
@@ -176,7 +176,7 @@ export default function Apartado(props) {
 				}
 			} catch (err) {
 				setloader(false);
-				ErrorConection(logout);
+				ErrorConection();
 			}
 		}
 	};
@@ -258,7 +258,7 @@ export default function Apartado(props) {
 			}
 		} catch (err) {
 			setbtnLoading(false);
-			ErrorConection(logout);
+			ErrorConection();
 		}
 	};
 	const fechaVenceEn = () => {

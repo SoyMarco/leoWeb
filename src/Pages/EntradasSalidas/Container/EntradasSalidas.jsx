@@ -5,14 +5,12 @@ import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { REGISTER_CAJA } from "graphql/caja";
-import useAuth from "hooks/useAuth";
 import { useHistory } from "react-router-dom";
 
 import "./entradasSalidas.css";
 
 export default function EntradasSalidas() {
 	const [mutateREGISTER_CAJA] = useMutation(REGISTER_CAJA);
-	const { logout } = useAuth();
 	const history = useHistory();
 
 	const [btnLoading, setbtnLoading] = useState(false);
@@ -48,7 +46,7 @@ export default function EntradasSalidas() {
 						openNotification("success", `${entradaSalida} guardado con exito`);
 					}
 				} catch (error) {
-					ErrorConection(logout);
+					ErrorConection();
 				}
 			}
 		}

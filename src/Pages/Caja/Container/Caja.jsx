@@ -5,7 +5,6 @@ import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { REGISTER_CAJA } from "graphql/caja";
-import useAuth from "hooks/useAuth";
 import { useHistory } from "react-router-dom";
 
 import "./caja.css";
@@ -13,7 +12,6 @@ import "./caja.css";
 export default function Caja() {
 	const [mutateREGISTER_CAJA] = useMutation(REGISTER_CAJA);
 	const history = useHistory();
-	const { logout } = useAuth();
 	const [caja, setcaja] = useState(0);
 	const inputCaja = useRef();
 	useEffect(() => {
@@ -34,7 +32,7 @@ export default function Caja() {
 				openNotification("success", `Registro guardado con exito`);
 			}
 		} catch (error) {
-			ErrorConection(logout);
+			ErrorConection();
 		}
 	};
 	const pressKeyEnter = (e) => {

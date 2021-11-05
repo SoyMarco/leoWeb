@@ -1,28 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { Row, Select, ConfigProvider, Result } from "antd";
-import "./buscarApartados.css";
-import { useQuery } from "@apollo/client";
 import { GET_APARTADOS_BUSCADOR } from "graphql/apartado";
-import { GET_ENCARGOS } from "graphql/encargo";
-import moment from "moment";
-import { useHistory } from "react-router-dom";
+import ErrorConection from "Utils/ErrorConection";
 import { SyncOutlined } from "@ant-design/icons";
+import { GET_ENCARGOS } from "graphql/encargo";
+import { useHistory } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import "./buscarApartados.css";
+import moment from "moment";
 
 export default function BuscadorApartados() {
 	let {
 		data: dataApartados,
 		loading,
+		error: errorApartados,
 		refetch,
 	} = useQuery(GET_APARTADOS_BUSCADOR);
 	let {
 		data: dataEncargos,
 		loading: loadingEncargos,
+		error: errorEncargos,
 		refetch: refetchEncargos,
 	} = useQuery(GET_ENCARGOS);
 
+	if (errorEncargos || errorApartados) {
+		ErrorConection();
+	}
+
 	const [listaBusqueda, setlistaBusqueda] = useState([]);
 	const [urlFolio, seturlFolio] = useState({ folio: 0, tipo: "" });
-	// const [clienteName, setclienteName] = useState(null);
 	const { Option } = Select;
 	const history = useHistory();
 	useEffect(() => {
@@ -40,7 +46,6 @@ export default function BuscadorApartados() {
 
 			listaBusquedaMap.push(...listaApartadosMap);
 			listaBusquedaMap.push(...listaEncargosMap);
-
 			setlistaBusqueda(listaBusquedaMap);
 		}
 	}, [dataApartados, dataEncargos]);
@@ -52,7 +57,7 @@ export default function BuscadorApartados() {
 	}, [urlFolio]);
 
 	const pasarAFechaVence = (item) => {
-		let fecha = "Sin fecha";
+		let fecha = "";
 		if (item?.vence) {
 			fecha = moment.unix(item.vence / 1000).format("LL");
 		} else {
@@ -88,7 +93,6 @@ export default function BuscadorApartados() {
 			fecha = moment.unix(item.createAt / 1000).fromNow();
 			fecha = `Encargó ${fecha}`;
 		}
-		// this.vence = fecha;
 		return fecha;
 	};
 	return (
@@ -115,16 +119,12 @@ export default function BuscadorApartados() {
 						option.children[1].key.toLowerCase().indexOf(input.toLowerCase()) >=
 							0
 					}
-					// onMouseOver={() =>
-					// 	document.querySelector("#buscarApartadoInput").select()
-					// }
 					style={{
-						width: 400,
+						width: 500,
 						fontWeight: "bold",
 						textAlignLast: "center",
 						fontSize: "20px",
 					}}
-					// value={clienteName}
 				>
 					{listaBusqueda?.map((item) => {
 						return (

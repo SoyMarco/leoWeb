@@ -51,7 +51,7 @@ export default function Ventas({
 
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [dataVenta, setdataVenta] = useState({});
-	const { auth, logout } = useAuth();
+	const { auth } = useAuth();
 	const [imprimir, setimprimir] = useState(false);
 
 	const onSelectChange = () => {
@@ -64,7 +64,6 @@ export default function Ventas({
 			setselectedRowKeys([lastFolio]);
 			setstateRecord(getVentas[numArray]);
 		}
-		console.log("getVentas", getVentas);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [getVentas]);
 
@@ -102,7 +101,7 @@ export default function Ventas({
 			}
 		} catch (error) {
 			setloader(false);
-			ErrorConection(logout);
+			ErrorConection();
 		}
 	};
 	const printApartado = (record) => {
@@ -133,7 +132,7 @@ export default function Ventas({
 			}
 		} catch (error) {
 			setloader(false);
-			ErrorConection(logout);
+			ErrorConection();
 			console.log("error", error);
 		}
 	};

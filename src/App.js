@@ -4,14 +4,13 @@ import "App.css";
 import "material-design-icons-iconfont";
 import AuthContext from "context/AuthContext";
 import NavToken from "Routes/NavToken";
-import { getToken, decodeToken, removeToken } from "Utils/token";
+import { decodeToken, removeToken } from "Utils/token";
 import Login from "Pages/Login/Container/Login";
 import { openNotification } from "Utils/openNotification";
 
-function App() {
+function App({ token }) {
 	const [auth, setAuth] = useState(undefined);
 	const timeLogout = () => {
-		const token = getToken();
 		if (token) {
 			try {
 				let dataToken = decodeToken(token);

@@ -5,7 +5,6 @@ import { CANCELAR_PRODUCTO_APARTDO } from "graphql/apartado";
 import { MdLocalGroceryStore, MdDelete } from "react-icons/md";
 import { FaShoppingCart } from "react-icons/fa";
 import { useMutation } from "@apollo/client";
-import useAuth from "hooks/useAuth";
 import moment from "moment";
 import {
 	Table,
@@ -39,7 +38,6 @@ export default function Productos({
 	);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [modalAddProduct, setmodalAddProduct] = useState(false);
-	const { logout } = useAuth();
 	const onSelectChange = () => {
 		setselectedRowKeys([]);
 	};
@@ -98,7 +96,7 @@ export default function Productos({
 				}
 			} catch (error) {
 				setloader(false);
-				ErrorConection(logout);
+				ErrorConection();
 			}
 		}
 	};

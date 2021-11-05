@@ -3,7 +3,6 @@ import { SaveFilled } from "@ant-design/icons";
 import { Row, Button, Modal, Calendar, ConfigProvider } from "antd";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
-import useAuth from "hooks/useAuth";
 import moment from "moment";
 import "moment/locale/es-us";
 import locale from "antd/lib/locale/es_ES";
@@ -17,7 +16,6 @@ export default function ModalCalendar({
 	dataApartado,
 }) {
 	const [mutateEDIT_VENCE_APARTADO] = useMutation(EDIT_VENCE_APARTADO);
-	const { logout } = useAuth();
 	const [btnLoading, setbtnLoading] = useState(false);
 	const [newFecha, setnewFecha] = useState(null);
 
@@ -43,7 +41,7 @@ export default function ModalCalendar({
 			}
 		} catch (error) {
 			setbtnLoading(false);
-			ErrorConection(logout);
+			ErrorConection();
 		}
 	};
 	const selectFecha = (value, dateString) => {
@@ -62,12 +60,9 @@ export default function ModalCalendar({
 		var fecha = moment.unix(dataApartado.vence / 1000).fromNow();
 		if (dataApartado.vence > Date.now()) {
 			fecha = `Vence ${fecha}`;
-			// this.colorVence = "#000058";
 		} else {
 			fecha = `Venció ${fecha}`;
-			// this.colorVence = "red";
 		}
-		// this.vence = fecha;
 		return fecha;
 	};
 

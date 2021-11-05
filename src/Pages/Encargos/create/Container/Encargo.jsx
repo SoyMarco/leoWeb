@@ -25,7 +25,7 @@ export default function Encargo() {
 	const audio = new Audio(aceptar);
 
 	const history = useHistory();
-	const { auth, logout } = useAuth();
+	const { auth } = useAuth();
 	const [optionsClientes, setoptionsClientes] = useState([]);
 	const [abono, setabono] = useState(0);
 	const [modalAbono, setmodalAbono] = useState(null);
@@ -181,7 +181,7 @@ export default function Encargo() {
 				}
 			} catch (error) {
 				setloader(false);
-				ErrorConection(logout);
+				ErrorConection();
 			}
 		}
 	};
@@ -189,7 +189,6 @@ export default function Encargo() {
 		let values = form.getFieldsValue();
 		if (!values.nombre && listaProductos.length > 0) {
 			setmodalAbono(true);
-			// guardarEncargo();
 		}
 	};
 	const onValuesChange = (e) => {
@@ -399,9 +398,6 @@ export default function Encargo() {
 					listaProductos={listaProductos}
 					abono={abono}
 					cliente={cliente}
-					// dataApartado={dataApartado}
-					// dinero={dinero}
-					// cambio={cambio}
 				/>
 			)}
 		</>

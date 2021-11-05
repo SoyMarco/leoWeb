@@ -18,7 +18,6 @@ import {
 } from "graphql/encargo";
 import { Row, Card, Skeleton, Button, Switch, Tooltip, Result } from "antd";
 import "./Encargo.css";
-// import { NetworkStatus } from "@apollo/client";
 
 export default function Encargo() {
 	const params = useParams();
@@ -30,7 +29,7 @@ export default function Encargo() {
 	const [mutateEDIT_GUARDAR_ENCARGO] = useMutation(EDIT_GUARDAR_ENCARGO);
 	const [titleWeb, settitleWeb] = useState("Encargo");
 	const [mutateCANCEL_ENTREGA] = useMutation(CANCEL_ENTREGA);
-	const { logout, auth } = useAuth();
+	const { auth } = useAuth();
 	const [modalCobrar, setmodalCobrar] = useState(false);
 	const [modalCalendar, setmodalCalendar] = useState(false);
 	const [modalReimprimir, setmodalReimprimir] = useState(false);
@@ -45,7 +44,6 @@ export default function Encargo() {
 	const [totalProductos, settotalProductos] = useState(0);
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
-	// const [venceEn, setvenceEn] = useState(null);
 	const inputAbono = useRef();
 	const [colorVence, setcolorVence] = useState(
 		"linear-gradient(#2196F3,#0000E6)"
@@ -56,7 +54,7 @@ export default function Encargo() {
 	}, []);
 
 	if (error) {
-		ErrorConection(logout);
+		ErrorConection();
 	}
 	const cerrarCobrar = () => {
 		setmodalCobrar(false);
@@ -65,20 +63,21 @@ export default function Encargo() {
 	useEffect(() => {
 		if (data?.getEncargoFolio[0]) {
 			setdataEncargo(data?.getEncargoFolio[0]);
-			let { productos, abonos, cliente, guardado } = data?.getEncargoFolio[0];
+			let {
+				productos: productosSet,
+				abonos: abonoSet,
+				cliente,
+				guardado,
+			} = data?.getEncargoFolio[0];
 
-			let listaAbonos = abonos.map((item) => {
+			let listaAbonos = abonoSet.map((item) => {
 				return { ...item, key: item._id };
 			});
 			setabonos(listaAbonos);
 
-			// let listaProductos = productos.map((item) => {
-			// 	return { ...item, key: item._id };
-			// });
-			setproductos(productos);
+			setproductos(productosSet);
 
 			settitleWeb(cliente);
-			// let cancel = cancelado[0]?.status ?? true;
 			setstatusEncargo(guardado.status);
 		}
 	}, [data]);
@@ -90,7 +89,6 @@ export default function Encargo() {
 	}, [dataEncargo?.vence]);
 
 	useEffect(() => {
-		// selectLastRow();
 		let sum = 0;
 		let sumProd = 0;
 		for (let i = 0; i < productos.length; i++) {
@@ -137,7 +135,7 @@ export default function Encargo() {
 		let status = dataEncargo?.entregado[0]?.status ?? false;
 		try {
 			if (dataEncargo.id) {
-				let { data } = await mutateCANCEL_ENTREGA({
+				let { data: dataCancelEntrega } = await mutateCANCEL_ENTREGA({
 					// Parameters
 					variables: {
 						input: {
@@ -146,7 +144,7 @@ export default function Encargo() {
 						},
 					},
 				});
-				if (data) {
+				if (dataCancelEntrega) {
 					openNotification(
 						"success",
 						`Encargo ${status ? "ENTREGADO" : "REACTIVADO"}`
@@ -155,30 +153,27 @@ export default function Encargo() {
 					setbtnLoading(false);
 				}
 			}
-		} catch (error) {
+		} catch (err) {
 			setbtnLoading(false);
-			ErrorConection(logout);
+			ErrorConection();
 		}
 	};
 	const fechaVenceEn = () => {
 		var fecha = moment.unix(dataEncargo.vence / 1000).fromNow();
 		if (dataEncargo.vence > Date.now()) {
-			// setvenceEn(`Vence ${fecha}`);
 			//Color azul
 			setcolorVence("linear-gradient(#2196F3,#0000E6)");
 		} else {
-			// setvenceEn(`Venció ${fecha}`);
 			//Color rojo
 			setcolorVence("linear-gradient(#F53636,#D32F2F,#8B0000)");
 		}
-		// this.vence = fecha;
 		return fecha;
 	};
 	const guardarEncargo = async () => {
 		setbtnLoading(true);
 		try {
 			if (dataEncargo?.id) {
-				const { data } = await mutateEDIT_GUARDAR_ENCARGO({
+				const { data: dataEditGuardar } = await mutateEDIT_GUARDAR_ENCARGO({
 					// Parameters
 					variables: {
 						input: {
@@ -187,16 +182,16 @@ export default function Encargo() {
 						},
 					},
 				});
-				if (data) {
+				if (dataEditGuardar) {
 					refetch();
 					openNotification("success", `Se modificó con exito`);
 					setbtnLoading(false);
 				}
 			}
-		} catch (error) {
-			console.log("error", error);
+		} catch (err) {
+			console.log("error", err);
 			setbtnLoading(false);
-			ErrorConection(logout);
+			ErrorConection();
 		}
 	};
 	return (
@@ -318,7 +313,6 @@ export default function Encargo() {
 													background: "red", // boxShadow: "5px 5px 19px #b3b3b3, -5px -5px 19px #ffffff",
 											  }
 									}
-									// onChange={logoutApp}
 									defaultChecked
 								></Switch>
 							</Tooltip>
