@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { keyBlock } from "Utils";
-import { AiFillDollarCircle } from "react-icons/ai";
+import { AiFillDollarCircle, AiOutlineCloudDownload } from "react-icons/ai";
 import { Input } from "antd";
 import { useHistory } from "react-router-dom";
 import GetVentasF3 from "Pages/GetVentasF3/Container/GetVentasF3";
@@ -20,6 +20,7 @@ export default function Encabezado({
 	addArticulo,
 	stateRecord,
 }) {
+	const [refetchVentaMobile, setrefetchVentaMobile] = useState(false);
 	const history = useHistory();
 	const pressEnter = () => {
 		if (precio.precio > 0) {
@@ -84,6 +85,12 @@ export default function Encabezado({
 				}
 			}
 		}
+
+		if (e.keyCode === 46) {
+			if (stateRecord) {
+				removeArticulo(stateRecord);
+			}
+		}
 		if (e.keyCode === 66) {
 			document.querySelector("#buscarApartadoInput").select();
 		}
@@ -92,19 +99,6 @@ export default function Encabezado({
 		}
 		if (e.keyCode === 78) {
 			history.push("/add");
-		}
-		if (e.keyCode === 121) {
-			document.querySelector("#buscarApartadoInput").select();
-		}
-		if (e.keyCode === 122) {
-			history.push("/add");
-		}
-		if (e.keyCode === 123) {
-			pressEnter();
-		}
-		// F6 abrir ventana
-		if (e.keyCode === 117) {
-			document.getElementById("linkNewWindow").click();
 		}
 		if (e.keyCode === 107) {
 			if (stateRecord) {
@@ -116,10 +110,22 @@ export default function Encabezado({
 				removeArticulo(stateRecord);
 			}
 		}
-		if (e.keyCode === 46) {
-			if (stateRecord) {
-				removeArticulo(stateRecord);
-			}
+		// F3
+		if (e.keyCode === 114) {
+			setrefetchVentaMobile(true);
+		}
+		// F6 abrir ventana
+		if (e.keyCode === 117) {
+			document.getElementById("linkNewWindow").click();
+		}
+		if (e.keyCode === 121) {
+			document.querySelector("#buscarApartadoInput").select();
+		}
+		if (e.keyCode === 122) {
+			history.push("/add");
+		}
+		if (e.keyCode === 123) {
+			pressEnter();
 		}
 	};
 	return (
@@ -132,6 +138,14 @@ export default function Encabezado({
 			}}
 		>
 			{/* Ingresar Precio */}
+			<AiOutlineCloudDownload
+				style={{
+					color: refetchVentaMobile ? "white" : "transparent",
+					fontSize: "30px",
+					margin: "0 10px 0 0",
+					verticalAlign: "sub",
+				}}
+			/>
 			<Input
 				id='inputPrecio'
 				prefix={<AiFillDollarCircle style={{ marginLeft: "20px" }} />}
@@ -151,7 +165,10 @@ export default function Encabezado({
 				onChange={handlePrecio}
 			/>
 			{/* GET VENTAS MOBILE */}
-			<GetVentasF3 />
+			<GetVentasF3
+				refetchVentaMobile={refetchVentaMobile}
+				setrefetchVentaMobile={setrefetchVentaMobile}
+			/>
 		</div>
 	);
 }
