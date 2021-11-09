@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { SmileOutlined, PrinterFilled } from "@ant-design/icons";
 import { VENTA_MOBILE_FALSE } from "../../../graphql/venta";
 import { useQuery, useMutation } from "@apollo/client";
 import Imprimir from "../Components/Imprimir/Imprimir";
 import { GET_VENTAS_MOBILE } from "graphql/venta";
 import ErrorConection from "Utils/ErrorConection";
+import { PrinterFilled } from "@ant-design/icons";
+import { FaUserAstronaut } from "react-icons/fa";
 import { Button, notification } from "antd";
 import useAuth from "hooks/useAuth";
 
@@ -17,13 +18,11 @@ export default function GetVentasF3({
 	let {
 		data,
 		error: errorGetVentas,
-		loading: loadingVM,
 		refetch: refetchVM,
 		startPolling,
 		stopPolling,
 	} = useQuery(GET_VENTAS_MOBILE);
 	const [mutateVENTA_MOBILE_FALSE] = useMutation(VENTA_MOBILE_FALSE);
-	console.log("loadingVM", loadingVM);
 
 	if (errorGetVentas) {
 		ErrorConection();
@@ -57,42 +56,57 @@ export default function GetVentasF3({
 				const btn = (
 					<>
 						<Button
-							type='danger'
+							shape='round'
+							loading={loader}
+							onClick={() => printMobile(element)}
+							icon={<PrinterFilled />}
+							style={{
+								margin: "0 10px 0 0",
+								width: "130px",
+								background: "linear-gradient(#2196F3,#0000E6)",
+								color: "white",
+								fontWeight: "bold",
+							}}
+						>
+							Imprimir
+						</Button>
+						<Button
+							shape='round'
 							loading={loader}
 							onClick={() => ventaMobileToFalse(key)}
 							style={{
-								margin: "-10px 20px 1px",
-								// fontSize: "large",
-								// background: "linear-gradient(#F53636,#D32F2F,#8B0000)",
+								background: "linear-gradient(#F53636,#D32F2F,#8B0000)",
+								color: "white",
+								fontWeight: "bold",
 							}}
 						>
-							No
-						</Button>
-						<Button
-							type='primary'
-							loading={loader}
-							onClick={() => printMobile(element)}
-							icon={<PrinterFilled style={{ marginTop: 5 }} />}
-							style={{
-								margin: "-10px 0",
-								// fontSize: "large",
-								// background: "linear-gradient(#32A632,#005800)",
-							}}
-						>
-							Si
+							Omitir
 						</Button>
 					</>
 				);
 				notification.open({
 					key,
-					message: `${element.vendedor} $${element.total}`,
+					message: (
+						<b>
+							{element.vendedor}: ${element.total}
+						</b>
+					),
 					description: "¿Imprir la venta Mobile?",
-					icon: <SmileOutlined style={{ color: "#108ee9" }} />,
+					icon: (
+						<FaUserAstronaut
+							style={{
+								color: "darkBlue",
+								fontSize: "x-large",
+								margin: "10px 0 0 0",
+							}}
+						/>
+					),
 					btn,
 					duration: 0,
 					style: {
 						width: 250,
 						padding: "5px 15px",
+						boxShadow: "5px 5px 29px #b3b3b3, -5px -5px 29px #c2c2c2",
 					},
 				});
 			}
