@@ -6,6 +6,8 @@ import { Modal, Row } from "antd";
 import "moment/locale/es-us";
 import moment from "moment";
 import "./imprimir.css";
+// const electron = require("electron");
+// const BrowserWindow = electron.BrowserWindow;
 
 const Imprimir = ({
 	imprimir,
@@ -25,7 +27,7 @@ const Imprimir = ({
 			document.getElementById("print-button").click();
 		}
 	}, [imprimir]);
-
+	const probandoPrint = () => {};
 	const afterPrint = () => {
 		initialState();
 		openNotification("success", "Venta guardada con exito");
@@ -35,8 +37,21 @@ const Imprimir = ({
 		<>
 			<Modal visible={imprimir} width='229px'>
 				<ReactToPrint
-					trigger={(e) => <button id='print-button'>Imprimiendo...</button>}
+					trigger={() => <button id='print-button'>Imprimiendo...</button>}
 					content={() => imprimirVenta.current}
+					print={(htmlContentToPrint) => {
+						return new Promise((resolve, reject) => {
+							const ipcRenderer = require("electron").ipcRenderer;
+
+							ipcRenderer.on("print", (event, content) => {
+								document.body.innerHTML = htmlContentToPrint;
+
+								ipcRenderer.send("readyToPrint");
+							});
+							// htmlContentToPrint.contentWindow.print({ silent: true });
+							// Do electron printing here, when finished call resolve(), if there is an error, call reject()
+						});
+					}}
 					// onBeforePrint={() => antesDeImprimir()}
 					onAfterPrint={() => afterPrint()}
 				/>
