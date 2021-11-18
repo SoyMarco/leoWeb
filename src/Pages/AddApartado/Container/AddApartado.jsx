@@ -108,7 +108,7 @@ export default function AddApartado() {
 							Cliente:
 						</h2>
 						<AutoComplete
-							defaultActiveFirstOption={true}
+							defaultActiveFirstOption={false}
 							id='inputNameClient'
 							ref={inputNameClient}
 							autoFocus={true}
