@@ -1,9 +1,6 @@
 import React from "react";
-import { Menu, Switch, Popconfirm, Tooltip } from "antd";
-import { Avatar } from "antd";
+import { Menu, Switch, Popconfirm, Tooltip, Avatar } from "antd";
 import LogoLeo from "assets/png/logo.png";
-// import { FaUserAstronaut } from "react-icons/fa";
-// import BuscadorApartados from "Pages/BuscadorApartados/Container/BuscadorApartados";
 export default function Horizontal({
 	Header,
 	history,
@@ -28,7 +25,6 @@ export default function Horizontal({
 					style={{
 						background: "transparent",
 						margin: "-10px 0 0 0",
-						// height: "50px",
 						color: "white",
 						width: "100%",
 					}}
@@ -61,17 +57,6 @@ export default function Horizontal({
 							Bazar Leo
 						</h1>
 					</Menu.Item>
-					{/* <Menu.Item
-						key='header3'
-						// onClick={() => history.push("/")}
-						style={{
-							background: "transparent",
-							margin: "2px 40px",
-						}}
-					>
-						{/* BUSCADOR RAPIDO DE APARTADOS */}
-					{/*<BuscadorApartados />
-					</Menu.Item> */}
 
 					<Menu.Item key='header5' style={{ padding: "3px 0 0 15px" }}>
 						<Tooltip
@@ -84,7 +69,6 @@ export default function Horizontal({
 						</Tooltip>
 					</Menu.Item>
 					<Menu.Item key='header6'>
-						{/* <h1></h1> */}
 						<Popconfirm title='¿Cerrar sesión?' onConfirm={() => logoutApp()}>
 							<Switch
 								checked={swtichstate}
@@ -99,7 +83,6 @@ export default function Horizontal({
 												background: "red", // boxShadow: "5px 5px 19px #b3b3b3, -5px -5px 19px #ffffff",
 										  }
 								}
-								// onChange={logoutApp}
 								defaultChecked
 							></Switch>
 						</Popconfirm>
