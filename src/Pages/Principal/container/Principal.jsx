@@ -63,7 +63,7 @@ function Principal() {
 	useEffect(() => {
 		var detectorPantalla = window.screen.width;
 		if (detectorPantalla < 600) {
-			history.push(`mobile/corte`);
+			history.push(`mobile/venta`);
 		}
 		selectInputPrecio();
 	}, []);
