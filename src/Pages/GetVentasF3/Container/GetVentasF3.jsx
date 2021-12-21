@@ -80,7 +80,7 @@ export default function GetVentasF3({
 								fontWeight: "bold",
 							}}
 						>
-							Omitir
+							No
 						</Button>
 					</>
 				);

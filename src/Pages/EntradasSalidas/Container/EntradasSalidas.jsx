@@ -5,6 +5,9 @@ import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { REGISTER_CAJA } from "graphql/caja";
+import { BsFillChatRightTextFill } from "react-icons/bs";
+import { FaMoneyBillAlt } from "react-icons/fa";
+
 import { useHistory } from "react-router-dom";
 
 import "./entradasSalidas.css";
@@ -14,9 +17,11 @@ export default function EntradasSalidas() {
 	const history = useHistory();
 
 	const [btnLoading, setbtnLoading] = useState(false);
-	const [caja, setcaja] = useState(0);
+	const [caja, setcaja] = useState(null);
+	const [motivo, setmotivo] = useState("");
 	const [entradaSalida, setentradaSalida] = useState(null);
 	const inputCaja = useRef();
+	const inputMotivo = useRef();
 
 	useEffect(() => {
 		if (entradaSalida) inputCaja.current.select();
@@ -53,7 +58,19 @@ export default function EntradasSalidas() {
 	};
 	const pressKeyEnter = (e) => {
 		if (e.keyCode === 13) {
-			sendEntradaSalida();
+			console.log("listo1", caja, motivo);
+
+			if (caja < 1 || isNaN(caja)) {
+				inputCaja.current.select();
+			} else if (motivo.length < 1) {
+				inputMotivo.current.select();
+			} else {
+				// sendEntradaSalida();
+				console.log("listo");
+			}
+		}
+		if (e.keyCode === 27) {
+			history.push("/");
 		}
 	};
 	return (
@@ -66,7 +83,7 @@ export default function EntradasSalidas() {
 				height: "75vh",
 			}}
 		>
-			<Card id='cardLogin' style={{ width: "700px" }}>
+			<Card id='cardLogin' style={{ width: "700px", height: "350px" }}>
 				<div
 					style={
 						!entradaSalida
@@ -110,41 +127,65 @@ export default function EntradasSalidas() {
 					}}
 				>
 					{entradaSalida && (
-						<Input
-							ref={inputCaja}
-							id='inputLogin'
-							type='number'
-							prefix={<span className='material-icons'>payments</span>}
-							loading={btnLoading}
-							style={{
-								color: "#000058",
-								// fontSize: 30,
-								fontSize: "x-large",
-								fontWeight: "bold",
-								borderRadius: "50px",
-								maxWidth: "80%",
-								padding: "5",
-								border: "0 0 0 0",
-								margin: "10px",
-							}}
-							onKeyUp={pressKeyEnter}
-							onKeyDown={keyBlock}
-							onChange={(e) => setcaja(parseFloat(e.target.value))}
-							value={caja}
-						/>
+						<>
+							<Input
+								ref={inputCaja}
+								id='inputLogin'
+								type='number'
+								prefix={<FaMoneyBillAlt />}
+								loading={btnLoading}
+								style={{
+									color: "#000058",
+									// fontSize: 30,
+									fontSize: "x-large",
+									fontWeight: "bold",
+									borderRadius: "50px",
+									maxWidth: "80%",
+									padding: "5",
+									border: "0 0 0 0",
+									margin: "10px",
+								}}
+								onKeyUp={pressKeyEnter}
+								onKeyDown={keyBlock}
+								onChange={(e) => setcaja(parseFloat(e.target.value))}
+								value={caja}
+								placeholder='Cantidad'
+							/>
+							<Input
+								ref={inputMotivo}
+								id='motivoLogin'
+								prefix={<BsFillChatRightTextFill />}
+								loading={btnLoading}
+								style={{
+									color: "#000058",
+									// fontSize: 30,
+									// fontSize: "large",
+									fontWeight: "bold",
+									borderRadius: "50px",
+									maxWidth: "80%",
+									padding: "5",
+									border: "0 0 0 0",
+									margin: "10px",
+								}}
+								onKeyUp={pressKeyEnter}
+								onChange={(e) => setmotivo(e.target.value.toUpperCase())}
+								value={motivo}
+								placeholder='Motivo'
+							/>
+						</>
 					)}
 					<br />
 					{entradaSalida ? (
 						<Row justify='space-around'>
 							<Button
-								type='primary'
 								shape='round'
 								style={{
 									width: "40%",
 									height: "40px",
 									margin: "20px 0",
 									fontSize: "large",
-									background: "linear-gradient(#2196F3,#0000E6)",
+									color: "white",
+									background: "linear-gradient(#F53636,#D32F2F,#8B0000)",
 								}}
 								loading={btnLoading}
 								onClick={() => setentradaSalida(null)}
@@ -159,7 +200,7 @@ export default function EntradasSalidas() {
 									height: "40px",
 									margin: "20px 0",
 									fontSize: "large",
-									background: "linear-gradient(#2196F3,#0000E6)",
+									background: "linear-gradient(#32A632,#005800)",
 								}}
 								loading={btnLoading}
 								onClick={() => sendEntradaSalida()}
