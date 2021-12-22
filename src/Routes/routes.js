@@ -15,9 +15,9 @@ import EntradasSalidas from "Pages/EntradasSalidas/Container/EntradasSalidas";
 import CorteMobile from "Mobile/Corte/Container/Corte";
 import VentaMobile from "Mobile/Ventas/Container/Ventas";
 import AddEncargo from "Pages/Encargos/create/Container/Encargo";
-// import ReadEncargo from "Pages/Encargos/read/Container/ReadEncargo";
 import ReadEncargos from "Pages/Encargos/Encargos/container/ReadEncargos";
 import UpdateEncargo from "Pages/Encargos/update/Container/Encargo";
+import CorteB from "Mobile/CorteB/Container/CorteB";
 const routes = [
 	{
 		path: "/",
@@ -90,6 +90,12 @@ const routes = [
 		path: "/mobile/corte",
 		layout: LayoutMobile,
 		component: CorteMobile,
+		exact: true,
+	},
+	{
+		path: "/mobile/corteB",
+		layout: LayoutMobile,
+		component: CorteB,
 		exact: true,
 	},
 	{

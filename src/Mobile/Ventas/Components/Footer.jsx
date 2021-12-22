@@ -23,7 +23,9 @@ export default function Horizontal({
 					<h3 style={{ margin: "10px 0 0 -50px" }}>
 						{totalProductos ? `Productos: ${totalProductos}` : null}
 					</h3>
-					<h2> {totalProductos ? `$ ${totalTotal}` : null}</h2>
+					<h2 style={{ color: "green", fontWeight: "bold" }}>
+						{totalProductos ? `$ ${totalTotal}` : null}
+					</h2>
 				</Row>
 			</div>
 		</>

@@ -34,37 +34,29 @@ const Corte = () => {
 		if (data) {
 			let { getVentasDiaAdmin } = data;
 			let vendedoresSeparados = [];
-
-			for (let i = 0; i < getVentasDiaAdmin.length; i++) {
-				const vendedor = getVentasDiaAdmin[i].vendedor;
+			for (const i of getVentasDiaAdmin) {
+				const vendedor = i.vendedor;
 
 				let listVendedores1 = [];
-				for (let q = 0; q < vendedoresSeparados.length; q++) {
-					const nameVendedorKey = Object.keys(vendedoresSeparados[q])[0];
+				for (const q of vendedoresSeparados) {
+					const nameVendedorKey = Object.keys(q)[0];
 					listVendedores1.push(nameVendedorKey);
 				}
 
 				if (listVendedores1.includes(vendedor)) {
-					let listVendedores = [];
-					for (let z = 0; z < vendedoresSeparados.length; z++) {
-						const nameVendedorKey = Object.keys(vendedoresSeparados[z])[0];
-						listVendedores.push(nameVendedorKey);
-					}
-
-					for (let x = 0; x < vendedoresSeparados.length; x++) {
-						const nameVendedorKey2 = Object.keys(vendedoresSeparados[x])[0];
+					for (const x of vendedoresSeparados) {
+						const nameVendedorKey2 = Object.keys(x)[0];
 
 						if (nameVendedorKey2 === vendedor) {
-							vendedoresSeparados[x][vendedor].push(getVentasDiaAdmin[i]);
+							x[vendedor].push(i);
 						}
 					}
 				} else {
 					vendedoresSeparados.push({
-						[vendedor]: [getVentasDiaAdmin[i]],
+						[vendedor]: [i],
 					});
 				}
 			}
-
 			let datosSeparados = vendedoresSeparados.map((obj) => {
 				return obj[Object.keys(obj)[0]];
 			});
@@ -75,18 +67,19 @@ const Corte = () => {
 			let sumasTarjetas = 0;
 			let sumasEfectivos = 0;
 			let sumasaCuentas = 0;
-			for (let ds = 0; ds < datosSeparados.length; ds++) {
-				let items = datosSeparados[ds];
+
+			for (const ds of datosSeparados) {
+				let items = ds;
 
 				let sumasTotal = 0;
 				let sumasTarjeta = 0;
 				let sumasEfectivo = 0;
 				let sumasaCuenta = 0;
-				for (let it = 0; it < items.length; it++) {
-					sumasTotal = sumasTotal + items[it].total;
-					sumasTarjeta = sumasTarjeta + items[it].tarjeta;
-					sumasEfectivo = sumasEfectivo + items[it].efectivo;
-					sumasaCuenta = sumasaCuenta + items[it].aCuenta;
+				for (const it of items) {
+					sumasTotal = sumasTotal + it.total;
+					sumasTarjeta = sumasTarjeta + it.tarjeta;
+					sumasEfectivo = sumasEfectivo + it.efectivo;
+					sumasaCuenta = sumasaCuenta + it.aCuenta;
 				}
 				sumasTotales = sumasTotales + sumasTotal;
 				sumasTarjetas = sumasTarjetas + sumasTarjeta;

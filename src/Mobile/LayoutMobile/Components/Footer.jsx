@@ -2,7 +2,8 @@ import React from "react";
 import { Row } from "antd";
 import { MdLocalGroceryStore } from "react-icons/md";
 import { FaCashRegister } from "react-icons/fa";
-import { GiOpenBook } from "react-icons/gi";
+// import optional
+// import { GiOpenBook } from "react-icons/gi";
 
 export default function Horizontal({ history }) {
 	return (
@@ -18,21 +19,21 @@ export default function Horizontal({ history }) {
 					fontSize: "xx-large",
 				}}
 			>
-				<Row justify='space-between'>
+				<Row justify='space-around'>
 					<FaCashRegister
 						style={{
 							margin: "10px 30px",
 							color: "darkblue",
 						}}
-						onClick={() => history.push("/mobile/corte")}
+						onClick={() => history.push("/mobile/corteB")}
 					/>
-					<GiOpenBook
+					{/* <GiOpenBook
 						style={{
 							margin: "10px 30px",
 							color: "darkblue",
 						}}
 						onClick={() => history.push("/mobile/encargos")}
-					/>
+					/> */}
 					<MdLocalGroceryStore
 						style={{
 							margin: "10px 30px",
