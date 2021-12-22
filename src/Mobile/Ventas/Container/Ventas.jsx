@@ -28,17 +28,17 @@ export default function Ventas() {
 		settotalProductos(0);
 	};
 	const inputPrecio = useRef();
-	useEffect(() => {}, [inputPrecio]);
+
 	useEffect(() => {
 		selectInputPrecio();
 	}, []);
+
 	useEffect(() => {
-		// selectLastRow();
 		let sum = 0;
 		let sumProd = 0;
-		for (let i = 0; i < listaCompras.length; i++) {
-			sum += listaCompras[i].totalArticulo;
-			sumProd += listaCompras[i].cantidad;
+		for (const compra of listaCompras) {
+			sum += compra.totalArticulo;
+			sumProd += compra.cantidad;
 		}
 		settotalTotal(sum);
 		settotalProductos(sumProd);
@@ -50,20 +50,16 @@ export default function Ventas() {
 		inputPrecio.current.select();
 		setinputVisible(true);
 	};
-	const click = () => {
-		selectInputPrecio();
-		// addArticulo(record, rowIndex);
-	};
+
 	const eliminarProducto = (item) => {
 		let i = listaCompras.indexOf(item);
 		if (i !== -1) {
 			let key = listaCompras.splice(i, 1);
-			setlistaCompras(listaCompras.filter((item) => item.key !== key));
+			setlistaCompras(listaCompras.filter((item2) => item2.key !== key));
 		} else if (item.key > 0) {
 			let key = item.key;
-			setlistaCompras(listaCompras.filter((item) => item.key !== key));
+			setlistaCompras(listaCompras.filter((item2) => item2.key !== key));
 		}
-		// this.focusPrecio();
 		selectInputPrecio();
 	};
 	const addArticulo = (record) => {
@@ -106,14 +102,7 @@ export default function Ventas() {
 				},
 			]);
 			setprecio({ precio: null });
-			// 	this.dialog = 0;
 			setidArticulo(idArticulo + 1);
-
-			// 	this.unaPrueba();
-			// } else if (!this.precio && this.cantidadAtirulos > 0) {
-			// 	this.abrirCobrar();
-			// } else {
-			// 	this.precio = "";
 		} else if (listaCompras.length > 0) {
 			setmodalCobrar(true);
 		}
@@ -134,7 +123,7 @@ export default function Ventas() {
 			dataIndex: "precio",
 			key: "precio",
 			ellipsis: true,
-			render: (precio) => (
+			render: (precioR) => (
 				<h3
 					style={{
 						textAlignLast: "right",
@@ -142,7 +131,7 @@ export default function Ventas() {
 						fontSize: "large",
 					}}
 				>
-					${precio}
+					${precioR}
 				</h3>
 			),
 		},
@@ -252,13 +241,6 @@ export default function Ventas() {
 					}}
 					// rowSelection={rowSelection}
 					size='small'
-					onRow={(record, rowIndex) => {
-						return {
-							onClick: () => {
-								click(record, rowIndex);
-							},
-						};
-					}}
 					locale={{
 						emptyText: (
 							<Result
