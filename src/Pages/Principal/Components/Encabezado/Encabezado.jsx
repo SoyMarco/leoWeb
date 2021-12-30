@@ -91,6 +91,9 @@ export default function Encabezado({
 				removeArticulo(stateRecord);
 			}
 		}
+		if (e.keyCode === 65) {
+			document.querySelector("#buscarApartadoInput").select();
+		}
 		if (e.keyCode === 66) {
 			document.querySelector("#buscarApartadoInput").select();
 		}

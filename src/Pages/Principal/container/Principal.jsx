@@ -48,7 +48,13 @@ function Principal() {
 		settotalProductos(0);
 		setstateRecord(null);
 	};
-
+	useEffect(() => {
+		var detectorPantalla = window.screen.width;
+		if (detectorPantalla < 600) {
+			history.push(`mobile/venta`);
+		}
+		selectInputPrecio();
+	}, []);
 	/* Cambiar titulo de pagina */
 	useEffect(() => {
 		if (Location.pathname === "/") {
@@ -60,13 +66,7 @@ function Principal() {
 			settitleWeb(title);
 		}
 	}, [Location, totalTotal]);
-	useEffect(() => {
-		var detectorPantalla = window.screen.width;
-		if (detectorPantalla < 600) {
-			history.push(`mobile/venta`);
-		}
-		selectInputPrecio();
-	}, []);
+
 	useEffect(() => {
 		selectLastRow();
 	}, [listaCompras.length]);
@@ -208,7 +208,8 @@ function Principal() {
 				/>
 			</Card>
 
-			<BarraMayorVenta totalTotal={totalTotal} />
+			<BarraMayorVenta />
+
 			{modalCobrar ? (
 				<Cobrar
 					modalCobrar={modalCobrar}
