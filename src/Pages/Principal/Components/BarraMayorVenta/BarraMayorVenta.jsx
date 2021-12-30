@@ -5,7 +5,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import { Row, Progress } from "antd";
 import "./BarraMayorVenta.css";
 
-const BarraMayorVenta = memo(({ totalTotal }) => {
+const BarraMayorVenta = memo(() => {
 	let { refetch: refetchEV } = useQuery(GET_ESTRELLAS_VENDEDOR);
 	let { data: getVentaMes, refetch: refetchMes } = useQuery(GET_VENTAS_MES);
 	let { data: getTotalVentasDia, refetch: refetchTotalVentasDia } =
@@ -23,10 +23,10 @@ const BarraMayorVenta = memo(({ totalTotal }) => {
 	}, []);
 
 	useEffect(() => {
-		if (getVentaMes?.getVentasMes?.ventaMayor) {
+		if (getVentaMes?.getVentasMes?.ventaMayor > 0) {
 			setventaMayor(getVentaMes.getVentasMes.ventaMayor);
 		}
-		if (getTotalVentasDia?.getTotalVentasDia) {
+		if (getTotalVentasDia?.getTotalVentasDia > 0) {
 			settotalVentasDia(getTotalVentasDia.getTotalVentasDia);
 		}
 	}, [getVentaMes, getTotalVentasDia]);
@@ -34,19 +34,17 @@ const BarraMayorVenta = memo(({ totalTotal }) => {
 	useEffect(() => {
 		//Calcular porcentaje de barra con venta actual
 		let porcentParcial = 0;
-		if (totalVentasDia && ventaMayor) {
-			porcentParcial = parseInt(
-				((totalVentasDia + totalTotal) * 100) / ventaMayor
-			);
+		if (totalVentasDia > 0 && ventaMayor > 0) {
+			porcentParcial = parseInt((totalVentasDia * 100) / ventaMayor);
 		}
 		setcalculatePorcent(porcentParcial);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [totalTotal, totalVentasDia, ventaMayor]);
+	}, [totalVentasDia, ventaMayor]);
 
 	useEffect(() => {
 		// GREGRAR ESTRELLAS
 		let porcentR = 0;
-		if (totalVentasDia && ventaMayor) {
+		if (totalVentasDia > 0 && ventaMayor > 0) {
 			porcentR = parseInt((totalVentasDia * 100) / ventaMayor);
 			if (porcentR >= 100 && porcentR < 200 && porcentReal < 100) {
 				setporcentReal(porcentR);
@@ -65,12 +63,13 @@ const BarraMayorVenta = memo(({ totalTotal }) => {
 	}, [porcentReal]);
 
 	const addEstrella = async () => {
+		let input = {
+			porcentaje: porcentReal,
+		};
 		try {
 			const { data: dataEstrella } = await mutateREGISTER_ESTRELLA({
 				variables: {
-					input: {
-						porcentaje: porcentReal,
-					},
+					input,
 				},
 			});
 			if (dataEstrella?.registerEstrella === true) {
@@ -80,28 +79,37 @@ const BarraMayorVenta = memo(({ totalTotal }) => {
 			console.log("error", error);
 		}
 	};
-
+	const colorBar = () => {
+		if (calculatePorcent > 0 && calculatePorcent < 50) {
+			return {
+				from: "red",
+				to: "orange",
+			};
+		}
+		if (calculatePorcent >= 50 && calculatePorcent < 80) {
+			return {
+				from: "orange",
+				to: "limegreen",
+			};
+		} else {
+			return {
+				from: "limegreen",
+				to: "dodgerblue",
+			};
+		}
+	};
+	const classBarr = () => {
+		if (calculatePorcent >= 100) {
+			return "barraMayorVenta";
+		}
+		return "sinEstilo";
+	};
 	return (
 		<Row justify='center' style={{ marginTop: 25 }}>
 			{calculatePorcent > 0 ? (
 				<Progress
-					strokeColor={
-						calculatePorcent > 0 && calculatePorcent < 50
-							? {
-									from: "red",
-									to: "orange",
-							  }
-							: calculatePorcent >= 50 && calculatePorcent < 80
-							? {
-									from: "orange",
-									to: "limegreen",
-							  }
-							: {
-									from: "limegreen",
-									to: "dodgerblue",
-							  }
-					}
-					className={calculatePorcent >= 100 ? "barraMayorVenta" : "sinEstilo"}
+					strokeColor={colorBar()}
+					className={classBarr()}
 					percent={calculatePorcent}
 					status='active'
 				/>

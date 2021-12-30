@@ -1,16 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useRef } from "react";
-import { Modal, Input, Form, Button, Row } from "antd";
+import React, { useState, useEffect, useRef, useMemo } from "react";
+import { Modal, Input, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
 import Imprimir from "../Imprimir/Imprimir";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";
-import { useMutation } from "@apollo/client";
-import { REGISTER_VENTA } from "graphql/venta";
+import { useMutation, useQuery } from "@apollo/client";
+import { REGISTER_VENTA, GET_TOTAL_VENTAS_DIA } from "graphql/venta";
 import useAuth from "hooks/useAuth";
 import aceptar from "assets/sonido/Aceptar.wav";
+import "./cobrar.css";
 const Cobrar = ({
 	modalCobrar,
 	setmodalCobrar,
@@ -19,31 +20,35 @@ const Cobrar = ({
 	initialState,
 }) => {
 	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
-	const [form] = Form.useForm();
+	let { refetch: refetchTotalVentasDia } = useQuery(GET_TOTAL_VENTAS_DIA);
 	const [cambio, setcambio] = useState(0);
 	const [imprimir, setimprimir] = useState(false);
 	const [btnLoading, setbtnLoading] = useState(false);
 	const [folio, setfolio] = useState(0);
-	const [dinero, setdinero] = useState({
-		aCuenta: 0,
-		tarjeta: 0,
-		efectivo: 0,
+	const [inputs, setinputs] = useState({
+		efectivo: null,
+		tarjeta: null,
+		aCuenta: null,
 	});
 	const cobrarEfectivo = useRef();
 	const { auth } = useAuth();
 	const audio = new Audio(aceptar);
-
 	useEffect(() => {
-		cobrarEfectivo.current.select();
+		setTimeout(() => {
+			cobrarEfectivo.current.select();
+		}, 50);
 	}, []);
 
 	useEffect(() => {
 		if (modalCobrar === true) {
-			form.setFieldsValue({ efectivo: totalTotal });
+			let others = inputs;
+			setinputs({ ...others, efectivo: totalTotal });
 			OnValuesChange();
 		}
 	}, [modalCobrar]);
-
+	useEffect(() => {
+		OnValuesChange();
+	}, [inputs]);
 	const pressKeyPrecio = (e) => {
 		// Enter
 		if (e.keyCode === 13) {
@@ -51,15 +56,24 @@ const Cobrar = ({
 		}
 		// E
 		if (e.keyCode === 69) {
+			if (inputs.aCuenta === totalTotal || inputs.tarjeta === totalTotal) {
+				setinputs({ efectivo: totalTotal });
+			}
 			cobrarEfectivo.current.select();
 		}
 		// A
 		if (e.keyCode === 65) {
-			document.querySelector("#cobraraCuenta").select();
+			if (inputs.efectivo === totalTotal || inputs.tarjeta === totalTotal) {
+				setinputs({ aCuenta: totalTotal });
+			}
+			document.querySelector("#aCuenta").select();
 		}
 		// T
 		if (e.keyCode === 84) {
-			document.querySelector("#cobrarTarjeta").select();
+			if (inputs.efectivo === totalTotal || inputs.aCuenta === totalTotal) {
+				setinputs({ tarjeta: totalTotal });
+			}
+			document.querySelector("#tarjeta").select();
 		}
 
 		// 	F1
@@ -77,101 +91,86 @@ const Cobrar = ({
 	};
 
 	const OnValuesChange = () => {
-		let valores = form.getFieldsValue();
-		if (!valores.efectivo) {
-			valores.efectivo = 0;
-		}
-		if (!valores.tarjeta) {
-			valores.tarjeta = 0;
-		}
-		if (!valores.aCuenta) {
-			valores.aCuenta = 0;
-		}
-		let efectivo = parseFloat(valores.efectivo);
-		let tarjeta = parseFloat(valores.tarjeta);
-		let aCuenta = parseFloat(valores.aCuenta);
+		let efectivo = parseFloat(inputs.efectivo ?? 0);
+		let tarjeta = parseFloat(inputs.tarjeta ?? 0);
+		let aCuenta = parseFloat(inputs.aCuenta ?? 0);
 		let total = parseFloat(totalTotal);
-		var sumaTodo = efectivo + tarjeta + aCuenta;
-		var resultado = sumaTodo - total;
+		let sumaTodo = efectivo + tarjeta + aCuenta;
+		let resultado = sumaTodo - total;
 
-		setdinero({
-			aCuenta: aCuenta,
-			tarjeta: tarjeta,
-			efectivo: efectivo,
-		});
 		setcambio(resultado);
 	};
 
 	//Guardar y/o Imprimir VENTA CON GraphQL
 	const savePrintNewV = async (keyF) => {
-		if (btnLoading === false) {
-			let efectivo = parseFloat(dinero.efectivo);
-			let tarjeta = parseFloat(dinero.tarjeta);
-			let aCuenta = parseFloat(dinero.aCuenta);
+		if (btnLoading === false && cambio >= 0) {
+			setbtnLoading(true);
+			let listaComprasNew = listaCompras.map((item) => ({
+				apartado: item.apartado,
+				cantidad: item.cantidad,
+				idArray: item.key,
+				nombre: item.nombre,
+				precio: item.precio,
+				refApartado: item.refApartado,
+				totalArticulo: item.totalArticulo,
+			}));
+
+			let efectivo = parseFloat(inputs.efectivo ?? 0);
+			let tarjeta = parseFloat(inputs.tarjeta ?? 0);
+			let aCuenta = parseFloat(inputs.aCuenta ?? 0);
 			let total = parseFloat(totalTotal);
-
-			if (cambio >= 0) {
-				setbtnLoading(true);
-				let listaComprasNew = listaCompras.map((item) => {
-					return {
-						apartado: item.apartado,
-						cantidad: item.cantidad,
-						idArray: item.key,
-						nombre: item.nombre,
-						precio: item.precio,
-						refApartado: item.refApartado,
-						totalArticulo: item.totalArticulo,
-					};
+			let input = {
+				productos: listaComprasNew,
+				vendedor: auth.name,
+				folio: 1,
+				total: total,
+				efectivo: efectivo,
+				tarjeta: tarjeta,
+				aCuenta: aCuenta,
+				pagoCon: 0,
+				referencia: "",
+				notas: "",
+			};
+			try {
+				const { data } = await mutateREGISTER_VENTA({
+					variables: { input },
 				});
+				if (data) {
+					//Actualizar % barra
+					refetchTotalVentasDia();
+					audio.play();
 
-				try {
-					const { data } = await mutateREGISTER_VENTA({
-						variables: {
-							input: {
-								productos: listaComprasNew,
-								vendedor: auth.name,
-								folio: 1,
-								total: total,
-								efectivo: efectivo,
-								tarjeta: tarjeta,
-								aCuenta: aCuenta,
-								pagoCon: 0,
-								referencia: "",
-								notas: "",
-							},
-						},
-					});
-					if (data) {
-						if (keyF === "F1") {
-							setfolio(data.registerVenta.folio);
-							setimprimir(true);
-						} else if (keyF === "F2") {
-							openNotification("success", "Venta guardada con exito");
-							initialState();
-						}
-						audio.play();
+					if (keyF === "F1") {
+						setfolio(data.registerVenta.folio);
+						setimprimir(true);
+					} else if (keyF === "F2") {
+						openNotification("success", "Venta guardada con exito");
+						initialState();
 					}
-				} catch (error) {
-					setbtnLoading(false);
-					ErrorConection();
 				}
+			} catch (error) {
+				setbtnLoading(false);
+				ErrorConection();
 			}
 		}
 	};
 	const keyBlockCobrar = (e) => {
-		let dataForm = form.getFieldsValue();
-		if (totalTotal === dataForm.efectivo) {
-			cobrarEfectivo.current.select();
-		}
 		keyBlock(e);
 	};
-	return (
-		<>
+	const onChangeInput = (e) => {
+		let key = e.target.id;
+		let value = Math.round(e.target.value * 100) / 100;
+		value = value > 0 ? value : null;
+		let algo = inputs;
+		setinputs({ ...algo, [key]: value });
+	};
+	const memoizedValue = useMemo(
+		() => (
 			<Imprimir
 				imprimir={imprimir}
 				totalTotal={totalTotal}
 				cambio={cambio}
-				dinero={dinero}
+				dinero={inputs}
 				listaCompras={listaCompras}
 				setmodalCobrar={setmodalCobrar}
 				folio={folio}
@@ -179,9 +178,16 @@ const Cobrar = ({
 				initialState={initialState}
 				key='keyImprimir'
 			/>
+		),
+		[imprimir]
+	);
+	return (
+		<>
+			{memoizedValue}
 			<Modal
 				key='keyModal'
 				style={{ top: 25 }}
+				className='ModalCobrarPrincipal'
 				title={
 					<>
 						<FaMoneyBillWave style={{ marginRight: "10px" }} />
@@ -193,24 +199,14 @@ const Cobrar = ({
 				footer={[
 					<Row justify='space-around' key='keyRowBtns'>
 						<Button
-							style={
-								cambio < 0
-									? {
-											background: "grey",
-											color: "white",
-											fontWeight: "bold",
-											width: 230,
-									  }
-									: {
-											background: "linear-gradient(#32A632,#005800)",
-											color: "white",
-											fontWeight: "bold",
-											width: 230,
-									  }
-							}
+							style={{
+								background:
+									cambio < 0 ? "grey" : "linear-gradient(#32A632,#005800)",
+								color: "white",
+								fontWeight: "bold",
+								width: 230,
+							}}
 							shape='round'
-							// loading={loading}
-							// disabled={cambio < 0}
 							onClick={() => savePrintNewV("F1")}
 							icon={<PrinterFilled />}
 							loading={btnLoading}
@@ -219,24 +215,14 @@ const Cobrar = ({
 							Imprimir F1
 						</Button>
 						<Button
-							style={
-								cambio < 0
-									? {
-											background: "grey",
-											color: "white",
-											fontWeight: "bold",
-											width: 230,
-									  }
-									: {
-											background: "linear-gradient(#3232A6,#000058)",
-											color: "white",
-											fontWeight: "bold",
-											width: 230,
-									  }
-							}
+							style={{
+								background:
+									cambio < 0 ? "grey" : "linear-gradient(#3232A6,#000058)",
+								color: "white",
+								fontWeight: "bold",
+								width: 230,
+							}}
 							shape='round'
-							// loading={loading}
-							// disabled={cambio < 0}
 							onClick={() => savePrintNewV("F2")}
 							icon={<SaveFilled />}
 							loading={btnLoading}
@@ -253,105 +239,61 @@ const Cobrar = ({
 						style={{
 							fontWeight: "bold",
 							fontSize: "36px",
-							color: "#00000099",
+							color: "green",
 							margin: 0,
 						}}
 					>
 						Total: ${totalTotal}
 					</h1>
 				</div>
-				<div key='div2' style={{ textAlignLast: "right" }}>
-					<Form form={form} onValuesChange={OnValuesChange} key='formPrincipal'>
-						<Form.Item
-							label='Efectivo'
-							name='efectivo'
-							key='1'
-							rules={[
-								{
-									required: false,
-									message: "Please input your username!",
-								},
-							]}
-							style={{ fontWeight: "bold", fontSize: "24px" }}
-						>
-							<Input
-								ref={cobrarEfectivo}
-								autoFocus={true}
-								id='cobrarEfectivo'
-								type='number'
-								prefix={<FaMoneyBillWave style={{ color: "gray" }} />}
-								onKeyUp={pressKeyPrecio}
-								onKeyDown={keyBlockCobrar}
-								key='keyInputEfectivo'
-								style={{ width: 400 }}
-							></Input>
-						</Form.Item>
-						<Form.Item
-							label='Tarjeta'
-							name='tarjeta'
-							key='2'
-							rules={[
-								{
-									required: false,
-									message: "Please input your username!",
-								},
-							]}
-							className='labelCobrar'
-						>
-							<Input
-								id='cobrarTarjeta'
-								className='inputCobrar'
-								type='number'
-								prefix={<FaCreditCard style={{ color: "gray" }} />}
-								onKeyUp={pressKeyPrecio}
-								onKeyDown={keyBlock}
-								key='keyInputTarjeta'
-								style={{ width: 400 }}
-							></Input>
-						</Form.Item>
-						<Form.Item
-							label='A cuenta'
-							name='aCuenta'
-							key='3'
-							rules={[
-								{
-									required: false,
-									message: "Please input your username!",
-								},
-							]}
-							className='labelCobrar'
-						>
-							<Input
-								id='cobraraCuenta'
-								className='inputCobrar'
-								type='number'
-								prefix={<FaStoreAlt style={{ color: "gray" }} />}
-								onKeyUp={pressKeyPrecio}
-								onKeyDown={keyBlock}
-								key='keyInputACuenta'
-								style={{ width: 400 }}
-							></Input>
-						</Form.Item>
-					</Form>
+				<div key='div2'>
+					<Input
+						placeholder='Efectivo'
+						ref={cobrarEfectivo}
+						autoFocus={true}
+						type='number'
+						prefix={<FaMoneyBillWave />}
+						onKeyUp={(e) => pressKeyPrecio(e)}
+						onKeyDown={(e) => keyBlockCobrar(e)}
+						onChange={(e) => onChangeInput(e)}
+						className='InputModalCobrar'
+						id='efectivo'
+						value={inputs.efectivo}
+					></Input>
+
+					<Input
+						placeholder='Tarjeta'
+						type='number'
+						prefix={<FaCreditCard />}
+						onKeyUp={pressKeyPrecio}
+						onKeyDown={keyBlock}
+						id='tarjeta'
+						className='InputModalCobrar'
+						onChange={(e) => onChangeInput(e)}
+						value={inputs.tarjeta}
+					></Input>
+
+					<Input
+						placeholder='A cuenta'
+						type='number'
+						prefix={<FaStoreAlt />}
+						onKeyUp={pressKeyPrecio}
+						onKeyDown={keyBlock}
+						id='aCuenta'
+						className='InputModalCobrar'
+						onChange={(e) => onChangeInput(e)}
+						value={inputs.aCuenta}
+					></Input>
 				</div>
 				<div key='div3' style={{ textAlignLast: "center" }}>
 					<h1
 						key='keyh1Cambio'
-						style={
-							cambio >= 0
-								? {
-										fontWeight: "bold",
-										fontSize: "40px",
-										color: "#35B009",
-										margin: "-20px 0 0 0",
-								  }
-								: {
-										fontWeight: "bold",
-										fontSize: "40px",
-										color: "red",
-										margin: "-20px 0 0 0",
-								  }
-						}
+						style={{
+							fontWeight: "bold",
+							fontSize: "40px",
+							color: cambio >= 0 ? "#35B009" : "red",
+							margin: "-10px 0 0 0",
+						}}
 					>
 						{cambio >= 0 ? `Cambio: $${cambio}` : `Faltan: $${cambio}`}
 					</h1>

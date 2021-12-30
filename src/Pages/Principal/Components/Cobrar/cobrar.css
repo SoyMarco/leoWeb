@@ -1,57 +1,12 @@
-.inputCobrar {
-	width: 30px;
+.ModalCobrarPrincipal .ant-modal-body {
+	padding: 0px 24px;
 }
-.labelCobrar {
-	font-weight: bold;
-}
-.ant-modal-header {
-	padding: 16px 24px !important;
-	color: white;
-	background: linear-gradient(#0000a6, #000066);
-	border-bottom: 1px solid #f0f0f0;
-	border-radius: 2px 2px 0 0;
-}
-
-.ant-modal-title {
-	margin: 0;
-	color: white;
-	font-weight: 500;
-	font-size: 24px;
-	line-height: 22px;
-	word-wrap: break-word;
-}
-
-.ant-modal-close-x {
-	display: block;
-	width: 56px;
-	height: 56px;
-	font-size: 16px;
-	font-style: normal;
-	line-height: 56px;
-	text-align: center;
-	text-transform: none;
-	text-rendering: auto;
-	color: white;
-}
-
-.cobrarEfectivo {
-	max-width: 360px;
-	text-align-last: center;
+.ant-input-affix-wrapper.InputModalCobrar {
+	width: 100%;
 	border-radius: 50px;
-	font-size: 24px;
-	font-weight: bold;
+	margin: 10px 0;
 }
-.ant-form-item-label > label {
-	position: relative;
-	display: inline-flex;
-	align-items: center;
-	height: 30px;
-	color: rgba(0, 0, 0, 0.85);
-	font-size: 14px !important;
-}
-.ant-modal-body {
-	padding: 6px 24px 0px 24px;
-	/* font-size: 14px; */
-	line-height: 1.5715;
-	word-wrap: break-word;
+
+.ant-input-affix-wrapper.InputModalCobrar svg {
+	font-size: x-large;
 }
