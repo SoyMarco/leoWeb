@@ -84,7 +84,7 @@ export default function BuscadorApartados() {
 		}
 	};
 	const fechaVenceEn = (item) => {
-		var fecha = moment.unix(item.vence / 1000).fromNow();
+		let fecha = moment.unix(item.vence / 1000).fromNow();
 		if (item.vence > Date.now()) {
 			fecha = `Vence ${fecha}`;
 		} else if (item.vence < Date.now()) {

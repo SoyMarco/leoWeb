@@ -2,7 +2,7 @@ import React from "react";
 import { Col, Row, Card } from "antd";
 
 export default function TotalesCorte({ loading, getTotales, refetch }) {
-	var formatter = new Intl.NumberFormat("en-US", {
+	const formatter = new Intl.NumberFormat("en-US", {
 		style: "currency",
 		currency: "USD",
 	});

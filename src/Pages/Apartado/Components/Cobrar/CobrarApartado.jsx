@@ -101,8 +101,8 @@ const CobrarApartado = ({
 		let tarjeta = parseFloat(valores.tarjeta);
 		let aCuenta = parseFloat(valores.aCuenta);
 		let total = parseFloat(totalTotal);
-		var sumaTodo = efectivo + tarjeta + aCuenta;
-		var resultado = sumaTodo - total;
+		let sumaTodo = efectivo + tarjeta + aCuenta;
+		let resultado = sumaTodo - total;
 
 		setdinero({
 			aCuenta: aCuenta,

@@ -98,9 +98,9 @@ export default function TablaPrincipal({
 				showTitle: false,
 			},
 			width: "90px",
-			render: (address) => (
-				<Tooltip placement='topLeft' title={address}>
-					{address}
+			render: (apartado) => (
+				<Tooltip placement='topLeft' title={apartado}>
+					{apartado}
 				</Tooltip>
 			),
 		},
@@ -142,7 +142,7 @@ export default function TablaPrincipal({
 			title: "Borrar",
 			dataIndex: "key",
 			key: "key",
-			width: "60px",
+			width: "70px",
 			render: (key, record) => (
 				<div style={{ textAlignLast: "center" }}>
 					<Button
