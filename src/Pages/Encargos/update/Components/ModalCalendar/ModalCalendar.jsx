@@ -48,8 +48,7 @@ export default function ModalCalendar({
 		setnewFecha(value.unix() * 1000);
 	};
 	const pasarAFechaLL = (item) => {
-		let fecha = moment.unix(item / 1000).format("LL");
-		return fecha;
+		return moment.unix(item / 1000).format("LL");
 	};
 	const selectVence = () => {
 		let fechhhh = moment.unix(dataApartado?.vence / 1000).format("YYYY-MM-DD");
@@ -57,7 +56,7 @@ export default function ModalCalendar({
 		return fechhhh;
 	};
 	const fechaVenceEn = () => {
-		var fecha = moment.unix(dataApartado.vence / 1000).fromNow();
+		let fecha = moment.unix(dataApartado.vence / 1000).fromNow();
 		if (dataApartado.vence > Date.now()) {
 			fecha = `Vence ${fecha}`;
 		} else {

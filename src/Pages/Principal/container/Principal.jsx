@@ -49,7 +49,7 @@ function Principal() {
 		setstateRecord(null);
 	};
 	useEffect(() => {
-		var detectorPantalla = window.screen.width;
+		let detectorPantalla = window.screen.width;
 		if (detectorPantalla < 600) {
 			history.push(`mobile/venta`);
 		}

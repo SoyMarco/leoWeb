@@ -91,16 +91,18 @@ export default function Encargo() {
 	useEffect(() => {
 		let sum = 0;
 		let sumProd = 0;
-		for (let i = 0; i < productos.length; i++) {
-			sum += productos[i].totalArticulo;
-			sumProd += productos[i].cantidad;
+
+		for (let iterator of productos) {
+			sum += iterator.totalArticulo;
+			sumProd += iterator.cantidad;
 		}
 		settotalTotal(sum);
 		settotalProductos(sumProd);
 
 		let sumAbo = 0;
-		for (let i = 0; i < abonos.length; i++) {
-			sumAbo += abonos[i].abono;
+
+		for (let iterator of abonos) {
+			sumAbo += iterator.abono;
 		}
 		settotalAbonos(sumAbo);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -123,12 +125,10 @@ export default function Encargo() {
 		return restaría;
 	};
 	const pasarAFecha = (item) => {
-		let fecha = moment.unix(item / 1000).format("LLLL");
-		return fecha;
+		return moment.unix(item / 1000).format("LLLL");
 	};
 	const pasarAFechaLL = (item) => {
-		let fecha = moment.unix(item / 1000).format("LL");
-		return fecha;
+		return moment.unix(item / 1000).format("LL");
 	};
 	const cancelEntrega = async () => {
 		setbtnLoading(true);
@@ -159,7 +159,7 @@ export default function Encargo() {
 		}
 	};
 	const fechaVenceEn = () => {
-		var fecha = moment.unix(dataEncargo.vence / 1000).fromNow();
+		let fecha = moment.unix(dataEncargo.vence / 1000).fromNow();
 		if (dataEncargo.vence > Date.now()) {
 			//Color azul
 			setcolorVence("linear-gradient(#2196F3,#0000E6)");
@@ -194,32 +194,9 @@ export default function Encargo() {
 			ErrorConection();
 		}
 	};
-	return (
-		<>
-			<title>{titleWeb}</title>
-
-			{/* ENCARGO ENTREGADO */}
-			{dataEncargo?.entregado[0]?.status && (
-				<Result
-					status='warning'
-					title={`Este encargo se entregó el día ${pasarAFecha(
-						dataEncargo?.entregado[0]?.fecha
-					)}, por ${dataEncargo?.entregado[0]?.vendedor?.toUpperCase()}`}
-					extra={
-						<Button
-							type='primary'
-							key='console'
-							loading={btnLoading}
-							onClick={() => cancelEntrega()}
-						>
-							Quitar entrega
-						</Button>
-					}
-				/>
-			)}
-
-			{/* INFO ENCARGO */}
-			{dataEncargo?.id ? (
+	const infomacionEncargo = () => {
+		if (dataEncargo?.id) {
+			return (
 				<Card
 					disabled={true}
 					actions={[
@@ -298,21 +275,12 @@ export default function Encargo() {
 									loading={loader}
 									checked={statusEncargo}
 									onClick={() => guardarEncargo()}
-									style={
-										statusEncargo
-											? {
-													background: "limegreen",
-													boxShadow:
-														"5px 5px 29px #b3b3b3, -5px -5px 29px #ffffff",
-													marginTop: 10,
-													marginRight: 5,
-											  }
-											: {
-													marginTop: 10,
-													marginRight: 5,
-													background: "red", // boxShadow: "5px 5px 19px #b3b3b3, -5px -5px 19px #ffffff",
-											  }
-									}
+									style={{
+										background: statusEncargo ? "limegreen" : "red",
+										boxShadow: "5px 5px 29px #b3b3b3, -5px -5px 29px #ffffff",
+										marginTop: 10,
+										marginRight: 5,
+									}}
 									defaultChecked
 								></Switch>
 							</Tooltip>
@@ -323,14 +291,14 @@ export default function Encargo() {
 					>{`Cliente: ${dataEncargo?.cliente}`}</h1>
 
 					{/* Tablas PRODUCTOS ABONOS*/}
-					{statusEncargo ? (
+					{statusEncargo && (
 						<Result
 							status='success'
 							title={`Encargo gurdado por ${dataEncargo?.guardado?.vendedor?.toUpperCase()}, el día ${pasarAFecha(
 								dataEncargo?.guardado?.fecha
 							)}`}
 						/>
-					) : null}
+					)}
 					<Row>
 						<TablaProductos
 							productos={productos}
@@ -358,11 +326,38 @@ export default function Encargo() {
 						/>
 					</Row>
 				</Card>
-			) : loading ? (
-				<Skeleton active />
-			) : (
-				<ErrorPage />
+			);
+		} else if (loading) {
+			return <Skeleton active />;
+		}
+		return <ErrorPage />;
+	};
+	return (
+		<>
+			<title>{titleWeb}</title>
+
+			{/* ENCARGO ENTREGADO */}
+			{dataEncargo?.entregado[0]?.status && (
+				<Result
+					status='warning'
+					title={`Este encargo se entregó el día ${pasarAFecha(
+						dataEncargo?.entregado[0]?.fecha
+					)}, por ${dataEncargo?.entregado[0]?.vendedor?.toUpperCase()}`}
+					extra={
+						<Button
+							type='primary'
+							key='console'
+							loading={btnLoading}
+							onClick={() => cancelEntrega()}
+						>
+							Quitar entrega
+						</Button>
+					}
+				/>
 			)}
+
+			{/* INFO ENCARGO */}
+			{infomacionEncargo()}
 
 			{/* MODAL ENCARGO */}
 			{modalCobrar ? (

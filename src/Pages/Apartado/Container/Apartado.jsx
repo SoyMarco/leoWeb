@@ -226,12 +226,10 @@ export default function Apartado(props) {
 		return restaría;
 	};
 	const pasarAFecha = (item) => {
-		let fecha = moment.unix(item / 1000).format("LLLL");
-		return fecha;
+		return moment.unix(item / 1000).format("LLLL");
 	};
 	const pasarAFechaLL = (item) => {
-		let fecha = moment.unix(item / 1000).format("LL");
-		return fecha;
+		return moment.unix(item / 1000).format("LL");
 	};
 	const cancelEntrega = async () => {
 		setbtnLoading(true);
@@ -262,7 +260,7 @@ export default function Apartado(props) {
 		}
 	};
 	const fechaVenceEn = () => {
-		var fecha = moment.unix(dataApartado.vence / 1000).fromNow();
+		let fecha = moment.unix(dataApartado.vence / 1000).fromNow();
 		if (dataApartado.vence > Date.now()) {
 			setvenceEn(`Vence ${fecha}`);
 			//Color azul
@@ -277,7 +275,7 @@ export default function Apartado(props) {
 	const titlePopconfirm = () => {
 		let title = "¿Deseas  RECUPERAR este apartado?";
 		if (statusApartado) {
-			title = "¿Deseas  DESACTIVAR este apartado?";
+			title = "¿Deseas  DESACTIlet este apartado?";
 		}
 		return title;
 	};
