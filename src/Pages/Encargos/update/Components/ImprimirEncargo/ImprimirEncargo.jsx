@@ -17,7 +17,6 @@ const ImprimirApartado = ({
 	cambio,
 	initialState,
 }) => {
-	// const [totalProductos, settotalProductos] = useState(0);
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
 	const [numPrint, setnumPrint] = useState(0);
@@ -43,13 +42,10 @@ const ImprimirApartado = ({
 
 	useEffect(() => {
 		let sum = 0;
-		// let sumProd = 0;
 		for (let i = 0; i < productos?.length; i++) {
 			sum += productos[i]?.totalArticulo;
-			// sumProd += productos[i].cantidad;
 		}
 		settotalTotal(sum);
-		// settotalProductos(sumProd);
 
 		let sumAbo = 0;
 		for (let i = 0; i < abonos?.length; i++) {
@@ -83,30 +79,25 @@ const ImprimirApartado = ({
 		}
 	};
 	const pasarAFechaLL = (item) => {
-		let fecha = moment.unix(item / 1000).format("LL");
-		return fecha;
+		return moment.unix(item / 1000).format("LL");
 	};
 	const pasarAFechaLTS = (item) => {
-		let fecha = moment.unix(item / 1000).format("LTS");
-		return fecha;
+		return moment.unix(item / 1000).format("LTS");
 	};
 	const pasarAFechaCorta = (item) => {
-		let fecha = moment.unix(item / 1000).format("ll");
-		return fecha;
+		return moment.unix(item / 1000).format("ll");
 	};
 	const pasarAFechaVence = (item) => {
-		let fecha = moment.unix(item / 1000).format("LL");
-		return fecha;
+		return moment.unix(item / 1000).format("LL");
 	};
 
 	const fechaVenceEn = () => {
-		var fecha = moment.unix(dataApartado.vence / 1000).fromNow();
+		let fecha = moment.unix(dataApartado.vence / 1000).fromNow();
 		if (dataApartado.vence > Date.now()) {
 			fecha = `Vence ${fecha}`;
 		} else {
 			fecha = `Venció ${fecha}`;
 		}
-		// this.vence = fecha;
 		return fecha;
 	};
 	const initialStateImprimir = () => {
@@ -315,14 +306,6 @@ const ImprimirApartado = ({
 					<span>
 						{pasarAFechaLL(Date.now())} <br />
 					</span>
-					<br></br>
-					<Row className='cambio'>
-						<h3>.</h3>
-					</Row>
-					<br></br>
-					<Row className='cambio'>
-						<h3>.</h3>
-					</Row>
 				</div>
 			</Modal>
 		</>

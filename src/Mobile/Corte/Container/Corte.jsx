@@ -93,7 +93,7 @@ const Corte = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data]);
 
-	var formatter = new Intl.NumberFormat("en-US", {
+	const formatter = new Intl.NumberFormat("en-US", {
 		style: "currency",
 		currency: "USD",
 
@@ -110,42 +110,41 @@ const Corte = () => {
 		let sumaTotalEfectivo = 0;
 		let sumaEfectivoFinal = 0;
 		let recargasMonto = 0;
-		for (let it = 0; it < item.length; it++) {
-			sumaTarjeta = sumaTarjeta + item[it].tarjeta;
-			sumaTotal = sumaTotal + item[it].total;
-			sumaACuenta = sumaACuenta + item[it].aCuenta;
+
+		for (let iterator of item) {
+			sumaTarjeta = sumaTarjeta + iterator.tarjeta;
+			sumaTotal = sumaTotal + iterator.total;
+			sumaACuenta = sumaACuenta + iterator.aCuenta;
 		}
 		ventasEfectivo = sumaTotal - (sumaTarjeta + sumaACuenta);
 
 		let cajaInicio = 0;
 		let cajaEntrada = 0;
 		let cajaSalida = 0;
-		for (let cd = 0; cd < cajasDia.length; cd++) {
+		for (let cadaDia of cajasDia) {
 			// Caja inicio
-			if (
-				item[0].vendedor === cajasDia[cd].vendedor &&
-				cajasDia[cd].tipo === "inicio"
-			) {
-				cajaInicio = cajasDia[cd].monto;
+			if (item[0].vendedor === cadaDia.vendedor && cadaDia.tipo === "inicio") {
+				cajaInicio = cadaDia.monto;
 			}
 			// Entrada
 			if (
-				item[0].vendedor === cajasDia[cd].vendedor &&
-				cajasDia[cd].tipo === "entradaSalida"
+				item[0].vendedor === cadaDia.vendedor &&
+				cadaDia.tipo === "entradaSalida"
 			) {
-				if (cajasDia[cd].monto > 0) {
-					cajaEntrada = cajasDia[cd].monto;
-				} else if (cajasDia[cd].monto < 0) {
-					cajaSalida = cajasDia[cd].monto;
+				if (cadaDia.monto > 0) {
+					cajaEntrada = cadaDia.monto;
+				} else if (cadaDia.monto < 0) {
+					cajaSalida = cadaDia.monto;
 				}
 			}
 			if (
-				item[0].vendedor === cajasDia[cd].vendedor &&
-				cajasDia[cd].tipo === "recargas"
+				item[0].vendedor === cadaDia.vendedor &&
+				cadaDia.tipo === "recargas"
 			) {
-				recargasMonto = cajasDia[cd].monto;
+				recargasMonto = cadaDia.monto;
 			}
 		}
+
 		sumaTotalEfectivo = ventasEfectivo + cajaInicio;
 		sumaEfectivoFinal = cajaEntrada + cajaSalida + sumaTotalEfectivo;
 		return (

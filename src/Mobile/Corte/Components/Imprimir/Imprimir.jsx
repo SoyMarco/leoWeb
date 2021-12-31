@@ -2,7 +2,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import moment from "moment";
 import "moment/locale/es-us";
-import { Modal } from "antd";
+import { Modal, Row } from "antd";
 import "./imprimir.css";
 import ReactToPrint from "react-to-print";
 import { openNotification } from "Utils/openNotification";
@@ -22,8 +22,8 @@ const Imprimir = ({ imprimir, setimprimir, stateRecord, auth }) => {
 	const imprimirVenta = useRef();
 
 	useEffect(() => {
-		var sumaTodo = efectivo + tarjeta + aCuenta;
-		var resultado = sumaTodo - totalTotal;
+		let sumaTodo = efectivo + tarjeta + aCuenta;
+		let resultado = sumaTodo - totalTotal;
 		setcambio(resultado);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [totalTotal]);
@@ -39,8 +39,7 @@ const Imprimir = ({ imprimir, setimprimir, stateRecord, auth }) => {
 		setimprimir(false);
 	};
 	const pasarAFecha = (item) => {
-		let fecha = moment.unix(item / 1000).format("lll");
-		return fecha;
+		return moment.unix(item / 1000).format("lll");
 	};
 
 	return (

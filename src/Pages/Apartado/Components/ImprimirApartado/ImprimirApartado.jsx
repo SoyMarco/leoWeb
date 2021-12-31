@@ -68,24 +68,20 @@ const ImprimirApartado = ({
 		}
 	};
 	const pasarAFechaLL = (item) => {
-		let fecha = moment.unix(item / 1000).format("LL");
-		return fecha;
+		return moment.unix(item / 1000).format("LL");
 	};
 	const pasarAFechaLTS = (item) => {
-		let fecha = moment.unix(item / 1000).format("LTS");
-		return fecha;
+		return moment.unix(item / 1000).format("LTS");
 	};
 	const pasarAFechaCorta = (item) => {
-		let fecha = moment.unix(item / 1000).format("ll");
-		return fecha;
+		return moment.unix(item / 1000).format("ll");
 	};
 	const pasarAFechaVence = (item) => {
-		let fecha = moment.unix(item / 1000).format("LL");
-		return fecha;
+		return moment.unix(item / 1000).format("LL");
 	};
 
 	const fechaVenceEn = () => {
-		var fecha = moment.unix(dataApartado.vence / 1000).fromNow();
+		let fecha = moment.unix(dataApartado.vence / 1000).fromNow();
 		if (dataApartado.vence > Date.now()) {
 			fecha = `Vence ${fecha}`;
 		} else {
@@ -306,14 +302,6 @@ const ImprimirApartado = ({
 					<span>
 						{pasarAFechaLL(Date.now())} <br />
 					</span>
-					<br></br>
-					<Row className='cambio'>
-						<h3>.</h3>
-					</Row>
-					<br></br>
-					<Row className='cambio'>
-						<h3>.</h3>
-					</Row>
 				</div>
 			</Modal>
 		</>

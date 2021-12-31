@@ -33,7 +33,7 @@ const Login = () => {
 	const [form] = Form.useForm();
 	const contraseña = useRef();
 	useEffect(() => {
-		var detectorPantalla = window.screen.width;
+		let detectorPantalla = window.screen.width;
 		setscreenWidth(detectorPantalla);
 		document.querySelector("#inputLogin").select();
 	}, []);

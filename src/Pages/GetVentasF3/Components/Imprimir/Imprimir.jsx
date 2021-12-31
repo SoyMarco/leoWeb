@@ -29,8 +29,8 @@ const Imprimir = ({
 	const imprimirVenta = useRef();
 
 	useEffect(() => {
-		var sumaTodo = efectivo + tarjeta + aCuenta;
-		var resultado = sumaTodo - totalTotal;
+		let sumaTodo = efectivo + tarjeta + aCuenta;
+		let resultado = sumaTodo - totalTotal;
 		setcambio(resultado);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [totalTotal]);
@@ -47,8 +47,7 @@ const Imprimir = ({
 		ventaMobileToFalse(id);
 	};
 	const pasarAFecha = (item) => {
-		let fecha = moment.unix(item / 1000).format("lll");
-		return fecha;
+		return moment.unix(item / 1000).format("lll");
 	};
 
 	return (
@@ -140,14 +139,6 @@ const Imprimir = ({
 					<Row className='cambio'>
 						<h3>Cambio: </h3>
 						<h2>${cambio}</h2>
-					</Row>
-					<br></br>
-					<Row className='cambio'>
-						<h3>.</h3>
-					</Row>
-					<br></br>
-					<Row className='cambio'>
-						<h3>.</h3>
 					</Row>
 				</div>
 			</Modal>
