@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import ImprimirApartado from "../ImprimirApartado/ImprimirApartado";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
@@ -160,8 +160,8 @@ const CobrarApartado = ({
 		}
 		keyBlock(e);
 	};
-	return (
-		<>
+	const memoPrint = useMemo(
+		() => (
 			<ImprimirApartado
 				imprimir={imprimir}
 				setimprimir={setimprimir}
@@ -174,7 +174,13 @@ const CobrarApartado = ({
 				dinero={dinero}
 				cambio={cambio}
 			/>
-
+		),
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[imprimir]
+	);
+	return (
+		<>
+			{memoPrint}
 			<Modal
 				key='modalCobrarAbonoApartado'
 				style={{ top: 25 }}
