@@ -302,14 +302,6 @@ const ImprimirApartado = ({
 					<span>
 						{pasarAFechaLL(Date.now())} <br />
 					</span>
-					<br></br>
-					<Row className='cambio'>
-						<h3>.</h3>
-					</Row>
-					<br></br>
-					<Row className='cambio'>
-						<h3>.</h3>
-					</Row>
 				</div>
 			</Modal>
 		</>

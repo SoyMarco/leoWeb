@@ -140,14 +140,6 @@ const Imprimir = ({
 						<h3>Cambio: </h3>
 						<h2>${cambio}</h2>
 					</Row>
-					<br></br>
-					<Row className='cambio'>
-						<h3>.</h3>
-					</Row>
-					<br></br>
-					<Row className='cambio'>
-						<h3>.</h3>
-					</Row>
 				</div>
 			</Modal>
 		</>
