@@ -65,8 +65,9 @@ const Imprimir = ({
 				</span>
 
 				{/* <!-- TABLA DE PRODUCTOS --> */}
-
-				<h2 className='sutituloTicket'>Productos</h2>
+				<h3 className='subtituloTicketApartado'>
+					<u> Productos</u>
+				</h3>
 				{listaCompras.map((item) => {
 					return (
 						<table key={`tableProcutVenta${item.key}`} className='productos'>
