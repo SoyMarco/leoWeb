@@ -1,68 +1,66 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { keyBlock } from "Utils";
 import { AiFillDollarCircle, AiOutlineCloudDownload } from "react-icons/ai";
 import { Input } from "antd";
 import { useHistory } from "react-router-dom";
 import GetVentasF3 from "Pages/GetVentasF3/Container/GetVentasF3";
+import ShopListContext from "context/Shopping/ShopListContext";
 
-export default function Encabezado({
-	precio,
-	setprecio,
-	handlePrecio,
-	listaCompras,
-	setlistaCompras,
-	idArticulo,
-	setidArticulo,
-	setmodalCobrar,
-	selectedRowKeys,
-	setselectedRowKeys,
-	removeArticulo,
-	addArticulo,
-	stateRecord,
-}) {
+export default function Encabezado({ setmodalCobrar, stateRecord }) {
+	const {
+		shopList,
+		addProductShopList,
+		addOneShopList,
+		removeOneShopList,
+		selectedRowKeys,
+		setselectedRowKeys,
+	} = useContext(ShopListContext);
+
 	const [refetchVentaMobile, setrefetchVentaMobile] = useState(false);
+	const [precio, setprecio] = useState({
+		precio: null,
+	});
+
 	const history = useHistory();
 	const pressEnter = () => {
 		if (precio.precio > 0) {
-			setlistaCompras([
-				...listaCompras,
-				{
-					key: idArticulo + 1,
-					nombre: "Articulo",
-					precio: Math.round(precio.precio * 100) / 100,
-					cantidad: 1,
-					apartado: 0,
-					refApartado: "0",
-					totalArticulo: Math.round(precio.precio * 100) / 100,
-				},
-			]);
+			addProductShopList({ precio: precio.precio });
 			setprecio({ precio: null });
-			setidArticulo(idArticulo + 1);
-		} else if (listaCompras.length > 0) {
+		} else if (shopList.length > 0) {
 			setmodalCobrar(true);
 		}
 	};
+
 	const rowAbajo = () => {
-		for (let i = 0; i < listaCompras.length; i++) {
-			const element = listaCompras[i].key;
+		for (let i = 0; i < shopList.length; i++) {
+			const element = shopList[i].key;
 			if (element === selectedRowKeys[0]) {
 				let newRow = i - 1;
-				setselectedRowKeys([listaCompras[newRow]?.key]);
+				setselectedRowKeys([shopList[newRow]?.key]);
 				return;
 			}
 		}
 	};
 	const rowArriba = () => {
-		for (let i = 0; i < listaCompras.length; i++) {
-			const element = listaCompras[i].key;
+		for (let i = 0; i < shopList.length; i++) {
+			const element = shopList[i].key;
 			if (element === selectedRowKeys[0]) {
 				let newRow = i + 1;
-				setselectedRowKeys([listaCompras[newRow]?.key]);
+				setselectedRowKeys([shopList[newRow]?.key]);
 				return;
 			}
 		}
 	};
-
+	const addArticulo = (record) => {
+		if (shopList.length > 0) {
+			addOneShopList(record.key);
+		}
+	};
+	const removeArticulo = (record) => {
+		if (shopList.length > 0) {
+			removeOneShopList(record);
+		}
+	};
 	// Press Key Precio commands
 	const pressKeyPrecio = (e) => {
 		if (e.keyCode === 13) {
@@ -70,17 +68,17 @@ export default function Encabezado({
 		}
 		// Tecla ⬆️
 		if (e.keyCode === 38) {
-			if (listaCompras.length > 1) {
-				let max = listaCompras.length - 1;
-				if (listaCompras[max].key !== selectedRowKeys[0]) {
+			if (shopList.length > 1) {
+				let max = shopList.length - 1;
+				if (shopList[max].key !== selectedRowKeys[0]) {
 					rowArriba();
 				}
 			}
 		}
 		// Tecla ⬇️
 		if (e.keyCode === 40) {
-			if (listaCompras.length > 1) {
-				if (listaCompras[0].key !== selectedRowKeys[0]) {
+			if (shopList.length > 1) {
+				if (shopList[0].key !== selectedRowKeys[0]) {
 					rowAbajo();
 				}
 			}
@@ -165,7 +163,11 @@ export default function Encabezado({
 				onKeyUp={pressKeyPrecio}
 				onKeyDown={keyBlock}
 				value={precio.precio}
-				onChange={handlePrecio}
+				onChange={(e) =>
+					setprecio({
+						precio: e.target.value,
+					})
+				}
 			/>
 			{/* GET VENTAS MOBILE */}
 			<GetVentasF3

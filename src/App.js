@@ -7,7 +7,7 @@ import NavToken from "Routes/NavToken";
 import { decodeToken, removeToken } from "Utils/token";
 import Login from "Pages/Login/Container/Login";
 import { openNotification } from "Utils/openNotification";
-
+import ShopListState from "context/Shopping/ShopListContextState";
 function App({ token }) {
 	const [auth, setAuth] = useState(undefined);
 	const timeLogout = () => {
@@ -56,7 +56,13 @@ function App({ token }) {
 	return (
 		<>
 			<AuthContext.Provider value={authData}>
-				{auth ? <NavToken setAuth /> : <Login />}
+				{auth ? (
+					<ShopListState>
+						<NavToken setAuth />
+					</ShopListState>
+				) : (
+					<Login />
+				)}
 			</AuthContext.Provider>
 		</>
 	);

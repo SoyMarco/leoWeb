@@ -1,18 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Table, Tooltip, Button, Result, Row } from "antd";
 import { MdDelete, MdLocalGroceryStore } from "react-icons/md";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
+import ShopListContext from "context/Shopping/ShopListContext";
 
-export default function TablaPrincipal({
-	listaCompras,
-	removeArticulo,
-	addArticulo,
-	eliminarProducto,
-	selectInputPrecio,
-	setselectedRowKeys,
-	setstateRecord,
-	selectedRowKeys,
-}) {
+export default function TablaPrincipal({ setstateRecord }) {
+	const {
+		eliminarProducto,
+		shopList,
+		addOneShopList,
+		removeOneShopList,
+		selectedRowKeys,
+		setselectedRowKeys,
+	} = useContext(ShopListContext);
+
 	const onSelectChange = () => {
 		setselectedRowKeys([]);
 	};
@@ -24,7 +25,18 @@ export default function TablaPrincipal({
 	const click = (record, rowIndex) => {
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
-		selectInputPrecio();
+		// selectInputPrecio
+		document.querySelector("#inputPrecio").select();
+	};
+	const addArticulo = (record) => {
+		if (shopList.length > 0) {
+			addOneShopList(record.key);
+		}
+	};
+	const removeArticulo = (record) => {
+		if (shopList.length > 0) {
+			removeOneShopList(record);
+		}
 	};
 	// Columnas de tabla
 	const columns = [
@@ -158,7 +170,7 @@ export default function TablaPrincipal({
 	return (
 		<Table
 			columns={columns}
-			dataSource={listaCompras}
+			dataSource={shopList}
 			pagination={false}
 			bordered
 			scroll={{ y: 300 }}

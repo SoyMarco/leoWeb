@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useContext } from "react";
 import { Modal, Input, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
@@ -12,13 +12,11 @@ import { REGISTER_VENTA, GET_TOTAL_VENTAS_DIA } from "graphql/venta";
 import useAuth from "hooks/useAuth";
 import aceptar from "assets/sonido/Aceptar.wav";
 import "./cobrar.css";
-const Cobrar = ({
-	modalCobrar,
-	setmodalCobrar,
-	totalTotal,
-	listaCompras,
-	initialState,
-}) => {
+import ShopListContext from "context/Shopping/ShopListContext";
+
+const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
+	const { shopList } = useContext(ShopListContext);
+
 	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
 	let { refetch: refetchTotalVentasDia } = useQuery(GET_TOTAL_VENTAS_DIA);
 	const [cambio, setcambio] = useState(0);
@@ -105,7 +103,7 @@ const Cobrar = ({
 	const savePrintNewV = async (keyF) => {
 		if (btnLoading === false && cambio >= 0) {
 			setbtnLoading(true);
-			let listaComprasNew = listaCompras.map((item) => ({
+			let listaComprasNew = shopList.map((item) => ({
 				apartado: item.apartado,
 				cantidad: item.cantidad,
 				idArray: item.key,
@@ -171,7 +169,7 @@ const Cobrar = ({
 				totalTotal={totalTotal}
 				cambio={cambio}
 				dinero={inputs}
-				listaCompras={listaCompras}
+				listaCompras={shopList}
 				setmodalCobrar={setmodalCobrar}
 				folio={folio}
 				auth={auth}

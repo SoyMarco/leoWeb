@@ -27,3 +27,16 @@
 .borrar {
 	color: "#c5221f";
 }
+h1.numeroProductos {
+	color: darkblue;
+	font-size: 35px;
+	font-weight: bold;
+	margin-top: 10px;
+}
+h1.totalProductos {
+	color: green;
+	font-size: 65px;
+	font-weight: bold;
+	margin-top: -15px;
+	margin-bottom: 0;
+}
