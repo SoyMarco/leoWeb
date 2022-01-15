@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { TablaProductos, TablaTotales, TablaVentas } from "../Components";
 import ErrorConection from "Utils/ErrorConection";
 import { GET_CORTE } from "graphql/venta";
 import { useQuery } from "@apollo/client";
 import { Row } from "antd";
 import "./corte.css";
+import AuthContext from "context/Auth/AuthContext";
 
 const Corte = () => {
+	const { timeLogout } = useContext(AuthContext);
+
 	let {
 		data: getCorteData,
 		error,
@@ -27,6 +30,7 @@ const Corte = () => {
 
 	useEffect(() => {
 		refetch();
+		timeLogout();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 

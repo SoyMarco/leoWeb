@@ -1,17 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import BuscadorApartados from "Pages/BuscadorApartados/Container/BuscadorApartados";
 import { Menu, Switch, Popconfirm, Tooltip, Avatar } from "antd";
 import { FaUserAstronaut } from "react-icons/fa";
 import Estrellas from "./Estrellas/Estrellas";
 import LogoLeo from "assets/png/logo.png";
+import AuthContext from "context/Auth/AuthContext";
 
 export default function Horizontal({
 	Header,
 	history,
-	auth,
 	logoutApp,
 	swtichstate,
 }) {
+	const { auth } = useContext(AuthContext);
 	return (
 		<>
 			{/* HORIZONTAL */}

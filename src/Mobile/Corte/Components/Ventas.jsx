@@ -6,7 +6,7 @@ import { MdLocalGroceryStore } from "react-icons/md";
 import { AiFillPrinter } from "react-icons/ai";
 import { useMutation } from "@apollo/client";
 import Imprimir from "./Imprimir/Imprimir";
-import useAuth from "../../../hooks/useAuth";
+import useAuth from "../../../context/Auth/AuthState";
 import moment from "moment";
 import { UrlFrontend } from "config/apollo";
 import {
@@ -30,7 +30,7 @@ export default function Ventas({
 }) {
 	const [mutateCANCELAR_VENTA] = useMutation(CANCELAR_VENTA);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
-	const { auth } = useAuth();
+	const { auth } = useContext(AuthContext);
 	const [imprimir, setimprimir] = useState(false);
 	const onSelectChange = () => {
 		setselectedRowKeys([]);

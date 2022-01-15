@@ -55,13 +55,11 @@ export default function Productos({
 		inputAbono.current.select();
 	};
 	const pasarAFecha = (item) => {
-		let fecha = moment.unix(item / 1000).format("ll");
-		return fecha;
+		return moment.unix(item / 1000).format("ll");
 	};
 
 	const pasarAFechaLLLL = (item) => {
-		let fecha = moment.unix(item / 1000).format("LLLL");
-		return fecha;
+		return moment.unix(item / 1000).format("LLLL");
 	};
 	const borrarEntregarProduct = async (item, borrarEntregar) => {
 		if (loader === false) {
@@ -254,7 +252,7 @@ export default function Productos({
 									color: "white",
 									fontSize: "large",
 									fontWeight: "revert",
-									margin: "10px 0 5px 10px",
+									margin: "10px 0 0 10px",
 								}}
 							>
 								Productos: {productos.length}

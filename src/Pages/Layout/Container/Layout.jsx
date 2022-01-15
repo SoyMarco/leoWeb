@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { GiLargeDress /* , GiOpenBook  */ } from "react-icons/gi";
 import { useHistory, useLocation, Link } from "react-router-dom";
 import { FaCashRegister, FaMoneyBillAlt } from "react-icons/fa";
@@ -7,15 +7,15 @@ import { RiTerminalWindowFill } from "react-icons/ri";
 import { MdLocalGroceryStore } from "react-icons/md";
 import Horizontal from "../Components/Horizontal";
 import "material-design-icons-iconfont";
-import useAuth from "hooks/useAuth";
 import { Layout, Menu } from "antd";
 import "antd/dist/antd.css";
 import "./layout.css";
-/* , FaPencilAlt */
+import AuthContext from "context/Auth/AuthContext";
+
 function LayoutForm({ children }) {
+	const { auth, logout } = useContext(AuthContext);
 	const [collapsed, setcollapsed] = useState(false);
 	const { Header, Content, Footer, Sider } = Layout;
-	const { logout, auth } = useAuth();
 	const history = useHistory();
 	const Location = useLocation();
 

@@ -5,11 +5,9 @@ import reportWebVitals from "./reportWebVitals";
 import { ApolloProvider } from "@apollo/client";
 import client from "./config/apollo";
 
-const token = localStorage.token;
-
 render(
 	<ApolloProvider client={client}>
-		<App token={token} />
+		<App />
 	</ApolloProvider>,
 	document.getElementById("root")
 );

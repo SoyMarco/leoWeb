@@ -2,7 +2,6 @@ import React, { useReducer, useState } from "react";
 
 import ShopListContext from "./ShopListContext";
 import ShopListReducer from "./ShopListReducer";
-
 import { ADD_PRODUCT_SHOP_LIST, CLEAR_SHOP_LIST } from "./types";
 
 const ShopListState = (props) => {
@@ -11,6 +10,7 @@ const ShopListState = (props) => {
 	};
 
 	const [state, dispatch] = useReducer(ShopListReducer, initialState);
+
 	const [idArticulo, setidArticulo] = useState(0);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 

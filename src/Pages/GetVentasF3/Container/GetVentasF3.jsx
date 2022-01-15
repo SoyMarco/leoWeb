@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { VENTA_MOBILE_FALSE } from "../../../graphql/venta";
 import { useQuery, useMutation } from "@apollo/client";
 import Imprimir from "../Components/Imprimir/Imprimir";
@@ -7,13 +7,13 @@ import ErrorConection from "Utils/ErrorConection";
 import { PrinterFilled } from "@ant-design/icons";
 import { FaUserAstronaut } from "react-icons/fa";
 import { Button, notification } from "antd";
-import useAuth from "hooks/useAuth";
+import AuthContext from "context/Auth/AuthContext";
 
 export default function GetVentasF3({
 	refetchVentaMobile,
 	setrefetchVentaMobile,
 }) {
-	const { auth } = useAuth();
+	const { auth } = useContext(AuthContext);
 
 	let {
 		data,

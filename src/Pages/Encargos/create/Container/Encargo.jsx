@@ -1,5 +1,5 @@
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Input, Form, Button, Row, AutoComplete } from "antd";
-import React, { useState, useEffect, useRef } from "react";
 import { BiAddToQueue } from "react-icons/bi";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
 import EncargoTable from "Pages/Encargos/create/Components/EncargoTable";
@@ -9,7 +9,7 @@ import { FaMoneyBillAlt } from "react-icons/fa";
 import { REGISTER_ENCARGO } from "graphql/encargo";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
-import useAuth from "hooks/useAuth";
+import AuthContext from "context/Auth/AuthContext";
 import { useHistory } from "react-router-dom";
 import ModalAbonoEncargo from "../Components/ModalAbonoEncargo";
 import aceptar from "assets/sonido/Aceptar.wav";
@@ -25,7 +25,7 @@ export default function Encargo() {
 	const audio = new Audio(aceptar);
 
 	const history = useHistory();
-	const { auth } = useAuth();
+	const { auth } = useContext(AuthContext);
 	const [optionsClientes, setoptionsClientes] = useState([]);
 	const [abono, setabono] = useState(0);
 	const [modalAbono, setmodalAbono] = useState(null);

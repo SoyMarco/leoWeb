@@ -6,7 +6,6 @@ import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { REGISTER_CAJA } from "graphql/caja";
 import { useHistory } from "react-router-dom";
-
 import "./caja.css";
 
 export default function Caja() {

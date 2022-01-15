@@ -9,13 +9,14 @@ import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";
 import { useMutation, useQuery } from "@apollo/client";
 import { REGISTER_VENTA, GET_TOTAL_VENTAS_DIA } from "graphql/venta";
-import useAuth from "hooks/useAuth";
+import AuthContext from "context/Auth/AuthContext";
 import aceptar from "assets/sonido/Aceptar.wav";
 import "./cobrar.css";
 import ShopListContext from "context/Shopping/ShopListContext";
 
 const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
 	const { shopList } = useContext(ShopListContext);
+	const { auth, timeLogout } = useContext(AuthContext);
 
 	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
 	let { refetch: refetchTotalVentasDia } = useQuery(GET_TOTAL_VENTAS_DIA);
@@ -29,12 +30,12 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
 		aCuenta: null,
 	});
 	const cobrarEfectivo = useRef();
-	const { auth } = useAuth();
 	const audio = new Audio(aceptar);
 	useEffect(() => {
 		setTimeout(() => {
 			cobrarEfectivo.current.select();
 		}, 50);
+		timeLogout();
 	}, []);
 
 	useEffect(() => {

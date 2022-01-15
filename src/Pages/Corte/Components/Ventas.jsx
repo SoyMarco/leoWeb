@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { BORRAR_EDITAR_ABONO, GET_PRODUCTOS_FOLIO } from "graphql/apartado";
 import ImprimirApartadoCorte from "./ImprimirApartado/ImprimirApartadoCorte";
 import { openNotification } from "../../../Utils/openNotification";
@@ -7,7 +7,6 @@ import { useMutation, useLazyQuery } from "@apollo/client";
 import { MdLocalGroceryStore } from "react-icons/md";
 import ErrorConection from "Utils/ErrorConection";
 import { AiFillPrinter } from "react-icons/ai";
-import useAuth from "../../../hooks/useAuth";
 import Imprimir from "./Imprimir/Imprimir";
 import moment from "moment";
 import {
@@ -21,6 +20,7 @@ import {
 	Switch,
 	Popconfirm,
 } from "antd";
+import AuthContext from "context/Auth/AuthContext";
 
 export default function Ventas({
 	getVentas,
@@ -51,7 +51,7 @@ export default function Ventas({
 
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [dataVenta, setdataVenta] = useState({});
-	const { auth } = useAuth();
+	const { auth } = useContext(AuthContext);
 	const [imprimir, setimprimir] = useState(false);
 
 	const onSelectChange = () => {

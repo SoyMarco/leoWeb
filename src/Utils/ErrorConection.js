@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { notification } from "antd";
 import { RiWifiOffLine } from "react-icons/ri";
 import { decodeToken } from "Utils/token";
-import useAuth from "hooks/useAuth";
+import AuthContext from "context/Auth/AuthContext";
 
 export default function ErrorConection() {
-	const { logout } = useAuth();
+	const { logout } = useContext(AuthContext);
 	notification.open({
 		message: "Error de conexión",
 		description: "Intentalo más tarde",

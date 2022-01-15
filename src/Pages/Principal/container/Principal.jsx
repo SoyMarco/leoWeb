@@ -14,10 +14,6 @@ import "./principal.css";
 function Principal() {
 	const { shopList, clearShopList, selectedRowKeys, setselectedRowKeys } =
 		useContext(ShopListContext);
-	useEffect(() => {
-		console.log("shopList", shopList);
-	}, [shopList]);
-
 	const client = useApolloClient();
 	const history = useHistory();
 	let firstLogin = client.readQuery({

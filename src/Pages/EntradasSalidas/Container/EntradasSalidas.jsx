@@ -58,14 +58,12 @@ export default function EntradasSalidas() {
 	};
 	const pressKeyEnter = (e) => {
 		if (e.keyCode === 13) {
-			console.log("listo1", caja, motivo);
-
 			if (caja < 1 || isNaN(caja)) {
 				inputCaja.current.select();
 			} else if (motivo.length < 1) {
 				inputMotivo.current.select();
 			} else {
-				// sendEntradaSalida();
+				// sendEntradaSalida
 				console.log("listo");
 			}
 		}

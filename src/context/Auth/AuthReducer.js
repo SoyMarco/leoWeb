@@ -4,12 +4,12 @@ export default (state, action) => {
 
 	const REDUCER = {
 		// Add
-		ADD_PRODUCT_SHOP_LIST: {
-			shopList: payload,
+		SET_AUTH: {
+			auth: payload,
 		},
 		// Clear
-		CLEAR_SHOP_LIST: {
-			shopList: [],
+		LOGOUT: {
+			auth: undefined,
 		},
 	};
 

@@ -5,7 +5,7 @@ import "./layout.css";
 import "material-design-icons-iconfont";
 import { openNotification } from "Utils/openNotification";
 import { useHistory, useLocation } from "react-router-dom";
-import useAuth from "hooks/useAuth";
+import AuthContext from "context/Auth/AuthContext";
 import Horizontal from "../Components/Horizontal";
 
 import FooterHorizontal from "../Components/Footer";

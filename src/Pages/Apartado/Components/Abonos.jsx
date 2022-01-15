@@ -44,12 +44,10 @@ export default function Abonos({
 		inputAbono.current.select();
 	};
 	const pasarAFecha = (item) => {
-		let fecha = moment.unix(item / 1000).format("L");
-		return fecha;
+		return moment.unix(item / 1000).format("L");
 	};
 	const pasarAFechaLLLL = (item) => {
-		let fecha = moment.unix(item / 1000).format("LLLL");
-		return fecha;
+		return moment.unix(item / 1000).format("LLLL");
 	};
 	const borrarAbono = async (record, borrarEditar) => {
 		setloader(true);
@@ -116,7 +114,7 @@ export default function Abonos({
 			),
 		},
 		{
-			title: "Abono",
+			title: "Abonos",
 			dataIndex: "abono",
 			key: "abono",
 			render: (abonoRender, record) => (
@@ -183,7 +181,7 @@ export default function Abonos({
 									color: "white",
 									fontSize: "large",
 									fontWeight: "revert",
-									margin: "10px 0 5px 10px",
+									margin: "10px 0 0 10px",
 								}}
 							>
 								Abonos: {abonos.length}
@@ -195,7 +193,7 @@ export default function Abonos({
 					pagination={false}
 					loading={loading}
 					bordered
-					scroll={{ y: 210 }}
+					scroll={{ y: 190 }}
 					rowSelection={rowSelection}
 					size='small'
 					style={{
@@ -228,7 +226,7 @@ export default function Abonos({
 										color: "green",
 										fontSize: "xx-large",
 										fontWeight: "revert",
-										marginRight: "20px",
+										margin: "0 20px",
 									}}
 								>
 									Abonos ${totalAbonos}

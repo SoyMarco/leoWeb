@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useContext } from "react";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import ImprimirApartado from "../ImprimirApartado/ImprimirApartado";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
@@ -8,7 +8,7 @@ import ErrorConection from "Utils/ErrorConection";
 import aceptar from "assets/sonido/Aceptar.wav";
 import { ADD_ABONO } from "graphql/apartado";
 import { useMutation } from "@apollo/client";
-import useAuth from "hooks/useAuth";
+import AuthContext from "context/Auth/AuthContext";
 import { keyBlock } from "Utils";
 
 const CobrarApartado = ({
@@ -35,7 +35,7 @@ const CobrarApartado = ({
 	});
 	const audio = new Audio(aceptar);
 
-	const { auth } = useAuth();
+	const { auth } = useContext(AuthContext);
 	const cobrarEfectivo = useRef();
 	useEffect(() => {
 		if (dataApartadoImprimir?.folio > 0) {

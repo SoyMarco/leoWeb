@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Modal, Input, Form, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
@@ -8,7 +8,7 @@ import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
 import { REGISTER_APARTADO } from "graphql/apartado";
-import useAuth from "hooks/useAuth";
+import AuthContext from "context/Auth/AuthContext";
 import aceptar from "assets/sonido/Aceptar.wav";
 
 const CobrarNewApartado = ({
@@ -21,7 +21,7 @@ const CobrarNewApartado = ({
 	inputAbono,
 	cliente,
 }) => {
-	const { auth } = useAuth();
+	const { auth } = useContext(AuthContext);
 	const [mutateREGISTER_APARTADO] = useMutation(REGISTER_APARTADO);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);

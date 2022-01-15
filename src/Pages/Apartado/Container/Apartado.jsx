@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import ImprimirApartado from "Pages/Apartado/Components/ImprimirApartado/ImprimirApartado";
 import ModalCalendar from "Pages/Apartado/Components/ModalCalendar/ModalCalendar";
 import {
@@ -14,7 +14,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import ErrorConection from "Utils/ErrorConection";
 import ErrorPage from "Pages/Error/Error";
-import useAuth from "hooks/useAuth";
+import AuthContext from "context/Auth/AuthContext";
 import { keyBlock } from "Utils";
 import moment from "moment";
 import {
@@ -36,6 +36,8 @@ import {
 import "./apartados.css";
 
 export default function Apartado(props) {
+	const { auth, timeLogout } = useContext(AuthContext);
+
 	const history = useHistory();
 	const params = useParams();
 	let urlFolio = parseInt(params.folio);
@@ -51,7 +53,6 @@ export default function Apartado(props) {
 	const [titleWeb, settitleWeb] = useState("Apartado");
 	const [mutateCANCELAR_APARTADO] = useMutation(CANCELAR_APARTADO);
 	const [mutateCANCEL_ENTREGA] = useMutation(CANCEL_ENTREGA);
-	const { auth } = useAuth();
 	const [modalCobrar, setmodalCobrar] = useState(false);
 	const [modalCalendar, setmodalCalendar] = useState(false);
 	const [modalReimprimir, setmodalReimprimir] = useState(false);
@@ -73,6 +74,7 @@ export default function Apartado(props) {
 	);
 	useEffect(() => {
 		refetch();
+		timeLogout();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 

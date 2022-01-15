@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import ImprimirEncargo from "../Components/ImprimirEncargo/ImprimirEncargo";
 import ModalCalendar from "../Components/ModalCalendar/ModalCalendar";
 import { CalendarOutlined } from "@ant-design/icons";
@@ -9,7 +9,7 @@ import { useParams } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import ErrorConection from "Utils/ErrorConection";
 import ErrorPage from "Pages/Error/Error";
-import useAuth from "hooks/useAuth";
+import AuthContext from "context/Auth/AuthContext";
 import moment from "moment";
 import {
 	GET_ENCARGO_FOLIO,
@@ -29,7 +29,7 @@ export default function Encargo() {
 	const [mutateEDIT_GUARDAR_ENCARGO] = useMutation(EDIT_GUARDAR_ENCARGO);
 	const [titleWeb, settitleWeb] = useState("Encargo");
 	const [mutateCANCEL_ENTREGA] = useMutation(CANCEL_ENTREGA);
-	const { auth } = useAuth();
+	const { auth } = useContext(AuthContext);
 	const [modalCobrar, setmodalCobrar] = useState(false);
 	const [modalCalendar, setmodalCalendar] = useState(false);
 	const [modalReimprimir, setmodalReimprimir] = useState(false);

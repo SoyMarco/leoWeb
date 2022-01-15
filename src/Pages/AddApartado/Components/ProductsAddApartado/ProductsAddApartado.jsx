@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Table, Input, Button, Result, Row, AutoComplete } from "antd";
 import { MdDelete, MdLocalGroceryStore } from "react-icons/md";
 import { DollarCircleOutlined } from "@ant-design/icons";
 import { keyBlock } from "Utils";
-import useAuth from "hooks/useAuth";
+import AuthContext from "context/Auth/AuthContext";
 
 export default function ProductsAddApartado({
 	next,
@@ -16,7 +16,7 @@ export default function ProductsAddApartado({
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [nombre, setnombre] = useState("");
 	const [precio, setprecio] = useState(null);
-	const { auth } = useAuth();
+	const { auth } = useContext(AuthContext);
 
 	const click = (record, rowIndex) => {
 		setselectedRowKeys([record.key]);
