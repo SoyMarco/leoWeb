@@ -10,10 +10,11 @@ import { ADD_ABONO } from "graphql/apartado";
 import { useMutation } from "@apollo/client";
 import AuthContext from "context/Auth/AuthContext";
 import { keyBlock } from "Utils";
+import ShopListContext from "context/Shopping/ShopListContext";
+import { useHistory } from "react-router-dom";
 
 const CobrarApartado = ({
 	modalCobrar,
-	setmodalCobrar,
 	cerrarCobrar,
 	totalTotal,
 	listaCompras,
@@ -22,6 +23,10 @@ const CobrarApartado = ({
 	inputAbono,
 	dataApartado,
 }) => {
+	const { addProductShopList } = useContext(ShopListContext);
+	const { auth } = useContext(AuthContext);
+	const history = useHistory();
+
 	const [mutateADD_ABONO] = useMutation(ADD_ABONO);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);
@@ -35,7 +40,6 @@ const CobrarApartado = ({
 	});
 	const audio = new Audio(aceptar);
 
-	const { auth } = useContext(AuthContext);
 	const cobrarEfectivo = useRef();
 	useEffect(() => {
 		if (dataApartadoImprimir?.folio > 0) {
@@ -134,6 +138,7 @@ const CobrarApartado = ({
 							ventaACuenta: ventaACuenta,
 							folioApartado: dataApartado.folio,
 							idApartado: dataApartado.id,
+							keyF: keyF,
 						},
 					},
 				});
@@ -141,9 +146,19 @@ const CobrarApartado = ({
 					if (keyF === "F1") {
 						setdataApartadoImprimir(data.addAbono);
 					} else if (keyF === "F2") {
-						openNotification("success", "Apartado guardado con exito");
+						openNotification("success", "Abono guardado con exito");
 						initialState(data);
+					} else if (keyF === "F3") {
+						openNotification("success", "Abono guardado con exito");
+						addProductShopList({
+							nombre: data.addAbono.cliente,
+							precio: total,
+							apartado: data.addAbono.folio,
+							refApartado: data.addAbono.id,
+						});
+						history.push("/");
 					}
+				} else {
 					audio.play();
 				}
 			} catch (error) {

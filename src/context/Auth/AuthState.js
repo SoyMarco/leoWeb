@@ -12,7 +12,6 @@ export default function AuthState(props) {
 		auth: undefined,
 	};
 	const [state, dispatch] = useReducer(AuthReducer, initialState);
-
 	useEffect(() => {
 		timeLogout();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -20,7 +19,6 @@ export default function AuthState(props) {
 
 	const timeLogout = () => {
 		let token = localStorage.token;
-		console.log("TOKEN AuthState", token);
 		if (token) {
 			try {
 				let dataToken = decodeToken(token);
@@ -32,10 +30,10 @@ export default function AuthState(props) {
 					logout();
 				}
 			} catch (error) {
-				setAuth(null);
+				logout();
 			}
 		} else {
-			setAuth(null);
+			logout();
 		}
 	};
 

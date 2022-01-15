@@ -67,7 +67,12 @@ const ShopListState = (props) => {
 			setselectedRowKeys(0);
 		}
 	};
-	const addProductShopList = ({ precio, nombre = "Articulo" }) => {
+	const addProductShopList = ({
+		precio,
+		nombre = "Articulo",
+		apartado = 0,
+		refApartado = "0",
+	}) => {
 		dispatch({
 			type: ADD_PRODUCT_SHOP_LIST,
 			payload: [
@@ -77,8 +82,8 @@ const ShopListState = (props) => {
 					nombre: nombre,
 					precio: Math.round(precio * 100) / 100,
 					cantidad: 1,
-					apartado: 0,
-					refApartado: "0",
+					apartado: apartado,
+					refApartado: refApartado,
 					totalArticulo: Math.round(precio * 100) / 100,
 				},
 			],

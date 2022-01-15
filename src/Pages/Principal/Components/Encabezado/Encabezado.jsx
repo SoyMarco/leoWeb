@@ -1,11 +1,12 @@
 import React, { useState, useContext } from "react";
 import { keyBlock } from "Utils";
 import { AiFillDollarCircle, AiOutlineCloudDownload } from "react-icons/ai";
-import { Input } from "antd";
+import { Input, Button, Badge } from "antd";
 import { useHistory } from "react-router-dom";
 import GetVentasF3 from "Pages/GetVentasF3/Container/GetVentasF3";
 import ShopListContext from "context/Shopping/ShopListContext";
-
+import "./Encabezado.css";
+import { ShoppingOutlined } from "@ant-design/icons";
 export default function Encabezado({ setmodalCobrar, stateRecord }) {
 	const {
 		shopList,
@@ -20,6 +21,7 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 	const [precio, setprecio] = useState({
 		precio: null,
 	});
+	const [algo, setalgo] = useState(undefined);
 
 	const history = useHistory();
 	const pressEnter = () => {
@@ -52,7 +54,9 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 		}
 	};
 	const addArticulo = (record) => {
-		if (shopList.length > 0) {
+		console.log("record", shopList, 1);
+		const shopItem = shopList.find((item) => item.key === record.key);
+		if (shopList.length > 0 && shopItem.apartado === 0) {
 			addOneShopList(record.key);
 		}
 	};
@@ -169,6 +173,19 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 					})
 				}
 			/>
+			{algo && (
+				<Badge count={99} className='BtnBadge'>
+					<Button
+						icon={
+							// <AiFillShopping />
+							<ShoppingOutlined style={{ fontSize: "30px", color: "blue" }} />
+						}
+						size='large'
+						shape='circle'
+						onClick={() => setalgo(false)}
+					/>
+				</Badge>
+			)}
 			{/* GET VENTAS MOBILE */}
 			<GetVentasF3
 				refetchVentaMobile={refetchVentaMobile}
