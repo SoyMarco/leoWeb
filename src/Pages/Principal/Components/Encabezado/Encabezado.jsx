@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { keyBlock } from "Utils";
 import { AiFillDollarCircle, AiOutlineCloudDownload } from "react-icons/ai";
 import { Input, Button, Badge } from "antd";
@@ -7,6 +7,9 @@ import GetVentasF3 from "Pages/GetVentasF3/Container/GetVentasF3";
 import ShopListContext from "context/Shopping/ShopListContext";
 import "./Encabezado.css";
 import { ShoppingOutlined } from "@ant-design/icons";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_F3 } from "graphql/f3";
+
 export default function Encabezado({ setmodalCobrar, stateRecord }) {
 	const {
 		shopList,
@@ -15,15 +18,23 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 		removeOneShopList,
 		selectedRowKeys,
 		setselectedRowKeys,
+		DrawerF3Visible,
+		setDrawerF3Visible,
 	} = useContext(ShopListContext);
+	const { data: dataGET } = useQuery(GET_ALL_F3);
 
 	const [refetchVentaMobile, setrefetchVentaMobile] = useState(false);
 	const [precio, setprecio] = useState({
 		precio: null,
 	});
-	const [algo, setalgo] = useState(undefined);
-
 	const history = useHistory();
+
+	useEffect(() => {
+		if (DrawerF3Visible === false) {
+			document.querySelector("#inputPrecio").select();
+		}
+	}, [DrawerF3Visible]);
+
 	const pressEnter = () => {
 		if (precio.precio > 0) {
 			addProductShopList({ precio: precio.precio });
@@ -118,6 +129,7 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 		// F3
 		if (e.keyCode === 114) {
 			setrefetchVentaMobile(true);
+			setDrawerF3Visible(!DrawerF3Visible);
 		}
 		// F6 abrir ventana
 		if (e.keyCode === 117) {
@@ -173,8 +185,8 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 					})
 				}
 			/>
-			{algo && (
-				<Badge count={99} className='BtnBadge'>
+			{dataGET?.getAllF3?.length && (
+				<Badge count={dataGET?.getAllF3?.length} className='BtnBadge'>
 					<Button
 						icon={
 							// <AiFillShopping />
@@ -182,10 +194,11 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 						}
 						size='large'
 						shape='circle'
-						onClick={() => setalgo(false)}
+						onClick={() => setDrawerF3Visible(!DrawerF3Visible)}
 					/>
 				</Badge>
 			)}
+
 			{/* GET VENTAS MOBILE */}
 			<GetVentasF3
 				refetchVentaMobile={refetchVentaMobile}

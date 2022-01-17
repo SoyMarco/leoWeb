@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { Button, Card, Input, Row } from "antd";
 import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
@@ -7,8 +7,10 @@ import ErrorConection from "Utils/ErrorConection";
 import { REGISTER_CAJA } from "graphql/caja";
 import { useHistory } from "react-router-dom";
 import "./caja.css";
+import AuthContext from "context/Auth/AuthContext";
 
 export default function Caja() {
+	const { timeLogout } = useContext(AuthContext);
 	const [mutateREGISTER_CAJA] = useMutation(REGISTER_CAJA);
 	const history = useHistory();
 	const [caja, setcaja] = useState(0);
@@ -31,7 +33,7 @@ export default function Caja() {
 				openNotification("success", `Registro guardado con exito`);
 			}
 		} catch (error) {
-			ErrorConection();
+			ErrorConection(timeLogout);
 		}
 	};
 	const pressKeyEnter = (e) => {

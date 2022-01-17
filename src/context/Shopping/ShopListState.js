@@ -3,13 +3,17 @@ import React, { useReducer, useState } from "react";
 import ShopListContext from "./ShopListContext";
 import ShopListReducer from "./ShopListReducer";
 import { ADD_PRODUCT_SHOP_LIST, CLEAR_SHOP_LIST } from "./types";
+import { REGISTER_F3 } from "graphql/f3";
+import { useMutation } from "@apollo/client";
+import { openNotification } from "Utils/openNotification";
 
 const ShopListState = (props) => {
 	const initialState = {
 		shopList: [],
 	};
-
+	const [mutateREGISTER_F3] = useMutation(REGISTER_F3);
 	const [state, dispatch] = useReducer(ShopListReducer, initialState);
+	const [DrawerF3Visible, setDrawerF3Visible] = useState(true);
 
 	const [idArticulo, setidArticulo] = useState(0);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
@@ -67,26 +71,66 @@ const ShopListState = (props) => {
 			setselectedRowKeys(0);
 		}
 	};
-	const addProductShopList = ({
+	const eliminarProductoF3 = (record) => {
+		const { shopList } = state;
+
+		let newPayload = shopList.filter((item) => {
+			console.log(" item.idF3 === record.idF3", item.idF3, record._id);
+			return item.idF3 !== record._id;
+		});
+		dispatch({
+			type: ADD_PRODUCT_SHOP_LIST,
+			payload: newPayload,
+		});
+		if (newPayload.length === 0) {
+			setselectedRowKeys(0);
+		}
+	};
+	const addProductShopList = async ({
 		precio,
 		nombre = "Articulo",
 		apartado = 0,
 		refApartado = "0",
+		f3 = false,
+		idF3,
 	}) => {
+		let venta = {
+			key: idArticulo + 1,
+			nombre: nombre,
+			precio: Math.round(precio * 100) / 100,
+			cantidad: 1,
+			apartado: apartado,
+			refApartado: refApartado,
+			totalArticulo: Math.round(precio * 100) / 100,
+			idF3: idF3,
+		};
+		if (f3 === true) {
+			try {
+				const { data } = await mutateREGISTER_F3({
+					variables: {
+						input: venta,
+					},
+				});
+				if (data) {
+					openNotification("success", "F3 guardado con exito");
+					venta.idF3 = data.registerF3._id;
+				}
+			} catch (error) {
+				console.log(error);
+			}
+		}
+		const { shopList } = state;
+
+		const currentShopList = [...shopList];
+		const shopItem = currentShopList.find(
+			(item) => item.refApartado === refApartado && item.precio === precio
+		);
+		if (shopItem) {
+			return;
+		}
 		dispatch({
 			type: ADD_PRODUCT_SHOP_LIST,
-			payload: [
-				...state.shopList,
-				{
-					key: idArticulo + 1,
-					nombre: nombre,
-					precio: Math.round(precio * 100) / 100,
-					cantidad: 1,
-					apartado: apartado,
-					refApartado: refApartado,
-					totalArticulo: Math.round(precio * 100) / 100,
-				},
-			],
+			payload: [...state.shopList, venta],
 		});
 		setidArticulo(idArticulo + 1);
 	};
@@ -105,6 +149,9 @@ const ShopListState = (props) => {
 				eliminarProducto,
 				setselectedRowKeys,
 				selectedRowKeys: selectedRowKeys,
+				setDrawerF3Visible,
+				DrawerF3Visible: DrawerF3Visible,
+				eliminarProductoF3,
 			}}
 		>
 			{props.children}

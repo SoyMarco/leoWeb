@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_ENCARGOS, EDIT_GUARDAR_ENCARGO } from "graphql/encargo";
 import { Skeleton, Card, Row, Col, Switch } from "antd";
@@ -8,8 +8,10 @@ import "./ReadEncargos.css";
 import { useHistory } from "react-router-dom";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
+import AuthContext from "context/Auth/AuthContext";
 
 export default function ReadEncargo() {
+	const { timeLogout } = useContext(AuthContext);
 	let {
 		data: dataEncargos,
 		loading: loadingEncargos,
@@ -62,7 +64,7 @@ export default function ReadEncargo() {
 		} catch (error) {
 			console.log("error", error);
 			setbtnLoading(false);
-			ErrorConection();
+			ErrorConection(timeLogout);
 		}
 	};
 	return (

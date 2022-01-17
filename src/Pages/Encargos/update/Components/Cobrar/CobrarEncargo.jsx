@@ -15,7 +15,6 @@ import aceptar from "assets/sonido/Aceptar.wav";
 
 const CobrarApartado = ({
 	modalCobrar,
-	setmodalCobrar,
 	cerrarCobrar,
 	totalTotal,
 	listaCompras,
@@ -24,6 +23,7 @@ const CobrarApartado = ({
 	inputAbono,
 	dataApartado,
 }) => {
+	const { auth, timeLogout } = useContext(AuthContext);
 	const history = useHistory();
 	const client = useApolloClient();
 	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
@@ -40,7 +40,6 @@ const CobrarApartado = ({
 	});
 	const audio = new Audio(aceptar);
 
-	const { auth } = useContext(AuthContext);
 	const cobrarEfectivo = useRef();
 	useEffect(() => {
 		if (dataApartadoImprimir?.folio > 0) {
@@ -144,7 +143,7 @@ const CobrarApartado = ({
 				}
 			} catch (error) {
 				setbtnLoading(false);
-				ErrorConection();
+				ErrorConection(timeLogout);
 			}
 		}
 	};
@@ -216,7 +215,7 @@ const CobrarApartado = ({
 							savePrintAbono(keyF, data.registerVenta);
 						}
 					} catch (error) {
-						ErrorConection();
+						ErrorConection(timeLogout);
 						setbtnLoading(false);
 					}
 				}

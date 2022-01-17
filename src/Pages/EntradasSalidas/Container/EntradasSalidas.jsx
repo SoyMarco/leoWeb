@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { Button, Card, Input, Row } from "antd";
 import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
@@ -9,10 +9,11 @@ import { BsFillChatRightTextFill } from "react-icons/bs";
 import { FaMoneyBillAlt } from "react-icons/fa";
 
 import { useHistory } from "react-router-dom";
-
+import AuthContext from "context/Auth/AuthContext";
 import "./entradasSalidas.css";
 
 export default function EntradasSalidas() {
+	const { timeLogout } = useContext(AuthContext);
 	const [mutateREGISTER_CAJA] = useMutation(REGISTER_CAJA);
 	const history = useHistory();
 
@@ -51,7 +52,7 @@ export default function EntradasSalidas() {
 						openNotification("success", `${entradaSalida} guardado con exito`);
 					}
 				} catch (error) {
-					ErrorConection();
+					ErrorConection(timeLogout);
 				}
 			}
 		}

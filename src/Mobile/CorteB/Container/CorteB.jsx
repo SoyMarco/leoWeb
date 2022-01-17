@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { TablaTotales } from "../Components";
 import ErrorConection from "Utils/ErrorConection";
 import { GET_CORTE } from "graphql/venta";
 import { useQuery } from "@apollo/client";
 import { Row } from "antd";
 import "./corte.css";
-
+import AuthContext from "context/Auth/AuthContext";
 const CorteB = () => {
+	const { timeLogout } = useContext(AuthContext);
 	let {
 		data: getCorteData,
 		error,
@@ -19,7 +20,7 @@ const CorteB = () => {
 	const [getTotales, setgetTotales] = useState({});
 
 	if (error) {
-		ErrorConection();
+		ErrorConection(timeLogout);
 	}
 
 	useEffect(() => {

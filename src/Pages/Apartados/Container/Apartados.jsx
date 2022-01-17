@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { TablaProductos, TablaApartados } from "../Components";
 import { Row, Input, Card } from "antd";
 import { useQuery } from "@apollo/client";
@@ -6,8 +6,10 @@ import { GET_APARTADOS } from "graphql/apartado";
 import { BsSearch } from "react-icons/bs";
 import "./apartados.css";
 import ErrorConection from "Utils/ErrorConection";
+import AuthContext from "context/Auth/AuthContext";
 
 export default function Apartados() {
+	const { timeLogout } = useContext(AuthContext);
 	let { data, loading, error, refetch } = useQuery(GET_APARTADOS);
 	const [stateRecord, setstateRecord] = useState({ abonos: {} });
 	const [getApartados, setgetApartados] = useState([]);
@@ -46,7 +48,7 @@ export default function Apartados() {
 	}, []);
 
 	if (error) {
-		ErrorConection();
+		ErrorConection(timeLogout);
 	}
 	useEffect(() => {
 		if (data) {

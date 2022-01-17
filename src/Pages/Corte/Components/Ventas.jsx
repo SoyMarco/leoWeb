@@ -32,6 +32,7 @@ export default function Ventas({
 	stateRecord,
 	refetchCorte,
 }) {
+	const { auth, timeLogout } = useContext(AuthContext);
 	const [imprimirApartado, setimprimirApartado] = useState(0);
 	const [
 		refetchGetApartado,
@@ -51,7 +52,6 @@ export default function Ventas({
 
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [dataVenta, setdataVenta] = useState({});
-	const { auth } = useContext(AuthContext);
 	const [imprimir, setimprimir] = useState(false);
 
 	const onSelectChange = () => {
@@ -101,7 +101,7 @@ export default function Ventas({
 			}
 		} catch (error) {
 			setloader(false);
-			ErrorConection();
+			ErrorConection(timeLogout);
 		}
 	};
 	const printApartado = (record) => {
@@ -132,7 +132,7 @@ export default function Ventas({
 			}
 		} catch (error) {
 			setloader(false);
-			ErrorConection();
+			ErrorConection(timeLogout);
 			console.log("error", error);
 		}
 	};

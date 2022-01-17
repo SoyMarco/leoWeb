@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { openNotification } from "../../../Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { CANCELAR_VENTA } from "../../../graphql/venta";
@@ -6,7 +6,8 @@ import { MdLocalGroceryStore } from "react-icons/md";
 import { AiFillPrinter } from "react-icons/ai";
 import { useMutation } from "@apollo/client";
 import Imprimir from "./Imprimir/Imprimir";
-import useAuth from "../../../context/Auth/AuthState";
+import AuthContext from "context/Auth/AuthContext";
+
 import moment from "moment";
 import { UrlFrontend } from "config/apollo";
 import {
@@ -30,7 +31,8 @@ export default function Ventas({
 }) {
 	const [mutateCANCELAR_VENTA] = useMutation(CANCELAR_VENTA);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
-	const { auth } = useContext(AuthContext);
+	const { auth, timeLogout } = useContext(AuthContext);
+
 	const [imprimir, setimprimir] = useState(false);
 	const onSelectChange = () => {
 		setselectedRowKeys([]);
@@ -77,7 +79,7 @@ export default function Ventas({
 			}
 		} catch (error) {
 			setloader(false);
-			ErrorConection();
+			ErrorConection(timeLogout);
 		}
 	};
 	/* COLUMNAS VENTAS */

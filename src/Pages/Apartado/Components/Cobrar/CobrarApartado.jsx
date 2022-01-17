@@ -23,10 +23,10 @@ const CobrarApartado = ({
 	inputAbono,
 	dataApartado,
 }) => {
+	const { auth, timeLogout } = useContext(AuthContext);
 	const { addProductShopList } = useContext(ShopListContext);
-	const { auth } = useContext(AuthContext);
 	const history = useHistory();
-
+	console.log("dataApartado", dataApartado);
 	const [mutateADD_ABONO] = useMutation(ADD_ABONO);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);
@@ -125,7 +125,17 @@ const CobrarApartado = ({
 			let ventaACuenta = parseFloat(dinero.aCuenta);
 			let total = parseFloat(totalTotal);
 			let resta = parseFloat(calculateRestaria());
-
+			if (keyF === "F3") {
+				addProductShopList({
+					nombre: dataApartado.cliente,
+					precio: total,
+					apartado: dataApartado.folio,
+					refApartado: dataApartado.id,
+					f3: true,
+				});
+				history.push("/");
+				return;
+			}
 			try {
 				const { data } = await mutateADD_ABONO({
 					variables: {
@@ -148,22 +158,13 @@ const CobrarApartado = ({
 					} else if (keyF === "F2") {
 						openNotification("success", "Abono guardado con exito");
 						initialState(data);
-					} else if (keyF === "F3") {
-						openNotification("success", "Abono guardado con exito");
-						addProductShopList({
-							nombre: data.addAbono.cliente,
-							precio: total,
-							apartado: data.addAbono.folio,
-							refApartado: data.addAbono.id,
-						});
-						history.push("/");
 					}
 				} else {
 					audio.play();
 				}
 			} catch (error) {
 				setbtnLoading(false);
-				ErrorConection();
+				ErrorConection(timeLogout);
 			}
 		}
 	};

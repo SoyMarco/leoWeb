@@ -112,6 +112,7 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
 				precio: item.precio,
 				refApartado: item.refApartado,
 				totalArticulo: item.totalArticulo,
+				idF3: item.idF3,
 			}));
 
 			let efectivo = parseFloat(inputs.efectivo ?? 0);
@@ -149,7 +150,7 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
 				}
 			} catch (error) {
 				setbtnLoading(false);
-				ErrorConection();
+				ErrorConection(timeLogout);
 			}
 		}
 	};

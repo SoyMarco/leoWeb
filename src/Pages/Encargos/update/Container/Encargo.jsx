@@ -20,6 +20,7 @@ import { Row, Card, Skeleton, Button, Switch, Tooltip, Result } from "antd";
 import "./Encargo.css";
 
 export default function Encargo() {
+	const { auth, timeLogout } = useContext(AuthContext);
 	const params = useParams();
 	let urlFolio = parseInt(params.folio);
 	let { data, loading, error, refetch } = useQuery(GET_ENCARGO_FOLIO, {
@@ -29,7 +30,6 @@ export default function Encargo() {
 	const [mutateEDIT_GUARDAR_ENCARGO] = useMutation(EDIT_GUARDAR_ENCARGO);
 	const [titleWeb, settitleWeb] = useState("Encargo");
 	const [mutateCANCEL_ENTREGA] = useMutation(CANCEL_ENTREGA);
-	const { auth } = useContext(AuthContext);
 	const [modalCobrar, setmodalCobrar] = useState(false);
 	const [modalCalendar, setmodalCalendar] = useState(false);
 	const [modalReimprimir, setmodalReimprimir] = useState(false);
@@ -54,7 +54,7 @@ export default function Encargo() {
 	}, []);
 
 	if (error) {
-		ErrorConection();
+		ErrorConection(timeLogout);
 	}
 	const cerrarCobrar = () => {
 		setmodalCobrar(false);
@@ -155,7 +155,7 @@ export default function Encargo() {
 			}
 		} catch (err) {
 			setbtnLoading(false);
-			ErrorConection();
+			ErrorConection(timeLogout);
 		}
 	};
 	const fechaVenceEn = () => {
@@ -191,7 +191,7 @@ export default function Encargo() {
 		} catch (err) {
 			console.log("error", err);
 			setbtnLoading(false);
-			ErrorConection();
+			ErrorConection(timeLogout);
 		}
 	};
 	const infomacionEncargo = () => {

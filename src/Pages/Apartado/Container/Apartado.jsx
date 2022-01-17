@@ -79,7 +79,7 @@ export default function Apartado(props) {
 	}, []);
 
 	if (error) {
-		ErrorConection();
+		ErrorConection(timeLogout);
 	}
 	const cerrarCobrar = () => {
 		setmodalCobrar(false);
@@ -141,7 +141,9 @@ export default function Apartado(props) {
 		let sumAbo = 0;
 
 		for (const abn of abonos) {
-			sumAbo += abn.abono;
+			if (abn?.cancel?.status !== true) {
+				sumAbo += abn.abono;
+			}
 		}
 		settotalAbonos(sumAbo);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -178,7 +180,7 @@ export default function Apartado(props) {
 				}
 			} catch (err) {
 				setloader(false);
-				ErrorConection();
+				ErrorConection(timeLogout);
 			}
 		}
 	};
@@ -258,7 +260,7 @@ export default function Apartado(props) {
 			}
 		} catch (err) {
 			setbtnLoading(false);
-			ErrorConection();
+			ErrorConection(timeLogout);
 		}
 	};
 	const fechaVenceEn = () => {

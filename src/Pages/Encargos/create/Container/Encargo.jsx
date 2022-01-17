@@ -17,6 +17,7 @@ import ImprimirNewEncargo from "../Components/ImprimirEncargo/ImprimirNewEncargo
 import { keyBlockFs } from "Utils";
 
 export default function Encargo() {
+	const { auth, timeLogout } = useContext(AuthContext);
 	const [mutateREGISTER_ENCARGO] = useMutation(REGISTER_ENCARGO);
 	const client = useApolloClient();
 	let apartadosBuscador = client.readQuery({
@@ -25,7 +26,6 @@ export default function Encargo() {
 	const audio = new Audio(aceptar);
 
 	const history = useHistory();
-	const { auth } = useContext(AuthContext);
 	const [optionsClientes, setoptionsClientes] = useState([]);
 	const [abono, setabono] = useState(0);
 	const [modalAbono, setmodalAbono] = useState(null);
@@ -181,7 +181,7 @@ export default function Encargo() {
 				}
 			} catch (error) {
 				setloader(false);
-				ErrorConection();
+				ErrorConection(timeLogout);
 			}
 		}
 	};

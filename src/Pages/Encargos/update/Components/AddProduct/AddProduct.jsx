@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { SaveFilled } from "@ant-design/icons";
 import { GiLargeDress } from "react-icons/gi";
 import { FaMoneyBillWave } from "react-icons/fa";
@@ -8,6 +8,7 @@ import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_PRODUCTS_NAME, ADD_PRODUCTO } from "graphql/apartado";
+import AuthContext from "context/Auth/AuthContext";
 
 export default function AddProduct({
 	setmodalAddProduct,
@@ -15,6 +16,7 @@ export default function AddProduct({
 	refetch,
 	dataApartado,
 }) {
+	const { timeLogout } = useContext(AuthContext);
 	const [mutateADD_PRODUCTO] = useMutation(ADD_PRODUCTO);
 	let { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
 	const [btnLoading, setbtnLoading] = useState(false);
@@ -68,7 +70,7 @@ export default function AddProduct({
 				}
 			} catch (error) {
 				setbtnLoading(false);
-				ErrorConection();
+				ErrorConection(timeLogout);
 			}
 		}
 	};

@@ -17,6 +17,7 @@ const Cobrar = ({
 	listaCompras,
 	initialState,
 }) => {
+	const { auth, timeLogout } = useContext(AuthContext);
 	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);
@@ -27,7 +28,6 @@ const Cobrar = ({
 		efectivo: 0,
 	});
 	const cobrarEfectivo = useRef();
-	const { auth } = useContext(AuthContext);
 	useEffect(() => {
 		cobrarEfectivo.current.select();
 	}, []);
@@ -129,7 +129,7 @@ const Cobrar = ({
 					}
 				} catch (error) {
 					setbtnLoading(false);
-					ErrorConection();
+					ErrorConection(timeLogout);
 				}
 			}
 		}

@@ -42,12 +42,13 @@ export default function TablaPrincipal({ setstateRecord }) {
 	// Columnas de tabla
 	const columns = [
 		{
-			title: "ID",
+			title: "",
 			dataIndex: "key",
-			key: "key",
+			// key: "key",
 			sorter: (a, b) => b.key - a.key,
 			defaultSortOrder: "ascend",
-			width: "60px",
+			width: "0px",
+			render: () => "",
 		},
 
 		{

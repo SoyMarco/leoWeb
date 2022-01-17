@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Table, Result, Col, Row, Tooltip, Popconfirm, Button } from "antd";
 import { MdDelete } from "react-icons/md";
 import { SmileOutlined } from "@ant-design/icons";
@@ -7,6 +7,7 @@ import { BORRAR_EDITAR_ABONO } from "graphql/apartado";
 import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
+import AuthContext from "context/Auth/AuthContext";
 
 export default function Abonos({
 	abonos,
@@ -19,6 +20,7 @@ export default function Abonos({
 	totalTotal,
 	abono,
 }) {
+	const { timeLogout } = useContext(AuthContext);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [mutateBORRAR_EDITAR_ABONO] = useMutation(BORRAR_EDITAR_ABONO);
 
@@ -67,7 +69,7 @@ export default function Abonos({
 			}
 		} catch (error) {
 			setloader(false);
-			ErrorConection();
+			ErrorConection(timeLogout);
 		}
 	};
 	/* COLUMNAS ABONOS */

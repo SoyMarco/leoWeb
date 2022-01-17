@@ -25,7 +25,7 @@ const Corte = () => {
 	const [getVentas, setgetVentas] = useState([]);
 
 	if (error) {
-		ErrorConection();
+		ErrorConection(timeLogout);
 	}
 
 	useEffect(() => {

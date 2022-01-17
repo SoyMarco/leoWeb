@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
 	Table,
 	Result,
@@ -16,6 +16,7 @@ import { BORRAR_EDITAR_ABONO } from "graphql/apartado";
 import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
+import AuthContext from "context/Auth/AuthContext";
 
 export default function Abonos({
 	abonos,
@@ -28,6 +29,7 @@ export default function Abonos({
 	totalTotal,
 	abono,
 }) {
+	const { timeLogout } = useContext(AuthContext);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [mutateBORRAR_EDITAR_ABONO] = useMutation(BORRAR_EDITAR_ABONO);
 
@@ -61,6 +63,7 @@ export default function Abonos({
 							abono: 0,
 							borrarEditar: borrarEditar,
 							idVenta: record.idVenta,
+							idAbono: record._id,
 							statusVenta: true,
 						},
 					},
@@ -73,7 +76,7 @@ export default function Abonos({
 			}
 		} catch (error) {
 			setloader(false);
-			ErrorConection();
+			ErrorConection(timeLogout);
 		}
 	};
 	/* COLUMNAS ABONOS */
@@ -124,6 +127,7 @@ export default function Abonos({
 							textAlignLast: "center",
 							fontWeight: "revert",
 							fontSize: "large",
+							background: record.cancel?.status ? "red" : "transparent",
 						}}
 					>
 						${abonoRender}
@@ -169,91 +173,89 @@ export default function Abonos({
 		return porcent;
 	};
 	return (
-		<>
-			<Col xs={24} sm={24} md={10}>
-				{/* PRODUCTOS */}
-				<Table
-					id='tableApartado'
-					title={() => (
-						<Row justify='space-between'>
+		<Col xs={24} sm={24} md={10}>
+			{/* PRODUCTOS */}
+			<Table
+				id='tableApartado'
+				title={() => (
+					<Row justify='space-between'>
+						<h1
+							style={{
+								color: "white",
+								fontSize: "large",
+								fontWeight: "revert",
+								margin: "10px 0 0 10px",
+							}}
+						>
+							Abonos: {abonos.length}
+						</h1>
+					</Row>
+				)}
+				columns={colAbonos}
+				dataSource={abonos}
+				pagination={false}
+				loading={loading}
+				bordered
+				scroll={{ y: 190 }}
+				rowSelection={rowSelection}
+				size='small'
+				style={{
+					height: "380px",
+					borderRadius: "10px",
+					boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
+					margin: "10px",
+				}}
+				onRow={(record, rowIndex) => {
+					return {
+						onClick: (e) => {
+							click(record, rowIndex);
+						},
+					};
+				}}
+				locale={{
+					emptyText: (
+						<Result
+							icon={<SmileOutlined />}
+							// status="500"
+							subTitle='Selecciona un apartado'
+						/>
+					),
+				}}
+				footer={() => (
+					<>
+						<Row justify='end'>
 							<h1
 								style={{
-									color: "white",
-									fontSize: "large",
+									color: "green",
+									fontSize: "xx-large",
 									fontWeight: "revert",
-									margin: "10px 0 0 10px",
+									margin: "0 20px",
 								}}
 							>
-								Abonos: {abonos.length}
+								Abonos ${totalAbonos}
 							</h1>
 						</Row>
-					)}
-					columns={colAbonos}
-					dataSource={abonos}
-					pagination={false}
-					loading={loading}
-					bordered
-					scroll={{ y: 190 }}
-					rowSelection={rowSelection}
-					size='small'
-					style={{
-						height: "380px",
-						borderRadius: "10px",
-						boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
-						margin: "10px",
-					}}
-					onRow={(record, rowIndex) => {
-						return {
-							onClick: (e) => {
-								click(record, rowIndex);
-							},
-						};
-					}}
-					locale={{
-						emptyText: (
-							<Result
-								icon={<SmileOutlined />}
-								// status="500"
-								subTitle='Selecciona un apartado'
+						<Row justify='center'>
+							<Progress
+								strokeColor={
+									calculatePorcent() > 100
+										? {
+												from: "red",
+												to: "limegreen",
+										  }
+										: {
+												from: "dodgerblue",
+												to: "limegreen",
+										  }
+								}
+								percent={parseInt(calculatePorcent())}
+								status='active'
+								// style={{ width: "90%" }}
 							/>
-						),
-					}}
-					footer={() => (
-						<>
-							<Row justify='end'>
-								<h1
-									style={{
-										color: "green",
-										fontSize: "xx-large",
-										fontWeight: "revert",
-										margin: "0 20px",
-									}}
-								>
-									Abonos ${totalAbonos}
-								</h1>
-							</Row>
-							<Row justify='center'>
-								<Progress
-									strokeColor={
-										calculatePorcent() > 100
-											? {
-													from: "red",
-													to: "limegreen",
-											  }
-											: {
-													from: "dodgerblue",
-													to: "limegreen",
-											  }
-									}
-									percent={parseInt(calculatePorcent())}
-									status='active'
-									// style={{ width: "90%" }}
-								/>
-							</Row>
-						</>
-					)}
-				/>
-			</Col>
-		</>
+						</Row>
+					</>
+				)}
+			/>
+		</Col>
 	);
 }
