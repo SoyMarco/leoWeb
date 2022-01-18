@@ -9,17 +9,7 @@ import ErrorConection from "Utils/ErrorConection";
 import { AiFillPrinter } from "react-icons/ai";
 import Imprimir from "./Imprimir/Imprimir";
 import moment from "moment";
-import {
-	Table,
-	Result,
-	Col,
-	Divider,
-	Row,
-	Tooltip,
-	Button,
-	Switch,
-	Popconfirm,
-} from "antd";
+import { Table, Result, Col, Row, Tooltip, Button } from "antd";
 import AuthContext from "context/Auth/AuthContext";
 
 export default function Ventas({
@@ -31,6 +21,7 @@ export default function Ventas({
 	setloader,
 	stateRecord,
 	refetchCorte,
+	setmodalProductos,
 }) {
 	const { auth, timeLogout } = useContext(AuthContext);
 	const [imprimirApartado, setimprimirApartado] = useState(0);
@@ -108,51 +99,6 @@ export default function Ventas({
 		setdataVenta(record);
 		setimprimirApartado(record?.productos[0]?.apartado);
 	};
-	const borrarAbono = async (record, borrarEditar) => {
-		setloader(true);
-		try {
-			if (record?.productos[0]?.refApartado) {
-				let { data } = await mutateBORRAR_EDITAR_ABONO({
-					// Parameters
-					variables: {
-						input: {
-							// _id: record.productos[0]._id,
-							abono: 0,
-							borrarEditar: borrarEditar,
-							idVenta: record.id,
-							statusVenta: true,
-						},
-					},
-				});
-				if (data) {
-					openNotification("success", `Abono borrado`);
-					setloader(false);
-					refetch();
-				}
-			}
-		} catch (error) {
-			setloader(false);
-			ErrorConection(timeLogout);
-			console.log("error", error);
-		}
-	};
-	const tooltipStatusAbono = (record) => {
-		let title = "";
-		if (record?.productos[0]?.apartado > 0 && record.cancelado === false) {
-			title = "Abono activo";
-		} else if (
-			record?.productos[0]?.apartado > 0 &&
-			record.cancelado === true
-		) {
-			title = "No se puede activar, se borró el Abono vinculado";
-		} else if (record.cancelado === true) {
-			title = "Desactivada";
-		} else {
-			title = "Activa";
-		}
-
-		return title;
-	};
 
 	/* COLUMNAS VENTAS */
 	const colVentas = [
@@ -166,6 +112,7 @@ export default function Ventas({
 			render: (folio, record) => (
 				<h4
 					style={{
+						fontWeight: "revert",
 						color: record?.productos[0]?.apartado > 0 ? "darkblue" : "green",
 					}}
 				>
@@ -182,6 +129,7 @@ export default function Ventas({
 			render: (createAt, record) => (
 				<h4
 					style={{
+						fontWeight: "revert",
 						color: record?.productos[0]?.apartado > 0 ? "darkblue" : "green",
 					}}
 				>
@@ -198,6 +146,7 @@ export default function Ventas({
 			render: (efectivo, record) => (
 				<h3
 					style={{
+						fontWeight: "revert",
 						textAlignLast: "right",
 						color: record?.productos[0]?.apartado > 0 ? "darkblue" : "green",
 					}}
@@ -216,6 +165,7 @@ export default function Ventas({
 				<Row justify='space-around'>
 					<h3
 						style={{
+							fontWeight: "revert",
 							textAlignLast: "center",
 							color: record?.productos[0]?.apartado > 0 ? "darkblue" : "green",
 						}}
@@ -235,6 +185,7 @@ export default function Ventas({
 				<h3
 					style={{
 						textAlignLast: "right",
+						fontWeight: "revert",
 						color: record?.productos[0]?.apartado > 0 ? "darkblue" : "green",
 					}}
 				>
@@ -300,63 +251,64 @@ export default function Ventas({
 				</Row>
 			),
 		},
-		{
-			title: "Activo",
-			dataIndex: "totalArticulo",
-			key: "totalArticulo",
-			ellipsis: {
-				showTitle: false,
-			},
-			width: "60px",
-			render: (totalArticulo, record) => (
-				<Row justify='center'>
-					<Tooltip placement='right' title={() => tooltipStatusAbono(record)}>
-						{record?.productos[0]?.apartado > 0 ? (
-							// Switch para APARTADOS
-							<Popconfirm
-								title='Si borras este abono no se podrá recuperar'
-								onConfirm={() => borrarAbono(record, "borrar")}
-								placement='topRight'
-								disabled={
-									record?.productos[0]?.apartado > 0 &&
-									record?.cancelado === true
-								}
-							>
-								<Switch
-									disabled={
-										record?.productos[0]?.apartado > 0 &&
-										record?.cancelado === true
-									}
-									loading={loader || loadGetApartado}
-									checked={!record.cancelado}
-									size='small'
-									style={
-										record.cancelado
-											? { background: "red", marginTop: "5px" }
-											: record?.productos[0]?.apartado > 0
-											? { background: "blue", marginTop: "5px" }
-											: { background: "limegreen", marginTop: "5px" }
-									}
-								/>
-							</Popconfirm>
-						) : (
-							// Switch para VENTAS
-							<Switch
-								// disabled={record.cancelado === true ? true : false}
-								loading={loader || loadGetApartado}
-								checked={!record.cancelado}
-								size='small'
-								style={{
-									background: record.cancelado ? "red" : "limegreen",
-									marginTop: "5px",
-								}}
-								onClick={() => cancelVenta(record)}
-							/>
-						)}
-					</Tooltip>
-				</Row>
-			),
-		},
+		// {
+		// 	title: "Activo",
+		// 	dataIndex: "totalArticulo",
+		// 	key: "totalArticulo",
+		// 	ellipsis: {
+		// 		showTitle: false,
+		// 	},
+		// 	width: "60px",
+		// 	render: (totalArticulo, record) => (
+		// 		<Row justify='center'>
+		// 			<Tooltip placement='right' title={() => tooltipStatusAbono(record)}>
+		// 				{record?.productos[0]?.apartado > 0 ? (
+		// 					// Switch para APARTADOS
+		// 					<Popconfirm
+		// 						title='Si borras este abono no se podrá recuperar'
+		// 						onConfirm={() => borrarAbono(record, "borrar")}
+		// 						placement='topRight'
+		// 						disabled={
+		// 							record?.productos[0]?.apartado > 0 &&
+		// 							record?.cancelado === true
+		// 						}
+		// 					>
+		// 						<Switch
+		// 							disabled={
+		// 								record?.productos[0]?.apartado > 0 &&
+		// 								record?.cancelado === true
+		// 							}
+		// 							loading={loader || loadGetApartado}
+		// 							checked={!record.cancelado}
+		// 							size='small'
+		// 							style={{
+		// 								background: record.cancelado
+		// 									? "red"
+		// 									: record?.productos[0]?.apartado > 0
+		// 									? "blue"
+		// 									: "limegreen",
+		// 								marginTop: "5px",
+		// 							}}
+		// 						/>
+		// 					</Popconfirm>
+		// 				) : (
+		// 					// Switch para VENTAS
+		// 					<Switch
+		// 						// disabled={record.cancelado === true ? true : false}
+		// 						loading={loader || loadGetApartado}
+		// 						checked={!record.cancelado}
+		// 						size='small'
+		// 						style={{
+		// 							background: record.cancelado ? "red" : "limegreen",
+		// 							marginTop: "5px",
+		// 						}}
+		// 						onClick={() => cancelVenta(record)}
+		// 					/>
+		// 				)}
+		// 			</Tooltip>
+		// 		</Row>
+		// 	),
+		// },
 	];
 
 	return (
@@ -380,10 +332,7 @@ export default function Ventas({
 					/>
 				) : null}
 			</Col>
-			<Col xs={24} sm={24} md={15}>
-				<Divider orientation='left' style={{ marginTop: 0 }}>
-					Ventas
-				</Divider>
+			<Col xs={24} sm={24} md={24}>
 				<Table
 					columns={colVentas}
 					dataSource={getVentas}
@@ -403,9 +352,7 @@ export default function Ventas({
 						return {
 							onClick: (e) => {
 								click(record, rowIndex);
-							},
-							onMouseEnter: (event) => {
-								click(record, rowIndex);
+								setmodalProductos(true);
 							},
 						};
 					}}

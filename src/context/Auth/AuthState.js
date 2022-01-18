@@ -23,7 +23,8 @@ export default function AuthState(props) {
 			try {
 				let dataToken = decodeToken(token);
 				let timeNow = Math.round(Date.now() / 1000);
-				if (dataToken.exp > timeNow) {
+				console.log(dataToken);
+				if (dataToken.exp > timeNow && dataToken.name) {
 					setAuth(dataToken);
 				} else {
 					openNotification("error", "Tu sesión expiro. Vuelve a ingresar");

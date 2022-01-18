@@ -148,6 +148,7 @@ const CobrarApartado = ({
 							ventaACuenta: ventaACuenta,
 							folioApartado: dataApartado.folio,
 							idApartado: dataApartado.id,
+							nombreCliente: dataApartado.cliente,
 							keyF: keyF,
 						},
 					},

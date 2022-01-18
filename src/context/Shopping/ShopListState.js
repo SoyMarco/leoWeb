@@ -112,7 +112,7 @@ const ShopListState = (props) => {
 					},
 				});
 				if (data) {
-					openNotification("success", "F3 guardado con exito");
+					openNotification("success", "F3 guardado");
 					venta.idF3 = data.registerF3._id;
 				}
 			} catch (error) {

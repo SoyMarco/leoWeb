@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Layout } from "antd";
 import "antd/dist/antd.css";
 import "./layout.css";
 import "material-design-icons-iconfont";
 import { openNotification } from "Utils/openNotification";
 import { useHistory, useLocation } from "react-router-dom";
-import AuthContext from "context/Auth/AuthContext";
 import Horizontal from "../Components/Horizontal";
-
 import FooterHorizontal from "../Components/Footer";
+import AuthContext from "context/Auth/AuthContext";
 
 function LayoutForm({ children }) {
 	// const [collapsed, setcollapsed] = useState(true);
 	const { Header, Content, Footer } = Layout;
-	const { logout, auth } = useAuth();
+	const { auth, logout } = useContext(AuthContext);
 	const [swtichstate, setswtichstate] = useState(true);
 	// const [currentMenu, setcurrentMenu] = useState(1);
 	const [titleWeb, settitleWeb] = useState(null);

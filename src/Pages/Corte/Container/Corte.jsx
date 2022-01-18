@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { TablaProductos, TablaTotales, TablaVentas } from "../Components";
+import { TablaTotales } from "../Components";
 import ErrorConection from "Utils/ErrorConection";
 import { GET_CORTE } from "graphql/venta";
 import { useQuery } from "@apollo/client";
@@ -19,10 +19,7 @@ const Corte = () => {
 		notifyOnNetworkStatusChange: true,
 	});
 
-	const [stateRecord, setstateRecord] = useState(null);
-	const [loader, setloader] = useState(false);
 	const [getTotales, setgetTotales] = useState({});
-	const [getVentas, setgetVentas] = useState([]);
 
 	if (error) {
 		ErrorConection(timeLogout);
@@ -41,28 +38,17 @@ const Corte = () => {
 	}, [getCorteData]);
 
 	const refetchCorte = (getData) => {
-		let { totales, ventas } = getData;
+		let { totales } = getData;
 		setgetTotales(totales);
-		setgetVentas(ventas);
 	};
 	return (
 		<>
 			<Row justify='center'>
-				<h1 style={{ fontSize: "x-large", fontWeight: "bold", color: "blue" }}>
+				<h1
+					style={{ fontSize: "x-large", fontWeight: "bold", color: "darkblue" }}
+				>
 					Corte
 				</h1>
-			</Row>
-			<Row style={{ border: 0, margin: 0, padding: 0 }}>
-				<TablaVentas
-					getVentas={getVentas}
-					loading={loading}
-					loader={loader}
-					setloader={setloader}
-					setstateRecord={setstateRecord}
-					stateRecord={stateRecord}
-					refetchCorte={refetchCorte}
-				/>
-				<TablaProductos stateRecord={stateRecord} loading={loading} />
 			</Row>
 
 			{/* <Divider orientation='left' style={{ marginBottom: 0 }}>

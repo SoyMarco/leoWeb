@@ -59,7 +59,7 @@ export default function TotalesCorte({ loading, getTotales, refetch }) {
 	};
 	return (
 		<>
-			<Card title='CORTE' bordered={false}>
+			<Card>
 				<Row style={{ margin: "15px 50px 0 50px" }}>
 					<Col xs={3}>
 						<h3>Incio Caja</h3>
