@@ -23,7 +23,6 @@ export default function AuthState(props) {
 			try {
 				let dataToken = decodeToken(token);
 				let timeNow = Math.round(Date.now() / 1000);
-				console.log(dataToken);
 				if (dataToken.exp > timeNow && dataToken.name) {
 					setAuth(dataToken);
 				} else {
@@ -31,7 +30,7 @@ export default function AuthState(props) {
 					logout();
 				}
 			} catch (error) {
-				logout();
+				console.log("timeLogout@", error);
 			}
 		} else {
 			logout();

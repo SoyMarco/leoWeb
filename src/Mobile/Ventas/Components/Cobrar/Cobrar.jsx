@@ -98,6 +98,7 @@ const Cobrar = ({
 						apartado: item.apartado,
 						cantidad: item.cantidad,
 						idArray: item.key,
+						key: item.key,
 						nombre: item.nombre,
 						precio: item.precio,
 						refApartado: item.refApartado,

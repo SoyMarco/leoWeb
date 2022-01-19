@@ -1,320 +1,205 @@
-// import React, { useEffect, useState } from "react";
-// import {
-// 	Table,
-// 	Result,
-// 	Divider,
-// 	Row,
-// 	Tooltip,
-// 	Button,
-// 	Modal,
-// 	Popconfirm,
-// 	Switch,
-// } from "antd";
-// import { SmileOutlined } from "@ant-design/icons";
-// import { UrlFrontend } from "config/apollo";
-// import { Link } from "react-router-dom";
-// import moment from "moment";
+import React, { useEffect, useState, useContext } from "react";
+import { Table, Result, Row, Tooltip, Button, Modal, Switch, Col } from "antd";
+import { SmileOutlined } from "@ant-design/icons";
+import moment from "moment";
+import { AiFillPrinter } from "react-icons/ai";
+import SchemaProductos from "../Schema/SchemaProductos";
+import { CANCELAR_VENTA } from "graphql/venta";
+import { useMutation } from "@apollo/client";
+import ErrorConection from "Utils/ErrorConection";
+import { openNotification } from "Utils/openNotification";
+import AuthContext from "context/Auth/AuthContext";
 
-// export default function Productos({
-// 	stateRecord,
-// 	loading,
-// 	modalProductos,
-// 	setmodalProductos,
-// }) {
-// 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
-// 	const [dataProductos, setdataProductos] = useState([]);
+export default function Productos({
+	stateRecord,
+	modalProductos,
+	setmodalProductos,
+	setimprimir,
+}) {
+	const { timeLogout } = useContext(AuthContext);
+	const [mutateCANCELAR_VENTA, { loading }] = useMutation(CANCELAR_VENTA);
 
-// 	useEffect(() => {
-// 		console.log("stateRecord@@@", stateRecord);
-// 		if (stateRecord) {
-// 			let { productos } = stateRecord;
-// 			let listaProductos = productos.map((item) => {
-// 				return { ...item, key: item.idArray };
-// 			});
-// 			setdataProductos(listaProductos);
-// 		}
-// 	}, [stateRecord]);
+	const [selectedRowKeys, setselectedRowKeys] = useState(0);
+	const [cantidadProductos, setcantidadProductos] = useState(0);
+	const [sumaProductos, setsumaProductos] = useState(0);
+	const [generalColor, setgeneralColor] = useState("green");
+	useEffect(() => {
+		if (stateRecord?.productos?.length > 0) {
+			let numProd = 0;
+			let sumProd = 0;
+			for (const item of stateRecord?.productos) {
+				if (item.cancelado !== true) {
+					numProd = numProd + item.cantidad;
+					sumProd = sumProd + item.totalArticulo;
+				}
+			}
+			setcantidadProductos(numProd);
+			setsumaProductos(sumProd);
 
-// 	const onSelectChange = () => {
-// 		setselectedRowKeys([]);
-// 	};
-// 	const rowSelection = {
-// 		selectedRowKeys,
-// 		onChange: onSelectChange,
-// 	};
+			// Color general
+			if (stateRecord?.cancelado === true) {
+				setgeneralColor("red");
+				return;
+			}
+			for (const item of stateRecord?.productos) {
+				if (item.apartado > 0) {
+					setgeneralColor("darkblue");
+					return;
+				}
+			}
+			setgeneralColor("green");
+		}
+	}, [stateRecord]);
 
-// 	const click = (record, rowIndex) => {
-// 		setselectedRowKeys([record.key]);
-// 	};
-// 	const tooltipStatusAbono = (record) => {
-// 		let title = "";
-// 		if (record?.apartado > 0 && record.cancelado === false) {
-// 			title = "Abono activo";
-// 		} else if (record?.apartado > 0 && record.cancelado === true) {
-// 			title = "No se puede activar, se borró el Abono vinculado";
-// 		} else if (record.cancelado === true) {
-// 			title = "Desactivada";
-// 		} else {
-// 			title = "Activa";
-// 		}
+	const onSelectChange = () => {
+		setselectedRowKeys([]);
+	};
+	const rowSelection = {
+		selectedRowKeys,
+		onChange: onSelectChange,
+	};
 
-// 		return title;
-// 	};
-// 	const pasarAFechaLLLL = (item) => {
-// 		return moment.unix(item / 1000).format("LLLL");
-// 	};
-// 		const borrarAbono = async (record, borrarEditar) => {
-// 			setloader(true);
-// 			try {
-// 				if (record?.productos[0]?.refApartado) {
-// 					let { data } = await mutateBORRAR_EDITAR_ABONO({
-// 						// Parameters
-// 						variables: {
-// 							input: {
-// 								// _id: record.productos[0]._id,
-// 								abono: 0,
-// 								borrarEditar: borrarEditar,
-// 								idVenta: record.id,
-// 								statusVenta: true,
-// 							},
-// 						},
-// 					});
-// 					if (data) {
-// 						openNotification("success", `Abono borrado`);
-// 						setloader(false);
-// 						refetch();
-// 					}
-// 				}
-// 			} catch (error) {
-// 				setloader(false);
-// 				ErrorConection(timeLogout);
-// 				console.log("error", error);
-// 			}
-// 		};
-// 	/* COLUMNAS PRODUCTOS */
-// 	const colProductos = [
-// 		{
-// 			title: "Apartado",
-// 			dataIndex: "key",
-// 			key: "key",
-// 			width: "80px",
-// 			ellipsis: true,
-// 			render: (key, record) =>
-// 				record.apartado > 0 && (
-// 					<Link
-// 						to={{
-// 							pathname: `/apartado/${record.apartado}`,
-// 						}}
-// 					>
-// 						<h3
-// 							style={{
-// 								textAlignLast: "center",
-// 								fontWeight: "revert",
-// 								fontSize: "large",
-// 								color: "#1890ff",
-// 							}}
-// 						>
-// 							{record.apartado}
-// 						</h3>
-// 					</Link>
-// 				),
-// 		},
-// 		{
-// 			title: "Nombre",
-// 			dataIndex: "nombre",
-// 			key: "nombre",
-// 			// width: "120px",
-// 			ellipsis: true,
-// 			render: (nombre, record) =>
-// 				nombre !== "Articulo" ? (
-// 					<Tooltip placement='topLeft' title={nombre}>
-// 						<h3
-// 							style={{
-// 								fontWeight: "revert",
-// 								fontSize: "large",
-// 							}}
-// 						>
-// 							{nombre}
-// 						</h3>
-// 					</Tooltip>
-// 				) : (
-// 					<p>{nombre}</p>
-// 				),
-// 		},
-// 		{
-// 			title: "Precio c/u",
-// 			dataIndex: "precio",
-// 			key: "precio",
-// 			ellipsis: true,
-// 			render: (precio) => (
-// 				<Tooltip placement='top' title={precio}>
-// 					<h3
-// 						style={{
-// 							textAlignLast: "right",
-// 							fontWeight: "revert",
-// 							fontSize: "large",
-// 						}}
-// 					>
-// 						${precio}
-// 					</h3>
-// 				</Tooltip>
-// 			),
-// 		},
-// 		{
-// 			title: "Cantidad",
-// 			dataIndex: "cantidad",
-// 			key: "cantidad",
-// 			ellipsis: true,
-// 			render: (cantidad, record) => (
-// 				<Row justify='space-around'>
-// 					<h3
-// 						style={{
-// 							textAlignLast: "center",
-// 							fontWeight: "revert",
-// 							// fontSize: "x-large",
-// 						}}
-// 					>
-// 						{cantidad}
-// 					</h3>
-// 				</Row>
-// 			),
-// 		},
-// 		{
-// 			title: "Total",
-// 			dataIndex: "totalArticulo",
-// 			key: "totalArticulo",
-// 			ellipsis: true,
-// 			render: (totalArticulo, record) => (
-// 				<Tooltip placement='top' title={totalArticulo}>
-// 					<Row justify='space-around'>
-// 						<h3
-// 							style={{
-// 								textAlignLast: "center",
-// 								fontWeight: "revert",
-// 								// fontSize: "x-large",
-// 							}}
-// 						>
-// 							${totalArticulo}
-// 						</h3>
-// 					</Row>
-// 				</Tooltip>
-// 			),
-// 		},
-// 		{
-// 			title: "Activo",
-// 			dataIndex: "totalArticulo",
-// 			key: "totalArticulo",
-// 			ellipsis: {
-// 				showTitle: false,
-// 			},
-// 			width: "60px",
-// 			render: (totalArticulo, record) => (
-// 				<Row justify='center'>
-// 					<Tooltip placement='right' title={() => tooltipStatusAbono(record)}>
-// 						{record?.apartado > 0 ? (
-// 							// Switch para APARTADOS
-// 							<Popconfirm
-// 								title='Si borras este abono no se podrá recuperar'
-// 								placement='topRight'
-// 								disabled={record?.apartado > 0 && record?.cancelado === true}
-// 							>
-// 								<Switch
-// 									disabled={record?.apartado > 0 && record?.cancelado === true}
-// 									// onConfirm={() => borrarAbono(record, "borrar")}
-// 									// loading={loader || loadGetApartado}
-// 									checked={!record.cancelado}
-// 									size='small'
-// 									style={{
-// 										background: record.cancelado
-// 											? "red"
-// 											: record?.apartado > 0
-// 											? "blue"
-// 											: "limegreen",
-// 										marginTop: "5px",
-// 									}}
-// 								/>
-// 							</Popconfirm>
-// 						) : (
-// 							// Switch para VENTAS
-// 							<Switch
-// 								// disabled={record.cancelado === true ? true : false}
-// 								// loading={loader || loadGetApartado}
-// 								checked={!record.cancelado}
-// 								size='small'
-// 								style={{
-// 									background: record.cancelado ? "red" : "limegreen",
-// 									marginTop: "5px",
-// 								}}
-// 								// onClick={() => cancelVenta(record)}
-// 							/>
-// 						)}
-// 					</Tooltip>
-// 				</Row>
-// 			),
-// 		},
-// 	];
-// 	const btnCancel = () => {
-// 		setmodalProductos(false);
-// 	};
-// 	return (
-// 		<Modal
-// 			visible={modalProductos}
-// 			width={"700px"}
-// 			onCancel={() => btnCancel()}
-// 			style={{ top: 50 }}
-// 			className='ModalCobrarPrincipal'
-// 			title={
-// 				<>
-// 					Productos de la venta: <b>{stateRecord?.folio}</b>
-// 				</>
-// 			}
-// 		>
-// 			<h2 style={{ color: "darkblue" }}>
-// 				{pasarAFechaLLLL(stateRecord?.createAt)}
-// 			</h2>
+	const click = (record, rowIndex) => {
+		setselectedRowKeys([record.key]);
+	};
 
-// 			{/* PRODUCTOS */}
-// 			<Table
-// 				columns={colProductos}
-// 				dataSource={dataProductos}
-// 				pagination={false}
-// 				loading={loading}
-// 				bordered
-// 				rowSelection={rowSelection}
-// 				size='small'
-// 				scroll={{ y: 350 }}
-// 				style={{
-// 					borderRadius: "15px",
-// 					boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
-// 					marginTop: "10px",
-// 				}}
-// 				onRow={(record, rowIndex) => {
-// 					return {
-// 						onClick: (e) => {
-// 							click(record, rowIndex);
-// 						},
-// 					};
-// 				}}
-// 				locale={{
-// 					emptyText: (
-// 						<Result
-// 							icon={<SmileOutlined />}
-// 							// status="500"
-// 							subTitle='Selecciona una venta'
-// 						/>
-// 					),
-// 				}}
-// 			/>
-// 			<Row align='space-around'>
-// 				<h1 className='numeroProductos'>
-// 					{stateRecord?.productos?.length
-// 						? `Productos: ${stateRecord?.productos?.length}`
-// 						: null}
-// 				</h1>
-// 				<h1 className='totalProductos'>
-// 					{stateRecord ? `$ ${stateRecord?.total}` : null}
-// 				</h1>
-// 			</Row>
-// 		</Modal>
-// 	);
-// }
+	const tooltipStatusAbono = (record) => {
+		if (record.cancelado === true) {
+			return "Desactivado";
+		}
+		return "Activado";
+	};
+
+	const pasarAFechaLLLL = (item) => {
+		return moment.unix(item / 1000).format("LLLL");
+	};
+
+	const btnCancel = () => {
+		setmodalProductos(false);
+	};
+
+	const cancelVenta = async () => {
+		if (loading === false) {
+			try {
+				const { data } = await mutateCANCELAR_VENTA({
+					variables: {
+						input: {
+							id: stateRecord.id,
+							status: stateRecord.cancelado,
+						},
+					},
+				});
+				if (data) {
+					openNotification(
+						"success",
+						`Venta ${
+							stateRecord.cancelado ? "recuperada" : "cancelada"
+						} con exito`
+					);
+				}
+			} catch (error) {
+				ErrorConection(timeLogout);
+			}
+		}
+	};
+	return (
+		<Modal
+			visible={modalProductos}
+			width={"700px"}
+			onCancel={() => btnCancel()}
+			style={{ top: 50 }}
+			className='ModalCobrarPrincipal'
+			title={
+				<>
+					Productos de la venta: <b>{stateRecord?.folio}</b>
+				</>
+			}
+			footer={[
+				<Button
+					key='submit'
+					type='primary'
+					size='large'
+					onClick={() => btnCancel()}
+				>
+					Cerrar
+				</Button>,
+			]}
+		>
+			<Row justify='space-around'>
+				<Col md={20}>
+					<h2 style={{ color: generalColor }}>
+						{pasarAFechaLLLL(stateRecord?.createAt)}
+					</h2>
+				</Col>
+				<Col md={4}>
+					<Tooltip placement='left' title={"Reimprimir"}>
+						<Button
+							icon={<AiFillPrinter style={{ fontSize: "30px" }} />}
+							size='large'
+							type='primary'
+							ghost
+							style={{
+								color: generalColor,
+							}}
+							onClick={() => setimprimir(true)}
+						/>
+					</Tooltip>
+					<Tooltip
+						placement='top'
+						title={() => tooltipStatusAbono(stateRecord)}
+					>
+						<Switch
+							loading={loading}
+							checked={!stateRecord?.cancelado}
+							style={{
+								background: generalColor,
+								margin: "0 0 15px 15px",
+							}}
+							onClick={() => cancelVenta()}
+						/>
+					</Tooltip>
+				</Col>
+			</Row>
+			{/* PRODUCTOS */}
+			<Table
+				rowKey={(record) => record._id}
+				columns={SchemaProductos(stateRecord)}
+				dataSource={stateRecord?.productos}
+				pagination={false}
+				bordered
+				rowSelection={rowSelection}
+				size='small'
+				scroll={{ y: 350 }}
+				style={{
+					borderRadius: "15px",
+					boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
+					marginTop: "10px",
+				}}
+				onRow={(record, rowIndex) => {
+					return {
+						onClick: (e) => {
+							click(record, rowIndex);
+						},
+					};
+				}}
+				locale={{
+					emptyText: (
+						<Result
+							icon={<SmileOutlined />}
+							// status="500"
+							subTitle='Selecciona una venta'
+						/>
+					),
+				}}
+			/>
+			<Row align='space-around'>
+				<h1 className='numeroProductos'>
+					{cantidadProductos ? `Productos: ${cantidadProductos}` : null}
+				</h1>
+				<h1 className='totalProductos'>
+					{sumaProductos ? `$ ${sumaProductos}` : null}
+				</h1>
+			</Row>
+		</Modal>
+	);
+}

@@ -26,7 +26,6 @@ const CobrarApartado = ({
 	const { auth, timeLogout } = useContext(AuthContext);
 	const { addProductShopList } = useContext(ShopListContext);
 	const history = useHistory();
-	console.log("dataApartado", dataApartado);
 	const [mutateADD_ABONO] = useMutation(ADD_ABONO);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);

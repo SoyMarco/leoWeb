@@ -83,10 +83,6 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
 		if (e.keyCode === 113) {
 			savePrintNewV("F2");
 		}
-		// F3
-		if (e.keyCode === 114) {
-			document.querySelector("#cobrarTarjeta").select();
-		}
 	};
 
 	const OnValuesChange = () => {
@@ -108,6 +104,7 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
 				apartado: item.apartado,
 				cantidad: item.cantidad,
 				idArray: item.key,
+				key: item.key,
 				nombre: item.nombre,
 				precio: item.precio,
 				refApartado: item.refApartado,

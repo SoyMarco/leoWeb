@@ -5,16 +5,15 @@ import { Row } from "antd";
 import { GET_CORTE } from "graphql/venta";
 import { useQuery } from "@apollo/client";
 import AuthContext from "context/Auth/AuthContext";
-
+import Imprimir from "../Components/Imprimir/Imprimir";
 import "./ventas.css";
 
 export default function Ventas() {
-	const { timeLogout } = useContext(AuthContext);
+	const { auth, timeLogout } = useContext(AuthContext);
 
 	let {
 		data: getCorteData,
 		error,
-		loading,
 		refetch,
 	} = useQuery(GET_CORTE, {
 		notifyOnNetworkStatusChange: true,
@@ -22,8 +21,9 @@ export default function Ventas() {
 	if (error) {
 		ErrorConection(timeLogout);
 	}
+
+	const [imprimir, setimprimir] = useState(false);
 	const [stateRecord, setstateRecord] = useState(null);
-	const [loader, setloader] = useState(false);
 	const [getVentas, setgetVentas] = useState([]);
 	const [modalProductos, setmodalProductos] = useState(false);
 
@@ -43,6 +43,7 @@ export default function Ventas() {
 		let { ventas } = getData;
 		setgetVentas(ventas);
 	};
+
 	return (
 		<div>
 			<Row justify='center'>
@@ -55,21 +56,26 @@ export default function Ventas() {
 			<Row>
 				<TablaVentas
 					getVentas={getVentas}
-					loading={loading}
-					loader={loader}
-					setloader={setloader}
 					setstateRecord={setstateRecord}
 					stateRecord={stateRecord}
-					refetchCorte={refetchCorte}
 					setmodalProductos={setmodalProductos}
+					setimprimir={setimprimir}
 				/>
 			</Row>
-			{/* <TablaProductos
+			<TablaProductos
 				stateRecord={stateRecord}
-				loading={loading}
 				modalProductos={modalProductos}
 				setmodalProductos={setmodalProductos}
-			/> */}
+				setimprimir={setimprimir}
+			/>
+			{imprimir ? (
+				<Imprimir
+					imprimir={imprimir}
+					setimprimir={setimprimir}
+					stateRecord={stateRecord}
+					auth={auth}
+				/>
+			) : null}
 		</div>
 	);
 }

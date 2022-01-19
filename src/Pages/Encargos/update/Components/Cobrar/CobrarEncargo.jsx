@@ -161,6 +161,7 @@ const CobrarApartado = ({
 					apartado: dataApartado.folio,
 					cantidad: 1,
 					idArray: dataApartado.folio,
+					key: dataApartado.key,
 					nombre: "APARTADO",
 					precio: total,
 					refApartado: dataApartado.id,

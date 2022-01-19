@@ -1,10 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import { openNotification } from "../../../Utils/openNotification";
-import ErrorConection from "Utils/ErrorConection";
-import { CANCELAR_VENTA } from "../../../graphql/venta";
+
 import { MdLocalGroceryStore } from "react-icons/md";
 import { AiFillPrinter } from "react-icons/ai";
-import { useMutation } from "@apollo/client";
 import Imprimir from "./Imprimir/Imprimir";
 import AuthContext from "context/Auth/AuthContext";
 
@@ -29,7 +26,6 @@ export default function Ventas({
 	setloader,
 	stateRecord,
 }) {
-	const [mutateCANCELAR_VENTA] = useMutation(CANCELAR_VENTA);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const { auth, timeLogout } = useContext(AuthContext);
 
@@ -58,30 +54,7 @@ export default function Ventas({
 		let fecha = moment.unix(item / 1000).format("LTS");
 		return fecha;
 	};
-	const cancelVenta = async (item) => {
-		setloader(true);
-		try {
-			const { data } = await mutateCANCELAR_VENTA({
-				variables: {
-					input: {
-						id: item.id,
-						status: item.cancelado,
-					},
-				},
-			});
-			if (data) {
-				openNotification(
-					"success",
-					`Venta ${item.cancelado ? "recuperada" : "cancelada"} con exito`
-				);
-				refetch();
-				setloader(false);
-			}
-		} catch (error) {
-			setloader(false);
-			ErrorConection(timeLogout);
-		}
-	};
+
 	/* COLUMNAS VENTAS */
 	const colVentas = [
 		{
@@ -276,13 +249,13 @@ export default function Ventas({
 									? { background: "blue", marginTop: "5px" }
 									: { background: "limegreen", marginTop: "5px" }
 							}
-							onClick={() =>
-								record?.productos[0]?.apartado > 0
-									? window.open(
-											`${UrlFrontend}apartado/${record?.productos[0]?.apartado}`
-									  )
-									: cancelVenta(record)
-							}
+							// onClick={() =>
+							// 	record?.productos[0]?.apartado > 0
+							// 		? window.open(
+							// 				`${UrlFrontend}apartado/${record?.productos[0]?.apartado}`
+							// 		  )
+							// 		: cancelVenta(record)
+							// }
 						/>
 						{/* </Popconfirm> */}
 					</Tooltip>

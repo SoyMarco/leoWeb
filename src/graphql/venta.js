@@ -23,6 +23,7 @@ export const GET_VENTAS_DIA = gql`
 			productos {
 				_id
 				idArray
+				key
 				nombre
 				precio
 				cantidad
@@ -57,6 +58,7 @@ export const GET_VENTAS_DIA_ADMIN = gql`
 			productos {
 				_id
 				idArray
+				key
 				nombre
 				precio
 				cantidad
@@ -68,51 +70,7 @@ export const GET_VENTAS_DIA_ADMIN = gql`
 		}
 	}
 `;
-export const CANCELAR_VENTA = gql`
-	mutation cancelarVenta($input: CancelarVentaInput) {
-		cancelarVenta(input: $input) {
-			ventas {
-				key
-				id
-				createAt
-				folio
-				cancelado
-				total
-				efectivo
-				tarjeta
-				aCuenta
-				pagoCon
-				productos {
-					_id
-					idArray
-					nombre
-					precio
-					cantidad
-					cancelado
-					totalArticulo
-					apartado
-					refApartado
-				}
-			}
-			totales {
-				key
-				inicioCaja
-				ventasEfectivo
-				totalEfectivo
-				efectivoFinalCaja
-				entSal
-				entradas
-				salidas
-				efectivo
-				tarjeta
-				aCuenta
-				total
-				finCaja
-				recargas
-			}
-		}
-	}
-`;
+
 export const GET_HEROKU_DESPIERTO = gql`
 	query getHerokuDespierto {
 		getHerokuDespierto {
@@ -137,6 +95,7 @@ export const GET_VENTAS_MOBILE = gql`
 			productos {
 				_id
 				idArray
+				key
 				nombre
 				precio
 				cantidad
@@ -154,10 +113,13 @@ export const VENTA_MOBILE_FALSE = gql`
 	}
 `;
 
-export const GET_CORTE = gql`
-	query getCorte {
-		getCorte {
-			ventas {
+export const GET_TOTAL_VENTAS_DIA = gql`
+	query getTotalVentasDia {
+		getTotalVentasDia
+	}
+`;
+
+const getCorteType = `ventas {
 				key
 				id
 				createAt
@@ -171,6 +133,7 @@ export const GET_CORTE = gql`
 				productos {
 					_id
 					idArray
+					key
 					nombre
 					precio
 					cantidad
@@ -195,16 +158,29 @@ export const GET_CORTE = gql`
 				total
 				finCaja
 				recargas
-			}
+			}`;
+export const GET_CORTE = gql`
+	query getCorte {
+		getCorte {
+			${getCorteType}
+		}
+	}
+`;
+export const CANCELAR_PRODUCTO_VENTA = gql`
+	mutation cancelProductVenta($input: cancelProductVentaInput) {
+		cancelProductVenta(input: $input) {
+			${getCorteType}
+		}
+	}
+`;
+export const CANCELAR_VENTA = gql`
+	mutation cancelarVenta($input: CancelarVentaInput) {
+		cancelarVenta(input: $input) {
+			${getCorteType}
 		}
 	}
 `;
 
-export const GET_TOTAL_VENTAS_DIA = gql`
-	query getTotalVentasDia {
-		getTotalVentasDia
-	}
-`;
 //llamadas locales
 export const VENTA_F3 = gql`
 	query ventaF3 {

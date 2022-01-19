@@ -10,10 +10,7 @@ import ErrorConection from "Utils/ErrorConection";
 import AuthContext from "context/Auth/AuthContext";
 import { ShoppingOutlined } from "@ant-design/icons";
 
-export default function GetVentasF3({
-	refetchVentaMobile,
-	setrefetchVentaMobile,
-}) {
+export default function GetVentasF3() {
 	const { timeLogout } = useContext(AuthContext);
 	const {
 		DrawerF3Visible,
@@ -29,15 +26,15 @@ export default function GetVentasF3({
 		startPolling,
 		stopPolling,
 	} = useQuery(GET_ALL_F3);
+
 	const [mutateCANCEL_F3] = useMutation(CANCEL_F3);
+
+	if (errorAllF3) {
+		console.log("ERROR GetVentasF3", errorAllF3);
+	}
 
 	const [loader, setloader] = useState(false);
 	const [dataTable, setdataTable] = useState([]);
-
-	useEffect(() => {
-		refetchAllF3();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
 
 	useEffect(() => {
 		if (DrawerF3Visible === true) {
@@ -57,9 +54,7 @@ export default function GetVentasF3({
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dataTable]);
-	if (errorAllF3) {
-		console.log("ERROR GetVentasF3", errorAllF3);
-	}
+
 	useEffect(() => {
 		startPolling(300000);
 		return () => {
@@ -67,15 +62,6 @@ export default function GetVentasF3({
 		};
 	}, [startPolling, stopPolling]);
 
-	useEffect(() => {
-		if (refetchVentaMobile === true) {
-			refetchAllF3();
-			setTimeout(() => {
-				setrefetchVentaMobile(false);
-			}, 1000);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [refetchVentaMobile]);
 	const onClose = () => {
 		setDrawerF3Visible(!DrawerF3Visible);
 	};
@@ -214,8 +200,6 @@ export default function GetVentasF3({
 		},
 	];
 	const addToShop = (key, record) => {
-		console.log("addToShop@@", key, record);
-
 		addProductShopList({
 			nombre: record.nombre,
 			precio: record.precio,

@@ -51,11 +51,7 @@ export const GET_PRODUCTOS_FOLIO = gql`
 				abono
 				vendedor
 				createAt
-				cancel {
-					status
-					fecha
-					vendedor
-				}
+				cancel
 				cancelado {
 					status
 					fecha
@@ -139,11 +135,7 @@ export const GET_APARTADOS = gql`
 				abono
 				vendedor
 				createAt
-				cancel {
-					status
-					fecha
-					vendedor
-				}
+				cancel
 				cancelado {
 					status
 					fecha
@@ -222,11 +214,7 @@ export const ADD_ABONO = gql`
 				abono
 				vendedor
 				createAt
-				cancel {
-					status
-					fecha
-					vendedor
-				}
+				cancel
 				cancelado {
 					status
 					fecha
@@ -295,11 +283,7 @@ export const ADD_PRODUCTO = gql`
 				abono
 				vendedor
 				createAt
-				cancel {
-					status
-					fecha
-					vendedor
-				}
+				cancel
 				cancelado {
 					status
 					fecha
@@ -409,11 +393,7 @@ export const REGISTER_APARTADO = gql`
 				abono
 				vendedor
 				createAt
-				cancel {
-					status
-					fecha
-					vendedor
-				}
+				cancel
 				cancelado {
 					status
 					fecha
@@ -499,11 +479,7 @@ export const REGISTER_APARTADO_F3 = gql`
 				abono
 				vendedor
 				createAt
-				cancel {
-					status
-					fecha
-					vendedor
-				}
+				cancel
 				cancelado {
 					status
 					fecha

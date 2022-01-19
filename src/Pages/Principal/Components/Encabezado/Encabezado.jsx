@@ -21,9 +21,14 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 		DrawerF3Visible,
 		setDrawerF3Visible,
 	} = useContext(ShopListContext);
-	const { data: dataGET } = useQuery(GET_ALL_F3);
+	const {
+		data: dataGET,
+		loading: loadingAllF3,
+		refetch: refetchAllF3,
+	} = useQuery(GET_ALL_F3, {
+		notifyOnNetworkStatusChange: true,
+	});
 
-	const [refetchVentaMobile, setrefetchVentaMobile] = useState(false);
 	const [precio, setprecio] = useState({
 		precio: null,
 	});
@@ -128,8 +133,8 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 		}
 		// F3
 		if (e.keyCode === 114) {
-			setrefetchVentaMobile(true);
-			setDrawerF3Visible(!DrawerF3Visible);
+			refetchAllF3();
+			setDrawerF3Visible(true);
 		}
 		// F6 abrir ventana
 		if (e.keyCode === 117) {
@@ -157,7 +162,7 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 			{/* Ingresar Precio */}
 			<AiOutlineCloudDownload
 				style={{
-					color: refetchVentaMobile ? "white" : "transparent",
+					color: loadingAllF3 ? "white" : "transparent",
 					fontSize: "30px",
 					margin: "0 10px 0 0",
 					verticalAlign: "sub",
@@ -186,24 +191,22 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 				}
 			/>
 			{dataGET?.getAllF3?.length && (
-				<Badge count={dataGET?.getAllF3?.length} className='BtnBadge'>
-					<Button
-						icon={
-							// <AiFillShopping />
-							<ShoppingOutlined style={{ fontSize: "30px", color: "blue" }} />
-						}
-						size='large'
-						shape='circle'
-						onClick={() => setDrawerF3Visible(!DrawerF3Visible)}
-					/>
-				</Badge>
+				<>
+					<Badge count={dataGET?.getAllF3?.length} className='BtnBadge'>
+						<Button
+							icon={
+								// <AiFillShopping />
+								<ShoppingOutlined style={{ fontSize: "30px", color: "blue" }} />
+							}
+							size='large'
+							shape='circle'
+							onClick={() => setDrawerF3Visible(!DrawerF3Visible)}
+						/>
+					</Badge>
+					{/* // GET VENTAS MOBILE */}
+				</>
 			)}
-
-			{/* GET VENTAS MOBILE */}
-			<GetVentasF3
-				refetchVentaMobile={refetchVentaMobile}
-				setrefetchVentaMobile={setrefetchVentaMobile}
-			/>
+			<GetVentasF3 />
 		</div>
 	);
 }

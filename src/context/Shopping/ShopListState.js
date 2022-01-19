@@ -75,7 +75,6 @@ const ShopListState = (props) => {
 		const { shopList } = state;
 
 		let newPayload = shopList.filter((item) => {
-			console.log(" item.idF3 === record.idF3", item.idF3, record._id);
 			return item.idF3 !== record._id;
 		});
 		dispatch({
