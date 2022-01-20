@@ -103,20 +103,6 @@ export default function TablaPrincipal({ setstateRecord }) {
 					<p>{nombre}</p>
 				),
 		},
-		// {
-		// 	title: "Referencia",
-		// 	dataIndex: "refApartado",
-		// 	key: "refApartado",
-		// 	ellipsis: {
-		// 		showTitle: false,
-		// 	},
-		// 	// width: "90px",
-		// 	render: (refApartado) => (
-		// 		<Tooltip placement='topLeft' title={refApartado}>
-		// 			{refApartado > 0 ? refApartado : null}
-		// 		</Tooltip>
-		// 	),
-		// },
 		{
 			title: "Precio por pieza",
 			dataIndex: "precio",
@@ -145,6 +131,7 @@ export default function TablaPrincipal({ setstateRecord }) {
 					<Button
 						type='primary'
 						shape='circle'
+						ghost
 						icon={<MinusOutlined />}
 						size='small'
 						onClick={() => removeArticulo(record)}
@@ -160,6 +147,7 @@ export default function TablaPrincipal({ setstateRecord }) {
 					<Button
 						type='primary'
 						shape='circle'
+						ghost
 						icon={<PlusOutlined />}
 						size='small'
 						onClick={() => addArticulo(record)}
@@ -193,7 +181,9 @@ export default function TablaPrincipal({ setstateRecord }) {
 			render: (key, record) => (
 				<div style={{ textAlignLast: "center" }}>
 					<Button
-						shape='circle'
+						danger
+						style={{ borderRadius: "10px" }}
+						ghost
 						icon={<MdDelete style={{ color: "#c5221f" }} size='25px' />}
 						onClick={() => eliminarProducto(record)}
 					></Button>
@@ -212,8 +202,9 @@ export default function TablaPrincipal({ setstateRecord }) {
 			style={{
 				height: "330px",
 				borderRadius: "10px",
-				boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
-				margin: "10px",
+				boxShadow: "10px 6px 20px 5px #8b8b8b, -6px 0px 20px #ffffff",
+				margin: "5px 10px",
+				background: "#f0f2f5",
 			}}
 			rowSelection={rowSelection}
 			size='small'

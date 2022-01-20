@@ -130,7 +130,7 @@ export default function Horizontal({
 								style={
 									swtichstate
 										? {
-												background: "blue",
+												background: "#1890ff",
 												boxShadow:
 													"5px 5px 29px #b3b3b3, -5px -5px 29px #ffffff",
 										  }

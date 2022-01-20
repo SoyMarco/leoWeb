@@ -151,14 +151,7 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 		}
 	};
 	return (
-		<div
-			style={{
-				background: "linear-gradient(#000066, #000058, #000036)",
-				textAlignLast: "center",
-				padding: "7px",
-				borderRadius: "25px 5px 0 0",
-			}}
-		>
+		<div className='EncabezadoPrincipal'>
 			{/* Ingresar Precio */}
 			<AiOutlineCloudDownload
 				style={{
@@ -170,7 +163,9 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 			/>
 			<Input
 				id='inputPrecio'
-				prefix={<AiFillDollarCircle style={{ marginLeft: "20px" }} />}
+				prefix={
+					<AiFillDollarCircle style={{ marginLeft: "20px" }} size={"40px"} />
+				}
 				style={{
 					color: "green",
 					// fontSize: 30,
@@ -190,7 +185,7 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 					})
 				}
 			/>
-			{dataGET?.getAllF3?.length && (
+			{dataGET?.getAllF3?.length > 0 && (
 				<>
 					<Badge count={dataGET?.getAllF3?.length} className='BtnBadge'>
 						<Button
