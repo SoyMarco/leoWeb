@@ -7,9 +7,7 @@ export const GET_FOLIO_MAX_APARTADO = gql`
 		}
 	}
 `;
-export const GET_PRODUCTOS_FOLIO = gql`
-	query getProductosFolio($folio: Float) {
-		getProductosFolio(folio: $folio) {
+const apartadoFolioType = `{
 			id
 			vendedor
 			cliente
@@ -73,7 +71,10 @@ export const GET_PRODUCTOS_FOLIO = gql`
 				fecha
 				vendedor
 			}
-		}
+		}`;
+export const GET_PRODUCTOS_FOLIO = gql`
+	query getProductosFolio($folio: Float) {
+		getProductosFolio(folio: $folio) ${apartadoFolioType}
 	}
 `;
 export const GET_APARTADOS = gql`
@@ -329,9 +330,7 @@ export const EDIT_VENCE_APARTADO = gql`
 `;
 export const BORRAR_EDITAR_ABONO = gql`
 	mutation borrarEditarAbono($input: AbonoApartadoInput) {
-		borrarEditarAbono(input: $input) {
-			id
-		}
+		borrarEditarAbono(input: $input) ${apartadoFolioType}
 	}
 `;
 export const CANCELAR_APARTADO = gql`

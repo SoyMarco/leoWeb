@@ -5,11 +5,10 @@ import {
 	Col,
 	Row,
 	Tooltip,
-	Popconfirm,
-	Button,
+	Switch,
 	Progress,
+	Popconfirm,
 } from "antd";
-import { MdDelete } from "react-icons/md";
 import { SmileOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { BORRAR_EDITAR_ABONO } from "graphql/apartado";
@@ -28,6 +27,7 @@ export default function Abonos({
 	refetch,
 	totalTotal,
 	abono,
+	getApartadoFolio,
 }) {
 	const { timeLogout } = useContext(AuthContext);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
@@ -52,32 +52,45 @@ export default function Abonos({
 		return moment.unix(item / 1000).format("LLLL");
 	};
 	const borrarAbono = async (record, borrarEditar) => {
+		console.log(record, getApartadoFolio);
 		setloader(true);
 		try {
-			if (record.idVenta) {
+			if (record) {
 				let { data } = await mutateBORRAR_EDITAR_ABONO({
 					// Parameters
 					variables: {
 						input: {
-							// _id: record.idVenta,
-							abono: 0,
+							abono: record.abono,
 							borrarEditar: borrarEditar,
 							idVenta: record.idVenta,
 							idAbono: record._id,
-							statusVenta: true,
+							idApartado: getApartadoFolio.getProductosFolio.id,
+							statusVenta: record.cancel,
 						},
 					},
 				});
 				if (data) {
 					openNotification("success", `Abono borrado`);
 					setloader(false);
-					refetch();
 				}
 			}
 		} catch (error) {
 			setloader(false);
 			ErrorConection(timeLogout);
 		}
+	};
+	const colorRow = (record) => {
+		if (record.cancel === true) {
+			return "red";
+		}
+
+		return "darkgreen";
+	};
+	const tooltipStatusAbono = (record) => {
+		if (record.cancelado === true) {
+			return "Desactivado";
+		}
+		return "Activado";
 	};
 	/* COLUMNAS ABONOS */
 	const colAbonos = [
@@ -93,10 +106,10 @@ export default function Abonos({
 			dataIndex: "vendedor",
 			key: "vendedor",
 			ellipsis: true,
-			render: (vendedor) => (
+			render: (vendedor, record) => (
 				<h3
 					style={{
-						// fontWeight: "revert",
+						color: colorRow(record),
 						fontSize: "large",
 					}}
 				>
@@ -112,7 +125,7 @@ export default function Abonos({
 			defaultSortOrder: "ascend",
 			render: (createAt, record) => (
 				<Tooltip placement='top' title={`${pasarAFechaLLLL(createAt)}`}>
-					<h1>{pasarAFecha(createAt)}</h1>
+					<h1 style={{ color: colorRow(record) }}>{pasarAFecha(createAt)}</h1>
 				</Tooltip>
 			),
 		},
@@ -127,7 +140,7 @@ export default function Abonos({
 							textAlignLast: "center",
 							fontWeight: "revert",
 							fontSize: "large",
-							background: record.cancel?.status ? "red" : "transparent",
+							color: colorRow(record),
 						}}
 					>
 						${abonoRender}
@@ -136,7 +149,7 @@ export default function Abonos({
 			),
 		},
 		{
-			title: "Delete",
+			title: "Status",
 			dataIndex: "idArray",
 			key: "idArray",
 			ellipsis: {
@@ -144,21 +157,26 @@ export default function Abonos({
 			},
 			width: "60px",
 			render: (idArray, record) => (
-				<Tooltip placement='bottom' title='Borrar abono'>
-					<Row justify='center'>
+				<Row justify='center'>
+					<Tooltip placement='right' title={() => tooltipStatusAbono(record)}>
 						<Popconfirm
 							disabled={loader || loading}
 							title='¿Deseas eliminarlo?'
 							onConfirm={() => borrarAbono(record, "borrar")}
 						>
-							<Button
-								loading={loader || loading}
-								shape='circle'
-								icon={<MdDelete style={{ color: "#c5221f" }} size='25px' />}
-							></Button>
+							<Switch
+								loading={loading}
+								checked={!record.cancel}
+								size='small'
+								style={{
+									background: colorRow(record),
+									marginTop: "5px",
+								}}
+								// onClick={() => borrarAbono(record, "borrar")}}
+							/>
 						</Popconfirm>
-					</Row>
-				</Tooltip>
+					</Tooltip>
+				</Row>
 			),
 		},
 	];
@@ -176,6 +194,7 @@ export default function Abonos({
 		<Col xs={24} sm={24} md={10}>
 			{/* PRODUCTOS */}
 			<Table
+				rowKey={(record) => record._id}
 				id='tableApartado'
 				title={() => (
 					<Row justify='space-between'>

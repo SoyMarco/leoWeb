@@ -87,7 +87,7 @@ export default function Apartado(props) {
 	};
 
 	useEffect(() => {
-		setdataApartado(getApartadoFolio?.getProductosFolio[0]);
+		setdataApartado(getApartadoFolio?.getProductosFolio);
 	}, [getApartadoFolio]);
 
 	useEffect(() => {
@@ -99,9 +99,12 @@ export default function Apartado(props) {
 				cancelado,
 			} = dataApartado;
 
-			let listaAbonos = abonosGet.map((item) => {
-				return { ...item, key: item._id };
-			});
+			let listaAbonos = [];
+			for (const item of abonosGet) {
+				if (item.cancel !== true) {
+					listaAbonos.push(item);
+				}
+			}
 			setabonos(listaAbonos);
 
 			let listaProductos = productosGet.map((item) => {
@@ -318,6 +321,7 @@ export default function Apartado(props) {
 						inputAbono={inputAbono}
 						totalTotal={totalTotal}
 						refetch={refetch}
+						getApartadoFolio={getApartadoFolio}
 					/>
 				</Row>
 			);
