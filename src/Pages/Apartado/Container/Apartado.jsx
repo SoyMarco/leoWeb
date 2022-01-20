@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import ImprimirApartado from "Pages/Apartado/Components/ImprimirApartado/ImprimirApartado";
 import ModalCalendar from "Pages/Apartado/Components/ModalCalendar/ModalCalendar";
 import {
@@ -14,7 +14,7 @@ import { useParams, useHistory } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import ErrorConection from "Utils/ErrorConection";
 import ErrorPage from "Pages/Error/Error";
-import useAuth from "hooks/useAuth";
+import AuthContext from "context/Auth/AuthContext";
 import { keyBlock } from "Utils";
 import moment from "moment";
 import {
@@ -36,6 +36,8 @@ import {
 import "./apartados.css";
 
 export default function Apartado(props) {
+	const { auth, timeLogout } = useContext(AuthContext);
+
 	const history = useHistory();
 	const params = useParams();
 	let urlFolio = parseInt(params.folio);
@@ -51,7 +53,6 @@ export default function Apartado(props) {
 	const [titleWeb, settitleWeb] = useState("Apartado");
 	const [mutateCANCELAR_APARTADO] = useMutation(CANCELAR_APARTADO);
 	const [mutateCANCEL_ENTREGA] = useMutation(CANCEL_ENTREGA);
-	const { auth } = useAuth();
 	const [modalCobrar, setmodalCobrar] = useState(false);
 	const [modalCalendar, setmodalCalendar] = useState(false);
 	const [modalReimprimir, setmodalReimprimir] = useState(false);
@@ -73,11 +74,12 @@ export default function Apartado(props) {
 	);
 	useEffect(() => {
 		refetch();
+		timeLogout();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	if (error) {
-		ErrorConection();
+		ErrorConection(timeLogout);
 	}
 	const cerrarCobrar = () => {
 		setmodalCobrar(false);
@@ -85,7 +87,7 @@ export default function Apartado(props) {
 	};
 
 	useEffect(() => {
-		setdataApartado(getApartadoFolio?.getProductosFolio[0]);
+		setdataApartado(getApartadoFolio?.getProductosFolio);
 	}, [getApartadoFolio]);
 
 	useEffect(() => {
@@ -97,9 +99,12 @@ export default function Apartado(props) {
 				cancelado,
 			} = dataApartado;
 
-			let listaAbonos = abonosGet.map((item) => {
-				return { ...item, key: item._id };
-			});
+			let listaAbonos = [];
+			for (const item of abonosGet) {
+				if (item.cancel !== true) {
+					listaAbonos.push(item);
+				}
+			}
 			setabonos(listaAbonos);
 
 			let listaProductos = productosGet.map((item) => {
@@ -139,7 +144,9 @@ export default function Apartado(props) {
 		let sumAbo = 0;
 
 		for (const abn of abonos) {
-			sumAbo += abn.abono;
+			if (abn?.cancel?.status !== true) {
+				sumAbo += abn.abono;
+			}
 		}
 		settotalAbonos(sumAbo);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -176,7 +183,7 @@ export default function Apartado(props) {
 				}
 			} catch (err) {
 				setloader(false);
-				ErrorConection();
+				ErrorConection(timeLogout);
 			}
 		}
 	};
@@ -256,7 +263,7 @@ export default function Apartado(props) {
 			}
 		} catch (err) {
 			setbtnLoading(false);
-			ErrorConection();
+			ErrorConection(timeLogout);
 		}
 	};
 	const fechaVenceEn = () => {
@@ -314,6 +321,7 @@ export default function Apartado(props) {
 						inputAbono={inputAbono}
 						totalTotal={totalTotal}
 						refetch={refetch}
+						getApartadoFolio={getApartadoFolio}
 					/>
 				</Row>
 			);
@@ -416,15 +424,7 @@ export default function Apartado(props) {
 								{abono.abono > 0 ? `Restaría $${calculateRestaria()}` : null}
 							</h1>,
 							<>
-								<h1
-									style={{
-										color: "green",
-										fontSize: "xxx-large",
-										fontWeight: "bold",
-										marginTop: "-20px",
-									}}
-									onClick={() => pressEnter}
-								>
+								<h1 className='totalRestaApartado' onClick={() => pressEnter}>
 									{totalProductos ? `Resta $${totalTotal - totalAbonos}` : null}
 								</h1>
 							</>,
@@ -530,9 +530,7 @@ export default function Apartado(props) {
 								</Tooltip>
 							</Row>
 						</Row>
-						<h1
-							style={{ fontSize: "x-large", fontWeight: "bold" }}
-						>{`Cliente: ${dataApartado?.cliente}`}</h1>
+						<h1 className='nameClient'>{`Cliente:  ${dataApartado?.cliente}`}</h1>
 
 						{
 							/* Tablas PRODUCTOS ABONOS*/

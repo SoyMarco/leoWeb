@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { SaveFilled } from "@ant-design/icons";
 import { Row, Button, Modal, Calendar, ConfigProvider } from "antd";
 import { openNotification } from "Utils/openNotification";
@@ -9,12 +9,15 @@ import locale from "antd/lib/locale/es_ES";
 import { useMutation } from "@apollo/client";
 import { EDIT_VENCE_APARTADO } from "graphql/apartado";
 import "./modalCalendar.css";
+import AuthContext from "context/Auth/AuthContext";
+
 export default function ModalCalendar({
 	setmodalCalendar,
 	modalCalendar,
 	refetch,
 	dataApartado,
 }) {
+	const { timeLogout } = useContext(AuthContext);
 	const [mutateEDIT_VENCE_APARTADO] = useMutation(EDIT_VENCE_APARTADO);
 	const [btnLoading, setbtnLoading] = useState(false);
 	const [newFecha, setnewFecha] = useState(null);
@@ -41,7 +44,7 @@ export default function ModalCalendar({
 			}
 		} catch (error) {
 			setbtnLoading(false);
-			ErrorConection();
+			ErrorConection(timeLogout);
 		}
 	};
 	const selectFecha = (value, dateString) => {

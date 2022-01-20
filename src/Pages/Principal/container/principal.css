@@ -27,3 +27,24 @@
 .borrar {
 	color: "#c5221f";
 }
+h1.numeroProductos {
+	color: darkblue;
+	background: rgba(0, 0, 139, 0.137);
+	border-radius: 50px;
+	padding: 0 30px;
+	align-self: center;
+	font-size: 35px;
+	font-weight: bold;
+	margin-top: 15px;
+}
+h1.totalProductos {
+	color: green;
+	background: rgba(0, 128, 0, 0.15);
+	border-radius: 50px;
+	align-self: center;
+	padding: 0 30px;
+	font-size: 65px;
+	font-weight: bold;
+	/* margin-top: -5px; */
+	margin-bottom: 0;
+}

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { RiShieldUserFill, RiLockPasswordFill } from "react-icons/ri";
 import { useMutation, useApolloClient } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
@@ -6,7 +6,6 @@ import { setToken, decodeToken } from "Utils/token";
 import { LOGIN, FIRST_LOGIN } from "graphql/user";
 import { FaUserAlt } from "react-icons/fa";
 import LogoLeo from "assets/png/logo.png";
-import useAuth from "hooks/useAuth";
 import "./login.css";
 import {
 	Card,
@@ -20,6 +19,7 @@ import {
 	Avatar,
 	Select,
 } from "antd";
+import AuthContext from "context/Auth/AuthContext";
 
 const Login = () => {
 	const client = useApolloClient();
@@ -27,7 +27,7 @@ const Login = () => {
 	const [name, setname] = useState("");
 	const [password, setpassword] = useState("");
 	const [loading, setloading] = useState(false);
-	const { setUser } = useAuth();
+	const { setAuth } = useContext(AuthContext);
 	const { Header, Footer } = Layout;
 	const [screenWidth, setscreenWidth] = useState(1000);
 	const [form] = Form.useForm();
@@ -60,7 +60,7 @@ const Login = () => {
 				const { token } = data.login;
 				setToken(token);
 				let dataToken = await decodeToken(token);
-				setUser(dataToken);
+				setAuth(dataToken);
 				openNotification("success", `Bienvenido ${dataToken.name}`);
 			}
 		} catch (error) {

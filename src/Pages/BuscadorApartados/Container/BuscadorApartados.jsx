@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Row, Select, ConfigProvider, Result } from "antd";
 import { GET_APARTADOS_BUSCADOR } from "graphql/apartado";
 import ErrorConection from "Utils/ErrorConection";
@@ -8,8 +8,10 @@ import { useHistory } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import "./buscarApartados.css";
 import moment from "moment";
+import AuthContext from "context/Auth/AuthContext";
 
 export default function BuscadorApartados() {
+	const { timeLogout } = useContext(AuthContext);
 	let {
 		data: dataApartados,
 		loading,
@@ -24,7 +26,7 @@ export default function BuscadorApartados() {
 	} = useQuery(GET_ENCARGOS);
 
 	if (errorEncargos || errorApartados) {
-		ErrorConection();
+		ErrorConection(timeLogout);
 	}
 
 	const [listaBusqueda, setlistaBusqueda] = useState([]);

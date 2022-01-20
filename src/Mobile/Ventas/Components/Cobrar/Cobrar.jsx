@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Modal, Input, Form, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { PrinterFilled } from "@ant-design/icons";
@@ -8,7 +8,7 @@ import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
 import { REGISTER_VENTA } from "graphql/venta";
-import useAuth from "hooks/useAuth";
+import AuthContext from "context/Auth/AuthContext";
 
 const Cobrar = ({
 	modalCobrar,
@@ -17,6 +17,7 @@ const Cobrar = ({
 	listaCompras,
 	initialState,
 }) => {
+	const { auth, timeLogout } = useContext(AuthContext);
 	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);
@@ -27,7 +28,6 @@ const Cobrar = ({
 		efectivo: 0,
 	});
 	const cobrarEfectivo = useRef();
-	const { auth } = useAuth();
 	useEffect(() => {
 		cobrarEfectivo.current.select();
 	}, []);
@@ -98,6 +98,7 @@ const Cobrar = ({
 						apartado: item.apartado,
 						cantidad: item.cantidad,
 						idArray: item.key,
+						key: item.key,
 						nombre: item.nombre,
 						precio: item.precio,
 						refApartado: item.refApartado,
@@ -129,7 +130,7 @@ const Cobrar = ({
 					}
 				} catch (error) {
 					setbtnLoading(false);
-					ErrorConection();
+					ErrorConection(timeLogout);
 				}
 			}
 		}

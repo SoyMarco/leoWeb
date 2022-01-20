@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { Col, Row, Card, InputNumber } from "antd";
 import { REGISTER_CAJA } from "graphql/caja";
 import { useMutation } from "@apollo/client";
@@ -7,8 +7,10 @@ import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";
 import { ImMobile } from "react-icons/im";
 import { useHistory } from "react-router-dom";
+import AuthContext from "context/Auth/AuthContext";
 
 export default function TotalesCorte({ loading, getTotales, refetch }) {
+	const { timeLogout } = useContext(AuthContext);
 	const [mutateREGISTER_CAJA] = useMutation(REGISTER_CAJA);
 	const [recargas, setrecargas] = useState(null);
 	const inputRecargas = useRef();
@@ -50,14 +52,14 @@ export default function TotalesCorte({ loading, getTotales, refetch }) {
 						refetch();
 					}
 				} catch (error) {
-					ErrorConection();
+					ErrorConection(timeLogout);
 				}
 			}
 		}
 	};
 	return (
 		<>
-			<Card title='CORTE' bordered={false}>
+			<Card>
 				<Row style={{ margin: "15px 50px 0 50px" }}>
 					<Col xs={3}>
 						<h3>Incio Caja</h3>

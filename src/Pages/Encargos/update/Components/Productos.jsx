@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { CANCELAR_PRODUCTO_APARTDO } from "graphql/apartado";
@@ -8,6 +8,7 @@ import moment from "moment";
 import { Table, Result, Col, Row, Button, Popconfirm, Tooltip } from "antd";
 import "./productos.css";
 import AddProduct from "./AddProduct/AddProduct";
+import AuthContext from "context/Auth/AuthContext";
 
 export default function Productos({
 	loading,
@@ -22,6 +23,7 @@ export default function Productos({
 	totalTotal,
 	inputAbono,
 }) {
+	const { timeLogout } = useContext(AuthContext);
 	const [mutateCANCELAR_PRODUCTO_APARTDO] = useMutation(
 		CANCELAR_PRODUCTO_APARTDO
 	);
@@ -82,7 +84,7 @@ export default function Productos({
 				}
 			} catch (error) {
 				setloader(false);
-				ErrorConection();
+				ErrorConection(timeLogout);
 			}
 		}
 	};

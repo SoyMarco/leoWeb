@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useContext } from "react";
 import { Modal, Input, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
@@ -9,16 +9,15 @@ import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";
 import { useMutation, useQuery } from "@apollo/client";
 import { REGISTER_VENTA, GET_TOTAL_VENTAS_DIA } from "graphql/venta";
-import useAuth from "hooks/useAuth";
+import AuthContext from "context/Auth/AuthContext";
 import aceptar from "assets/sonido/Aceptar.wav";
 import "./cobrar.css";
-const Cobrar = ({
-	modalCobrar,
-	setmodalCobrar,
-	totalTotal,
-	listaCompras,
-	initialState,
-}) => {
+import ShopListContext from "context/Shopping/ShopListContext";
+
+const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
+	const { shopList } = useContext(ShopListContext);
+	const { auth, timeLogout } = useContext(AuthContext);
+
 	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
 	let { refetch: refetchTotalVentasDia } = useQuery(GET_TOTAL_VENTAS_DIA);
 	const [cambio, setcambio] = useState(0);
@@ -31,12 +30,12 @@ const Cobrar = ({
 		aCuenta: null,
 	});
 	const cobrarEfectivo = useRef();
-	const { auth } = useAuth();
 	const audio = new Audio(aceptar);
 	useEffect(() => {
 		setTimeout(() => {
 			cobrarEfectivo.current.select();
 		}, 50);
+		timeLogout();
 	}, []);
 
 	useEffect(() => {
@@ -84,10 +83,6 @@ const Cobrar = ({
 		if (e.keyCode === 113) {
 			savePrintNewV("F2");
 		}
-		// F3
-		if (e.keyCode === 114) {
-			document.querySelector("#cobrarTarjeta").select();
-		}
 	};
 
 	const OnValuesChange = () => {
@@ -105,14 +100,16 @@ const Cobrar = ({
 	const savePrintNewV = async (keyF) => {
 		if (btnLoading === false && cambio >= 0) {
 			setbtnLoading(true);
-			let listaComprasNew = listaCompras.map((item) => ({
+			let listaComprasNew = shopList.map((item) => ({
 				apartado: item.apartado,
 				cantidad: item.cantidad,
 				idArray: item.key,
+				key: item.key,
 				nombre: item.nombre,
 				precio: item.precio,
 				refApartado: item.refApartado,
 				totalArticulo: item.totalArticulo,
+				idF3: item.idF3,
 			}));
 
 			let efectivo = parseFloat(inputs.efectivo ?? 0);
@@ -150,7 +147,7 @@ const Cobrar = ({
 				}
 			} catch (error) {
 				setbtnLoading(false);
-				ErrorConection();
+				ErrorConection(timeLogout);
 			}
 		}
 	};
@@ -171,7 +168,7 @@ const Cobrar = ({
 				totalTotal={totalTotal}
 				cambio={cambio}
 				dinero={inputs}
-				listaCompras={listaCompras}
+				listaCompras={shopList}
 				setmodalCobrar={setmodalCobrar}
 				folio={folio}
 				auth={auth}

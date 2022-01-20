@@ -1,0 +1,16 @@
+span.BtnBadge {
+	position: fixed;
+	top: 65px;
+	right: 40px;
+	border-radius: 50%;
+	box-shadow: 5px 5px 29px #b3b3b3, -5px -5px 29px #ffffff;
+	background: transparent;
+}
+
+div.EncabezadoPrincipal {
+	background: linear-gradient(#000066, #000058, #000036);
+	text-align-last: center;
+	padding: 7px;
+	border-radius: 25px 25px 0 0;
+	margin: 5px 10px 0 10px;
+}

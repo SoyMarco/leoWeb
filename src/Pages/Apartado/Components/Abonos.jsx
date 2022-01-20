@@ -1,22 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
 	Table,
 	Result,
 	Col,
 	Row,
 	Tooltip,
-	Popconfirm,
-	Button,
+	Switch,
 	Progress,
+	Popconfirm,
 } from "antd";
-import { MdDelete } from "react-icons/md";
 import { SmileOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { BORRAR_EDITAR_ABONO } from "graphql/apartado";
 import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
-
+import AuthContext from "context/Auth/AuthContext";
+import "./productos.css";
 export default function Abonos({
 	abonos,
 	loading,
@@ -27,7 +27,9 @@ export default function Abonos({
 	refetch,
 	totalTotal,
 	abono,
+	getApartadoFolio,
 }) {
+	const { timeLogout } = useContext(AuthContext);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [mutateBORRAR_EDITAR_ABONO] = useMutation(BORRAR_EDITAR_ABONO);
 
@@ -44,39 +46,51 @@ export default function Abonos({
 		inputAbono.current.select();
 	};
 	const pasarAFecha = (item) => {
-		let fecha = moment.unix(item / 1000).format("L");
-		return fecha;
+		return moment.unix(item / 1000).format("L");
 	};
 	const pasarAFechaLLLL = (item) => {
-		let fecha = moment.unix(item / 1000).format("LLLL");
-		return fecha;
+		return moment.unix(item / 1000).format("LLLL");
 	};
 	const borrarAbono = async (record, borrarEditar) => {
+		console.log(record, getApartadoFolio);
 		setloader(true);
 		try {
-			if (record.idVenta) {
+			if (record) {
 				let { data } = await mutateBORRAR_EDITAR_ABONO({
 					// Parameters
 					variables: {
 						input: {
-							// _id: record.idVenta,
-							abono: 0,
+							abono: record.abono,
 							borrarEditar: borrarEditar,
 							idVenta: record.idVenta,
-							statusVenta: true,
+							idAbono: record._id,
+							idApartado: getApartadoFolio.getProductosFolio.id,
+							statusVenta: record.cancel,
 						},
 					},
 				});
 				if (data) {
 					openNotification("success", `Abono borrado`);
 					setloader(false);
-					refetch();
 				}
 			}
 		} catch (error) {
 			setloader(false);
-			ErrorConection();
+			ErrorConection(timeLogout);
 		}
+	};
+	const colorRow = (record) => {
+		if (record.cancel === true) {
+			return "red";
+		}
+
+		return "darkgreen";
+	};
+	const tooltipStatusAbono = (record) => {
+		if (record.cancelado === true) {
+			return "Desactivado";
+		}
+		return "Activado";
 	};
 	/* COLUMNAS ABONOS */
 	const colAbonos = [
@@ -92,10 +106,10 @@ export default function Abonos({
 			dataIndex: "vendedor",
 			key: "vendedor",
 			ellipsis: true,
-			render: (vendedor) => (
+			render: (vendedor, record) => (
 				<h3
 					style={{
-						// fontWeight: "revert",
+						color: colorRow(record),
 						fontSize: "large",
 					}}
 				>
@@ -111,12 +125,12 @@ export default function Abonos({
 			defaultSortOrder: "ascend",
 			render: (createAt, record) => (
 				<Tooltip placement='top' title={`${pasarAFechaLLLL(createAt)}`}>
-					<h1>{pasarAFecha(createAt)}</h1>
+					<h1 style={{ color: colorRow(record) }}>{pasarAFecha(createAt)}</h1>
 				</Tooltip>
 			),
 		},
 		{
-			title: "Abono",
+			title: "Abonos",
 			dataIndex: "abono",
 			key: "abono",
 			render: (abonoRender, record) => (
@@ -126,6 +140,7 @@ export default function Abonos({
 							textAlignLast: "center",
 							fontWeight: "revert",
 							fontSize: "large",
+							color: colorRow(record),
 						}}
 					>
 						${abonoRender}
@@ -134,7 +149,7 @@ export default function Abonos({
 			),
 		},
 		{
-			title: "Delete",
+			title: "Status",
 			dataIndex: "idArray",
 			key: "idArray",
 			ellipsis: {
@@ -142,21 +157,26 @@ export default function Abonos({
 			},
 			width: "60px",
 			render: (idArray, record) => (
-				<Tooltip placement='bottom' title='Borrar abono'>
-					<Row justify='center'>
+				<Row justify='center'>
+					<Tooltip placement='right' title={() => tooltipStatusAbono(record)}>
 						<Popconfirm
 							disabled={loader || loading}
 							title='¿Deseas eliminarlo?'
 							onConfirm={() => borrarAbono(record, "borrar")}
 						>
-							<Button
-								loading={loader || loading}
-								shape='circle'
-								icon={<MdDelete style={{ color: "#c5221f" }} size='25px' />}
-							></Button>
+							<Switch
+								loading={loading}
+								checked={!record.cancel}
+								size='small'
+								style={{
+									background: colorRow(record),
+									marginTop: "5px",
+								}}
+								// onClick={() => borrarAbono(record, "borrar")}}
+							/>
 						</Popconfirm>
-					</Row>
-				</Tooltip>
+					</Tooltip>
+				</Row>
 			),
 		},
 	];
@@ -171,91 +191,82 @@ export default function Abonos({
 		return porcent;
 	};
 	return (
-		<>
-			<Col xs={24} sm={24} md={10}>
-				{/* PRODUCTOS */}
-				<Table
-					id='tableApartado'
-					title={() => (
-						<Row justify='space-between'>
-							<h1
-								style={{
-									color: "white",
-									fontSize: "large",
-									fontWeight: "revert",
-									margin: "10px 0 5px 10px",
-								}}
-							>
-								Abonos: {abonos.length}
-							</h1>
+		<Col xs={24} sm={24} md={10}>
+			{/* PRODUCTOS */}
+			<Table
+				rowKey={(record) => record._id}
+				id='tableApartado'
+				title={() => (
+					<Row justify='space-between'>
+						<h1
+							style={{
+								color: "white",
+								fontSize: "large",
+								fontWeight: "revert",
+								margin: "10px 0 0 10px",
+							}}
+						>
+							Abonos: {abonos.length}
+						</h1>
+					</Row>
+				)}
+				columns={colAbonos}
+				dataSource={abonos}
+				pagination={false}
+				loading={loading}
+				bordered
+				scroll={{ y: 190 }}
+				rowSelection={rowSelection}
+				size='small'
+				style={{
+					height: "380px",
+					borderRadius: "10px",
+					boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
+					margin: "10px",
+					background: "#f0f2f5",
+				}}
+				onRow={(record, rowIndex) => {
+					return {
+						onClick: (e) => {
+							click(record, rowIndex);
+						},
+					};
+				}}
+				locale={{
+					emptyText: (
+						<Result
+							icon={<SmileOutlined />}
+							// status="500"
+							subTitle='Selecciona un apartado'
+						/>
+					),
+				}}
+				footer={() => (
+					<>
+						<Row justify='end'>
+							<h1 className='totalAbonosApartado'>Abonos ${totalAbonos}</h1>
 						</Row>
-					)}
-					columns={colAbonos}
-					dataSource={abonos}
-					pagination={false}
-					loading={loading}
-					bordered
-					scroll={{ y: 210 }}
-					rowSelection={rowSelection}
-					size='small'
-					style={{
-						height: "380px",
-						borderRadius: "10px",
-						boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
-						margin: "10px",
-					}}
-					onRow={(record, rowIndex) => {
-						return {
-							onClick: (e) => {
-								click(record, rowIndex);
-							},
-						};
-					}}
-					locale={{
-						emptyText: (
-							<Result
-								icon={<SmileOutlined />}
-								// status="500"
-								subTitle='Selecciona un apartado'
+						<Row justify='center'>
+							<Progress
+								strokeColor={
+									calculatePorcent() > 100
+										? {
+												from: "red",
+												to: "limegreen",
+										  }
+										: {
+												from: "dodgerblue",
+												to: "limegreen",
+										  }
+								}
+								percent={parseInt(calculatePorcent())}
+								status='active'
+								// style={{ width: "90%" }}
 							/>
-						),
-					}}
-					footer={() => (
-						<>
-							<Row justify='end'>
-								<h1
-									style={{
-										color: "green",
-										fontSize: "xx-large",
-										fontWeight: "revert",
-										marginRight: "20px",
-									}}
-								>
-									Abonos ${totalAbonos}
-								</h1>
-							</Row>
-							<Row justify='center'>
-								<Progress
-									strokeColor={
-										calculatePorcent() > 100
-											? {
-													from: "red",
-													to: "limegreen",
-											  }
-											: {
-													from: "dodgerblue",
-													to: "limegreen",
-											  }
-									}
-									percent={parseInt(calculatePorcent())}
-									status='active'
-									// style={{ width: "90%" }}
-								/>
-							</Row>
-						</>
-					)}
-				/>
-			</Col>
-		</>
+						</Row>
+					</>
+				)}
+			/>
+		</Col>
 	);
 }

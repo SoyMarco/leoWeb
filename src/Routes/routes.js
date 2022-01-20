@@ -18,6 +18,7 @@ import AddEncargo from "Pages/Encargos/create/Container/Encargo";
 import ReadEncargos from "Pages/Encargos/Encargos/container/ReadEncargos";
 import UpdateEncargo from "Pages/Encargos/update/Container/Encargo";
 import CorteB from "Mobile/CorteB/Container/CorteB";
+import Ventas from "Pages/Ventas/Container/Ventas";
 const routes = [
 	{
 		path: "/",
@@ -71,6 +72,12 @@ const routes = [
 		path: "/addencargo",
 		layout: LayoutForm,
 		component: AddEncargo,
+		exact: true,
+	},
+	{
+		path: "/ventas",
+		layout: LayoutForm,
+		component: Ventas,
 		exact: true,
 	},
 	{

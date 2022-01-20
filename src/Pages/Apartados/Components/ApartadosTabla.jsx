@@ -3,7 +3,7 @@ import { MdLocalGroceryStore } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { AiFillPrinter } from "react-icons/ai";
 import ImprimirApartados from "../Components/Imprimir/ImprimirApartado";
-import useAuth from "hooks/useAuth";
+import AuthContext from "context/Auth/AuthContext";
 import moment from "moment";
 import { Table, Result, Col, Divider, Row, Button, Tooltip } from "antd";
 import { useHistory } from "react-router-dom";
@@ -18,7 +18,7 @@ export default function ApartadosTabla({
 	stateRecord,
 }) {
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
-	const { auth } = useAuth();
+	const { auth } = useContext(AuthContext);
 	const [imprimir, setimprimir] = useState(false);
 	const history = useHistory();
 

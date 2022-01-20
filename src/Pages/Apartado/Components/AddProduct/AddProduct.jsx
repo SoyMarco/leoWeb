@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Row, Button, Modal, Input, Form, AutoComplete } from "antd";
 import { GET_PRODUCTS_NAME, ADD_PRODUCTO } from "graphql/apartado";
 import { openNotification } from "Utils/openNotification";
@@ -8,6 +8,7 @@ import { FaMoneyBillWave } from "react-icons/fa";
 import { SaveFilled } from "@ant-design/icons";
 import { GiLargeDress } from "react-icons/gi";
 import { keyBlock } from "Utils";
+import AuthContext from "context/Auth/AuthContext";
 
 export default function AddProduct({
 	setmodalAddProduct,
@@ -16,6 +17,7 @@ export default function AddProduct({
 	dataApartado,
 	initialState,
 }) {
+	const { timeLogout } = useContext(AuthContext);
 	const [mutateADD_PRODUCTO] = useMutation(ADD_PRODUCTO);
 	let { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
 	const [btnLoading, setbtnLoading] = useState(false);
@@ -70,7 +72,7 @@ export default function AddProduct({
 				}
 			} catch (error) {
 				setbtnLoading(false);
-				ErrorConection();
+				ErrorConection(timeLogout);
 			}
 		}
 	};

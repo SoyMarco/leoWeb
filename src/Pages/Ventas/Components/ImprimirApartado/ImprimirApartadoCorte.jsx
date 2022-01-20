@@ -197,7 +197,11 @@ const ImprimirApartadoCorte = ({
 						return (
 							<table key='item.id' className='productosApartado'>
 								<tr>
-									<td>{item.nombre}</td>
+									<td>
+										{item.apartado > 0
+											? `APARTADO ${item.apartado}`
+											: item.nombre}
+									</td>
 									<td>
 										<h3 className={item.cantidad > 1 ? null : "finalTicket"}>
 											${item.precio}

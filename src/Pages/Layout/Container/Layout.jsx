@@ -1,21 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { GiLargeDress /* , GiOpenBook  */ } from "react-icons/gi";
 import { useHistory, useLocation, Link } from "react-router-dom";
-import { FaCashRegister, FaMoneyBillAlt } from "react-icons/fa";
+import {
+	FaCashRegister,
+	FaMoneyBillAlt,
+	FaFileInvoiceDollar,
+} from "react-icons/fa";
 import { openNotification } from "Utils/openNotification";
 import { RiTerminalWindowFill } from "react-icons/ri";
 import { MdLocalGroceryStore } from "react-icons/md";
 import Horizontal from "../Components/Horizontal";
 import "material-design-icons-iconfont";
-import useAuth from "hooks/useAuth";
 import { Layout, Menu } from "antd";
 import "antd/dist/antd.css";
 import "./layout.css";
-/* , FaPencilAlt */
+import AuthContext from "context/Auth/AuthContext";
+
 function LayoutForm({ children }) {
+	const { auth, logout } = useContext(AuthContext);
 	const [collapsed, setcollapsed] = useState(false);
 	const { Header, Content, Footer, Sider } = Layout;
-	const { logout, auth } = useAuth();
 	const history = useHistory();
 	const Location = useLocation();
 
@@ -118,23 +122,6 @@ function LayoutForm({ children }) {
 									<h2>Cuenta</h2>
 								</Menu.Item>
 								<Menu.Item
-									key='/corte'
-									icon={
-										<Link
-											to={{
-												pathname: `/corte`,
-											}}
-										>
-											<FaCashRegister
-												style={{ color: "#004882", fontSize: "25px" }}
-											/>
-										</Link>
-									}
-									onClick={() => history.push("/corte")}
-								>
-									<h2>Corte</h2>
-								</Menu.Item>
-								<Menu.Item
 									key='/add'
 									icon={
 										<Link
@@ -208,7 +195,40 @@ function LayoutForm({ children }) {
 								>
 									<h3>Entrada / Salida</h3>
 								</Menu.Item>
-
+								<Menu.Item
+									key='/ventas'
+									icon={
+										<Link
+											to={{
+												pathname: `/ventas`,
+											}}
+										>
+											<FaFileInvoiceDollar
+												style={{ color: "#004882", fontSize: "25px" }}
+											/>
+										</Link>
+									}
+									onClick={() => history.push("/ventas")}
+								>
+									<h2>Ventas</h2>
+								</Menu.Item>
+								<Menu.Item
+									key='/corte'
+									icon={
+										<Link
+											to={{
+												pathname: `/corte`,
+											}}
+										>
+											<FaCashRegister
+												style={{ color: "#004882", fontSize: "25px" }}
+											/>
+										</Link>
+									}
+									onClick={() => history.push("/corte")}
+								>
+									<h2>Corte</h2>
+								</Menu.Item>
 								<Menu.Item
 									key='7'
 									icon={

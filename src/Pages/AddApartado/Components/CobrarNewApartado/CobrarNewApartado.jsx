@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Modal, Input, Form, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
@@ -7,9 +7,11 @@ import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
-import { REGISTER_APARTADO } from "graphql/apartado";
-import useAuth from "hooks/useAuth";
+import { REGISTER_APARTADO, REGISTER_APARTADO_F3 } from "graphql/apartado";
+import AuthContext from "context/Auth/AuthContext";
 import aceptar from "assets/sonido/Aceptar.wav";
+import ShopListContext from "context/Shopping/ShopListContext";
+import { useHistory } from "react-router-dom";
 
 const CobrarNewApartado = ({
 	modalCobrar,
@@ -21,8 +23,10 @@ const CobrarNewApartado = ({
 	inputAbono,
 	cliente,
 }) => {
-	const { auth } = useAuth();
+	const { addProductShopList } = useContext(ShopListContext);
+	const { auth, timeLogout } = useContext(AuthContext);
 	const [mutateREGISTER_APARTADO] = useMutation(REGISTER_APARTADO);
+	const [mutateREGISTER_APARTADO_F3] = useMutation(REGISTER_APARTADO_F3);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);
 	const [imprimir, setimprimir] = useState(false);
@@ -33,6 +37,8 @@ const CobrarNewApartado = ({
 		tarjeta: 0,
 		efectivo: 0,
 	});
+	const history = useHistory();
+
 	const audio = new Audio(aceptar);
 	const inputEfectivo = useRef();
 	useEffect(() => {
@@ -58,6 +64,11 @@ const CobrarNewApartado = ({
 		if (e.keyCode === 113) {
 			savePrintAbono("F2");
 		}
+		// F3
+		if (e.keyCode === 114) {
+			registrarApartadoF3();
+		}
+
 		// E
 		if (e.keyCode === 69) {
 			inputEfectivo.current.select();
@@ -68,11 +79,6 @@ const CobrarNewApartado = ({
 		}
 		// T
 		if (e.keyCode === 84) {
-			document.querySelector("#cobrarTarjeta").select();
-		}
-
-		// F3
-		if (e.keyCode === 114) {
 			document.querySelector("#cobrarTarjeta").select();
 		}
 	};
@@ -136,7 +142,40 @@ const CobrarNewApartado = ({
 				}
 			} catch (error) {
 				setbtnLoading(false);
-				ErrorConection();
+				ErrorConection(timeLogout);
+			}
+		}
+	};
+
+	const registrarApartadoF3 = async () => {
+		if (auth.name && btnLoading === false) {
+			setbtnLoading(true);
+			try {
+				const { data } = await mutateREGISTER_APARTADO_F3({
+					variables: {
+						input: {
+							productos: listaCompras,
+							cliente: cliente,
+						},
+					},
+				});
+				if (data) {
+					let { registerApartadoF3 } = data;
+					addProductShopList({
+						nombre: registerApartadoF3.cliente,
+						precio: parseFloat(totalTotal),
+						apartado: registerApartadoF3.folio,
+						refApartado: registerApartadoF3.id,
+						f3: true,
+					});
+					history.push("/");
+					initialState();
+
+					setbtnLoading(false);
+				}
+			} catch (error) {
+				setbtnLoading(false);
+				ErrorConection(timeLogout);
 			}
 		}
 	};

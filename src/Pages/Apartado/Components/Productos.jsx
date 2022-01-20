@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { CANCELAR_PRODUCTO_APARTDO } from "graphql/apartado";
@@ -18,6 +18,7 @@ import {
 } from "antd";
 import "./productos.css";
 import AddProduct from "./AddProduct/AddProduct";
+import AuthContext from "context/Auth/AuthContext";
 
 export default function Productos({
 	loading,
@@ -33,6 +34,7 @@ export default function Productos({
 	inputAbono,
 	initialState,
 }) {
+	const { timeLogout } = useContext(AuthContext);
 	const [mutateCANCELAR_PRODUCTO_APARTDO] = useMutation(
 		CANCELAR_PRODUCTO_APARTDO
 	);
@@ -55,13 +57,11 @@ export default function Productos({
 		inputAbono.current.select();
 	};
 	const pasarAFecha = (item) => {
-		let fecha = moment.unix(item / 1000).format("ll");
-		return fecha;
+		return moment.unix(item / 1000).format("ll");
 	};
 
 	const pasarAFechaLLLL = (item) => {
-		let fecha = moment.unix(item / 1000).format("LLLL");
-		return fecha;
+		return moment.unix(item / 1000).format("LLLL");
 	};
 	const borrarEntregarProduct = async (item, borrarEntregar) => {
 		if (loader === false) {
@@ -96,7 +96,7 @@ export default function Productos({
 				}
 			} catch (error) {
 				setloader(false);
-				ErrorConection();
+				ErrorConection(timeLogout);
 			}
 		}
 	};
@@ -183,7 +183,7 @@ export default function Productos({
 			),
 		},
 		{
-			title: "Delete",
+			title: "Borrar",
 			dataIndex: "totalArticulo",
 			key: "totalArticulo",
 			ellipsis: {
@@ -208,26 +208,26 @@ export default function Productos({
 			),
 		},
 		{
-			title: "Status",
+			title: "Entregar",
 			dataIndex: "idArray",
 			key: "idArray",
 			ellipsis: {
 				showTitle: false,
 			},
-			width: "60px",
+			width: "70px",
 			render: (idArray, record) => (
 				<Tooltip
 					placement='right'
 					title={
 						record?.entregado[0]?.status !== true
-							? "Producto Activo"
+							? "Entregar producto"
 							: "Producto Entregado"
 					}
 				>
 					<Row justify='center'>
 						<Switch
 							loading={loader}
-							checked={record?.entregado[0]?.status === true}
+							checked={record?.entregado[0]?.status === false}
 							size='small'
 							style={
 								record?.entregado[0]?.status
@@ -254,7 +254,7 @@ export default function Productos({
 									color: "white",
 									fontSize: "large",
 									fontWeight: "revert",
-									margin: "10px 0 5px 10px",
+									margin: "10px 0 0 10px",
 								}}
 							>
 								Productos: {productos.length}
@@ -292,6 +292,7 @@ export default function Productos({
 						borderRadius: "10px",
 						boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
 						margin: "10px",
+						background: "#f0f2f5",
 					}}
 					rowSelection={rowSelection}
 					size='small'
@@ -316,16 +317,7 @@ export default function Productos({
 					}}
 					footer={() => (
 						<Row justify='end'>
-							<h1
-								style={{
-									color: "dodgerblue",
-									fontSize: "xx-large",
-									fontWeight: "revert",
-									marginRight: "20px",
-								}}
-							>
-								Productos ${totalTotal}
-							</h1>
+							<h1 className='totalProductoApartado'>Productos ${totalTotal}</h1>
 						</Row>
 					)}
 				/>

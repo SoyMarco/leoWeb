@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { GET_VENTAS_DIA_ADMIN } from "graphql/venta";
 import { GET_CAJA_DIA_ADMIN } from "graphql/caja";
 import ErrorConection from "Utils/ErrorConection";
 import { useQuery } from "@apollo/client";
 import { Row, Divider, Col } from "antd";
 import "./corte.css";
+import AuthContext from "context/Auth/AuthContext";
 
 const Corte = () => {
+	const { timeLogout } = useContext(AuthContext);
 	let { data, error, refetch } = useQuery(GET_VENTAS_DIA_ADMIN);
 	let { data: getCajas, refetch: refetchCaja } = useQuery(GET_CAJA_DIA_ADMIN);
 	const [dataVentasDiaAdmin, setdataVentasDiaAdmin] = useState([]);
@@ -22,7 +24,7 @@ const Corte = () => {
 	}, []);
 
 	if (error) {
-		ErrorConection();
+		ErrorConection(timeLogout);
 	}
 	useEffect(() => {
 		if (getCajas) {

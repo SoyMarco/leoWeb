@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo, useContext } from "react";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import ImprimirApartado from "../ImprimirApartado/ImprimirApartado";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
@@ -8,12 +8,13 @@ import ErrorConection from "Utils/ErrorConection";
 import aceptar from "assets/sonido/Aceptar.wav";
 import { ADD_ABONO } from "graphql/apartado";
 import { useMutation } from "@apollo/client";
-import useAuth from "hooks/useAuth";
+import AuthContext from "context/Auth/AuthContext";
 import { keyBlock } from "Utils";
+import ShopListContext from "context/Shopping/ShopListContext";
+import { useHistory } from "react-router-dom";
 
 const CobrarApartado = ({
 	modalCobrar,
-	setmodalCobrar,
 	cerrarCobrar,
 	totalTotal,
 	listaCompras,
@@ -22,6 +23,9 @@ const CobrarApartado = ({
 	inputAbono,
 	dataApartado,
 }) => {
+	const { auth, timeLogout } = useContext(AuthContext);
+	const { addProductShopList } = useContext(ShopListContext);
+	const history = useHistory();
 	const [mutateADD_ABONO] = useMutation(ADD_ABONO);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);
@@ -35,7 +39,6 @@ const CobrarApartado = ({
 	});
 	const audio = new Audio(aceptar);
 
-	const { auth } = useAuth();
 	const cobrarEfectivo = useRef();
 	useEffect(() => {
 		if (dataApartadoImprimir?.folio > 0) {
@@ -121,7 +124,17 @@ const CobrarApartado = ({
 			let ventaACuenta = parseFloat(dinero.aCuenta);
 			let total = parseFloat(totalTotal);
 			let resta = parseFloat(calculateRestaria());
-
+			if (keyF === "F3") {
+				addProductShopList({
+					nombre: dataApartado.cliente,
+					precio: total,
+					apartado: dataApartado.folio,
+					refApartado: dataApartado.id,
+					f3: true,
+				});
+				history.push("/");
+				return;
+			}
 			try {
 				const { data } = await mutateADD_ABONO({
 					variables: {
@@ -134,6 +147,8 @@ const CobrarApartado = ({
 							ventaACuenta: ventaACuenta,
 							folioApartado: dataApartado.folio,
 							idApartado: dataApartado.id,
+							nombreCliente: dataApartado.cliente,
+							keyF: keyF,
 						},
 					},
 				});
@@ -141,14 +156,15 @@ const CobrarApartado = ({
 					if (keyF === "F1") {
 						setdataApartadoImprimir(data.addAbono);
 					} else if (keyF === "F2") {
-						openNotification("success", "Apartado guardado con exito");
+						openNotification("success", "Abono guardado con exito");
 						initialState(data);
 					}
+				} else {
 					audio.play();
 				}
 			} catch (error) {
 				setbtnLoading(false);
-				ErrorConection();
+				ErrorConection(timeLogout);
 			}
 		}
 	};

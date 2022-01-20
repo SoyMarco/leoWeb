@@ -1,17 +1,19 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import ProductsAddApartado from "../Components/ProductsAddApartado/ProductsAddApartado";
 import { DollarCircleOutlined } from "@ant-design/icons";
 import { Steps, Button, message, Card, Input, Row, AutoComplete } from "antd";
 import ImprimirNewApartado from "../Components/ImprimirApartado/ImprimirNewApartado";
 import CobrarNewApartado from "../Components/CobrarNewApartado/CobrarNewApartado";
 import { useHistory } from "react-router-dom";
-import useAuth from "hooks/useAuth";
+import AuthContext from "context/Auth/AuthContext";
 import { keyBlock } from "Utils";
 import "./addApartado.css";
 import { useQuery } from "@apollo/client";
 import { GET_CLIENTS_NAMES, GET_PRODUCTS_NAME } from "graphql/apartado";
 
 export default function AddApartado() {
+	const { auth, timeLogout } = useContext(AuthContext);
+
 	let { data: getClientsNames } = useQuery(GET_CLIENTS_NAMES);
 	let { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
 	const history = useHistory();
@@ -28,8 +30,10 @@ export default function AddApartado() {
 
 	const inputNameClient = useRef();
 	const inputAbono = useRef();
-	const { auth } = useAuth();
-
+	useEffect(() => {
+		timeLogout();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 	useEffect(() => {
 		setrestaria(totalTotal - abono);
 	}, [abono, totalTotal]);

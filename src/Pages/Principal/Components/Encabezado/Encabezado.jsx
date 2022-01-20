@@ -1,68 +1,86 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { keyBlock } from "Utils";
 import { AiFillDollarCircle, AiOutlineCloudDownload } from "react-icons/ai";
-import { Input } from "antd";
+import { Input, Button, Badge } from "antd";
 import { useHistory } from "react-router-dom";
 import GetVentasF3 from "Pages/GetVentasF3/Container/GetVentasF3";
+import ShopListContext from "context/Shopping/ShopListContext";
+import "./Encabezado.css";
+import { ShoppingOutlined } from "@ant-design/icons";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_F3 } from "graphql/f3";
 
-export default function Encabezado({
-	precio,
-	setprecio,
-	handlePrecio,
-	listaCompras,
-	setlistaCompras,
-	idArticulo,
-	setidArticulo,
-	setmodalCobrar,
-	selectedRowKeys,
-	setselectedRowKeys,
-	removeArticulo,
-	addArticulo,
-	stateRecord,
-}) {
-	const [refetchVentaMobile, setrefetchVentaMobile] = useState(false);
+export default function Encabezado({ setmodalCobrar, stateRecord }) {
+	const {
+		shopList,
+		addProductShopList,
+		addOneShopList,
+		removeOneShopList,
+		selectedRowKeys,
+		setselectedRowKeys,
+		DrawerF3Visible,
+		setDrawerF3Visible,
+	} = useContext(ShopListContext);
+	const {
+		data: dataGET,
+		loading: loadingAllF3,
+		refetch: refetchAllF3,
+	} = useQuery(GET_ALL_F3, {
+		notifyOnNetworkStatusChange: true,
+	});
+
+	const [precio, setprecio] = useState({
+		precio: null,
+	});
 	const history = useHistory();
+
+	useEffect(() => {
+		if (DrawerF3Visible === false) {
+			document.querySelector("#inputPrecio").select();
+		}
+	}, [DrawerF3Visible]);
+
 	const pressEnter = () => {
 		if (precio.precio > 0) {
-			setlistaCompras([
-				...listaCompras,
-				{
-					key: idArticulo + 1,
-					nombre: "Articulo",
-					precio: Math.round(precio.precio * 100) / 100,
-					cantidad: 1,
-					apartado: 0,
-					refApartado: "0",
-					totalArticulo: Math.round(precio.precio * 100) / 100,
-				},
-			]);
+			addProductShopList({ precio: precio.precio });
 			setprecio({ precio: null });
-			setidArticulo(idArticulo + 1);
-		} else if (listaCompras.length > 0) {
+		} else if (shopList.length > 0) {
 			setmodalCobrar(true);
 		}
 	};
+
 	const rowAbajo = () => {
-		for (let i = 0; i < listaCompras.length; i++) {
-			const element = listaCompras[i].key;
+		for (let i = 0; i < shopList.length; i++) {
+			const element = shopList[i].key;
 			if (element === selectedRowKeys[0]) {
 				let newRow = i - 1;
-				setselectedRowKeys([listaCompras[newRow]?.key]);
+				setselectedRowKeys([shopList[newRow]?.key]);
 				return;
 			}
 		}
 	};
 	const rowArriba = () => {
-		for (let i = 0; i < listaCompras.length; i++) {
-			const element = listaCompras[i].key;
+		for (let i = 0; i < shopList.length; i++) {
+			const element = shopList[i].key;
 			if (element === selectedRowKeys[0]) {
 				let newRow = i + 1;
-				setselectedRowKeys([listaCompras[newRow]?.key]);
+				setselectedRowKeys([shopList[newRow]?.key]);
 				return;
 			}
 		}
 	};
-
+	const addArticulo = (record) => {
+		console.log("record", shopList, 1);
+		const shopItem = shopList.find((item) => item.key === record.key);
+		if (shopList.length > 0 && shopItem.apartado === 0) {
+			addOneShopList(record.key);
+		}
+	};
+	const removeArticulo = (record) => {
+		if (shopList.length > 0) {
+			removeOneShopList(record);
+		}
+	};
 	// Press Key Precio commands
 	const pressKeyPrecio = (e) => {
 		if (e.keyCode === 13) {
@@ -70,17 +88,17 @@ export default function Encabezado({
 		}
 		// Tecla ⬆️
 		if (e.keyCode === 38) {
-			if (listaCompras.length > 1) {
-				let max = listaCompras.length - 1;
-				if (listaCompras[max].key !== selectedRowKeys[0]) {
+			if (shopList.length > 1) {
+				let max = shopList.length - 1;
+				if (shopList[max].key !== selectedRowKeys[0]) {
 					rowArriba();
 				}
 			}
 		}
 		// Tecla ⬇️
 		if (e.keyCode === 40) {
-			if (listaCompras.length > 1) {
-				if (listaCompras[0].key !== selectedRowKeys[0]) {
+			if (shopList.length > 1) {
+				if (shopList[0].key !== selectedRowKeys[0]) {
 					rowAbajo();
 				}
 			}
@@ -115,7 +133,8 @@ export default function Encabezado({
 		}
 		// F3
 		if (e.keyCode === 114) {
-			setrefetchVentaMobile(true);
+			refetchAllF3();
+			setDrawerF3Visible(true);
 		}
 		// F6 abrir ventana
 		if (e.keyCode === 117) {
@@ -132,18 +151,11 @@ export default function Encabezado({
 		}
 	};
 	return (
-		<div
-			style={{
-				background: "linear-gradient(#000066, #000058, #000036)",
-				textAlignLast: "center",
-				padding: "7px",
-				borderRadius: "25px 5px 0 0",
-			}}
-		>
+		<div className='EncabezadoPrincipal'>
 			{/* Ingresar Precio */}
 			<AiOutlineCloudDownload
 				style={{
-					color: refetchVentaMobile ? "white" : "transparent",
+					color: loadingAllF3 ? "white" : "transparent",
 					fontSize: "30px",
 					margin: "0 10px 0 0",
 					verticalAlign: "sub",
@@ -151,7 +163,9 @@ export default function Encabezado({
 			/>
 			<Input
 				id='inputPrecio'
-				prefix={<AiFillDollarCircle style={{ marginLeft: "20px" }} />}
+				prefix={
+					<AiFillDollarCircle style={{ marginLeft: "20px" }} size={"40px"} />
+				}
 				style={{
 					color: "green",
 					// fontSize: 30,
@@ -165,13 +179,29 @@ export default function Encabezado({
 				onKeyUp={pressKeyPrecio}
 				onKeyDown={keyBlock}
 				value={precio.precio}
-				onChange={handlePrecio}
+				onChange={(e) =>
+					setprecio({
+						precio: e.target.value,
+					})
+				}
 			/>
-			{/* GET VENTAS MOBILE */}
-			<GetVentasF3
-				refetchVentaMobile={refetchVentaMobile}
-				setrefetchVentaMobile={setrefetchVentaMobile}
-			/>
+			{dataGET?.getAllF3?.length > 0 && (
+				<>
+					<Badge count={dataGET?.getAllF3?.length} className='BtnBadge'>
+						<Button
+							icon={
+								// <AiFillShopping />
+								<ShoppingOutlined style={{ fontSize: "30px", color: "blue" }} />
+							}
+							size='large'
+							shape='circle'
+							onClick={() => setDrawerF3Visible(!DrawerF3Visible)}
+						/>
+					</Badge>
+					{/* // GET VENTAS MOBILE */}
+				</>
+			)}
+			<GetVentasF3 />
 		</div>
 	);
 }

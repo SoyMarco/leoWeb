@@ -7,9 +7,7 @@ export const GET_FOLIO_MAX_APARTADO = gql`
 		}
 	}
 `;
-export const GET_PRODUCTOS_FOLIO = gql`
-	query getProductosFolio($folio: Float) {
-		getProductosFolio(folio: $folio) {
+const apartadoFolioType = `{
 			id
 			vendedor
 			cliente
@@ -51,6 +49,7 @@ export const GET_PRODUCTOS_FOLIO = gql`
 				abono
 				vendedor
 				createAt
+				cancel
 				cancelado {
 					status
 					fecha
@@ -72,7 +71,10 @@ export const GET_PRODUCTOS_FOLIO = gql`
 				fecha
 				vendedor
 			}
-		}
+		}`;
+export const GET_PRODUCTOS_FOLIO = gql`
+	query getProductosFolio($folio: Float) {
+		getProductosFolio(folio: $folio) ${apartadoFolioType}
 	}
 `;
 export const GET_APARTADOS = gql`
@@ -134,6 +136,7 @@ export const GET_APARTADOS = gql`
 				abono
 				vendedor
 				createAt
+				cancel
 				cancelado {
 					status
 					fecha
@@ -212,6 +215,7 @@ export const ADD_ABONO = gql`
 				abono
 				vendedor
 				createAt
+				cancel
 				cancelado {
 					status
 					fecha
@@ -280,6 +284,7 @@ export const ADD_PRODUCTO = gql`
 				abono
 				vendedor
 				createAt
+				cancel
 				cancelado {
 					status
 					fecha
@@ -325,9 +330,7 @@ export const EDIT_VENCE_APARTADO = gql`
 `;
 export const BORRAR_EDITAR_ABONO = gql`
 	mutation borrarEditarAbono($input: AbonoApartadoInput) {
-		borrarEditarAbono(input: $input) {
-			id
-		}
+		borrarEditarAbono(input: $input) ${apartadoFolioType}
 	}
 `;
 export const CANCELAR_APARTADO = gql`
@@ -389,6 +392,7 @@ export const REGISTER_APARTADO = gql`
 				abono
 				vendedor
 				createAt
+				cancel
 				cancelado {
 					status
 					fecha
@@ -426,6 +430,76 @@ export const GET_CLIENTS_NAMES = gql`
 		getClientsNames {
 			value
 			key
+		}
+	}
+`;
+
+export const REGISTER_APARTADO_F3 = gql`
+	mutation registerApartadoF3($input: ApartadoInput) {
+		registerApartadoF3(input: $input) {
+			id
+			vendedor
+			cliente
+			folio
+			total
+			referencia
+			notas
+			createAt
+			vence
+			productos {
+				vendedor
+				nombre
+				precio
+				cantidad
+				totalArticulo
+				idArray
+				_id
+				createAt
+				entregado {
+					status
+					fecha
+					vendedor
+				}
+				sacado {
+					status
+					fecha
+					vendedor
+				}
+				cancelado {
+					status
+					fecha
+					vendedor
+				}
+			}
+			abonos {
+				_id
+				idVenta
+				folioVenta
+				abono
+				vendedor
+				createAt
+				cancel
+				cancelado {
+					status
+					fecha
+					vendedor
+				}
+			}
+			entregado {
+				status
+				fecha
+				vendedor
+			}
+			sacado {
+				status
+				fecha
+				vendedor
+			}
+			cancelado {
+				status
+				fecha
+				vendedor
+			}
 		}
 	}
 `;
