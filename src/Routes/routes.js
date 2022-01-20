@@ -7,7 +7,7 @@ import Principal from "Pages/Principal/container/Principal";
 import Corte from "Pages/Corte/Container/Corte";
 
 import Apartado from "Pages/Apartado/Container/Apartado";
-import Error from "Pages/Error/Error";
+import ErrorPage from "Pages/Error/Error";
 import Prueba from "Pages/prueba";
 import AddApartado from "Pages/AddApartado/Container/AddApartado";
 import Caja from "Pages/Caja/Container/Caja";
@@ -124,8 +124,10 @@ const routes = [
 		exact: true,
 	},
 	{
+		path: "*",
 		layout: LayoutForm,
-		component: Error,
+		component: ErrorPage,
+		exact: false,
 	},
 	// {
 	// 	path: "/:username",

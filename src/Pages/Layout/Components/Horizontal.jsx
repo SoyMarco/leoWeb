@@ -5,13 +5,10 @@ import { FaUserAstronaut } from "react-icons/fa";
 import Estrellas from "./Estrellas/Estrellas";
 import LogoLeo from "assets/png/logo.png";
 import AuthContext from "context/Auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 
-export default function Horizontal({
-	Header,
-	history,
-	logoutApp,
-	swtichstate,
-}) {
+export default function Horizontal({ Header, logoutApp, swtichstate }) {
+	let navigate = useNavigate();
 	const { auth } = useContext(AuthContext);
 	return (
 		<>
@@ -44,12 +41,12 @@ export default function Horizontal({
 							margin: 0,
 							padding: " 0 0 0 20px",
 						}}
-						onClick={() => history.push("/")}
+						onClick={() => navigate("/")}
 						icon={<Avatar src={LogoLeo} size='large' />}
 					></Menu.Item>
 					<Menu.Item
 						key='header2'
-						onClick={() => history.push("/")}
+						onClick={() => navigate("/")}
 						style={{
 							padding: 0,
 						}}
@@ -67,7 +64,7 @@ export default function Horizontal({
 					</Menu.Item>
 					<Menu.Item
 						key='header3'
-						// onClick={() => history.push("/")}
+						// onClick={() => navigate("/")}
 						style={{
 							background: "transparent",
 							margin: "2px 40px",

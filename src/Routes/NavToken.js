@@ -1,26 +1,24 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import routes from "./routes";
-import { map } from "lodash";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const NavToken = () => {
 	return (
-		<Router>
-			<Switch>
-				{map(routes, (route, index) => (
+		<BrowserRouter>
+			<Routes>
+				{routes?.map((route, index) => (
 					<Route
 						key={index}
 						path={route.path}
 						exact={route.exact}
-						render={(props) => (
+						element={
 							<route.layout>
-								<route.component {...props} />
+								<route.component />
 							</route.layout>
-						)}
+						}
 					/>
 				))}
-			</Switch>
-		</Router>
+			</Routes>
+		</BrowserRouter>
 	);
 };
 export default NavToken;

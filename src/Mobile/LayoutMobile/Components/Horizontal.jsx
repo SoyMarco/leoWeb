@@ -1,13 +1,10 @@
 import React from "react";
 import { Menu, Switch, Popconfirm, Tooltip, Avatar } from "antd";
 import LogoLeo from "assets/png/logo.png";
-export default function Horizontal({
-	Header,
-	history,
-	auth,
-	logoutApp,
-	swtichstate,
-}) {
+import { useNavigate } from "react-router-dom";
+
+export default function Horizontal({ Header, auth, logoutApp, swtichstate }) {
+	let navigate = useNavigate();
 	return (
 		<>
 			{/* HORIZONTAL */}
@@ -36,12 +33,12 @@ export default function Horizontal({
 							margin: 0,
 							padding: " 0 0 0 20px",
 						}}
-						onClick={() => history.push("/")}
+						onClick={() => navigate("/")}
 						icon={<Avatar src={LogoLeo} size='large' />}
 					></Menu.Item>
 					<Menu.Item
 						key='header2'
-						onClick={() => history.push("/")}
+						onClick={() => navigate("/")}
 						style={{
 							padding: 0,
 						}}

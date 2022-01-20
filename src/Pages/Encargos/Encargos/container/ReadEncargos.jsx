@@ -5,7 +5,7 @@ import { Skeleton, Card, Row, Col, Switch } from "antd";
 import { AiFillFolderOpen } from "react-icons/ai";
 import moment from "moment";
 import "./ReadEncargos.css";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import AuthContext from "context/Auth/AuthContext";
@@ -20,7 +20,7 @@ export default function ReadEncargo() {
 		notifyOnNetworkStatusChange: true,
 	});
 	const [mutateEDIT_GUARDAR_ENCARGO] = useMutation(EDIT_GUARDAR_ENCARGO);
-	const history = useHistory();
+	let navigate = useNavigate();
 	let widthPantalla = window.screen.width;
 
 	const { Meta } = Card;

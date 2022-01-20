@@ -47,6 +47,7 @@ export default function AuthState(props) {
 			payload: user,
 		});
 	};
+	console.log("props.children", props);
 	return (
 		<AuthContext.Provider
 			value={{

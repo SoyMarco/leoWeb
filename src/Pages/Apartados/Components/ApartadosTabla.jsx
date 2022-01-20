@@ -6,7 +6,7 @@ import ImprimirApartados from "../Components/Imprimir/ImprimirApartado";
 import AuthContext from "context/Auth/AuthContext";
 import moment from "moment";
 import { Table, Result, Col, Divider, Row, Button, Tooltip } from "antd";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function ApartadosTabla({
 	loading,
@@ -20,11 +20,10 @@ export default function ApartadosTabla({
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const { auth } = useContext(AuthContext);
 	const [imprimir, setimprimir] = useState(false);
-	const history = useHistory();
+	let navigate = useNavigate();
 
-	const onSelectChange = (selectedRowKeys) => {
+	const onSelectChange = () => {
 		setselectedRowKeys([]);
-		// setselectedRowKeys(selectedRowKeys);
 	};
 	const rowSelection = {
 		selectedRowKeys,
@@ -35,7 +34,6 @@ export default function ApartadosTabla({
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
 		document.querySelector("#inputSearch").select();
-		// addArticulo(record, rowIndex);
 	};
 	const pasarAFecha = (item) => {
 		let fecha = moment.unix(item / 1000).format("ll");
@@ -142,7 +140,7 @@ export default function ApartadosTabla({
 						icon={<FaRegEdit style={{ fontSize: "25px" }} />}
 						shape='circle'
 						style={{ color: "blue" }}
-						onClick={() => history.push(`/apartado/${record.folio}`)}
+						onClick={() => navigate(`/apartado/${record.folio}`)}
 					/>
 				</Row>
 			),

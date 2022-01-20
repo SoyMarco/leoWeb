@@ -10,7 +10,7 @@ import { useMutation, useApolloClient } from "@apollo/client";
 import { ADD_ABONO } from "graphql/apartado";
 import { REGISTER_VENTA, VENTA_F3 } from "graphql/venta";
 import AuthContext from "context/Auth/AuthContext";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import aceptar from "assets/sonido/Aceptar.wav";
 
 const CobrarApartado = ({
@@ -24,7 +24,7 @@ const CobrarApartado = ({
 	dataApartado,
 }) => {
 	const { auth, timeLogout } = useContext(AuthContext);
-	const history = useHistory();
+	let navigate = useNavigate();
 	const client = useApolloClient();
 	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
 	const [mutateADD_ABONO] = useMutation(ADD_ABONO);
@@ -204,7 +204,7 @@ const CobrarApartado = ({
 						},
 					});
 
-					history.push("/");
+					navigate("/");
 				} else {
 					try {
 						const { data } = await mutateREGISTER_VENTA({

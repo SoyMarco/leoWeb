@@ -4,7 +4,7 @@ import moment from "moment";
 import "moment/locale/es-us";
 import { Modal, Row, Divider, Button } from "antd";
 import "./imprimir.css";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 import { keyBlock } from "Utils";
 import { openNotification } from "Utils/openNotification";
@@ -22,7 +22,7 @@ const ImprimirNewEncargo = ({
 	const [numPrint, setnumPrint] = useState(0);
 	const imprimirNewEncargo = useRef();
 	const inputReprint = useRef();
-	const history = useHistory();
+	let navigate = useNavigate();
 
 	useEffect(() => {
 		if (imprimir === true) {
@@ -37,7 +37,7 @@ const ImprimirNewEncargo = ({
 			inputReprint.current.select();
 			setnumPrint(numPrint + 1);
 		} else if (numPrint === 1) {
-			history.push("/");
+			navigate("/");
 		}
 	};
 	const pressKeyPrecio = (e) => {
@@ -71,11 +71,7 @@ const ImprimirNewEncargo = ({
 				onAfterPrint={() => afterPrint()}
 			/>
 
-			<Modal
-				visible={imprimir}
-				width='229px'
-				onCancel={() => history.push("/")}
-			>
+			<Modal visible={imprimir} width='229px' onCancel={() => navigate("/")}>
 				{/* <input ref={inputReprint} onKeyUp={pressKeyPrecio}></input> */}
 				<input
 					id='inputPrincipalPrintESC'
@@ -89,7 +85,7 @@ const ImprimirNewEncargo = ({
 						type='primary'
 						danger
 						shape='round'
-						onClick={() => history.push("/")}
+						onClick={() => navigate("/")}
 					>
 						ESC
 					</Button>

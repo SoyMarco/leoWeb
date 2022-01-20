@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 import BarraMayorVenta from "../Components/BarraMayorVenta/BarraMayorVenta";
 import TablaPrincipal from "../Components/TablaPrincipal/TablaPrincipal";
 import Encabezado from "../Components/Encabezado/Encabezado";
-import { useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Cobrar from "../Components/Cobrar/Cobrar";
 import { useApolloClient } from "@apollo/client";
 import { FIRST_LOGIN } from "graphql/user";
@@ -15,12 +15,12 @@ function Principal() {
 	const { shopList, clearShopList, selectedRowKeys, setselectedRowKeys } =
 		useContext(ShopListContext);
 	const client = useApolloClient();
-	const history = useHistory();
+	let navigate = useNavigate();
 	let firstLogin = client.readQuery({
 		query: FIRST_LOGIN,
 	});
 	if (firstLogin?.firstLogin?.screenWidth > 600) {
-		history.push("/caja");
+		navigate("/caja");
 		client.writeQuery({
 			query: FIRST_LOGIN,
 			data: { firstLogin: null },
@@ -43,7 +43,7 @@ function Principal() {
 	useEffect(() => {
 		let detectorPantalla = window.screen.width;
 		if (detectorPantalla < 600) {
-			history.push(`mobile/venta`);
+			navigate(`mobile/venta`);
 		}
 		//selectInputPrecio
 		document.querySelector("#inputPrecio").select();

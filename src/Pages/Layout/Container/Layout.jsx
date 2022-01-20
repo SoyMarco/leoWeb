@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { GiLargeDress /* , GiOpenBook  */ } from "react-icons/gi";
-import { useHistory, useLocation, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import {
 	FaCashRegister,
 	FaMoneyBillAlt,
@@ -12,7 +12,7 @@ import { MdLocalGroceryStore } from "react-icons/md";
 import Horizontal from "../Components/Horizontal";
 import "material-design-icons-iconfont";
 import { Layout, Menu } from "antd";
-import "antd/dist/antd.css";
+import "antd/dist/antd.min.css";
 import "./layout.css";
 import AuthContext from "context/Auth/AuthContext";
 
@@ -20,7 +20,7 @@ function LayoutForm({ children }) {
 	const { auth, logout } = useContext(AuthContext);
 	const [collapsed, setcollapsed] = useState(false);
 	const { Header, Content, Footer, Sider } = Layout;
-	const history = useHistory();
+	let navigate = useNavigate();
 	const Location = useLocation();
 
 	const [swtichstate, setswtichstate] = useState(true);
@@ -66,7 +66,7 @@ function LayoutForm({ children }) {
 		setTimeout(() => {
 			logout();
 			openNotification("success", "Espero verte pronto de nuevo.");
-			history.push("/");
+			navigate("/");
 		}, 200);
 	};
 	const handleClick = (e) => {
@@ -87,7 +87,6 @@ function LayoutForm({ children }) {
 				{/* HORIZONTAL */}
 				<Horizontal
 					Header={Header}
-					history={history}
 					auth={auth}
 					logoutApp={logoutApp}
 					swtichstate={swtichstate}
@@ -117,7 +116,7 @@ function LayoutForm({ children }) {
 											/>
 										</Link>
 									}
-									onClick={() => history.push("/")}
+									onClick={() => navigate("/")}
 								>
 									<h2>Cuenta</h2>
 								</Menu.Item>
@@ -134,7 +133,7 @@ function LayoutForm({ children }) {
 											/>
 										</Link>
 									}
-									onClick={() => history.push("/add")}
+									onClick={() => navigate("/add")}
 								>
 									<h3>Nuevo Apartado</h3>
 								</Menu.Item>
@@ -154,7 +153,7 @@ function LayoutForm({ children }) {
 											/>
 										</Link>
 									}
-									onClick={() => history.push("/addencargo")}
+									onClick={() => navigate("/addencargo")}
 								>
 									<h3>Nuevo Encargo</h3>
 								</Menu.Item>
@@ -174,7 +173,7 @@ function LayoutForm({ children }) {
 											/>
 										</Link>
 									}
-									onClick={() => history.push("/encargos")}
+									onClick={() => navigate("/encargos")}
 								>
 									<h3>Encargos</h3>
 								</Menu.Item> */}
@@ -191,7 +190,7 @@ function LayoutForm({ children }) {
 											/>
 										</Link>
 									}
-									onClick={() => history.push("/entradasSalidas")}
+									onClick={() => navigate("/entradasSalidas")}
 								>
 									<h3>Entrada / Salida</h3>
 								</Menu.Item>
@@ -208,7 +207,7 @@ function LayoutForm({ children }) {
 											/>
 										</Link>
 									}
-									onClick={() => history.push("/ventas")}
+									onClick={() => navigate("/ventas")}
 								>
 									<h2>Ventas</h2>
 								</Menu.Item>
@@ -225,7 +224,7 @@ function LayoutForm({ children }) {
 											/>
 										</Link>
 									}
-									onClick={() => history.push("/corte")}
+									onClick={() => navigate("/corte")}
 								>
 									<h2>Corte</h2>
 								</Menu.Item>

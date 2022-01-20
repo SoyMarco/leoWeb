@@ -6,7 +6,7 @@ import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";
 import { ImMobile } from "react-icons/im";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AuthContext from "context/Auth/AuthContext";
 
 export default function TotalesCorte({ loading, getTotales, refetch }) {
@@ -14,7 +14,7 @@ export default function TotalesCorte({ loading, getTotales, refetch }) {
 	const [mutateREGISTER_CAJA] = useMutation(REGISTER_CAJA);
 	const [recargas, setrecargas] = useState(null);
 	const inputRecargas = useRef();
-	const history = useHistory();
+	let navigate = useNavigate();
 
 	const formatter = new Intl.NumberFormat("en-US", {
 		style: "currency",
@@ -26,7 +26,7 @@ export default function TotalesCorte({ loading, getTotales, refetch }) {
 			sendRecargas();
 		}
 		if (e.keyCode === 27) {
-			history.push("/");
+			navigate("/");
 		}
 	};
 

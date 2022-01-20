@@ -4,7 +4,7 @@ import { GET_APARTADOS_BUSCADOR } from "graphql/apartado";
 import ErrorConection from "Utils/ErrorConection";
 import { SyncOutlined } from "@ant-design/icons";
 import { GET_ENCARGOS } from "graphql/encargo";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import "./buscarApartados.css";
 import moment from "moment";
@@ -32,7 +32,7 @@ export default function BuscadorApartados() {
 	const [listaBusqueda, setlistaBusqueda] = useState([]);
 	const [urlFolio, seturlFolio] = useState({ folio: 0, tipo: "" });
 	const { Option } = Select;
-	const history = useHistory();
+	let navigate = useNavigate();
 	useEffect(() => {
 		if (dataApartados && dataEncargos) {
 			let listaBusquedaMap = [];
@@ -53,7 +53,7 @@ export default function BuscadorApartados() {
 	}, [dataApartados, dataEncargos]);
 	useEffect(() => {
 		if (urlFolio?.folio > 0) {
-			history.push(`/${urlFolio.tipo}/${urlFolio.folio}`);
+			navigate(`/${urlFolio.tipo}/${urlFolio.folio}`);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [urlFolio]);
@@ -81,7 +81,7 @@ export default function BuscadorApartados() {
 	);
 	const pressKeyBuscador = (e) => {
 		if (e.keyCode === 27) {
-			history.push("/");
+			navigate("/");
 			document?.querySelector("#inputPrecio")?.select();
 		}
 	};
