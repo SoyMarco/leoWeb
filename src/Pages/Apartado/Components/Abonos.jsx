@@ -16,7 +16,7 @@ import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import AuthContext from "context/Auth/AuthContext";
-
+import "./productos.css";
 export default function Abonos({
 	abonos,
 	loading,
@@ -223,6 +223,7 @@ export default function Abonos({
 					borderRadius: "10px",
 					boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
 					margin: "10px",
+					background: "#f0f2f5",
 				}}
 				onRow={(record, rowIndex) => {
 					return {
@@ -243,16 +244,7 @@ export default function Abonos({
 				footer={() => (
 					<>
 						<Row justify='end'>
-							<h1
-								style={{
-									color: "green",
-									fontSize: "xx-large",
-									fontWeight: "revert",
-									margin: "0 20px",
-								}}
-							>
-								Abonos ${totalAbonos}
-							</h1>
+							<h1 className='totalAbonosApartado'>Abonos ${totalAbonos}</h1>
 						</Row>
 						<Row justify='center'>
 							<Progress

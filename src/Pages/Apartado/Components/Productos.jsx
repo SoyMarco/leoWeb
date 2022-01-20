@@ -183,7 +183,7 @@ export default function Productos({
 			),
 		},
 		{
-			title: "Delete",
+			title: "Borrar",
 			dataIndex: "totalArticulo",
 			key: "totalArticulo",
 			ellipsis: {
@@ -208,26 +208,26 @@ export default function Productos({
 			),
 		},
 		{
-			title: "Status",
+			title: "Entregar",
 			dataIndex: "idArray",
 			key: "idArray",
 			ellipsis: {
 				showTitle: false,
 			},
-			width: "60px",
+			width: "70px",
 			render: (idArray, record) => (
 				<Tooltip
 					placement='right'
 					title={
 						record?.entregado[0]?.status !== true
-							? "Producto Activo"
+							? "Entregar producto"
 							: "Producto Entregado"
 					}
 				>
 					<Row justify='center'>
 						<Switch
 							loading={loader}
-							checked={record?.entregado[0]?.status === true}
+							checked={record?.entregado[0]?.status === false}
 							size='small'
 							style={
 								record?.entregado[0]?.status
@@ -292,6 +292,7 @@ export default function Productos({
 						borderRadius: "10px",
 						boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
 						margin: "10px",
+						background: "#f0f2f5",
 					}}
 					rowSelection={rowSelection}
 					size='small'
@@ -316,16 +317,7 @@ export default function Productos({
 					}}
 					footer={() => (
 						<Row justify='end'>
-							<h1
-								style={{
-									color: "dodgerblue",
-									fontSize: "xx-large",
-									fontWeight: "revert",
-									marginRight: "20px",
-								}}
-							>
-								Productos ${totalTotal}
-							</h1>
+							<h1 className='totalProductoApartado'>Productos ${totalTotal}</h1>
 						</Row>
 					)}
 				/>

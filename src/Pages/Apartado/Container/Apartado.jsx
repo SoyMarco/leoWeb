@@ -424,15 +424,7 @@ export default function Apartado(props) {
 								{abono.abono > 0 ? `Restaría $${calculateRestaria()}` : null}
 							</h1>,
 							<>
-								<h1
-									style={{
-										color: "green",
-										fontSize: "xxx-large",
-										fontWeight: "bold",
-										marginTop: "-20px",
-									}}
-									onClick={() => pressEnter}
-								>
+								<h1 className='totalRestaApartado' onClick={() => pressEnter}>
 									{totalProductos ? `Resta $${totalTotal - totalAbonos}` : null}
 								</h1>
 							</>,
@@ -538,9 +530,7 @@ export default function Apartado(props) {
 								</Tooltip>
 							</Row>
 						</Row>
-						<h1
-							style={{ fontSize: "x-large", fontWeight: "bold" }}
-						>{`Cliente: ${dataApartado?.cliente}`}</h1>
+						<h1 className='nameClient'>{`Cliente:  ${dataApartado?.cliente}`}</h1>
 
 						{
 							/* Tablas PRODUCTOS ABONOS*/

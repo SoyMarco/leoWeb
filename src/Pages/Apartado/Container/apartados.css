@@ -24,3 +24,22 @@
 .borrar {
 	color: "#c5221f";
 }
+
+h1.nameClient {
+	font-size: x-large;
+	font-weight: bold;
+	border-radius: 30px;
+	text-align: center;
+	margin: 5px 20px 0 20px;
+	color: darkblue;
+	background: rgba(0, 0, 139, 0.185);
+}
+h1.totalRestaApartado {
+	color: darkgreen;
+	background: rgba(0, 100, 0, 0.178);
+	border-radius: 50px;
+	padding: 0 15px;
+	font-size: 50px !important;
+	font-weight: revert;
+	margin: -10px 20px 0;
+}
