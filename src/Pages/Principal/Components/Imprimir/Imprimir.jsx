@@ -1,13 +1,12 @@
 /* eslint-disable jsx-a11y/alt-text */
 import React, { useEffect, useRef } from "react";
+import { useReactToPrint } from "react-to-print";
 import { openNotification } from "Utils/openNotification";
-import ReactToPrint from "react-to-print";
-import { Modal, Row } from "antd";
+import { Row } from "antd";
 import logoLeo from "Pages/Principal/Utils/images";
 import "moment/locale/es-us";
 import moment from "moment";
 import "./imprimir.css";
-
 const Imprimir = ({
 	imprimir,
 	cambio,
@@ -23,7 +22,7 @@ const Imprimir = ({
 
 	useEffect(() => {
 		if (imprimir === true) {
-			document.getElementById("print-button").click();
+			handlePrint();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imprimir]);
@@ -33,15 +32,19 @@ const Imprimir = ({
 		openNotification("success", "Venta guardada con exito");
 	};
 
+	const handlePrint = useReactToPrint({
+		content: () => imprimirVenta.current,
+		onAfterPrint: () => afterPrint(),
+	});
 	return (
-		<Modal visible={imprimir} width='229px'>
-			<ReactToPrint
-				trigger={(e) => <button id='print-button'>Imprimiendo...</button>}
-				content={() => imprimirVenta.current}
-				// onBeforePrint={() => antesDeImprimir()}
-				onAfterPrint={() => afterPrint()}
-			/>
-			<div id='tickets' className='ticket' name='tickets' ref={imprimirVenta}>
+		<div style={{ visibility: "hidden" }}>
+			<div
+				id='tickets'
+				className='ticket'
+				name='tickets'
+				ref={imprimirVenta}
+				style={{ width: "229px" }}
+			>
 				{/*  LOGO LEO  */}
 				<img src={logoLeo} />
 				{/* <!-- FECHA --> */}
@@ -62,8 +65,9 @@ const Imprimir = ({
 				</span>
 
 				{/* <!-- TABLA DE PRODUCTOS --> */}
-
-				<h2 className='sutituloTicket'>Productos</h2>
+				<h3 className='subtituloTicketApartado'>
+					<u> Productos</u>
+				</h3>
 				{listaCompras.map((item) => {
 					return (
 						<table key={`tableProcutVenta${item.key}`} className='productos'>
@@ -121,16 +125,8 @@ const Imprimir = ({
 					<h3>Cambio: </h3>
 					<h2>${cambio}</h2>
 				</Row>
-				<br></br>
-				<Row className='cambio'>
-					<h3>.</h3>
-				</Row>
-				<br></br>
-				<Row className='cambio'>
-					<h3>.</h3>
-				</Row>
 			</div>
-		</Modal>
+		</div>
 	);
 };
 export default Imprimir;

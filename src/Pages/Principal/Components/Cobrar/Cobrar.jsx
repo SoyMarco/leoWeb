@@ -164,7 +164,7 @@ const Cobrar = ({
 		let algo = inputs;
 		setinputs({ ...algo, [key]: value });
 	};
-	const memoizedValue = useMemo(
+	const memoPrint = useMemo(
 		() => (
 			<Imprimir
 				imprimir={imprimir}
@@ -183,7 +183,7 @@ const Cobrar = ({
 	);
 	return (
 		<>
-			{memoizedValue}
+			{memoPrint}
 			<Modal
 				key='keyModal'
 				style={{ top: 25 }}

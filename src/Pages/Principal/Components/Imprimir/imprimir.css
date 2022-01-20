@@ -33,15 +33,10 @@
 	padding-bottom: 0px;
 	padding-top: 0px;
 }
+.subtituloTicketApartado {
+	padding: 0px;
+	max-width: 190px;
 
-/* h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	margin-top: 0;
-	margin-bottom: 0;
-	color: rgba(0, 0, 0, 0.85);
-	font-weight: 500;
-} */
+	font-weight: bold;
+	margin-top: 15px;
+}
