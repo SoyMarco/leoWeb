@@ -69,9 +69,9 @@ const SchemaVentas = (setimprimir) => {
 	return [
 		{
 			title: "Folio",
-			dataIndex: "key",
-			key: "key",
-			sorter: (a, b) => b.key - a.key,
+			dataIndex: "folio",
+			key: "folio",
+			sorter: (a, b) => b.folio - a.folio,
 			defaultSortOrder: "ascend",
 			width: "80px",
 			ellipsis: true,

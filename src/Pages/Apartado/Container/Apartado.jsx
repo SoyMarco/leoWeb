@@ -10,7 +10,7 @@ import {
 import CobrarApartado from "../Components/Cobrar/CobrarApartado";
 import { TablaProductos, TablaAbonos } from "../Components";
 import { openNotification } from "Utils/openNotification";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@apollo/client";
 import ErrorConection from "Utils/ErrorConection";
 import ErrorPage from "Pages/Error/Error";
@@ -38,7 +38,7 @@ import "./apartados.css";
 export default function Apartado(props) {
 	const { auth, timeLogout } = useContext(AuthContext);
 
-	const history = useHistory();
+	let navigate = useNavigate();
 	const params = useParams();
 	let urlFolio = parseInt(params.folio);
 	let {
@@ -196,7 +196,7 @@ export default function Apartado(props) {
 			if (abono.abono > 0) {
 				setabono({ abono: null });
 			} else {
-				history.push("/");
+				navigate("/");
 			}
 		}
 
@@ -213,7 +213,7 @@ export default function Apartado(props) {
 		}
 		// Cuenta
 		if (e.keyCode === 67) {
-			history.push("/");
+			navigate("/");
 		}
 	};
 	const initialState = (data) => {

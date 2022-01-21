@@ -10,7 +10,7 @@ import { REGISTER_ENCARGO } from "graphql/encargo";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import AuthContext from "context/Auth/AuthContext";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ModalAbonoEncargo from "../Components/ModalAbonoEncargo";
 import aceptar from "assets/sonido/Aceptar.wav";
 import ImprimirNewEncargo from "../Components/ImprimirEncargo/ImprimirNewEncargo";
@@ -25,7 +25,7 @@ export default function Encargo() {
 	});
 	const audio = new Audio(aceptar);
 
-	const history = useHistory();
+	let navigate = useNavigate();
 	const [optionsClientes, setoptionsClientes] = useState([]);
 	const [abono, setabono] = useState(0);
 	const [modalAbono, setmodalAbono] = useState(null);
@@ -177,7 +177,7 @@ export default function Encargo() {
 					audio.play();
 					openNotification("success", `Encargo guardado `);
 					setloader(false);
-					history.push("/");
+					navigate("/");
 				}
 			} catch (error) {
 				setloader(false);

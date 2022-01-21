@@ -4,7 +4,7 @@ import { DollarCircleOutlined } from "@ant-design/icons";
 import { Steps, Button, message, Card, Input, Row, AutoComplete } from "antd";
 import ImprimirNewApartado from "../Components/ImprimirApartado/ImprimirNewApartado";
 import CobrarNewApartado from "../Components/CobrarNewApartado/CobrarNewApartado";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AuthContext from "context/Auth/AuthContext";
 import { keyBlock } from "Utils";
 import "./addApartado.css";
@@ -16,7 +16,7 @@ export default function AddApartado() {
 
 	let { data: getClientsNames } = useQuery(GET_CLIENTS_NAMES);
 	let { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
-	const history = useHistory();
+	let navigate = useNavigate();
 	const [current, setCurrent] = useState(0);
 	const [cliente, setcliente] = useState("");
 	const [titulo2, settitulo2] = useState("Productos");
@@ -64,7 +64,7 @@ export default function AddApartado() {
 		setCurrent(current - 1);
 	};
 	const goToHome = () => {
-		history.push("/");
+		navigate("/");
 	};
 
 	const cerrarCobrar = () => {
@@ -77,7 +77,7 @@ export default function AddApartado() {
 		}
 		if (e.keyCode === 27) {
 			if (!cliente) {
-				history.push("/");
+				navigate("/");
 			}
 		}
 	};

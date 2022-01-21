@@ -5,14 +5,14 @@ import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { REGISTER_CAJA } from "graphql/caja";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./caja.css";
 import AuthContext from "context/Auth/AuthContext";
 
 export default function Caja() {
 	const { timeLogout } = useContext(AuthContext);
 	const [mutateREGISTER_CAJA] = useMutation(REGISTER_CAJA);
-	const history = useHistory();
+	let navigate = useNavigate();
 	const [caja, setcaja] = useState(0);
 	const inputCaja = useRef();
 	useEffect(() => {
@@ -29,7 +29,7 @@ export default function Caja() {
 				},
 			});
 			if (data) {
-				history.push("/");
+				navigate("/");
 				openNotification("success", `Registro guardado con exito`);
 			}
 		} catch (error) {

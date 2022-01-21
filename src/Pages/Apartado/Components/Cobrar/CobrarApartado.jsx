@@ -11,7 +11,7 @@ import { useMutation } from "@apollo/client";
 import AuthContext from "context/Auth/AuthContext";
 import { keyBlock } from "Utils";
 import ShopListContext from "context/Shopping/ShopListContext";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const CobrarApartado = ({
 	modalCobrar,
@@ -25,7 +25,7 @@ const CobrarApartado = ({
 }) => {
 	const { auth, timeLogout } = useContext(AuthContext);
 	const { addProductShopList } = useContext(ShopListContext);
-	const history = useHistory();
+	let navigate = useNavigate();
 	const [mutateADD_ABONO] = useMutation(ADD_ABONO);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);
@@ -132,7 +132,7 @@ const CobrarApartado = ({
 					refApartado: dataApartado.id,
 					f3: true,
 				});
-				history.push("/");
+				navigate("/");
 				return;
 			}
 			try {
@@ -396,4 +396,4 @@ client.writeQuery({
 		id: 5,
 	},
 });
-history.push("/"); */
+navigate("/"); */

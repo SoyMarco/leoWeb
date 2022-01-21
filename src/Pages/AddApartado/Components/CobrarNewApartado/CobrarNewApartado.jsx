@@ -11,7 +11,7 @@ import { REGISTER_APARTADO, REGISTER_APARTADO_F3 } from "graphql/apartado";
 import AuthContext from "context/Auth/AuthContext";
 import aceptar from "assets/sonido/Aceptar.wav";
 import ShopListContext from "context/Shopping/ShopListContext";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const CobrarNewApartado = ({
 	modalCobrar,
@@ -37,7 +37,7 @@ const CobrarNewApartado = ({
 		tarjeta: 0,
 		efectivo: 0,
 	});
-	const history = useHistory();
+	let navigate = useNavigate();
 
 	const audio = new Audio(aceptar);
 	const inputEfectivo = useRef();
@@ -168,7 +168,7 @@ const CobrarNewApartado = ({
 						refApartado: registerApartadoF3.id,
 						f3: true,
 					});
-					history.push("/");
+					navigate("/");
 					initialState();
 
 					setbtnLoading(false);

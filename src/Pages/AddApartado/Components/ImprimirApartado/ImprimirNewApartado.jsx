@@ -4,7 +4,7 @@ import moment from "moment";
 import "moment/locale/es-us";
 import { Modal, Row, Divider, Button } from "antd";
 import "./imprimir.css";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 import { keyBlock } from "Utils";
 import { openNotification } from "Utils/openNotification";
@@ -24,7 +24,7 @@ const ImprimirNewApartado = ({
 	const [numPrint, setnumPrint] = useState(0);
 	const imprimirNewApartado = useRef();
 	const inputReprint = useRef();
-	const history = useHistory();
+	let navigate = useNavigate();
 	const audio = new Audio(aceptar);
 
 	useEffect(() => {
@@ -58,7 +58,7 @@ const ImprimirNewApartado = ({
 			setnumPrint(numPrint + 1);
 			audio.play();
 		} else if (numPrint === 1) {
-			history.push("/");
+			navigate("/");
 		}
 	};
 	const pressKeyPrecio = (e) => {
@@ -106,7 +106,7 @@ const ImprimirNewApartado = ({
 			<Modal
 				visible={imprimir}
 				width='229px'
-				onCancel={() => history.push("/")}
+				onCancel={() => navigate("/")}
 				onOk={() => document.getElementById("print-button").click()}
 				key='ModalPrintNewApartado'
 			>
@@ -125,7 +125,7 @@ const ImprimirNewApartado = ({
 						type='primary'
 						danger
 						shape='round'
-						onClick={() => history.push("/")}
+						onClick={() => navigate("/")}
 						key='botonESCPrintNewApartado'
 					>
 						ESC

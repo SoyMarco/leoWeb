@@ -1,22 +1,19 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Layout } from "antd";
-import "antd/dist/antd.css";
+import "antd/dist/antd.min.css";
 import "./layout.css";
 import "material-design-icons-iconfont";
 import { openNotification } from "Utils/openNotification";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Horizontal from "../Components/Horizontal";
 import FooterHorizontal from "../Components/Footer";
 import AuthContext from "context/Auth/AuthContext";
 
 function LayoutForm({ children }) {
-	// const [collapsed, setcollapsed] = useState(true);
 	const { Header, Content, Footer } = Layout;
 	const { auth, logout } = useContext(AuthContext);
 	const [swtichstate, setswtichstate] = useState(true);
-	// const [currentMenu, setcurrentMenu] = useState(1);
 	const [titleWeb, settitleWeb] = useState(null);
-	const history = useHistory();
 	const Location = useLocation();
 	/* Cambiar titulo de pagina */
 	useEffect(() => {
@@ -36,27 +33,14 @@ function LayoutForm({ children }) {
 		}
 	}, [Location]);
 
-	// const { SubMenu } = Menu;
-	// const onCollapse = () => {
-	// 	setcollapsed(!collapsed);
-	// 	let title = Location.pathname;
-	// 	if (title === "/") {
-	// 		document.querySelector("#inputPrecio").select();
-	// 	}
-	// };
-
 	const logoutApp = () => {
 		setswtichstate(!swtichstate);
 		setTimeout(() => {
 			logout();
 			openNotification("success", "Espero verte pronto de nuevo.");
 		}, 200);
-
-		// setAuth(null);
 	};
-	// const handleClick = (e) => {
-	// 	setcurrentMenu(e.key);
-	// };
+
 	return (
 		<>
 			{titleWeb ? <title>{titleWeb}</title> : null}
@@ -70,7 +54,6 @@ function LayoutForm({ children }) {
 				{/* HORIZONTAL */}
 				<Horizontal
 					Header={Header}
-					history={history}
 					auth={auth}
 					logoutApp={logoutApp}
 					swtichstate={swtichstate}
@@ -94,7 +77,6 @@ function LayoutForm({ children }) {
 						>
 							<FooterHorizontal
 								Header={Header}
-								history={history}
 								auth={auth}
 								logoutApp={logoutApp}
 								swtichstate={swtichstate}

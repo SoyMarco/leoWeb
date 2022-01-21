@@ -1,18 +1,20 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React from "react";
 import "App.css";
 import "material-design-icons-iconfont";
 import NavToken from "Routes/NavToken";
-import AuthState from "context/Auth/AuthState";
 import ShopListState from "context/Shopping/ShopListState";
+import { ApolloProvider } from "@apollo/client";
+import client from "./config/apollo";
+import AuthState from "context/Auth/AuthState";
 
 function App() {
 	return (
-		<AuthState>
-			<ShopListState>
-				<NavToken />
-			</ShopListState>
-		</AuthState>
+		<ApolloProvider client={client}>
+			<AuthState>
+				<ShopListState>
+					<NavToken />
+				</ShopListState>
+			</AuthState>
+		</ApolloProvider>
 	);
 }
 

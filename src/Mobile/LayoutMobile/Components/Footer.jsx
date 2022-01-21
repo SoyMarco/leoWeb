@@ -2,10 +2,11 @@ import React from "react";
 import { Row } from "antd";
 import { MdLocalGroceryStore } from "react-icons/md";
 import { FaCashRegister } from "react-icons/fa";
-// import optional
-// import { GiOpenBook } from "react-icons/gi";
+import { useNavigate } from "react-router-dom";
 
-export default function Horizontal({ history }) {
+export default function Horizontal() {
+	let navigate = useNavigate();
+
 	return (
 		<>
 			{/* HORIZONTAL */}
@@ -25,21 +26,21 @@ export default function Horizontal({ history }) {
 							margin: "10px 30px",
 							color: "darkblue",
 						}}
-						onClick={() => history.push("/mobile/corteB")}
+						onClick={() => navigate("/mobile/corteB")}
 					/>
 					{/* <GiOpenBook
 						style={{
 							margin: "10px 30px",
 							color: "darkblue",
 						}}
-						onClick={() => history.push("/mobile/encargos")}
+						onClick={() => navigate("/mobile/encargos")}
 					/> */}
 					<MdLocalGroceryStore
 						style={{
 							margin: "10px 30px",
 							color: "darkblue",
 						}}
-						onClick={() => history.push("/mobile/venta")}
+						onClick={() => navigate("/mobile/venta")}
 					/>
 				</Row>
 			</div>

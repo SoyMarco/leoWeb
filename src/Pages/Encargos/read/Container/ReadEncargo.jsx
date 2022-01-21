@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 // import useAuth from "hooks/useAuth";
-// import { useHistory } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 // import ModalAbonoEncargo from "../Components/ModalAbonoEncargo";
 // import aceptar from "assets/sonido/Aceptar.wav";
 // import ImprimirNewEncargo from "../Components/ImprimirEncargo/ImprimirNewEncargo";
@@ -30,7 +30,7 @@ export default function ReadEncargo() {
 	// const audio = new Audio(aceptar);
 	const { Meta } = Card;
 
-	// const history = useHistory();
+	// let navigate = useNavigate();
 	// const { auth, logout } = useAuth();
 
 	const pasarAFechaLLLL = (item) => {

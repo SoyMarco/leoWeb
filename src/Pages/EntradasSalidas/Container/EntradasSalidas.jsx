@@ -8,14 +8,14 @@ import { REGISTER_CAJA } from "graphql/caja";
 import { BsFillChatRightTextFill } from "react-icons/bs";
 import { FaMoneyBillAlt } from "react-icons/fa";
 
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import AuthContext from "context/Auth/AuthContext";
 import "./entradasSalidas.css";
 
 export default function EntradasSalidas() {
 	const { timeLogout } = useContext(AuthContext);
 	const [mutateREGISTER_CAJA] = useMutation(REGISTER_CAJA);
-	const history = useHistory();
+	let navigate = useNavigate();
 
 	const [btnLoading, setbtnLoading] = useState(false);
 	const [caja, setcaja] = useState(null);
@@ -48,7 +48,7 @@ export default function EntradasSalidas() {
 						},
 					});
 					if (data) {
-						history.push("/");
+						navigate("/");
 						openNotification("success", `${entradaSalida} guardado con exito`);
 					}
 				} catch (error) {
@@ -69,7 +69,7 @@ export default function EntradasSalidas() {
 			}
 		}
 		if (e.keyCode === 27) {
-			history.push("/");
+			navigate("/");
 		}
 	};
 	return (

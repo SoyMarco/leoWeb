@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { keyBlock } from "Utils";
 import { AiFillDollarCircle, AiOutlineCloudDownload } from "react-icons/ai";
 import { Input, Button, Badge } from "antd";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import GetVentasF3 from "Pages/GetVentasF3/Container/GetVentasF3";
 import ShopListContext from "context/Shopping/ShopListContext";
 import "./Encabezado.css";
@@ -32,7 +32,7 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 	const [precio, setprecio] = useState({
 		precio: null,
 	});
-	const history = useHistory();
+	let navigate = useNavigate();
 
 	useEffect(() => {
 		if (DrawerF3Visible === false) {
@@ -116,10 +116,10 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 			document.querySelector("#buscarApartadoInput").select();
 		}
 		if (e.keyCode === 67) {
-			history.push("/corte");
+			navigate("/corte");
 		}
 		if (e.keyCode === 78) {
-			history.push("/add");
+			navigate("/add");
 		}
 		if (e.keyCode === 107) {
 			if (stateRecord) {
@@ -144,7 +144,7 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 			document.querySelector("#buscarApartadoInput").select();
 		}
 		if (e.keyCode === 122) {
-			history.push("/add");
+			navigate("/add");
 		}
 		if (e.keyCode === 123) {
 			pressEnter();

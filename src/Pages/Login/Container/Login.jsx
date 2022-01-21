@@ -20,10 +20,11 @@ import {
 	Select,
 } from "antd";
 import AuthContext from "context/Auth/AuthContext";
+import logoLeo from "../logo512.png";
 
 const Login = () => {
 	const client = useApolloClient();
-	const [mutateLOGIN] = useMutation(LOGIN);
+	const [mutateLOGIN, { loading: loadImage }] = useMutation(LOGIN);
 	const [name, setname] = useState("");
 	const [password, setpassword] = useState("");
 	const [loading, setloading] = useState(false);
@@ -78,7 +79,7 @@ const Login = () => {
 		}
 	};
 	return (
-		<>
+		<div style={{ display: "flex", flexDirection: "column" }}>
 			<Layout>
 				<Header
 					style={{
@@ -259,7 +260,12 @@ const Login = () => {
 					Creado por MarcoASR ©2021
 				</Footer>
 			</Layout>
-		</>
+			{loadImage && (
+				<div className='pageLoading'>
+					<img src={logoLeo} alt='img' className='imagenLogin' />
+				</div>
+			)}
+		</div>
 	);
 };
 
