@@ -1,7 +1,7 @@
 import { render } from "react-dom";
 import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
 render(<App />, document.getElementById("root"));
 
-reportWebVitals();
+serviceWorkerRegistration.register();

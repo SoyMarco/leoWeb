@@ -43,3 +43,32 @@
 	height: 43px;
 	border-radius: 50px;
 }
+
+div.pageLoading {
+	background: linear-gradient(#000066, #000058, #000036);
+	height: 100%;
+	width: 100%;
+	justify-content: center;
+	align-content: center;
+	position: absolute;
+}
+@keyframes latidos {
+	from {
+		transform: none;
+	}
+	10% {
+		transform: scale(1.4);
+	}
+	to {
+		transform: none;
+	}
+}
+img.imagenLogin {
+	position: fixed;
+	top: 30%;
+	left: 43%;
+	max-width: 30%;
+	max-height: 30%;
+	z-index: 9999;
+	animation: latidos 1.5s infinite;
+}

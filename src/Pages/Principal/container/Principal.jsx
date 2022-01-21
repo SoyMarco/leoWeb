@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import BarraMayorVenta from "../Components/BarraMayorVenta/BarraMayorVenta";
 import TablaPrincipal from "../Components/TablaPrincipal/TablaPrincipal";
 import Encabezado from "../Components/Encabezado/Encabezado";
