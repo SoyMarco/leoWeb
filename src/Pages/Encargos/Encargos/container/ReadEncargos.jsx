@@ -92,7 +92,7 @@ export default function ReadEncargo() {
 											<div className='divAbrir'>
 												<div
 													onClick={() =>
-														history.push(
+														navigate(
 															widthPantalla < 700
 																? `/mobile/encargo/${item.folio}`
 																: `/encargo/${item.folio}`
