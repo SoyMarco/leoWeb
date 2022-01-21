@@ -56,7 +56,7 @@ div.pageLoading {
 	from {
 		transform: none;
 	}
-	10% {
+	11% {
 		transform: scale(1.4);
 	}
 	to {
