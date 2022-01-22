@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
-import { GET_VENTAS_DIA_ADMIN } from "graphql/venta";
-import { GET_CAJA_DIA_ADMIN } from "graphql/caja";
+import { GET_VENTAS_DIA_ADMIN } from "myGraphql/venta";
+import { GET_CAJA_DIA_ADMIN } from "myGraphql/caja";
 import ErrorConection from "Utils/ErrorConection";
 import { useQuery } from "@apollo/client";
 import { Row, Divider, Col } from "antd";

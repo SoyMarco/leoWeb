@@ -1,24 +1,30 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useRef, useState, useContext } from "react";
 import { Button, Card, Input, Row } from "antd";
 import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
-import { REGISTER_CAJA } from "graphql/caja";
+import { REGISTER_CAJA } from "myGraphql/caja";
 import { useNavigate } from "react-router-dom";
 import "./caja.css";
 import AuthContext from "context/Auth/AuthContext";
 
 export default function Caja() {
-	const { timeLogout } = useContext(AuthContext);
-	const [mutateREGISTER_CAJA] = useMutation(REGISTER_CAJA);
-	let navigate = useNavigate();
+	const { timeLogout, setFirstLogin } = useContext(AuthContext);
+	const [mutateREGISTER_CAJA, { loading }] = useMutation(REGISTER_CAJA);
 	const [caja, setcaja] = useState(0);
+
 	const inputCaja = useRef();
+	let navigate = useNavigate();
+
 	useEffect(() => {
 		inputCaja.current.select();
+		setFirstLogin(undefined);
 	}, []);
+
 	const sendLogin = async () => {
+		if (loading) return;
 		try {
 			const { data } = await mutateREGISTER_CAJA({
 				variables: {
@@ -29,13 +35,14 @@ export default function Caja() {
 				},
 			});
 			if (data) {
-				navigate("/");
 				openNotification("success", `Registro guardado con exito`);
+				navigate("/");
 			}
 		} catch (error) {
 			ErrorConection(timeLogout);
 		}
 	};
+
 	const pressKeyEnter = (e) => {
 		if (e.keyCode === 13) {
 			sendLogin();

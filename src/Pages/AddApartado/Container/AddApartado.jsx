@@ -9,7 +9,7 @@ import AuthContext from "context/Auth/AuthContext";
 import { keyBlock } from "Utils";
 import "./addApartado.css";
 import { useQuery } from "@apollo/client";
-import { GET_CLIENTS_NAMES, GET_PRODUCTS_NAME } from "graphql/apartado";
+import { GET_CLIENTS_NAMES, GET_PRODUCTS_NAME } from "myGraphql/apartado";
 
 export default function AddApartado() {
 	const { auth, timeLogout } = useContext(AuthContext);

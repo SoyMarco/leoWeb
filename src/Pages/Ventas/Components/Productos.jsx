@@ -4,7 +4,7 @@ import { SmileOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { AiFillPrinter } from "react-icons/ai";
 import SchemaProductos from "../Schema/SchemaProductos";
-import { CANCELAR_VENTA } from "graphql/venta";
+import { CANCELAR_VENTA } from "myGraphql/venta";
 import { useMutation } from "@apollo/client";
 import ErrorConection from "Utils/ErrorConection";
 import { openNotification } from "Utils/openNotification";

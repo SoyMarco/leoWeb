@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
-import { CANCELAR_PRODUCTO_APARTDO } from "graphql/apartado";
+import { CANCELAR_PRODUCTO_APARTDO } from "myGraphql/apartado";
 import { MdLocalGroceryStore, MdDelete } from "react-icons/md";
 import { FaShoppingCart } from "react-icons/fa";
 import { useMutation } from "@apollo/client";
 import moment from "moment";
+import "moment/locale/es";
+
 import {
 	Table,
 	Result,
@@ -57,7 +59,10 @@ export default function Productos({
 		inputAbono.current.select();
 	};
 	const pasarAFecha = (item) => {
-		return moment.unix(item / 1000).format("ll");
+		moment.locale("es");
+		let algo = moment.unix(item / 1000).format("ll");
+		console.log(algo);
+		return algo;
 	};
 
 	const pasarAFechaLLLL = (item) => {

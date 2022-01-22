@@ -11,7 +11,7 @@ import {
 } from "antd";
 import { SmileOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { BORRAR_EDITAR_ABONO } from "graphql/apartado";
+import { BORRAR_EDITAR_ABONO } from "myGraphql/apartado";
 import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";

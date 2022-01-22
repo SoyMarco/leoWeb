@@ -1,6 +1,6 @@
 import React, { useState, useEffect, memo } from "react";
-import { REGISTER_ESTRELLA, GET_ESTRELLAS_VENDEDOR } from "graphql/estrella";
-import { GET_VENTAS_MES, GET_TOTAL_VENTAS_DIA } from "graphql/venta";
+import { REGISTER_ESTRELLA, GET_ESTRELLAS_VENDEDOR } from "myGraphql/estrella";
+import { GET_VENTAS_MES, GET_TOTAL_VENTAS_DIA } from "myGraphql/venta";
 import { useQuery, useMutation } from "@apollo/client";
 import { Row, Progress } from "antd";
 import "./BarraMayorVenta.css";

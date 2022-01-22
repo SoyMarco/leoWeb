@@ -7,7 +7,7 @@ import moment from "moment";
 import "moment/locale/es-us";
 import locale from "antd/lib/locale/es_ES";
 import { useMutation } from "@apollo/client";
-import { EDIT_VENCE_APARTADO } from "graphql/apartado";
+import { EDIT_VENCE_APARTADO } from "myGraphql/apartado";
 import "./modalCalendar.css";
 import AuthContext from "context/Auth/AuthContext";
 

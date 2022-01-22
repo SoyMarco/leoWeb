@@ -7,7 +7,7 @@ import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
-import { REGISTER_APARTADO, REGISTER_APARTADO_F3 } from "graphql/apartado";
+import { REGISTER_APARTADO, REGISTER_APARTADO_F3 } from "myGraphql/apartado";
 import AuthContext from "context/Auth/AuthContext";
 import aceptar from "assets/sonido/Aceptar.wav";
 import ShopListContext from "context/Shopping/ShopListContext";

@@ -8,7 +8,7 @@ import ShopListContext from "context/Shopping/ShopListContext";
 import "./Encabezado.css";
 import { ShoppingOutlined } from "@ant-design/icons";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_F3 } from "graphql/f3";
+import { GET_ALL_F3 } from "myGraphql/f3";
 
 export default function Encabezado({ setmodalCobrar, stateRecord }) {
 	const {

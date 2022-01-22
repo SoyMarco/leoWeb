@@ -8,7 +8,7 @@ import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";
 import { useMutation, useQuery } from "@apollo/client";
-import { REGISTER_VENTA, GET_TOTAL_VENTAS_DIA } from "graphql/venta";
+import { REGISTER_VENTA, GET_TOTAL_VENTAS_DIA } from "myGraphql/venta";
 import AuthContext from "context/Auth/AuthContext";
 import aceptar from "assets/sonido/Aceptar.wav";
 import "./cobrar.css";

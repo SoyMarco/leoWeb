@@ -1,5 +1,5 @@
 import React, { useEffect, useContext, useState } from "react";
-import { GET_ALL_F3, CANCEL_F3 } from "graphql/f3";
+import { GET_ALL_F3, CANCEL_F3 } from "myGraphql/f3";
 import { useQuery, useMutation } from "@apollo/client";
 import { Drawer, Table, Tooltip, Result, Button, Popconfirm } from "antd";
 import { MdDelete, MdLocalGroceryStore } from "react-icons/md";

@@ -4,7 +4,7 @@ import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
-import { REGISTER_CAJA } from "graphql/caja";
+import { REGISTER_CAJA } from "myGraphql/caja";
 import { BsFillChatRightTextFill } from "react-icons/bs";
 import { FaMoneyBillAlt } from "react-icons/fa";
 

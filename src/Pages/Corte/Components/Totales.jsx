@@ -1,6 +1,6 @@
 import React, { useState, useRef, useContext } from "react";
 import { Col, Row, Card, InputNumber } from "antd";
-import { REGISTER_CAJA } from "graphql/caja";
+import { REGISTER_CAJA } from "myGraphql/caja";
 import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";

@@ -15,7 +15,7 @@ import {
 	GET_ENCARGO_FOLIO,
 	CANCEL_ENTREGA,
 	EDIT_GUARDAR_ENCARGO,
-} from "graphql/encargo";
+} from "myGraphql/encargo";
 import { Row, Card, Skeleton, Button, Switch, Tooltip, Result } from "antd";
 import "./Encargo.css";
 

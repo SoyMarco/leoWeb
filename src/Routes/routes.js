@@ -8,7 +8,6 @@ import Corte from "Pages/Corte/Container/Corte";
 
 import Apartado from "Pages/Apartado/Container/Apartado";
 import ErrorPage from "Pages/Error/Error";
-import Prueba from "Pages/prueba";
 import AddApartado from "Pages/AddApartado/Container/AddApartado";
 import Caja from "Pages/Caja/Container/Caja";
 import EntradasSalidas from "Pages/EntradasSalidas/Container/EntradasSalidas";
@@ -42,12 +41,6 @@ const routes = [
 		path: "/apartado/:folio",
 		layout: LayoutForm,
 		component: Apartado,
-		exact: true,
-	},
-	{
-		path: "/prueba",
-		layout: LayoutForm,
-		component: Prueba,
 		exact: true,
 	},
 	{

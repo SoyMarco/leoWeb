@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Row, Select, ConfigProvider, Result } from "antd";
-import { GET_APARTADOS_BUSCADOR } from "graphql/apartado";
+import { GET_APARTADOS_BUSCADOR } from "myGraphql/apartado";
 import ErrorConection from "Utils/ErrorConection";
 import { SyncOutlined } from "@ant-design/icons";
-import { GET_ENCARGOS } from "graphql/encargo";
+import { GET_ENCARGOS } from "myGraphql/encargo";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import "./buscarApartados.css";

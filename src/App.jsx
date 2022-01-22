@@ -1,5 +1,4 @@
 import "App.css";
-import "material-design-icons-iconfont";
 import NavToken from "Routes/NavToken";
 import ShopListState from "context/Shopping/ShopListState";
 import { ApolloProvider } from "@apollo/client";
