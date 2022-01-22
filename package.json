@@ -3,15 +3,19 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
-		"@ant-design/icons": "4.7.0",
+		"@ant-design/icons": "4.6.2",
+		"@testing-library/jest-dom": "5.11.4",
+		"@testing-library/react": "11.1.0",
+		"@testing-library/user-event": "12.1.10",
 		"@apollo/client": "3.5.7",
-		"@babel/runtime": "^7.16.7",
+		"@babel/runtime": "7.16.7",
 		"antd": "4.18.4",
 		"apollo-link-context": "1.0.20",
 		"apollo-upload-client": "17.0.0",
 		"graphql": "16.2.0",
 		"jsonwebtoken": "8.5.1",
 		"jwt-decode": "3.1.2",
+		"material-design-icons-iconfont": "6.1.1",
 		"moment": "2.29.1",
 		"react": "17.0.2",
 		"react-dom": "17.0.2",
@@ -19,16 +23,32 @@
 		"react-router": "6.2.1",
 		"react-router-dom": "6.2.1",
 		"react-scripts": "5.0.0",
-		"react-to-print": "2.14.3"
+		"react-to-print": "2.14.3",
+		"web-vitals": "2.1.3",
+		"xlsx": "0.17.1",
+		"workbox-background-sync": "5.1.4",
+		"workbox-broadcast-update": "5.1.4",
+		"workbox-cacheable-response": "5.1.4",
+		"workbox-core": "5.1.4",
+		"workbox-expiration": "5.1.4",
+		"workbox-google-analytics": "5.1.4",
+		"workbox-navigation-preload": "5.1.4",
+		"workbox-precaching": "5.1.4",
+		"workbox-range-requests": "5.1.4",
+		"workbox-routing": "5.1.4",
+		"workbox-strategies": "5.1.4",
+		"workbox-streams": "5.1.4"
 	},
 	"scripts": {
 		"start": "react-scripts start",
 		"build": "react-scripts build",
+		"test": "react-scripts test",
 		"eject": "react-scripts eject"
 	},
 	"eslintConfig": {
 		"extends": [
-			"react-app"
+			"react-app",
+			"react-app/jest"
 		]
 	},
 	"browserslist": {
