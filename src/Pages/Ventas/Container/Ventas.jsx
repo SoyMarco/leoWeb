@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { TablaProductos, TablaVentas } from "../Components";
 import ErrorConection from "Utils/ErrorConection";
 import { Row } from "antd";
-import { GET_CORTE } from "graphql/venta";
+import { GET_CORTE } from "myGraphql/venta";
 import { useQuery } from "@apollo/client";
 import AuthContext from "context/Auth/AuthContext";
 import Imprimir from "../Components/Imprimir/Imprimir";

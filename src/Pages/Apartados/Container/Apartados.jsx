@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { TablaProductos, TablaApartados } from "../Components";
 import { Row, Input, Card } from "antd";
 import { useQuery } from "@apollo/client";
-import { GET_APARTADOS } from "graphql/apartado";
+import { GET_APARTADOS } from "myGraphql/apartado";
 import { BsSearch } from "react-icons/bs";
 import "./apartados.css";
 import ErrorConection from "Utils/ErrorConection";

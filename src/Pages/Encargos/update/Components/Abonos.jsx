@@ -3,7 +3,7 @@ import { Table, Result, Col, Row, Tooltip, Popconfirm, Button } from "antd";
 import { MdDelete } from "react-icons/md";
 import { SmileOutlined } from "@ant-design/icons";
 import moment from "moment";
-import { BORRAR_EDITAR_ABONO } from "graphql/apartado";
+import { BORRAR_EDITAR_ABONO } from "myGraphql/apartado";
 import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";

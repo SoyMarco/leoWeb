@@ -7,7 +7,7 @@ import { Row, Button, Modal, Input, Form, AutoComplete } from "antd";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_PRODUCTS_NAME, ADD_PRODUCTO } from "graphql/apartado";
+import { GET_PRODUCTS_NAME, ADD_PRODUCTO } from "myGraphql/apartado";
 import AuthContext from "context/Auth/AuthContext";
 
 export default function AddProduct({

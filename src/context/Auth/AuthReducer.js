@@ -11,6 +11,10 @@ export default (state, action) => {
 		LOGOUT: {
 			auth: undefined,
 		},
+
+		SET_FIRST_LOGIN: {
+			firstLogin: payload,
+		},
 	};
 
 	return { ...state, ...REDUCER[type] };

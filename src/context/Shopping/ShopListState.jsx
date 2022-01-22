@@ -3,7 +3,7 @@ import React, { useReducer, useState } from "react";
 import ShopListContext from "./ShopListContext";
 import ShopListReducer from "./ShopListReducer";
 import { ADD_PRODUCT_SHOP_LIST, CLEAR_SHOP_LIST } from "./types";
-import { REGISTER_F3 } from "graphql/f3";
+import { REGISTER_F3 } from "myGraphql/f3";
 import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 

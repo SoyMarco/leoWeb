@@ -1,6 +1,6 @@
 import React, { useEffect, useState, memo } from "react";
 import { useQuery } from "@apollo/client";
-import { GET_ESTRELLAS_VENDEDOR } from "graphql/estrella";
+import { GET_ESTRELLAS_VENDEDOR } from "myGraphql/estrella";
 import { StarFilled } from "@ant-design/icons";
 import { Tooltip } from "antd";
 

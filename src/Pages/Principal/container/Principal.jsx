@@ -5,27 +5,18 @@ import TablaPrincipal from "../Components/TablaPrincipal/TablaPrincipal";
 import Encabezado from "../Components/Encabezado/Encabezado";
 import { useNavigate, useLocation } from "react-router-dom";
 import Cobrar from "../Components/Cobrar/Cobrar";
-import { useApolloClient } from "@apollo/client";
-import { FIRST_LOGIN } from "graphql/user";
 import { Card, Row } from "antd";
 import ShopListContext from "context/Shopping/ShopListContext";
 import "./principal.css";
+import AuthContext from "context/Auth/AuthContext";
 
 function Principal() {
+	const { firstLogin } = useContext(AuthContext);
+
 	const { shopList, clearShopList, selectedRowKeys, setselectedRowKeys } =
 		useContext(ShopListContext);
-	const client = useApolloClient();
 	let navigate = useNavigate();
-	let firstLogin = client.readQuery({
-		query: FIRST_LOGIN,
-	});
-	if (firstLogin?.firstLogin?.screenWidth > 600) {
-		navigate("/caja");
-		client.writeQuery({
-			query: FIRST_LOGIN,
-			data: { firstLogin: null },
-		});
-	}
+
 	const Location = useLocation();
 	const [titleWeb, settitleWeb] = useState("Leo Web");
 	const [modalCobrar, setmodalCobrar] = useState(false);
@@ -41,9 +32,14 @@ function Principal() {
 		setstateRecord(null);
 	};
 	useEffect(() => {
+		console.log(firstLogin);
+		if (firstLogin) {
+			return navigate(`/caja`);
+		}
+
 		let detectorPantalla = window.screen.width;
 		if (detectorPantalla < 600) {
-			navigate(`mobile/venta`);
+			return navigate(`mobile/venta`);
 		}
 		//selectInputPrecio
 		document.querySelector("#inputPrecio").select();

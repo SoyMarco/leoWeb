@@ -7,7 +7,7 @@ import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";
 import { useMutation } from "@apollo/client";
-import { REGISTER_VENTA } from "graphql/venta";
+import { REGISTER_VENTA } from "myGraphql/venta";
 import AuthContext from "context/Auth/AuthContext";
 
 const Cobrar = ({

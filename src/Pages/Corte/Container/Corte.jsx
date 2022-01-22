@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { TablaTotales } from "../Components";
 import ErrorConection from "Utils/ErrorConection";
-import { GET_CORTE } from "graphql/venta";
+import { GET_CORTE } from "myGraphql/venta";
 import { useQuery } from "@apollo/client";
 import { Row } from "antd";
 import "./corte.css";

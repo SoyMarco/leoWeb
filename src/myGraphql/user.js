@@ -64,12 +64,3 @@ export const SEARCH = gql`
 		}
 	}
 `;
-
-//llamadas locales
-export const FIRST_LOGIN = gql`
-	query firstLogin {
-		firstLogin {
-			screenWidth
-		}
-	}
-`;

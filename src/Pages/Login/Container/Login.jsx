@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect, useContext } from "react";
 import { RiShieldUserFill, RiLockPasswordFill } from "react-icons/ri";
-import { useMutation, useApolloClient } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import { setToken, decodeToken } from "Utils/token";
-import { LOGIN, FIRST_LOGIN } from "graphql/user";
+import { LOGIN } from "myGraphql/user";
 import { FaUserAlt } from "react-icons/fa";
 import LogoLeo from "assets/png/logo.png";
 import "./login.css";
@@ -23,24 +23,26 @@ import AuthContext from "context/Auth/AuthContext";
 import logoLeo from "../logo512.png";
 
 const Login = () => {
-	const client = useApolloClient();
 	const [mutateLOGIN, { loading: loadImage }] = useMutation(LOGIN);
+	const screenWidth = window.screen.width;
+
 	const [name, setname] = useState("");
 	const [password, setpassword] = useState("");
-	const [loading, setloading] = useState(false);
-	const { setAuth } = useContext(AuthContext);
+	const { setAuth, setFirstLogin } = useContext(AuthContext);
 	const { Header, Footer } = Layout;
-	const [screenWidth, setscreenWidth] = useState(1000);
+
 	const [form] = Form.useForm();
 	const contraseña = useRef();
+
 	useEffect(() => {
-		let detectorPantalla = window.screen.width;
-		setscreenWidth(detectorPantalla);
 		document.querySelector("#inputLogin").select();
+
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	const { Option } = Select;
 	const sendLogin = async () => {
-		setloading(true);
+		setFirstLogin(screenWidth);
+
 		try {
 			const { data } = await mutateLOGIN({
 				variables: {
@@ -51,12 +53,6 @@ const Login = () => {
 				},
 			});
 			if (data) {
-				// Data GQL
-				setloading(false);
-				client.writeQuery({
-					query: FIRST_LOGIN,
-					data: { firstLogin: { screenWidth } },
-				});
 				// Data Locale Storage
 				const { token } = data.login;
 				setToken(token);
@@ -66,7 +62,6 @@ const Login = () => {
 			}
 		} catch (error) {
 			openNotification("error", "Error en Usuario o Contraseña");
-			setloading(false);
 		}
 	};
 	const pressKeyEnter = (e) => {
@@ -166,7 +161,7 @@ const Login = () => {
 						>
 							<Form form={form}>
 								<Select
-									disabled={loading}
+									disabled={loadImage}
 									id='inputLogin'
 									placeholder='Busca Apartados'
 									optionFilterProp='children'
@@ -219,7 +214,7 @@ const Login = () => {
 									ref={contraseña}
 									id='inputLogin2'
 									prefix={<RiLockPasswordFill />}
-									disabled={loading}
+									disabled={loadImage}
 									type='password'
 									placeholder='Contraseña'
 									style={{
@@ -240,7 +235,7 @@ const Login = () => {
 							</Form>
 							<br />
 							<Button
-								loading={loading}
+								loading={loadImage}
 								type='primary'
 								shape='round'
 								style={{

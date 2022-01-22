@@ -4,7 +4,8 @@ import { openNotification } from "Utils/openNotification";
 import { Modal, Row, Divider, Button } from "antd";
 import ReactToPrint from "react-to-print";
 import { keyBlock } from "Utils";
-import "moment/locale/es-us";
+import "moment/locale/es-mx";
+// import "moment/locale/es-us";
 import moment from "moment";
 import "./imprimir.css";
 
@@ -33,9 +34,12 @@ const ImprimirApartado = ({
 		settotalTotal(sum);
 
 		let sumAbo = 0;
-		for (let i = 0; i < abonos?.length; i++) {
-			sumAbo += abonos[i]?.abono;
+		for (const abono of abonos) {
+			if (abono.cancel !== true) {
+				sumAbo += abono.abono;
+			}
 		}
+
 		settotalAbonos(sumAbo);
 	}, [imprimir, abonos, productos]);
 	useEffect(() => {
@@ -209,7 +213,13 @@ const ImprimirApartado = ({
 						return (
 							<table key={`${item._id}table`} className='productosApartado'>
 								<tbody>
-									<tr key={`${item._id}tr`}>
+									<tr
+										key={`${item._id}tr`}
+										style={{
+											background:
+												item.entregado[0]?.status === true ? "gray" : "white",
+										}}
+									>
 										<td key={`${item._id}nombre`}>{item.nombre}</td>
 										<td key={`${item._id}cantidad`}>
 											<h3 className={item.cantidad > 1 ? null : "finalTicket"}>
@@ -236,20 +246,23 @@ const ImprimirApartado = ({
 						<u>ABONOS</u>
 					</h3>
 					{abonos?.map((item) => {
-						return (
-							<table key={`${item._id}table`} className='productosApartado'>
-								<tbody>
-									<tr key={`${item._id}tr`}>
-										<td style={{ padding: "0px" }} key={`${item._id}fecha`}>
-											{pasarAFechaCorta(item.createAt)}
-										</td>
-										<td key={`${item._id}abono`}>
-											<h3 className={"finalTicket"}>${item.abono}</h3>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						);
+						if (item.cancel !== true) {
+							return (
+								<table key={`${item._id}table`} className='productosApartado'>
+									<tbody>
+										<tr key={`${item._id}tr`}>
+											<td style={{ padding: "0px" }} key={`${item._id}fecha`}>
+												{pasarAFechaCorta(item.createAt)}
+											</td>
+											<td key={`${item._id}abono`}>
+												<h3 className={"finalTicket"}>${item.abono}</h3>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							);
+						}
+						return false;
 					})}
 					<h3 className='sumaTabla'>Abonos: ${totalAbonos}</h3>
 					{/* <!-- FIN TABLA DE ABONOS --> */}

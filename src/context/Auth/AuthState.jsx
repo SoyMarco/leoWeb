@@ -5,11 +5,12 @@ import { openNotification } from "Utils/openNotification";
 
 import AuthContext from "./AuthContext";
 import AuthReducer from "./AuthReducer";
-import { SET_AUTH } from "./types";
+import { SET_AUTH, SET_FIRST_LOGIN } from "./types";
 
 export default function AuthState(props) {
 	const initialState = {
 		auth: undefined,
+		firstLogin: undefined,
 	};
 	const [state, dispatch] = useReducer(AuthReducer, initialState);
 	useEffect(() => {
@@ -47,16 +48,31 @@ export default function AuthState(props) {
 			payload: user,
 		});
 	};
+	const setFirstLogin = (size) => {
+		dispatch({
+			type: SET_FIRST_LOGIN,
+			payload: size,
+		});
+	};
+
+	const navegateAuth = () => {
+		if (state.auth) {
+			return props.children;
+		}
+		return <Login />;
+	};
 	return (
 		<AuthContext.Provider
 			value={{
 				auth: state.auth,
+				firstLogin: state.firstLogin,
 				setAuth,
 				logout,
 				timeLogout,
+				setFirstLogin,
 			}}
 		>
-			{state.auth ? props.children : <Login />}
+			{navegateAuth()}
 		</AuthContext.Provider>
 	);
 }

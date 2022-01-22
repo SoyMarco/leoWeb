@@ -10,7 +10,6 @@ import { openNotification } from "Utils/openNotification";
 import { RiTerminalWindowFill } from "react-icons/ri";
 import { MdLocalGroceryStore } from "react-icons/md";
 import Horizontal from "../Components/Horizontal";
-import "material-design-icons-iconfont";
 import { Layout, Menu } from "antd";
 import "antd/dist/antd.min.css";
 import "./layout.css";

@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { Layout } from "antd";
 import "antd/dist/antd.min.css";
 import "./layout.css";
-import "material-design-icons-iconfont";
 import { openNotification } from "Utils/openNotification";
 import { useLocation } from "react-router-dom";
 import Horizontal from "../Components/Horizontal";

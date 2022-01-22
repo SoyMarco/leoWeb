@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
-import { CANCELAR_PRODUCTO_APARTDO } from "graphql/apartado";
+import { CANCELAR_PRODUCTO_APARTDO } from "myGraphql/apartado";
 import { MdLocalGroceryStore, MdDelete } from "react-icons/md";
 import { useMutation } from "@apollo/client";
 import moment from "moment";

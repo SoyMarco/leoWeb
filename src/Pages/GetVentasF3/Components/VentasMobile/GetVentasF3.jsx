@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { VENTA_MOBILE_FALSE, GET_VENTAS_MOBILE } from "graphql/venta";
+import { VENTA_MOBILE_FALSE, GET_VENTAS_MOBILE } from "myGraphql/venta";
 import { useQuery, useMutation } from "@apollo/client";
 import Imprimir from "../Imprimir/Imprimir";
 import ErrorConection from "Utils/ErrorConection";

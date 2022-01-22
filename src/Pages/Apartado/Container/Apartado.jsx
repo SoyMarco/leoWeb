@@ -21,7 +21,7 @@ import {
 	GET_PRODUCTOS_FOLIO,
 	CANCELAR_APARTADO,
 	CANCEL_ENTREGA,
-} from "graphql/apartado";
+} from "myGraphql/apartado";
 import {
 	Row,
 	Card,

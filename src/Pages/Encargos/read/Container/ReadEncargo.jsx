@@ -8,7 +8,7 @@ import moment from "moment";
 import { Card, Row, Col, Switch } from "antd";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_ENCARGO_FOLIO } from "graphql/encargo";
+import { GET_ENCARGO_FOLIO } from "myGraphql/encargo";
 export default function ReadEncargo() {
 	const params = useParams();
 	let urlFolio = parseInt(params.folio);

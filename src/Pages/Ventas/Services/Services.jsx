@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { openNotification } from "Utils/openNotification";
-import { CANCELAR_VENTA } from "graphql/venta";
+import { CANCELAR_VENTA } from "myGraphql/venta";
 import { useMutation } from "@apollo/client";
 import ErrorConection from "Utils/ErrorConection";
 import AuthContext from "context/Auth/AuthContext";

@@ -6,7 +6,6 @@ import Imprimir from "./Imprimir/Imprimir";
 import AuthContext from "context/Auth/AuthContext";
 
 import moment from "moment";
-import { UrlFrontend } from "config/apollo";
 import {
 	Table,
 	Result,
@@ -27,7 +26,7 @@ export default function Ventas({
 	stateRecord,
 }) {
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
-	const { auth, timeLogout } = useContext(AuthContext);
+	const { auth } = useContext(AuthContext);
 
 	const [imprimir, setimprimir] = useState(false);
 	const onSelectChange = () => {
@@ -182,13 +181,6 @@ export default function Ventas({
 								record?.productos[0]?.apartado > 0
 									? { color: "blue" }
 									: { color: "limegreen" }
-							}
-							onClick={() =>
-								record?.productos[0]?.apartado > 0
-									? window.open(
-											`${UrlFrontend}apartado/${record?.productos[0]?.apartado}`
-									  )
-									: setimprimir(true)
 							}
 						/>
 					</Tooltip>

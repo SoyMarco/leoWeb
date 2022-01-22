@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Row, Button, Modal, Input, Form, AutoComplete } from "antd";
-import { GET_PRODUCTS_NAME, ADD_PRODUCTO } from "graphql/apartado";
+import { GET_PRODUCTS_NAME, ADD_PRODUCTO } from "myGraphql/apartado";
 import { openNotification } from "Utils/openNotification";
 import { useQuery, useMutation } from "@apollo/client";
 import ErrorConection from "Utils/ErrorConection";

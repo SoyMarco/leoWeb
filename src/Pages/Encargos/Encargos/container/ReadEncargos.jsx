@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_ENCARGOS, EDIT_GUARDAR_ENCARGO } from "graphql/encargo";
+import { GET_ENCARGOS, EDIT_GUARDAR_ENCARGO } from "myGraphql/encargo";
 import { Skeleton, Card, Row, Col, Switch } from "antd";
 import { AiFillFolderOpen } from "react-icons/ai";
 import moment from "moment";

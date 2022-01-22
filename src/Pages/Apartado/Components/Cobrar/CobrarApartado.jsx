@@ -6,7 +6,7 @@ import { openNotification } from "Utils/openNotification";
 import { Modal, Input, Form, Button, Row } from "antd";
 import ErrorConection from "Utils/ErrorConection";
 import aceptar from "assets/sonido/Aceptar.wav";
-import { ADD_ABONO } from "graphql/apartado";
+import { ADD_ABONO } from "myGraphql/apartado";
 import { useMutation } from "@apollo/client";
 import AuthContext from "context/Auth/AuthContext";
 import { keyBlock } from "Utils";

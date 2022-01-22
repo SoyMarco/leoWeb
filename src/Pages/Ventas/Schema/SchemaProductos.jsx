@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import ErrorConection from "Utils/ErrorConection";
 import { openNotification } from "Utils/openNotification";
 import AuthContext from "context/Auth/AuthContext";
-import { CANCELAR_PRODUCTO_VENTA } from "graphql/venta";
+import { CANCELAR_PRODUCTO_VENTA } from "myGraphql/venta";
 import { useMutation } from "@apollo/client";
 
 const SchemaProductos = (stateRecord) => {
