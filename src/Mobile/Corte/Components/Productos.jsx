@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Table, Result, Col, Divider, Row, Tooltip, Button } from "antd";
 import { SmileOutlined } from "@ant-design/icons";
-import { UrlFrontend } from "config/apollo";
 
 export default function Productos({ stateRecord, loading }) {
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
@@ -9,17 +8,16 @@ export default function Productos({ stateRecord, loading }) {
 
 	useEffect(() => {
 		if (stateRecord) {
-			let { productos } = stateRecord;
-			let listaProductos = productos.map((item) => {
+			let { productosS } = stateRecord;
+			let listaProductos = productosS.map((item) => {
 				return { ...item, key: item.idArray };
 			});
 			setproductos(listaProductos);
 		}
 	}, [stateRecord]);
 
-	const onSelectChange = (selectedRowKeys) => {
+	const onSelectChange = (selctedRowKeys) => {
 		setselectedRowKeys([]);
-		// setselectedRowKeys(selectedRowKeys);
 	};
 	const rowSelection = {
 		selectedRowKeys,
@@ -28,8 +26,6 @@ export default function Productos({ stateRecord, loading }) {
 
 	const click = (record, rowIndex) => {
 		setselectedRowKeys([record.key]);
-		// setstateRecord(record);
-		// addArticulo(record, rowIndex);
 	};
 
 	/* COLUMNAS PRODUCTOS */
@@ -60,10 +56,6 @@ export default function Productos({ stateRecord, loading }) {
 								color: "white",
 								background: "linear-gradient(#2196F3,#0000E6)",
 							}}
-							onClick={() =>
-								record.apartado > 0 &&
-								window.open(`${UrlFrontend}apartado/${record.apartado}`)
-							}
 						>{`${nombre}`}</Button>
 					) : (
 						nombre
