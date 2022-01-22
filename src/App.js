@@ -1,4 +1,4 @@
-import "App.css";
+import "Utils/App.css";
 import NavToken from "Routes/NavToken";
 import ShopListState from "context/Shopping/ShopListState";
 import { ApolloProvider } from "@apollo/client";
