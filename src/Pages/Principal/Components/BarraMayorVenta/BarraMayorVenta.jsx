@@ -15,6 +15,7 @@ const BarraMayorVenta = memo(() => {
 	const [totalVentasDia, settotalVentasDia] = useState(0);
 	const [porcentReal, setporcentReal] = useState(0);
 	const [calculatePorcent, setcalculatePorcent] = useState(0);
+	const [stopStars, setstopStars] = useState(false);
 
 	useEffect(() => {
 		refetchTotalVentasDia();
@@ -56,13 +57,14 @@ const BarraMayorVenta = memo(() => {
 	}, [totalVentasDia, ventaMayor]);
 
 	useEffect(() => {
-		if (porcentReal >= 100 && porcentReal < 200) {
+		if (porcentReal >= 100 && stopStars === false) {
 			addEstrella();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [porcentReal]);
 
 	const addEstrella = async () => {
+		console.log("addEstrella");
 		let input = {
 			porcentaje: porcentReal,
 		};
@@ -74,11 +76,14 @@ const BarraMayorVenta = memo(() => {
 			});
 			if (dataEstrella?.registerEstrella === true) {
 				refetchEV();
+			} else if (dataEstrella?.registerEstrella === false) {
+				setstopStars(true);
 			}
 		} catch (error) {
 			console.log("error", error);
 		}
 	};
+
 	const colorBar = () => {
 		if (calculatePorcent > 0 && calculatePorcent < 50) {
 			return {
