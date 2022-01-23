@@ -5,16 +5,18 @@ import { StarFilled } from "@ant-design/icons";
 import { Tooltip } from "antd";
 
 const Estrellas = memo(() => {
-	let { data: getEV } = useQuery(GET_ESTRELLAS_VENDEDOR);
+	let { data: getEV, refetch } = useQuery(GET_ESTRELLAS_VENDEDOR);
 	const [estrellasVendedor, setestrellasVendedor] = useState(0);
 	const [estrellaHoy, setestrellaHoy] = useState(false);
 	const [title, settitle] = useState(
 		"Para conseguir estrellas llena la barra al 100%"
 	);
 	useEffect(() => {
+		refetch();
 		return () => {
 			setestrellaHoy(false);
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	//Verifica si hoy se consiguieron estrellas
 	useEffect(() => {

@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 export default function Horizontal({ Header, logoutApp, swtichstate }) {
 	let navigate = useNavigate();
 	const { auth } = useContext(AuthContext);
+
 	return (
 		<>
 			{/* HORIZONTAL */}

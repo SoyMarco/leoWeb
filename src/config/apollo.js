@@ -18,9 +18,9 @@ export const UrlBackend = {
 };
 
 /* HEROKU DEV*/
-// export const UrlBackend = {
-// 	uri: "https://leo-gql-dev.herokuapp.com/",
-// };
+export const UrlBackend = {
+	uri: "https://leo-gql-dev.herokuapp.com/",
+};
 
 const httpLik = createUploadLink(UrlBackend);
 const authLink = setContext((_, { headers }) => {
