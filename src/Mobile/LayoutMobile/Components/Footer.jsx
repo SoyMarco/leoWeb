@@ -3,7 +3,7 @@ import { MdLocalGroceryStore } from "react-icons/md";
 import { FaCashRegister } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
-export default function Horizontal() {
+export default function Footer() {
 	const navigate = useNavigate();
 
 	return (
