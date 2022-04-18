@@ -11,7 +11,7 @@ import "./ventas.css";
 export default function Ventas() {
 	const { auth, timeLogout } = useContext(AuthContext);
 
-	let {
+	const {
 		data: getCorteData,
 		error,
 		refetch,
@@ -40,7 +40,7 @@ export default function Ventas() {
 	}, [getCorteData]);
 
 	const refetchCorte = (getData) => {
-		let { ventas } = getData;
+		const { ventas } = getData;
 		setgetVentas(ventas);
 	};
 

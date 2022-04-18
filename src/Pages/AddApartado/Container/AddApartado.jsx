@@ -14,9 +14,9 @@ import { GET_CLIENTS_NAMES, GET_PRODUCTS_NAME } from "myGraphql/apartado";
 export default function AddApartado() {
 	const { auth, timeLogout } = useContext(AuthContext);
 
-	let { data: getClientsNames } = useQuery(GET_CLIENTS_NAMES);
-	let { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
-	let navigate = useNavigate();
+	const { data: getClientsNames } = useQuery(GET_CLIENTS_NAMES);
+	const { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
+	const navigate = useNavigate();
 	const [current, setCurrent] = useState(0);
 	const [cliente, setcliente] = useState("");
 	const [titulo2, settitulo2] = useState("Productos");

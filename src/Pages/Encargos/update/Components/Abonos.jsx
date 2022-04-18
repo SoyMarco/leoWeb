@@ -14,11 +14,8 @@ export default function Abonos({
 	loading,
 	loader,
 	setloader,
-	totalAbonos,
 	inputAbono,
 	refetch,
-	totalTotal,
-	abono,
 }) {
 	const { timeLogout } = useContext(AuthContext);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
@@ -32,24 +29,22 @@ export default function Abonos({
 		onChange: onSelectChange,
 	};
 
-	const click = (record, rowIndex) => {
+	const click = (record, _rowIndex) => {
 		setselectedRowKeys([record.key]);
 		inputAbono.current.select();
 	};
 	const pasarAFecha = (item) => {
-		let fecha = moment.unix(item / 1000).format("L");
-		return fecha;
+		return moment.unix(item / 1000).format("L");
 	};
 	const pasarAFechaLLLL = (item) => {
-		let fecha = moment.unix(item / 1000).format("LLLL");
-		return fecha;
+		return moment.unix(item / 1000).format("LLLL");
 	};
 	const borrarAbono = async (record, borrarEditar) => {
 		setloader(true);
 
 		try {
 			if (record._id) {
-				let { data } = await mutateBORRAR_EDITAR_ABONO({
+				const { data } = await mutateBORRAR_EDITAR_ABONO({
 					// Parameters
 					variables: {
 						input: {
@@ -103,7 +98,7 @@ export default function Abonos({
 			key: "createAt",
 			sorter: (a, b) => b.createAt - a.createAt,
 			defaultSortOrder: "ascend",
-			render: (createAt, record) => (
+			render: (createAt, _record) => (
 				<Tooltip placement='top' title={`${pasarAFechaLLLL(createAt)}`}>
 					<h1>{pasarAFecha(createAt)}</h1>
 				</Tooltip>
@@ -113,7 +108,7 @@ export default function Abonos({
 			title: "Abono",
 			dataIndex: "abono",
 			key: "abono",
-			render: (abonoRender, record) => (
+			render: (abonoRender, _record) => (
 				<Row justify='space-around'>
 					<h3
 						style={{
@@ -135,7 +130,7 @@ export default function Abonos({
 				showTitle: false,
 			},
 			width: "60px",
-			render: (idArray, record) => (
+			render: (_idArray, record) => (
 				<Tooltip placement='bottom' title='Borrar abono'>
 					<Row justify='center'>
 						<Popconfirm
@@ -191,7 +186,7 @@ export default function Abonos({
 					}}
 					onRow={(record, rowIndex) => {
 						return {
-							onClick: (e) => {
+							onClick: () => {
 								click(record, rowIndex);
 							},
 						};

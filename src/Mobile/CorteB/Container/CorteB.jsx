@@ -8,7 +8,7 @@ import "./corte.css";
 import AuthContext from "context/Auth/AuthContext";
 const CorteB = () => {
 	const { timeLogout } = useContext(AuthContext);
-	let {
+	const {
 		data: getCorteData,
 		error,
 		loading,
@@ -35,7 +35,7 @@ const CorteB = () => {
 	}, [getCorteData]);
 
 	const refetchCorte = (getData) => {
-		let { totales } = getData;
+		const { totales } = getData;
 		setgetTotales(totales);
 	};
 	return (

@@ -19,11 +19,11 @@ export default function AuthState(props) {
 	}, []);
 
 	const timeLogout = () => {
-		let token = localStorage.token;
+		const token = localStorage.token;
 		if (token) {
 			try {
-				let dataToken = decodeToken(token);
-				let timeNow = Math.round(Date.now() / 1000);
+				const dataToken = decodeToken(token);
+				const timeNow = Math.round(Date.now() / 1000);
 				if (dataToken.exp > timeNow && dataToken.name) {
 					setAuth(dataToken);
 				} else {

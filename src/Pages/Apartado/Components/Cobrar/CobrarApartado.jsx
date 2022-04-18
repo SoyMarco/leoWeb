@@ -25,7 +25,7 @@ const CobrarApartado = ({
 }) => {
 	const { auth, timeLogout } = useContext(AuthContext);
 	const { addProductShopList } = useContext(ShopListContext);
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 	const [mutateADD_ABONO] = useMutation(ADD_ABONO);
 	const [form] = Form.useForm();
 	const [cambio, setcambio] = useState(0);
@@ -100,12 +100,12 @@ const CobrarApartado = ({
 		if (!valores.aCuenta) {
 			valores.aCuenta = 0;
 		}
-		let efectivo = parseFloat(valores.efectivo);
-		let tarjeta = parseFloat(valores.tarjeta);
-		let aCuenta = parseFloat(valores.aCuenta);
-		let total = parseFloat(totalTotal);
-		let sumaTodo = efectivo + tarjeta + aCuenta;
-		let resultado = sumaTodo - total;
+		const efectivo = parseFloat(valores.efectivo);
+		const tarjeta = parseFloat(valores.tarjeta);
+		const aCuenta = parseFloat(valores.aCuenta);
+		const total = parseFloat(totalTotal);
+		const sumaTodo = efectivo + tarjeta + aCuenta;
+		const resultado = sumaTodo - total;
 
 		setdinero({
 			aCuenta: aCuenta,
@@ -119,11 +119,11 @@ const CobrarApartado = ({
 	const savePrintAbono = async (keyF) => {
 		if (cambio >= 0 && btnLoading === false) {
 			setbtnLoading(true);
-			let ventaEfectivo = parseFloat(dinero.efectivo);
-			let ventaTarjeta = parseFloat(dinero.tarjeta);
-			let ventaACuenta = parseFloat(dinero.aCuenta);
-			let total = parseFloat(totalTotal);
-			let resta = parseFloat(calculateRestaria());
+			const ventaEfectivo = parseFloat(dinero.efectivo);
+			const ventaTarjeta = parseFloat(dinero.tarjeta);
+			const ventaACuenta = parseFloat(dinero.aCuenta);
+			const total = parseFloat(totalTotal);
+			const resta = parseFloat(calculateRestaria());
 			if (keyF === "F3") {
 				addProductShopList({
 					nombre: dataApartado.cliente,
@@ -170,7 +170,7 @@ const CobrarApartado = ({
 	};
 
 	const keyBlockCobrar = (e) => {
-		let dataForm = form.getFieldsValue();
+		const dataForm = form.getFieldsValue();
 		if (totalTotal === dataForm.efectivo) {
 			cobrarEfectivo.current.select();
 		}

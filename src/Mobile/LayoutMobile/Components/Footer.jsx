@@ -1,11 +1,10 @@
-import React from "react";
 import { Row } from "antd";
 import { MdLocalGroceryStore } from "react-icons/md";
 import { FaCashRegister } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 export default function Horizontal() {
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 
 	return (
 		<>

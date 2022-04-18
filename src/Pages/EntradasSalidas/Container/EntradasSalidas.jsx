@@ -15,7 +15,7 @@ import "./entradasSalidas.css";
 export default function EntradasSalidas() {
 	const { timeLogout } = useContext(AuthContext);
 	const [mutateREGISTER_CAJA] = useMutation(REGISTER_CAJA);
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 
 	const [btnLoading, setbtnLoading] = useState(false);
 	const [caja, setcaja] = useState(null);

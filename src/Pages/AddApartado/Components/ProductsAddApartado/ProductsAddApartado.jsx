@@ -18,7 +18,7 @@ export default function ProductsAddApartado({
 	const [precio, setprecio] = useState(null);
 	const { auth } = useContext(AuthContext);
 
-	const click = (record, rowIndex) => {
+	const click = (record) => {
 		setselectedRowKeys([record.key]);
 	};
 	const onSelectChange = () => {
@@ -30,19 +30,19 @@ export default function ProductsAddApartado({
 		onChange: onSelectChange,
 	};
 	const selectLastRow = () => {
-		let ultimoArray = listaCompras.length;
+		const ultimoArray = listaCompras.length;
 		if (ultimoArray) {
 			setselectedRowKeys([listaCompras[ultimoArray - 1].key]);
 		}
 	};
 	const eliminarProducto = (item) => {
-		let i = listaCompras.indexOf(item);
+		const i = listaCompras.indexOf(item);
 		if (i !== -1) {
-			let key = listaCompras.splice(i, 1);
+			const key = listaCompras.splice(i, 1);
 			setlistaCompras(listaCompras.filter((itemF) => itemF.key !== key));
 			selectLastRow();
 		} else if (item.key > 0) {
-			let key = item.key;
+			const key = item.key;
 			setlistaCompras(listaCompras.filter((itemF) => itemF.key !== key));
 			selectLastRow();
 		}
@@ -137,7 +137,7 @@ export default function ProductsAddApartado({
 			dataIndex: "key",
 			key: "key",
 			width: "90px",
-			render: (key, record) => (
+			render: (_key, record) => (
 				<div style={{ textAlignLast: "center" }}>
 					<Button
 						shape='circle'
@@ -224,10 +224,10 @@ export default function ProductsAddApartado({
 				}}
 				rowSelection={rowSelection}
 				size='small'
-				onRow={(record, rowIndex) => {
+				onRow={(record) => {
 					return {
 						onClick: () => {
-							click(record, rowIndex);
+							click(record);
 						},
 					};
 				}}

@@ -22,8 +22,8 @@ const Imprimir = ({ imprimir, setimprimir, stateRecord, auth }) => {
 	const imprimirVenta = useRef();
 
 	useEffect(() => {
-		let sumaTodo = efectivo + tarjeta + aCuenta;
-		let resultado = sumaTodo - totalTotal;
+		const sumaTodo = efectivo + tarjeta + aCuenta;
+		const resultado = sumaTodo - totalTotal;
 		setcambio(resultado);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [totalTotal]);
@@ -46,7 +46,7 @@ const Imprimir = ({ imprimir, setimprimir, stateRecord, auth }) => {
 		<>
 			<Modal visible={imprimir} width='229px'>
 				<ReactToPrint
-					trigger={(e) => <button id='print-button'>Imprimiendo...</button>}
+					trigger={() => <button id='print-button'>Imprimiendo...</button>}
 					content={() => imprimirVenta.current}
 					// onBeforePrint={() => antesDeImprimir()}
 					onAfterPrint={() => afterPrint()}
