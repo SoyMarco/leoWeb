@@ -19,10 +19,8 @@ import {
 export default function Ventas({
 	loading,
 	getVentasDia,
-	refetch,
 	setstateRecord,
 	loader,
-	setloader,
 	stateRecord,
 }) {
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
@@ -33,8 +31,8 @@ export default function Ventas({
 		setselectedRowKeys([]);
 	};
 	useEffect(() => {
-		let numArray = getVentasDia.length - 1;
-		let lastFolio = getVentasDia[numArray]?.key;
+		const numArray = getVentasDia.length - 1;
+		const lastFolio = getVentasDia[numArray]?.key;
 		setselectedRowKeys([lastFolio]);
 		setstateRecord(getVentasDia[numArray]);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -45,13 +43,12 @@ export default function Ventas({
 		onChange: onSelectChange,
 	};
 
-	const click = (record, rowIndex) => {
+	const click = (record, _rowIndex) => {
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
 	};
 	const pasarAFecha = (item) => {
-		let fecha = moment.unix(item / 1000).format("LTS");
-		return fecha;
+		return moment.unix(item / 1000).format("LTS");
 	};
 
 	/* COLUMNAS VENTAS */
@@ -91,7 +88,7 @@ export default function Ventas({
 			title: "Tajeta",
 			dataIndex: "tarjeta",
 			key: "tarjeta",
-			render: (tarjeta, record) => (
+			render: (tarjeta, _record) => (
 				<Row justify='space-around'>
 					<h3
 						style={{
@@ -163,7 +160,7 @@ export default function Ventas({
 				showTitle: false,
 			},
 			width: "60px",
-			render: (totalArticulo, record) => (
+			render: (_totalArticulo, record) => (
 				<Row justify='center'>
 					<Tooltip
 						placement='left'
@@ -195,7 +192,7 @@ export default function Ventas({
 				showTitle: false,
 			},
 			width: "60px",
-			render: (totalArticulo, record) => (
+			render: (_totalArticulo, record) => (
 				<Row justify='center'>
 					<Tooltip
 						placement='right'
@@ -210,21 +207,6 @@ export default function Ventas({
 								: "Activo"
 						}
 					>
-						{/* <Popconfirm
-							disabled={
-								record?.productos[0]?.apartado > 0 && record.cancelado === true
-									? true
-									: false
-							}
-							title='¿Cancelar Venta?'
-							onConfirm={() =>
-								record?.productos[0]?.apartado > 0
-									? window.open(
-											`${UrlFrontend}apartado/${record?.productos[0]?.apartado}`
-									  )
-									: cancelVenta(record)
-							}
-						> */}
 						<Switch
 							disabled={
 								record?.productos[0]?.apartado > 0 && record.cancelado === true
@@ -241,15 +223,7 @@ export default function Ventas({
 									? { background: "blue", marginTop: "5px" }
 									: { background: "limegreen", marginTop: "5px" }
 							}
-							// onClick={() =>
-							// 	record?.productos[0]?.apartado > 0
-							// 		? window.open(
-							// 				`${UrlFrontend}apartado/${record?.productos[0]?.apartado}`
-							// 		  )
-							// 		: cancelVenta(record)
-							// }
 						/>
-						{/* </Popconfirm> */}
 					</Tooltip>
 				</Row>
 			),
@@ -287,7 +261,7 @@ export default function Ventas({
 					size='small'
 					onRow={(record, rowIndex) => {
 						return {
-							onClick: (e) => {
+							onClick: () => {
 								click(record, rowIndex);
 							},
 						};

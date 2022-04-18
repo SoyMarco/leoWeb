@@ -8,7 +8,7 @@ import Horizontal from "../Components/Horizontal";
 import FooterHorizontal from "../Components/Footer";
 import AuthContext from "context/Auth/AuthContext";
 
-function LayoutForm({ children }) {
+function LayoutMobile({ children }) {
 	const { Header, Content, Footer } = Layout;
 	const { auth, logout } = useContext(AuthContext);
 	const [swtichstate, setswtichstate] = useState(true);
@@ -88,4 +88,4 @@ function LayoutForm({ children }) {
 	);
 }
 
-export default LayoutForm;
+export default LayoutMobile;

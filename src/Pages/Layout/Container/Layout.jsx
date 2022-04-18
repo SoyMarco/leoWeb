@@ -12,7 +12,7 @@ function LayoutForm({ children }) {
 	const { auth, logout } = useContext(AuthContext);
 	const [collapsed, setcollapsed] = useState(false);
 	const { Header, Content, Footer, Sider } = Layout;
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 	const Location = useLocation();
 	const screenWidth = window.screen.width;
 	const [swtichstate, setswtichstate] = useState(true);
@@ -26,8 +26,8 @@ function LayoutForm({ children }) {
 	}, [Location]);
 
 	const changeLocation = () => {
-		let titleUrl = Location.pathname;
-		let urlLocation = Location.pathname;
+		const titleUrl = Location.pathname;
+		const urlLocation = Location.pathname;
 		let apartado = "";
 		let encargo = "";
 		apartado = urlLocation.slice(0, 10);
@@ -50,7 +50,7 @@ function LayoutForm({ children }) {
 	};
 	const onCollapse = () => {
 		setcollapsed(!collapsed);
-		let title = Location.pathname;
+		const title = Location.pathname;
 		if (title === "/") {
 			document.querySelector("#inputPrecio").select();
 		}

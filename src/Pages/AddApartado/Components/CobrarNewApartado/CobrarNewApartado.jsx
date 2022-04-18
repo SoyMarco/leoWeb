@@ -37,7 +37,7 @@ const CobrarNewApartado = ({
 		tarjeta: 0,
 		efectivo: 0,
 	});
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 
 	const audio = new Audio(aceptar);
 	const inputEfectivo = useRef();
@@ -84,7 +84,7 @@ const CobrarNewApartado = ({
 	};
 
 	const OnValuesChange = () => {
-		let valores = form.getFieldsValue();
+		const valores = form.getFieldsValue();
 		if (!valores.efectivo) {
 			valores.efectivo = 0;
 		}
@@ -94,12 +94,12 @@ const CobrarNewApartado = ({
 		if (!valores.aCuenta) {
 			valores.aCuenta = 0;
 		}
-		let efectivo = parseFloat(valores.efectivo);
-		let tarjeta = parseFloat(valores.tarjeta);
-		let aCuenta = parseFloat(valores.aCuenta);
-		let total = parseFloat(totalTotal);
-		let sumaTodo = efectivo + tarjeta + aCuenta;
-		let resultado = sumaTodo - total;
+		const efectivo = parseFloat(valores.efectivo);
+		const tarjeta = parseFloat(valores.tarjeta);
+		const aCuenta = parseFloat(valores.aCuenta);
+		const total = parseFloat(totalTotal);
+		const sumaTodo = efectivo + tarjeta + aCuenta;
+		const resultado = sumaTodo - total;
 
 		setdinero({
 			aCuenta: aCuenta,
@@ -113,9 +113,9 @@ const CobrarNewApartado = ({
 	const savePrintAbono = async (keyF) => {
 		if (cambio >= 0 && auth.name && btnLoading === false) {
 			setbtnLoading(true);
-			let ventaEfectivo = parseFloat(dinero.efectivo);
-			let ventaTarjeta = parseFloat(dinero.tarjeta);
-			let ventaACuenta = parseFloat(dinero.aCuenta);
+			const ventaEfectivo = parseFloat(dinero.efectivo);
+			const ventaTarjeta = parseFloat(dinero.tarjeta);
+			const ventaACuenta = parseFloat(dinero.aCuenta);
 			try {
 				const { data } = await mutateREGISTER_APARTADO({
 					variables: {
@@ -160,7 +160,7 @@ const CobrarNewApartado = ({
 					},
 				});
 				if (data) {
-					let { registerApartadoF3 } = data;
+					const { registerApartadoF3 } = data;
 					addProductShopList({
 						nombre: registerApartadoF3.cliente,
 						precio: parseFloat(totalTotal),

@@ -13,7 +13,6 @@ const ImprimirApartadoCorte = ({
 	setimprimirApartado,
 	auth,
 	dataApartado,
-	dinero,
 }) => {
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
@@ -83,7 +82,7 @@ const ImprimirApartadoCorte = ({
 	return (
 		<>
 			<ReactToPrint
-				trigger={(e) => (
+				trigger={() => (
 					<button id='printApartado-button-corte'>Imprimiendo...</button>
 				)}
 				content={() => ReimprimirApartado.current}

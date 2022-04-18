@@ -24,7 +24,7 @@ const CobrarApartado = ({
 	dataApartado,
 }) => {
 	const { auth, timeLogout } = useContext(AuthContext);
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 	const client = useApolloClient();
 	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
 	const [mutateADD_ABONO] = useMutation(ADD_ABONO);

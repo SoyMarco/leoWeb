@@ -8,15 +8,15 @@ export default function Productos({ stateRecord, loading }) {
 
 	useEffect(() => {
 		if (stateRecord) {
-			let { productosS } = stateRecord;
-			let listaProductos = productosS.map((item) => {
+			const { productosS } = stateRecord;
+			const listaProductos = productosS.map((item) => {
 				return { ...item, key: item.idArray };
 			});
 			setproductos(listaProductos);
 		}
 	}, [stateRecord]);
 
-	const onSelectChange = (selctedRowKeys) => {
+	const onSelectChange = () => {
 		setselectedRowKeys([]);
 	};
 	const rowSelection = {
@@ -24,7 +24,7 @@ export default function Productos({ stateRecord, loading }) {
 		onChange: onSelectChange,
 	};
 
-	const click = (record, rowIndex) => {
+	const click = (record, _rowIndex) => {
 		setselectedRowKeys([record.key]);
 	};
 
@@ -87,7 +87,7 @@ export default function Productos({ stateRecord, loading }) {
 			dataIndex: "cantidad",
 			key: "cantidad",
 			ellipsis: true,
-			render: (cantidad, record) => (
+			render: (cantidad, _record) => (
 				<Row justify='space-around'>
 					<h3
 						style={{
@@ -106,7 +106,7 @@ export default function Productos({ stateRecord, loading }) {
 			dataIndex: "totalArticulo",
 			key: "totalArticulo",
 			ellipsis: true,
-			render: (totalArticulo, record) => (
+			render: (totalArticulo, _record) => (
 				<Tooltip placement='top' title={totalArticulo}>
 					<Row justify='space-around'>
 						<h3
@@ -148,7 +148,7 @@ export default function Productos({ stateRecord, loading }) {
 					}}
 					onRow={(record, rowIndex) => {
 						return {
-							onClick: (e) => {
+							onClick: () => {
 								click(record, rowIndex);
 							},
 						};

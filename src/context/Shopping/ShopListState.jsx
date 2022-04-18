@@ -55,14 +55,14 @@ const ShopListState = (props) => {
 	const eliminarProducto = (item) => {
 		const { shopList } = state;
 
-		let i = shopList.indexOf(item);
+		const i = shopList.indexOf(item);
 		let key;
 		if (i !== -1) {
 			key = shopList.splice(i, 1);
 		} else if (item.key > 0) {
 			key = item.key;
 		}
-		let newPayload = shopList.filter((item2) => item2.key !== key);
+		const newPayload = shopList.filter((item2) => item2.key !== key);
 		dispatch({
 			type: ADD_PRODUCT_SHOP_LIST,
 			payload: newPayload,
@@ -74,7 +74,7 @@ const ShopListState = (props) => {
 	const eliminarProductoF3 = (record) => {
 		const { shopList } = state;
 
-		let newPayload = shopList.filter((item) => {
+		const newPayload = shopList.filter((item) => {
 			return item.idF3 !== record._id;
 		});
 		dispatch({
@@ -93,7 +93,7 @@ const ShopListState = (props) => {
 		f3 = false,
 		idF3,
 	}) => {
-		let venta = {
+		const venta = {
 			key: idArticulo + 1,
 			nombre: nombre,
 			precio: Math.round(precio * 100) / 100,

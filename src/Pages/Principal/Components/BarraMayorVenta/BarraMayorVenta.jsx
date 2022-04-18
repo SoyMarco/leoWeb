@@ -6,9 +6,9 @@ import { Row, Progress } from "antd";
 import "./BarraMayorVenta.css";
 
 const BarraMayorVenta = memo(() => {
-	let { refetch: refetchEV } = useQuery(GET_ESTRELLAS_VENDEDOR);
-	let { data: getVentaMes, refetch: refetchMes } = useQuery(GET_VENTAS_MES);
-	let { data: getTotalVentasDia, refetch: refetchTotalVentasDia } =
+	const { refetch: refetchEV } = useQuery(GET_ESTRELLAS_VENDEDOR);
+	const { data: getVentaMes, refetch: refetchMes } = useQuery(GET_VENTAS_MES);
+	const { data: getTotalVentasDia, refetch: refetchTotalVentasDia } =
 		useQuery(GET_TOTAL_VENTAS_DIA);
 	const [mutateREGISTER_ESTRELLA] = useMutation(REGISTER_ESTRELLA);
 	const [ventaMayor, setventaMayor] = useState(0);
@@ -64,7 +64,7 @@ const BarraMayorVenta = memo(() => {
 	}, [porcentReal]);
 
 	const addEstrella = async () => {
-		let input = {
+		const input = {
 			porcentaje: porcentReal,
 		};
 		try {

@@ -140,7 +140,7 @@ export default function SchemaPrincipal() {
 			dataIndex: "totalArticulo",
 			key: "totalArticulo",
 			width: "150px",
-			render: (totalArticulo, record) => (
+			render: (totalArticulo) => (
 				<h3
 					style={{
 						textAlignLast: "right",
@@ -158,7 +158,7 @@ export default function SchemaPrincipal() {
 			dataIndex: "key",
 			key: "key",
 			width: "85px",
-			render: (key, record) => (
+			render: (_key, record) => (
 				<div style={{ textAlignLast: "center" }}>
 					<Button
 						danger

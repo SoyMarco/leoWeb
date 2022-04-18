@@ -15,14 +15,11 @@ const ImprimirNewEncargo = ({
 	auth,
 	cliente,
 	listaProductos,
-	setimprimir,
-	dinero,
-	cambio,
 }) => {
 	const [numPrint, setnumPrint] = useState(0);
 	const imprimirNewEncargo = useRef();
 	const inputReprint = useRef();
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (imprimir === true) {
@@ -51,21 +48,18 @@ const ImprimirNewEncargo = ({
 		}
 	};
 	const pasarAFechaLL = (item) => {
-		let fecha = moment.unix(item / 1000).format("LL");
-		return fecha;
+		return moment.unix(item / 1000).format("LL");
 	};
 	const pasarAFechaLTS = (item) => {
-		let fecha = moment.unix(item / 1000).format("LTS");
-		return fecha;
+		return moment.unix(item / 1000).format("LTS");
 	};
 	const pasarAFechaCorta = (item) => {
-		let fecha = moment.unix(item / 1000).format("ll");
-		return fecha;
+		return moment.unix(item / 1000).format("ll");
 	};
 	return (
 		<>
 			<ReactToPrint
-				trigger={(e) => <button id='print-button'>Imprimiendo...</button>}
+				trigger={() => <button id='print-button'>Imprimiendo...</button>}
 				content={() => imprimirNewEncargo.current}
 				// onBeforePrint={() => antesDeImprimir()}
 				onAfterPrint={() => afterPrint()}

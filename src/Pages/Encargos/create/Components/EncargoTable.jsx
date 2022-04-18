@@ -5,25 +5,24 @@ import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
 
 export default function EncargoTable({ listaProductos, setlistaProductos }) {
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
-	const onSelectChange = (selectedRowKeys) => {
+	const onSelectChange = () => {
 		setselectedRowKeys([]);
 	};
 	const rowSelection = {
 		selectedRowKeys,
 		onChange: onSelectChange,
 	};
-	const eliminarProducto = (item) => {
-		let i = listaProductos.indexOf(item);
+	const eliminarProducto = (itemX) => {
+		let i = listaProductos.indexOf(itemX);
 		if (i !== -1) {
 			let key = listaProductos.splice(i, 1);
 			setlistaProductos(listaProductos.filter((item) => item.key !== key));
 			selectLastRow();
-		} else if (item.key > 0) {
-			let key = item.key;
+		} else if (itemX.key > 0) {
+			let key = itemX.key;
 			setlistaProductos(listaProductos.filter((item) => item.key !== key));
 			selectLastRow();
 		}
-		// this.focusPrecio();
 	};
 	const selectLastRow = () => {
 		let ultimoArray = listaProductos.length;
@@ -31,7 +30,7 @@ export default function EncargoTable({ listaProductos, setlistaProductos }) {
 			setselectedRowKeys([listaProductos[ultimoArray - 1].key]);
 		}
 	};
-	const click = (record, rowIndex) => {
+	const click = (record, _rowIndex) => {
 		setselectedRowKeys([record.key]);
 	};
 	const addArticulo = (record) => {
@@ -39,7 +38,6 @@ export default function EncargoTable({ listaProductos, setlistaProductos }) {
 			const currentShopList = [...listaProductos];
 			const shopItem = currentShopList.find((item) => item.key === record.key);
 			shopItem.cantidad = shopItem.cantidad + 1;
-			// shopItem.totalArticulo = shopItem.cantidad * shopItem.precio;
 			const newShopList = [...currentShopList];
 			setlistaProductos(newShopList);
 		}
@@ -193,7 +191,7 @@ export default function EncargoTable({ listaProductos, setlistaProductos }) {
 			dataIndex: "key",
 			key: "key",
 			width: "90px",
-			render: (key, record) => (
+			render: (_key, record) => (
 				<div style={{ textAlignLast: "center" }}>
 					<Button
 						shape='circle'

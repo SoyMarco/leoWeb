@@ -10,7 +10,7 @@ import AuthContext from "context/Auth/AuthContext";
 
 export default function Apartados() {
 	const { timeLogout } = useContext(AuthContext);
-	let { data, loading, error, refetch } = useQuery(GET_APARTADOS);
+	const { data, loading, error, refetch } = useQuery(GET_APARTADOS);
 	const [stateRecord, setstateRecord] = useState({ abonos: {} });
 	const [getApartados, setgetApartados] = useState([]);
 	const [dataFilter, setdataFilter] = useState(null);
@@ -19,12 +19,12 @@ export default function Apartados() {
 	const onChangeFilter = (e) => {
 		setdataFilter(null);
 		let texto = e.target.value;
-		let isNumber = texto / 2;
+		const isNumber = texto / 2;
 		let newArray = [];
 
 		if (isNumber > 0) {
 			for (let apartado of getApartados) {
-				let folio = apartado.folio;
+				const folio = apartado.folio;
 				texto = parseInt(texto);
 				if (texto === folio) {
 					newArray.push(apartado);
@@ -32,7 +32,7 @@ export default function Apartados() {
 			}
 		} else {
 			for (let apartado of getApartados) {
-				let cliente = apartado.cliente.toLowerCase();
+				const cliente = apartado.cliente.toLowerCase();
 				if (cliente.indexOf(texto.toLowerCase()) !== -1) {
 					newArray.push(apartado);
 				}
@@ -52,8 +52,8 @@ export default function Apartados() {
 	}
 	useEffect(() => {
 		if (data) {
-			let { getApartados: arrayMap } = data;
-			let listaApartados = arrayMap.map((item) => {
+			const { getApartados: arrayMap } = data;
+			const listaApartados = arrayMap.map((item) => {
 				return { ...item, key: item.folio };
 			});
 			setgetApartados(listaApartados);

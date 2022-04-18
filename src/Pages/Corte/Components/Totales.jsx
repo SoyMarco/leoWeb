@@ -14,7 +14,7 @@ export default function TotalesCorte({ loading, getTotales, refetch }) {
 	const [mutateREGISTER_CAJA] = useMutation(REGISTER_CAJA);
 	const [recargas, setrecargas] = useState(null);
 	const inputRecargas = useRef();
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 
 	const formatter = new Intl.NumberFormat("en-US", {
 		style: "currency",
@@ -35,7 +35,7 @@ export default function TotalesCorte({ loading, getTotales, refetch }) {
 	};
 	const sendRecargas = async () => {
 		if (loading === false) {
-			let monto = recargas;
+			const monto = recargas;
 			if (monto > 0) {
 				try {
 					const { data } = await mutateREGISTER_CAJA({

@@ -47,7 +47,7 @@ export default function ModalCalendar({
 			ErrorConection(timeLogout);
 		}
 	};
-	const selectFecha = (value, dateString) => {
+	const selectFecha = (value) => {
 		setnewFecha(value.unix() * 1000);
 	};
 	const pasarAFechaLL = (item) => {

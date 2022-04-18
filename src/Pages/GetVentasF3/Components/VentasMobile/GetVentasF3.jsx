@@ -14,7 +14,7 @@ export default function GetVentasF3({
 }) {
 	const { auth, timeLogout } = useContext(AuthContext);
 
-	let {
+	const {
 		data,
 		error: errorGetVentas,
 		refetch: refetchVM,
@@ -47,7 +47,7 @@ export default function GetVentasF3({
 	}, [refetchVentaMobile]);
 	useEffect(() => {
 		if (data?.getVentasMobile) {
-			let { getVentasMobile } = data;
+			const { getVentasMobile } = data;
 
 			for (const iterator of getVentasMobile) {
 				const element = iterator;

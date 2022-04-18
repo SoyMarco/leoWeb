@@ -10,7 +10,7 @@ import AuthContext from "context/Auth/AuthContext";
 const Corte = () => {
 	const { timeLogout } = useContext(AuthContext);
 
-	let {
+	const {
 		data: getCorteData,
 		error,
 		loading,
@@ -38,7 +38,7 @@ const Corte = () => {
 	}, [getCorteData]);
 
 	const refetchCorte = (getData) => {
-		let { totales } = getData;
+		const { totales } = getData;
 		setgetTotales(totales);
 	};
 	return (

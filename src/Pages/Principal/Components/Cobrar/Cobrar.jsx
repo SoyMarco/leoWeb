@@ -19,7 +19,7 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
 	const { auth, timeLogout } = useContext(AuthContext);
 
 	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
-	let { refetch: refetchTotalVentasDia } = useQuery(GET_TOTAL_VENTAS_DIA);
+	const { refetch: refetchTotalVentasDia } = useQuery(GET_TOTAL_VENTAS_DIA);
 	const [cambio, setcambio] = useState(0);
 	const [imprimir, setimprimir] = useState(false);
 	const [btnLoading, setbtnLoading] = useState(false);
@@ -40,8 +40,7 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
 
 	useEffect(() => {
 		if (modalCobrar === true) {
-			let others = inputs;
-			setinputs({ ...others, efectivo: totalTotal });
+			setinputs({ ...inputs, efectivo: totalTotal });
 			OnValuesChange();
 		}
 	}, [modalCobrar]);
@@ -86,12 +85,12 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
 	};
 
 	const OnValuesChange = () => {
-		let efectivo = parseFloat(inputs.efectivo ?? 0);
-		let tarjeta = parseFloat(inputs.tarjeta ?? 0);
-		let aCuenta = parseFloat(inputs.aCuenta ?? 0);
-		let total = parseFloat(totalTotal);
-		let sumaTodo = efectivo + tarjeta + aCuenta;
-		let resultado = sumaTodo - total;
+		const efectivo = parseFloat(inputs.efectivo ?? 0);
+		const tarjeta = parseFloat(inputs.tarjeta ?? 0);
+		const aCuenta = parseFloat(inputs.aCuenta ?? 0);
+		const total = parseFloat(totalTotal);
+		const sumaTodo = efectivo + tarjeta + aCuenta;
+		const resultado = sumaTodo - total;
 
 		setcambio(resultado);
 	};
@@ -100,7 +99,7 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
 	const savePrintNewV = async (keyF) => {
 		if (btnLoading === false && cambio >= 0) {
 			setbtnLoading(true);
-			let listaComprasNew = shopList.map((item) => ({
+			const listaComprasNew = shopList.map((item) => ({
 				apartado: item.apartado,
 				cantidad: item.cantidad,
 				idArray: item.key,
@@ -112,11 +111,11 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
 				idF3: item.idF3,
 			}));
 
-			let efectivo = parseFloat(inputs.efectivo ?? 0);
-			let tarjeta = parseFloat(inputs.tarjeta ?? 0);
-			let aCuenta = parseFloat(inputs.aCuenta ?? 0);
-			let total = parseFloat(totalTotal);
-			let input = {
+			const efectivo = parseFloat(inputs.efectivo ?? 0);
+			const tarjeta = parseFloat(inputs.tarjeta ?? 0);
+			const aCuenta = parseFloat(inputs.aCuenta ?? 0);
+			const total = parseFloat(totalTotal);
+			const input = {
 				productos: listaComprasNew,
 				vendedor: auth.name,
 				folio: 1,
@@ -155,11 +154,10 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
 		keyBlock(e);
 	};
 	const onChangeInput = (e) => {
-		let key = e.target.id;
+		const key = e.target.id;
 		let value = Math.round(e.target.value * 100) / 100;
 		value = value > 0 ? value : null;
-		let algo = inputs;
-		setinputs({ ...algo, [key]: value });
+		setinputs({ ...inputs, [key]: value });
 	};
 	const memoPrint = useMemo(
 		() => (

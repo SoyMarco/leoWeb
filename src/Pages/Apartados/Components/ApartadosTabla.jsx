@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { MdLocalGroceryStore } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { AiFillPrinter } from "react-icons/ai";
@@ -11,16 +11,13 @@ import { useNavigate } from "react-router-dom";
 export default function ApartadosTabla({
 	loading,
 	getApartados,
-	refetch,
 	setstateRecord,
-	loader,
-	setloader,
 	stateRecord,
 }) {
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const { auth } = useContext(AuthContext);
 	const [imprimir, setimprimir] = useState(false);
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 
 	const onSelectChange = () => {
 		setselectedRowKeys([]);
@@ -30,14 +27,13 @@ export default function ApartadosTabla({
 		onChange: onSelectChange,
 	};
 
-	const click = (record, rowIndex) => {
+	const click = (record, _rowIndex) => {
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
 		document.querySelector("#inputSearch").select();
 	};
 	const pasarAFecha = (item) => {
-		let fecha = moment.unix(item / 1000).format("ll");
-		return fecha;
+		return moment.unix(item / 1000).format("ll");
 	};
 
 	/* COLUMNAS VENTAS */
@@ -93,7 +89,7 @@ export default function ApartadosTabla({
 			dataIndex: "vendedor",
 			key: "vendedor",
 			width: "90px",
-			render: (vendedor, record) => (
+			render: (vendedor, _record) => (
 				<Row justify='space-around'>
 					<h3
 						style={{
@@ -115,7 +111,7 @@ export default function ApartadosTabla({
 				showTitle: false,
 			},
 			width: "60px",
-			render: (totalArticulo, record) => (
+			render: () => (
 				<Row justify='center'>
 					<Button
 						icon={<AiFillPrinter style={{ fontSize: "25px" }} />}
@@ -134,7 +130,7 @@ export default function ApartadosTabla({
 				showTitle: false,
 			},
 			width: "60px",
-			render: (Edit, record) => (
+			render: (_Edit, record) => (
 				<Row justify='center'>
 					<Button
 						icon={<FaRegEdit style={{ fontSize: "25px" }} />}
@@ -176,7 +172,7 @@ export default function ApartadosTabla({
 					size='small'
 					onRow={(record, rowIndex) => {
 						return {
-							onClick: (e) => {
+							onClick: () => {
 								click(record, rowIndex);
 							},
 						};

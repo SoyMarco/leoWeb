@@ -24,7 +24,6 @@ export default function Abonos({
 	setloader,
 	totalAbonos,
 	inputAbono,
-	refetch,
 	totalTotal,
 	abono,
 	getApartadoFolio,
@@ -41,7 +40,7 @@ export default function Abonos({
 		onChange: onSelectChange,
 	};
 
-	const click = (record, rowIndex) => {
+	const click = (record) => {
 		setselectedRowKeys([record.key]);
 		inputAbono.current.select();
 	};
@@ -56,7 +55,7 @@ export default function Abonos({
 		setloader(true);
 		try {
 			if (record) {
-				let { data } = await mutateBORRAR_EDITAR_ABONO({
+				const { data } = await mutateBORRAR_EDITAR_ABONO({
 					// Parameters
 					variables: {
 						input: {
@@ -156,7 +155,7 @@ export default function Abonos({
 				showTitle: false,
 			},
 			width: "60px",
-			render: (idArray, record) => (
+			render: (_idArray, record) => (
 				<Row justify='center'>
 					<Tooltip placement='right' title={() => tooltipStatusAbono(record)}>
 						<Popconfirm
@@ -225,10 +224,10 @@ export default function Abonos({
 					margin: "10px",
 					background: "#f0f2f5",
 				}}
-				onRow={(record, rowIndex) => {
+				onRow={(record) => {
 					return {
-						onClick: (e) => {
-							click(record, rowIndex);
+						onClick: () => {
+							click(record);
 						},
 					};
 				}}

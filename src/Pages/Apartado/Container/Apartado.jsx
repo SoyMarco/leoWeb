@@ -35,13 +35,13 @@ import {
 } from "antd";
 import "./apartados.css";
 
-export default function Apartado(props) {
+export default function Apartado() {
 	const { auth, timeLogout } = useContext(AuthContext);
 
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 	const params = useParams();
-	let urlFolio = parseInt(params.folio);
-	let {
+	const urlFolio = parseInt(params.folio);
+	const {
 		data: getApartadoFolio,
 		loading,
 		error,
@@ -92,7 +92,7 @@ export default function Apartado(props) {
 
 	useEffect(() => {
 		if (dataApartado) {
-			let {
+			const {
 				productos: productosGet,
 				abonos: abonosGet,
 				cliente,
@@ -107,13 +107,13 @@ export default function Apartado(props) {
 			}
 			setabonos(listaAbonos);
 
-			let listaProductos = productosGet.map((item) => {
+			const listaProductos = productosGet.map((item) => {
 				return { ...item, key: item._id };
 			});
 			setproductos(listaProductos);
 
 			settitleWeb(cliente);
-			let cancel = cancelado[0]?.status ?? true;
+			const cancel = cancelado[0]?.status ?? true;
 			setstatusApartado(cancel);
 		}
 	}, [dataApartado]);
@@ -163,7 +163,7 @@ export default function Apartado(props) {
 
 			try {
 				if (dataApartado.id) {
-					let { data: dataCancelApartado } = await mutateCANCELAR_APARTADO({
+					const { data: dataCancelApartado } = await mutateCANCELAR_APARTADO({
 						// Parameters
 						variables: {
 							input: {
@@ -240,10 +240,10 @@ export default function Apartado(props) {
 	};
 	const cancelEntrega = async () => {
 		setbtnLoading(true);
-		let status = dataApartado?.entregado[0]?.status ?? false;
+		const status = dataApartado?.entregado[0]?.status ?? false;
 		try {
 			if (dataApartado.id) {
-				let { data: dataCancelEntrega } = await mutateCANCEL_ENTREGA({
+				const { data: dataCancelEntrega } = await mutateCANCEL_ENTREGA({
 					// Parameters
 					variables: {
 						input: {
@@ -267,7 +267,7 @@ export default function Apartado(props) {
 		}
 	};
 	const fechaVenceEn = () => {
-		let fecha = moment.unix(dataApartado.vence / 1000).fromNow();
+		const fecha = moment.unix(dataApartado.vence / 1000).fromNow();
 		if (dataApartado.vence > Date.now()) {
 			setvenceEn(`Vence ${fecha}`);
 			//Color azul

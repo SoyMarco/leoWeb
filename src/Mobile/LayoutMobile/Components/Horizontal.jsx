@@ -4,7 +4,7 @@ import LogoLeo from "assets/png/logo.png";
 import { useNavigate } from "react-router-dom";
 
 export default function Horizontal({ Header, auth, logoutApp, swtichstate }) {
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 	return (
 		<>
 			{/* HORIZONTAL */}

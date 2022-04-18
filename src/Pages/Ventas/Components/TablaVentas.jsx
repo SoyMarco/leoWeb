@@ -17,10 +17,10 @@ export default function TablaVentas({
 	};
 	useEffect(() => {
 		if (getVentas) {
-			let numArray = getVentas?.length - 1;
-			let lastFolio = getVentas[numArray]?.key;
+			const numArray = getVentas?.length - 1;
+			const lastFolio = getVentas[numArray]?.key;
 			setselectedRowKeys([lastFolio]);
-			let algo = getVentas.find((item) => item.id === stateRecord?.id);
+			const algo = getVentas.find((item) => item.id === stateRecord?.id);
 			setstateRecord(algo ?? []);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
