@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Col } from "antd";
 
-export default function Ventas({ loading, getVentasDia, cajaDia }) {
+export default function Totales({ loading, getVentasDia, cajaDia }) {
 	const [totales, settotales] = useState([]);
 
 	useEffect(() => {
@@ -131,7 +131,7 @@ export default function Ventas({ loading, getVentasDia, cajaDia }) {
 			title: "Efectivo en Caja",
 			dataIndex: "finCaja",
 			key: "finCaja",
-			render: (finCaja, record) => (
+			render: (finCaja, _record) => (
 				<h2
 					style={{
 						textAlignLast: "right",

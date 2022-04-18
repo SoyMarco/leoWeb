@@ -54,7 +54,7 @@ const Imprimir = ({
 		<>
 			<Modal visible={imprimir} width='229px'>
 				<ReactToPrint
-					trigger={(e) => <button id='print-button'>Imprimiendo...</button>}
+					trigger={() => <button id='print-button'>Imprimiendo...</button>}
 					content={() => imprimirVenta.current}
 					// onBeforePrint={() => antesDeImprimir()}
 					onAfterPrint={() => afterPrint()}

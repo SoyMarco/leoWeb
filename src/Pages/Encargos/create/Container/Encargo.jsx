@@ -105,7 +105,7 @@ export default function Encargo() {
 			document.querySelector("#clienteNuevoEncargo").select();
 		}
 	};
-	const onFinishFailed = (errorInfo) => {
+	const onFinishFailed = () => {
 		if (listaProductos.length > 0) {
 			refModelo.current.select();
 		}
