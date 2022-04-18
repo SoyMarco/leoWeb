@@ -12,12 +12,12 @@ import AuthContext from "context/Auth/AuthContext";
 
 function Principal() {
 	const { firstLogin } = useContext(AuthContext);
-
 	const { shopList, clearShopList, selectedRowKeys, setselectedRowKeys } =
 		useContext(ShopListContext);
-	let navigate = useNavigate();
 
+	const navigate = useNavigate();
 	const Location = useLocation();
+
 	const [titleWeb, settitleWeb] = useState("Leo Web");
 	const [modalCobrar, setmodalCobrar] = useState(false);
 	const [totalTotal, settotalTotal] = useState(0);
@@ -32,12 +32,11 @@ function Principal() {
 		setstateRecord(null);
 	};
 	useEffect(() => {
-		console.log(firstLogin);
 		if (firstLogin) {
 			return navigate(`/caja`);
 		}
 
-		let detectorPantalla = window.screen.width;
+		const detectorPantalla = window.screen.width;
 		if (detectorPantalla < 600) {
 			return navigate(`mobile/venta`);
 		}
@@ -54,7 +53,7 @@ function Principal() {
 	}, [shopList.length]);
 
 	const selectLastRow = () => {
-		let ultimoArray = shopList.length;
+		const ultimoArray = shopList.length;
 		if (ultimoArray) {
 			setselectedRowKeys([shopList[ultimoArray - 1].key]);
 		}
@@ -64,9 +63,7 @@ function Principal() {
 		if (Location.pathname === "/") {
 			settitleWeb(`CUENTA: $${totalTotal}`);
 		} else {
-			let title = Location.pathname;
-			title = title.toUpperCase();
-			title = title.replace(/^./, "");
+			const title = Location.pathname.toUpperCase().replace(/^./, "");
 			settitleWeb(title);
 		}
 	}, [Location, totalTotal]);

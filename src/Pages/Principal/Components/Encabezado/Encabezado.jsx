@@ -70,7 +70,6 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 		}
 	};
 	const addArticulo = (record) => {
-		console.log("record", shopList, 1);
 		const shopItem = shopList.find((item) => item.key === record.key);
 		if (shopList.length > 0 && shopItem.apartado === 0) {
 			addOneShopList(record.key);

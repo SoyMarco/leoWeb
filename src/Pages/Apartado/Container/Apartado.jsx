@@ -542,7 +542,6 @@ export default function Apartado(props) {
 				)
 			}
 
-			{}
 			{
 				/* MODAL APARTADO */
 				modalCobrar ? (
@@ -571,8 +570,6 @@ export default function Apartado(props) {
 					/>
 				)
 			}
-
-			{}
 			{
 				/* MODAL REIMPRIMIR */
 				modalReimprimir ? (
