@@ -28,3 +28,12 @@
 .ant-menu-inline .ant-menu-item::after {
 	border-right: 3px solid blue;
 }
+
+.iconLayoutV > svg.ant-menu-item-icon {
+	color: #004882;
+	font-size: 25px !important;
+}
+
+.iconLayoutV > span.ant-menu-title-content {
+	font-size: 18px;
+}

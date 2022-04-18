@@ -44,7 +44,6 @@ const SchemaVentas = (setimprimir) => {
 		return "Activa";
 	};
 	const cancelVenta = async (item) => {
-		console.log("cancelVenta", item);
 		if (loading === false) {
 			try {
 				const { data } = await mutateCANCELAR_VENTA({
@@ -160,7 +159,7 @@ const SchemaVentas = (setimprimir) => {
 			dataIndex: "productos",
 			key: "productos",
 			ellipsis: true,
-			render: (productos, record) => (
+			render: (_, record) => (
 				<h3
 					style={{
 						textAlignLast: "center",
@@ -200,7 +199,7 @@ const SchemaVentas = (setimprimir) => {
 				showTitle: false,
 			},
 			width: "90px",
-			render: (totalArticulo, record) => (
+			render: (_totalArticulo, record) => (
 				<Row justify='center'>
 					<Tooltip placement='left' title={"Reimprimir"}>
 						<Button
@@ -225,7 +224,7 @@ const SchemaVentas = (setimprimir) => {
 				showTitle: false,
 			},
 			width: "90px",
-			render: (totalArticulo, record) => (
+			render: (_totalArticulo, record) => (
 				<Row justify='center'>
 					<Tooltip placement='top' title={() => tooltipStatusAbono(record)}>
 						<Switch

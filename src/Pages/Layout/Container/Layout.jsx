@@ -1,19 +1,12 @@
-import React, { useState, useEffect, useContext } from "react";
-import { GiLargeDress /* , GiOpenBook  */ } from "react-icons/gi";
-import { useNavigate, useLocation, Link } from "react-router-dom";
-import {
-	FaCashRegister,
-	FaMoneyBillAlt,
-	FaFileInvoiceDollar,
-} from "react-icons/fa";
+import { useState, useEffect, useContext } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { openNotification } from "Utils/openNotification";
-import { RiTerminalWindowFill } from "react-icons/ri";
-import { MdLocalGroceryStore } from "react-icons/md";
 import Horizontal from "../Components/Horizontal";
 import { Layout, Menu } from "antd";
 import "antd/dist/antd.min.css";
 import "./layout.css";
 import AuthContext from "context/Auth/AuthContext";
+import layoutVertical from "../Schemas/LayoutVertical";
 
 function LayoutForm({ children }) {
 	const { auth, logout } = useContext(AuthContext);
@@ -21,15 +14,19 @@ function LayoutForm({ children }) {
 	const { Header, Content, Footer, Sider } = Layout;
 	let navigate = useNavigate();
 	const Location = useLocation();
-
+	const screenWidth = window.screen.width;
 	const [swtichstate, setswtichstate] = useState(true);
 	const [currentMenu, setcurrentMenu] = useState("1");
 	const [titleWeb, settitleWeb] = useState(null);
 
 	/* Cambiar titulo de pagina */
 	useEffect(() => {
-		let titleUrl = Location.pathname;
+		changeLocation();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [Location]);
 
+	const changeLocation = () => {
+		let titleUrl = Location.pathname;
 		let urlLocation = Location.pathname;
 		let apartado = "";
 		let encargo = "";
@@ -50,8 +47,7 @@ function LayoutForm({ children }) {
 			settitleWeb(title);
 		}
 		setcurrentMenu(titleUrl);
-	}, [Location]);
-
+	};
 	const onCollapse = () => {
 		setcollapsed(!collapsed);
 		let title = Location.pathname;
@@ -69,7 +65,16 @@ function LayoutForm({ children }) {
 		}, 200);
 	};
 	const handleClick = (e) => {
+		if (e.key === "NuevaVentana") {
+			return;
+		}
 		setcurrentMenu(e.key);
+	};
+
+	const navVertical = (item) => {
+		if (item.pathname) {
+			navigate(item.pathname);
+		}
 	};
 	return (
 		<>
@@ -92,159 +97,36 @@ function LayoutForm({ children }) {
 				/>
 
 				{/* VERTICAL */}
+
 				<Layout>
-					<Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
-						<div>
+					{screenWidth > 900 && (
+						<Sider
+							collapsible
+							collapsed={collapsed}
+							onCollapse={onCollapse}
+							breakpoint='lg'
+						>
 							<Menu
 								mode='inline'
 								onClick={(e) => handleClick(e)}
 								selectedKeys={[currentMenu]}
-								// onMouseOver={() => setcollapsed(false)}
-								// onMouseLeave={() => setcollapsed(true)}
 							>
-								<Menu.Item
-									key='/'
-									icon={
-										<Link
-											to={{
-												pathname: `/`,
-											}}
-										>
-											<MdLocalGroceryStore
-												style={{ color: "#004882", fontSize: "25px" }}
-											/>
-										</Link>
-									}
-									onClick={() => navigate("/")}
-								>
-									<h2>Cuenta</h2>
-								</Menu.Item>
-								<Menu.Item
-									key='/add'
-									icon={
-										<Link
-											to={{
-												pathname: `/add`,
-											}}
-										>
-											<GiLargeDress
-												style={{ color: "#004882", fontSize: "25px" }}
-											/>
-										</Link>
-									}
-									onClick={() => navigate("/add")}
-								>
-									<h3>Nuevo Apartado</h3>
-								</Menu.Item>
-								{/* <Menu.Item
-									key='/addencargo'
-									icon={
-										<Link
-											to={{
-												pathname: `/addencargo`,
-											}}
-										>
-											<FaPencilAlt
-												style={{
-													color: "#004882",
-													fontSize: "25px",
-												}}
-											/>
-										</Link>
-									}
-									onClick={() => navigate("/addencargo")}
-								>
-									<h3>Nuevo Encargo</h3>
-								</Menu.Item>
-								<Menu.Item
-									key='/encargos'
-									icon={
-										<Link
-											to={{
-												pathname: `/encargos`,
-											}}
-										>
-											<GiOpenBook
-												style={{
-													color: "#004882",
-													fontSize: "25px",
-												}}
-											/>
-										</Link>
-									}
-									onClick={() => navigate("/encargos")}
-								>
-									<h3>Encargos</h3>
-								</Menu.Item> */}
-								<Menu.Item
-									key='/entradasSalidas'
-									icon={
-										<Link
-											to={{
-												pathname: `/entradasSalidas`,
-											}}
-										>
-											<FaMoneyBillAlt
-												style={{ color: "#004882", fontSize: "25px" }}
-											/>
-										</Link>
-									}
-									onClick={() => navigate("/entradasSalidas")}
-								>
-									<h3>Entrada / Salida</h3>
-								</Menu.Item>
-								<Menu.Item
-									key='/ventas'
-									icon={
-										<Link
-											to={{
-												pathname: `/ventas`,
-											}}
-										>
-											<FaFileInvoiceDollar
-												style={{ color: "#004882", fontSize: "25px" }}
-											/>
-										</Link>
-									}
-									onClick={() => navigate("/ventas")}
-								>
-									<h2>Ventas</h2>
-								</Menu.Item>
-								<Menu.Item
-									key='/corte'
-									icon={
-										<Link
-											to={{
-												pathname: `/corte`,
-											}}
-										>
-											<FaCashRegister
-												style={{ color: "#004882", fontSize: "25px" }}
-											/>
-										</Link>
-									}
-									onClick={() => navigate("/corte")}
-								>
-									<h2>Corte</h2>
-								</Menu.Item>
-								<Menu.Item
-									key='7'
-									icon={
-										<RiTerminalWindowFill
-											style={{ color: "#004882", fontSize: "30px" }}
-										/>
-									}
-								>
-									<a href='/' target='_blank' id='linkNewWindow'>
-										<h3>Nueva ventana</h3>
-									</a>
-								</Menu.Item>
+								{layoutVertical.map((item) => (
+									<Menu.Item
+										key={item.key}
+										onClick={() => navVertical(item)}
+										icon={item.icon}
+										className='iconLayoutV'
+									>
+										{item.title}
+									</Menu.Item>
+								))}
 							</Menu>
-						</div>
-					</Sider>
+						</Sider>
+					)}
 					<Layout>
-						{/* CONTENIDO DE VENTAS */}
-						<Content style={{ margin: "0 16px" }}>{children}</Content>
+						{/* CONTENIDO DE VENTANAS*/}
+						<Content style={{ margin: "5px" }}>{children}</Content>
 
 						<Footer style={{ textAlign: "center" }}>
 							Creado por MarcoASR ©2021

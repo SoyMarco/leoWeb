@@ -12,6 +12,11 @@ const baseUrlFront = window.location;
 // };
 export const UrlFrontend = `${baseUrlFront.origin}/`;
 
+/* LOCAL BACKEND*/
+// export const UrlBackend = {
+// 	uri: "http://192.168.100.17:4000/",
+// };
+
 /* HEROKU */
 export const UrlBackend = {
 	uri: "https://leo-gql.herokuapp.com/",

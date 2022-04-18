@@ -29,9 +29,7 @@ export default function Productos({
 	setstateRecord,
 	loader,
 	setloader,
-	stateRecord,
 	dataApartado,
-	totalProductos,
 	totalTotal,
 	inputAbono,
 	initialState,
@@ -53,16 +51,14 @@ export default function Productos({
 		if (modalAddProduct === false) inputAbono.current.select();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [modalAddProduct]);
-	const click = (record, rowIndex) => {
+	const click = (record) => {
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
 		inputAbono.current.select();
 	};
 	const pasarAFecha = (item) => {
 		moment.locale("es");
-		let algo = moment.unix(item / 1000).format("ll");
-		console.log(algo);
-		return algo;
+		return moment.unix(item / 1000).format("ll");
 	};
 
 	const pasarAFechaLLLL = (item) => {
@@ -173,7 +169,7 @@ export default function Productos({
 			key: "precio",
 			sorter: (a, b) => b.precio - a.precio,
 			// width: "90px",
-			render: (precio, record) => (
+			render: (precio) => (
 				<Row justify='space-around'>
 					<h3
 						style={{
@@ -195,7 +191,7 @@ export default function Productos({
 				showTitle: false,
 			},
 			width: "60px",
-			render: (totalArticulo, record) => (
+			render: (_, record) => (
 				<Tooltip placement='right' title='Borrar producto'>
 					<Row justify='center'>
 						<Popconfirm
@@ -220,7 +216,7 @@ export default function Productos({
 				showTitle: false,
 			},
 			width: "70px",
-			render: (idArray, record) => (
+			render: (_, record) => (
 				<Tooltip
 					placement='right'
 					title={
@@ -301,10 +297,10 @@ export default function Productos({
 					}}
 					rowSelection={rowSelection}
 					size='small'
-					onRow={(record, rowIndex) => {
+					onRow={(record) => {
 						return {
-							onClick: (e) => {
-								click(record, rowIndex);
+							onClick: () => {
+								click(record);
 							},
 						};
 					}}

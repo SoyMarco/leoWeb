@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useRef, useMemo, useContext } from "react";
+import { useState, useEffect, useRef, useMemo, useContext } from "react";
 import { Modal, Input, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
@@ -204,6 +204,7 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
 								width: 230,
 							}}
 							shape='round'
+							size='large'
 							onClick={() => savePrintNewV("F1")}
 							icon={<PrinterFilled />}
 							loading={btnLoading}
@@ -220,6 +221,7 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
 								width: 230,
 							}}
 							shape='round'
+							size='large'
 							onClick={() => savePrintNewV("F2")}
 							icon={<SaveFilled />}
 							loading={btnLoading}
