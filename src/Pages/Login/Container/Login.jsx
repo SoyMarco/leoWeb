@@ -73,6 +73,7 @@ const Login = () => {
 			}
 		}
 	};
+
 	return (
 		<div style={{ display: "flex", flexDirection: "column" }}>
 			<Layout>
@@ -171,14 +172,16 @@ const Login = () => {
 									value={name}
 									showSearch
 									filterOption={(input, option) =>
-										option.key.toLowerCase().indexOf(input.toLowerCase()) >= 0
+										option.children
+											.toLowerCase()
+											.indexOf(input.toLowerCase()) >= 0
 									}
 									style={{
-										color: "#000058",
-										// fontSize: 30,
-										fontSize: "large",
-										fontWeight: "bold",
-										borderRadius: "50px",
+										// color: "#000058",
+										// // fontSize: 30,
+										// fontSize: "large",
+										// fontWeight: "bold",
+										// borderRadius: "50px",
 										width: "80%",
 										padding: "5",
 										border: "0 0 0 0",
@@ -251,6 +254,7 @@ const Login = () => {
 						</div>
 					</Card>
 				</div>
+
 				<Footer style={{ textAlign: "center" }}>
 					Creado por MarcoASR ©2021
 				</Footer>

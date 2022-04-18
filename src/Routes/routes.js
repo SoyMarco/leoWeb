@@ -18,6 +18,8 @@ import ReadEncargos from "Pages/Encargos/Encargos/container/ReadEncargos";
 import UpdateEncargo from "Pages/Encargos/update/Container/Encargo";
 import CorteB from "Mobile/CorteB/Container/CorteB";
 import Ventas from "Pages/Ventas/Container/Ventas";
+import Perfumes from "Pages/Perfumes/Container/Perfumes";
+
 const routes = [
 	{
 		path: "/",
@@ -53,6 +55,12 @@ const routes = [
 		path: "/caja",
 		layout: LayoutForm,
 		component: Caja,
+		exact: true,
+	},
+	{
+		path: "/perfumes",
+		layout: LayoutForm,
+		component: Perfumes,
 		exact: true,
 	},
 	{

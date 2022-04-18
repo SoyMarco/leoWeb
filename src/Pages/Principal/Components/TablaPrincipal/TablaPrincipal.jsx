@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Table, Result } from "antd";
 import { MdLocalGroceryStore } from "react-icons/md";
 import ShopListContext from "context/Shopping/ShopListContext";
@@ -8,13 +8,8 @@ export default function TablaPrincipal({ setstateRecord }) {
 	const { shopList, selectedRowKeys, setselectedRowKeys } =
 		useContext(ShopListContext);
 
-	const onSelectChange = () => {
-		setselectedRowKeys([]);
-	};
-
 	const rowSelection = {
 		selectedRowKeys,
-		onChange: onSelectChange,
 	};
 	const click = (record) => {
 		setselectedRowKeys([record.key]);

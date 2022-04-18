@@ -64,7 +64,6 @@ const BarraMayorVenta = memo(() => {
 	}, [porcentReal]);
 
 	const addEstrella = async () => {
-		console.log("addEstrella");
 		let input = {
 			porcentaje: porcentReal,
 		};

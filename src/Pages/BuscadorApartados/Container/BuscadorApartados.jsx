@@ -12,13 +12,13 @@ import AuthContext from "context/Auth/AuthContext";
 
 export default function BuscadorApartados() {
 	const { timeLogout } = useContext(AuthContext);
-	let {
+	const {
 		data: dataApartados,
 		loading,
 		error: errorApartados,
 		refetch,
 	} = useQuery(GET_APARTADOS_BUSCADOR);
-	let {
+	const {
 		data: dataEncargos,
 		loading: loadingEncargos,
 		error: errorEncargos,
@@ -32,23 +32,22 @@ export default function BuscadorApartados() {
 	const [listaBusqueda, setlistaBusqueda] = useState([]);
 	const [urlFolio, seturlFolio] = useState({ folio: 0, tipo: "" });
 	const { Option } = Select;
-	let navigate = useNavigate();
+	const navigate = useNavigate();
+
 	useEffect(() => {
 		if (dataApartados && dataEncargos) {
-			let listaBusquedaMap = [];
-			let { getApartados } = dataApartados;
-			let listaApartadosMap = getApartados.map((item) => {
+			const { getApartados } = dataApartados;
+			const { getEncargos } = dataEncargos;
+
+			const listaApartadosMap = getApartados.map((item) => {
 				return { ...item, tipo: "apartado" };
 			});
 
-			let { getEncargos } = dataEncargos;
-			let listaEncargosMap = getEncargos.map((item) => {
+			const listaEncargosMap = getEncargos.map((item) => {
 				return { ...item, tipo: "encargo" };
 			});
 
-			listaBusquedaMap.push(...listaApartadosMap);
-			listaBusquedaMap.push(...listaEncargosMap);
-			setlistaBusqueda(listaBusquedaMap);
+			setlistaBusqueda([...listaApartadosMap, ...listaEncargosMap]);
 		}
 	}, [dataApartados, dataEncargos]);
 	useEffect(() => {
@@ -59,18 +58,15 @@ export default function BuscadorApartados() {
 	}, [urlFolio]);
 
 	const pasarAFechaVence = (item) => {
-		let fecha = "";
 		if (item?.vence) {
-			fecha = moment.unix(item.vence / 1000).format("LL");
-		} else {
-			fecha = moment.unix(item.createAt / 1000).format("LL");
+			return moment.unix(item.vence / 1000).format("LL");
 		}
-		return fecha;
+		return moment.unix(item.createAt / 1000).format("LL");
 	};
 	const selectItem = (folio, item) => {
 		seturlFolio({ folio: folio, tipo: item?.children[2]?.key });
 	};
-	const onFocus = (e) => {
+	const onFocus = () => {
 		refetch();
 		refetchEncargos();
 	};
@@ -98,87 +94,84 @@ export default function BuscadorApartados() {
 		return fecha;
 	};
 	return (
-		<>
-			<ConfigProvider renderEmpty={customizeRenderEmpty}>
-				<Select
-					id='buscarApartadoInput'
-					loading={loading || loadingEncargos}
-					showSearch
-					placeholder={
-						loading || loadingEncargos ? (
-							<SyncOutlined style={{ fontSize: 25 }} spin={true} />
-						) : (
-							"Busca Apartados y Encargos"
-						)
-					}
-					optionFilterProp='children'
-					onSelect={(folio, item) => selectItem(folio, item)}
-					onKeyUp={pressKeyBuscador}
-					// onSearch={(e) => setclienteName(e.toUpperCase())}
-					onFocus={onFocus}
-					filterOption={(input, option) =>
-						option.children[0].key.indexOf(input) >= 0 ||
-						option.children[1].key.toLowerCase().indexOf(input.toLowerCase()) >=
-							0
-					}
-					style={{
-						width: 500,
-						fontWeight: "bold",
-						textAlignLast: "center",
-						fontSize: "20px",
-					}}
-				>
-					{listaBusqueda?.map((item) => {
-						return (
-							<Option
-								value={item.folio}
-								key={item.id}
-								style={{ borderBottom: "solid #6893b4" }}
-							>
-								<Row justify='space-between' key={item.folio}>
-									<h3
-										style={
-											item?.entregado[0]?.status === true ||
-											item?.cancelado[0]?.status === false ||
-											item?.cancelado?.status === true ||
-											item?.entregado?.status === true
-												? { color: "red" }
-												: null
-										}
-									>
-										{item.cliente}
-									</h3>
-
-									<h3
-										style={
-											item?.entregado[0]?.status === true ||
-											item?.cancelado[0]?.status === false
-												? { color: "red" }
-												: null
-										}
-									>
-										{item?.tipo?.toUpperCase()}: {item.folio}
-									</h3>
-								</Row>
-								<h4
-									key={item.cliente}
+		<ConfigProvider renderEmpty={customizeRenderEmpty}>
+			<Select
+				id='buscarApartadoInput'
+				loading={loading || loadingEncargos}
+				showSearch
+				placeholder={
+					loading || loadingEncargos ? (
+						<SyncOutlined style={{ fontSize: 25 }} spin={true} />
+					) : (
+						"Busca Apartados y Encargos"
+					)
+				}
+				optionFilterProp='children'
+				onSelect={(folio, item) => selectItem(folio, item)}
+				onKeyUp={pressKeyBuscador}
+				// onSearch={(e) => setclienteName(e.toUpperCase())}
+				onFocus={onFocus}
+				filterOption={(input, option) =>
+					option.children[0].key.indexOf(input) >= 0 ||
+					option.children[1].key.toLowerCase().indexOf(input.toLowerCase()) >= 0
+				}
+				style={{
+					width: 500,
+					fontWeight: "bold",
+					textAlignLast: "center",
+					fontSize: "20px",
+				}}
+			>
+				{listaBusqueda?.map((item) => {
+					return (
+						<Option
+							value={item.folio}
+							key={item.id}
+							style={{ borderBottom: "solid #6893b4" }}
+						>
+							<Row justify='space-between' key={item.folio}>
+								<h3
 									style={
 										item?.entregado[0]?.status === true ||
 										item?.cancelado[0]?.status === false ||
-										item?.entregado?.status === true ||
-										item?.cancelado?.status === true
+										item?.cancelado?.status === true ||
+										item?.entregado?.status === true
 											? { color: "red" }
 											: null
 									}
 								>
-									<b>{fechaVenceEn(item)}</b>, {pasarAFechaVence(item)}
-								</h4>
-								<div key={item.tipo}></div>
-							</Option>
-						);
-					})}
-				</Select>
-			</ConfigProvider>
-		</>
+									{item.cliente}
+								</h3>
+
+								<h3
+									style={
+										item?.entregado[0]?.status === true ||
+										item?.cancelado[0]?.status === false
+											? { color: "red" }
+											: null
+									}
+								>
+									{item?.tipo?.toUpperCase()}: {item.folio}
+								</h3>
+							</Row>
+							<h4
+								key={item.cliente}
+								style={
+									item?.entregado[0]?.status === true ||
+									item?.cancelado[0]?.status === false ||
+									item?.entregado?.status === true ||
+									item?.cancelado?.status === true
+										? { color: "red" }
+										: null
+								}
+							>
+								<b>{fechaVenceEn(item)}</b>, {pasarAFechaVence(item)}
+							</h4>
+							<div key={item.tipo}></div>
+						</Option>
+					);
+				})}
+			</Select>
+		</ConfigProvider>
 	);
 }
