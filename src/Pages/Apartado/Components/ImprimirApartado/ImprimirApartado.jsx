@@ -5,7 +5,6 @@ import { Modal, Row, Divider, Button } from "antd";
 import ReactToPrint from "react-to-print";
 import { keyBlock } from "Utils";
 import "moment/locale/es-mx";
-// import "moment/locale/es-us";
 import moment from "moment";
 import "./imprimir.css";
 
@@ -56,7 +55,7 @@ const ImprimirApartado = ({
 			inputReprint.current.select();
 			setnumPrint(numPrint + 1);
 		} else if (numPrint === 1) {
-			let data = { addAbono: dataApartado };
+			const data = { addAbono: dataApartado };
 			initialState(data);
 			setimprimir(false);
 		}
@@ -94,7 +93,7 @@ const ImprimirApartado = ({
 		return fecha;
 	};
 	const initialStateImprimir = () => {
-		let data = { addAbono: dataApartado };
+		const data = { addAbono: dataApartado };
 
 		initialState(data);
 		setimprimir(false);
@@ -102,7 +101,7 @@ const ImprimirApartado = ({
 	return (
 		<>
 			<ReactToPrint
-				trigger={(e) => <button id='print-button2'>Imprimiendo...</button>}
+				trigger={() => <button id='print-button2'>Imprimiendo...</button>}
 				content={() => ReimprimirApartado.current}
 				// onBeforePrint={() => antesDeImprimir()}
 				onAfterPrint={() => afterPrint()}

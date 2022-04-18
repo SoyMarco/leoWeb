@@ -13,13 +13,12 @@ import AuthContext from "context/Auth/AuthContext";
 export default function AddProduct({
 	setmodalAddProduct,
 	modalAddProduct,
-	refetch,
 	dataApartado,
 	initialState,
 }) {
 	const { timeLogout } = useContext(AuthContext);
 	const [mutateADD_PRODUCTO] = useMutation(ADD_PRODUCTO);
-	let { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
+	const { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
 	const [btnLoading, setbtnLoading] = useState(false);
 	const [btnDisabled, setbtnDisabled] = useState(true);
 	const [idApartado, setidApartado] = useState(null);
@@ -39,9 +38,8 @@ export default function AddProduct({
 		form.setFieldsValue({
 			Articulo: nombre,
 		});
-		let { id } = 0;
 		if (dataApartado) {
-			id = dataApartado.id;
+			const id = dataApartado.id;
 			setidApartado(id);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -63,7 +61,7 @@ export default function AddProduct({
 						},
 					});
 					if (dataAddProd) {
-						let data = { addAbono: dataAddProd.addProducto };
+						const data = { addAbono: dataAddProd.addProducto };
 
 						openNotification("success", `Articulo agregado con exito`);
 						initialState(data);

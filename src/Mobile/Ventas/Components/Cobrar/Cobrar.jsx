@@ -68,12 +68,12 @@ const Cobrar = ({
 		if (!valores.aCuenta) {
 			valores.aCuenta = 0;
 		}
-		let efectivo = parseFloat(valores.efectivo);
-		let tarjeta = parseFloat(valores.tarjeta);
-		let aCuenta = parseFloat(valores.aCuenta);
-		let total = parseFloat(totalTotal);
-		let sumaTodo = efectivo + tarjeta + aCuenta;
-		let resultado = sumaTodo - total;
+		const efectivo = parseFloat(valores.efectivo);
+		const tarjeta = parseFloat(valores.tarjeta);
+		const aCuenta = parseFloat(valores.aCuenta);
+		const total = parseFloat(totalTotal);
+		const sumaTodo = efectivo + tarjeta + aCuenta;
+		const resultado = sumaTodo - total;
 
 		setdinero({
 			aCuenta: aCuenta,
@@ -86,14 +86,14 @@ const Cobrar = ({
 	//Guardar y/o Imprimir VENTA CON GraphQL
 	const saveVentaMobile = async () => {
 		if (btnLoading === false) {
-			let efectivo = parseFloat(dinero.efectivo);
-			let tarjeta = parseFloat(dinero.tarjeta);
-			let aCuenta = parseFloat(dinero.aCuenta);
-			let total = parseFloat(totalTotal);
+			const efectivo = parseFloat(dinero.efectivo);
+			const tarjeta = parseFloat(dinero.tarjeta);
+			const aCuenta = parseFloat(dinero.aCuenta);
+			const total = parseFloat(totalTotal);
 
 			if (cambio >= 0) {
 				setbtnLoading(true);
-				let listaComprasNew = listaCompras.map((item) => {
+				const listaComprasNew = listaCompras.map((item) => {
 					return {
 						apartado: item.apartado,
 						cantidad: item.cantidad,
@@ -136,7 +136,7 @@ const Cobrar = ({
 		}
 	};
 	const keyBlockCobrar = (e) => {
-		let dataForm = form.getFieldsValue();
+		const dataForm = form.getFieldsValue();
 		if (totalTotal === dataForm.efectivo) {
 			cobrarEfectivo.current.select();
 		}

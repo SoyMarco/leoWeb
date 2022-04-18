@@ -10,7 +10,7 @@ import BDivider from "Components/BDivider/Bdivider";
 function ModalAddPerfume({ modalAddVisible, setmodalAddVisible }) {
 	const [mutateREGISTER_PERFUME, { loading }] = useMutation(REGISTER_PERFUME);
 
-	let { refetch } = useQuery(GET_ALL_PERFUME, {
+	const { refetch } = useQuery(GET_ALL_PERFUME, {
 		notifyOnNetworkStatusChange: true,
 	});
 
@@ -26,7 +26,7 @@ function ModalAddPerfume({ modalAddVisible, setmodalAddVisible }) {
 	const savePerfume = async () => {
 		if (loading) return;
 		try {
-			let input = {
+			const input = {
 				nombre: nombreValue,
 				genero: generoValues,
 				tipo: typeValues,

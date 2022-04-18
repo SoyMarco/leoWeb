@@ -18,7 +18,7 @@ export default function AddProduct({
 }) {
 	const { timeLogout } = useContext(AuthContext);
 	const [mutateADD_PRODUCTO] = useMutation(ADD_PRODUCTO);
-	let { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
+	const { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
 	const [btnLoading, setbtnLoading] = useState(false);
 	const [btnDisabled, setbtnDisabled] = useState(true);
 	const [idApartado, setidApartado] = useState(null);
@@ -38,7 +38,7 @@ export default function AddProduct({
 		form.setFieldsValue({
 			Articulo: nombre,
 		});
-		let { id } = 0;
+		let id = 0;
 		if (dataApartado) {
 			id = dataApartado.id;
 			setidApartado(id);

@@ -32,7 +32,7 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 	const [precio, setprecio] = useState({
 		precio: null,
 	});
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (DrawerF3Visible === false) {

@@ -16,7 +16,7 @@ export default function Caja() {
 	const [caja, setcaja] = useState(0);
 
 	const inputCaja = useRef();
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		inputCaja.current.select();

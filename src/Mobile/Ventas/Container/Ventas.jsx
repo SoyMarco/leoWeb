@@ -54,10 +54,10 @@ export default function Ventas() {
 	const eliminarProducto = (item) => {
 		let i = listaCompras.indexOf(item);
 		if (i !== -1) {
-			let key = listaCompras.splice(i, 1);
+			const key = listaCompras.splice(i, 1);
 			setlistaCompras(listaCompras.filter((item2) => item2.key !== key));
 		} else if (item.key > 0) {
-			let key = item.key;
+			const key = item.key;
 			setlistaCompras(listaCompras.filter((item2) => item2.key !== key));
 		}
 		selectInputPrecio();
@@ -175,7 +175,7 @@ export default function Ventas() {
 			ellipsis: {
 				showTitle: false,
 			},
-			render: (totalArticulo, record) => (
+			render: (totalArticulo, _record) => (
 				<h3
 					style={{
 						textAlignLast: "right",
@@ -193,7 +193,7 @@ export default function Ventas() {
 			dataIndex: "key",
 			key: "key",
 			width: "60px",
-			render: (key, record) => (
+			render: (_key, record) => (
 				<div style={{ textAlignLast: "center" }}>
 					<Button
 						shape='circle'

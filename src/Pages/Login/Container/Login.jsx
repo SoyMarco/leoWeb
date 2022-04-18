@@ -56,7 +56,7 @@ const Login = () => {
 				// Data Locale Storage
 				const { token } = data.login;
 				setToken(token);
-				let dataToken = await decodeToken(token);
+				const dataToken = await decodeToken(token);
 				setAuth(dataToken);
 				openNotification("success", `Bienvenido ${dataToken.name}`);
 			}

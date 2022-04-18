@@ -5,7 +5,7 @@ import { StarFilled } from "@ant-design/icons";
 import { Tooltip } from "antd";
 
 const Estrellas = memo(() => {
-	let { data: getEV, refetch } = useQuery(GET_ESTRELLAS_VENDEDOR);
+	const { data: getEV, refetch } = useQuery(GET_ESTRELLAS_VENDEDOR);
 	const [estrellasVendedor, setestrellasVendedor] = useState(0);
 	const [estrellaHoy, setestrellaHoy] = useState(false);
 	const [title, settitle] = useState(
@@ -25,7 +25,7 @@ const Estrellas = memo(() => {
 		if (getEV) {
 			setestrellasVendedor(getEV.getEstrellasVendedor.estrellas);
 			horaInicio.setHours(horaInicio.getHours() - 8);
-			let horaInicioUnix = horaInicio.getTime();
+			const horaInicioUnix = horaInicio.getTime();
 			fechaEstrella = parseInt(getEV?.getEstrellasVendedor?.createAt);
 			if (horaInicioUnix < fechaEstrella && fechaEstrella !== 0) {
 				setestrellaHoy(true);

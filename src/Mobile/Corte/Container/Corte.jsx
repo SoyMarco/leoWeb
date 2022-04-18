@@ -9,8 +9,8 @@ import AuthContext from "context/Auth/AuthContext";
 
 const Corte = () => {
 	const { timeLogout } = useContext(AuthContext);
-	let { data, error, refetch } = useQuery(GET_VENTAS_DIA_ADMIN);
-	let { data: getCajas, refetch: refetchCaja } = useQuery(GET_CAJA_DIA_ADMIN);
+	const { data, error, refetch } = useQuery(GET_VENTAS_DIA_ADMIN);
+	const { data: getCajas, refetch: refetchCaja } = useQuery(GET_CAJA_DIA_ADMIN);
 	const [dataVentasDiaAdmin, setdataVentasDiaAdmin] = useState([]);
 	const [cajasDia, setcajasDia] = useState([]);
 	const [ventaEfectivo, setventaEfectivo] = useState(0);
@@ -28,13 +28,13 @@ const Corte = () => {
 	}
 	useEffect(() => {
 		if (getCajas) {
-			let { getCajaDiaAdmin } = getCajas;
+			const { getCajaDiaAdmin } = getCajas;
 			setcajasDia(getCajaDiaAdmin);
 		}
 	}, [getCajas]);
 	useEffect(() => {
 		if (data) {
-			let { getVentasDiaAdmin } = data;
+			const { getVentasDiaAdmin } = data;
 			let vendedoresSeparados = [];
 			for (const i of getVentasDiaAdmin) {
 				const vendedor = i.vendedor;
@@ -59,7 +59,7 @@ const Corte = () => {
 					});
 				}
 			}
-			let datosSeparados = vendedoresSeparados.map((obj) => {
+			const datosSeparados = vendedoresSeparados.map((obj) => {
 				return obj[Object.keys(obj)[0]];
 			});
 			setdataVentasDiaAdmin(datosSeparados);

@@ -14,7 +14,6 @@ const ImprimirNewApartado = ({
 	imprimir,
 	dataApartado,
 	auth,
-	setimprimir,
 	dinero,
 	cambio,
 }) => {
@@ -24,7 +23,7 @@ const ImprimirNewApartado = ({
 	const [numPrint, setnumPrint] = useState(0);
 	const imprimirNewApartado = useRef();
 	const inputReprint = useRef();
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 	const audio = new Audio(aceptar);
 
 	useEffect(() => {
@@ -97,7 +96,7 @@ const ImprimirNewApartado = ({
 	return (
 		<>
 			<ReactToPrint
-				trigger={(e) => <button id='print-button'>Imprimiendo...</button>}
+				trigger={() => <button id='print-button'>Imprimiendo...</button>}
 				content={() => imprimirNewApartado.current}
 				// onBeforePrint={() => antesDeImprimir()}
 				onAfterPrint={() => afterPrint()}

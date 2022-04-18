@@ -11,7 +11,6 @@ export default function Productos({ stateRecord, loading }) {
 	const [totalTotal, settotalTotal] = useState(0);
 
 	useEffect(() => {
-		// selectLastRow();
 		let sum = 0;
 		let sumProd = 0;
 		for (let i = 0; i < productos?.length; i++) {
@@ -32,13 +31,11 @@ export default function Productos({ stateRecord, loading }) {
 	useEffect(() => {
 		if (stateRecord) {
 			try {
-				let { productos } = stateRecord;
-				let listaProductos = productos?.map((item) => {
+				const listaProductos = stateRecord.productos?.map((item) => {
 					return { ...item, key: item.idArray };
 				});
 				setproductos(listaProductos);
-				let { abonos } = stateRecord;
-				let listaAbonos = abonos?.map((item2) => {
+				const listaAbonos = stateRecord.abonos?.map((item2) => {
 					return { ...item2, key: item2.idArray };
 				});
 				setabonos(listaAbonos);
@@ -52,23 +49,19 @@ export default function Productos({ stateRecord, loading }) {
 		}
 	}, [stateRecord]);
 
-	const onSelectChange = (selectedRowKeys) => {
+	const onSelectChange = () => {
 		setselectedRowKeys([]);
-		// setselectedRowKeys(selectedRowKeys);
 	};
 	const rowSelection = {
 		selectedRowKeys,
 		onChange: onSelectChange,
 	};
 
-	const click = (record, rowIndex) => {
+	const click = (record, _rowIndex) => {
 		setselectedRowKeys([record.key]);
-		// setstateRecord(record);
-		// addArticulo(record, rowIndex);
 	};
 	const pasarAFecha = (item) => {
-		let fecha = moment.unix(item / 1000).format("L");
-		return fecha;
+		return moment.unix(item / 1000).format("L");
 	};
 	/* COLUMNAS PRODUCTOS */
 	const colProductos = [
@@ -120,7 +113,7 @@ export default function Productos({ stateRecord, loading }) {
 			title: "Cantidad",
 			dataIndex: "cantidad",
 			key: "cantidad",
-			render: (cantidad, record) => (
+			render: (cantidad, _record) => (
 				<Row justify='space-around'>
 					<h3
 						style={{
@@ -138,7 +131,7 @@ export default function Productos({ stateRecord, loading }) {
 			title: "Total",
 			dataIndex: "totalArticulo",
 			key: "totalArticulo",
-			render: (totalArticulo, record) => (
+			render: (totalArticulo, _record) => (
 				<Row justify='end'>
 					<h3
 						style={{
@@ -176,7 +169,7 @@ export default function Productos({ stateRecord, loading }) {
 					}}
 					onRow={(record, rowIndex) => {
 						return {
-							onClick: (e) => {
+							onClick: () => {
 								click(record, rowIndex);
 							},
 						};
