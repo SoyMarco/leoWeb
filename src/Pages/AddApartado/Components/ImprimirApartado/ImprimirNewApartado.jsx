@@ -1,30 +1,36 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import moment from "moment";
 import "moment/locale/es-us";
-import { Modal, Row, Divider, Button } from "antd";
+import { Row, Button, Card } from "antd";
 import "./imprimir.css";
 import { useNavigate } from "react-router-dom";
 import ReactToPrint from "react-to-print";
-import { keyBlock } from "Utils";
 import { openNotification } from "Utils/openNotification";
 import aceptar from "assets/sonido/Aceptar.wav";
+import AuthContext from "context/Auth/AuthContext";
+import NewAparadoContext from "context/NewApartado/NewAparadoContext";
 
-const ImprimirNewApartado = ({
-	imprimir,
-	dataApartado,
-	auth,
-	dinero,
-	cambio,
-}) => {
+const ImprimirNewApartado = () => {
+	const { dinero, dataApartado, imprimir, cambio } =
+		useContext(NewAparadoContext);
+	const { abonos, cliente, entregado, folio, productos, vence } = dataApartado;
+
+	const { auth, timeLogout } = useContext(AuthContext);
+
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
-	const { abonos, cliente, entregado, folio, productos, vence } = dataApartado;
 	const [numPrint, setnumPrint] = useState(0);
+
 	const imprimirNewApartado = useRef();
 	const inputReprint = useRef();
 	const navigate = useNavigate();
 	const audio = new Audio(aceptar);
+
+	useEffect(() => {
+		timeLogout();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	useEffect(() => {
 		let sum = 0;
@@ -34,7 +40,8 @@ const ImprimirNewApartado = ({
 		settotalTotal(sum);
 		let sumAbo = 0;
 		for (let i = 0; i < abonos?.length; i++) {
-			sumAbo += abonos[i]?.abono;
+			console.log((sumAbo, sumAbo + abonos[i]?.abono));
+			sumAbo = sumAbo + abonos[i]?.abono;
 		}
 		settotalAbonos(sumAbo);
 
@@ -43,12 +50,12 @@ const ImprimirNewApartado = ({
 
 	useEffect(() => {
 		if (totalAbonos || totalTotal) {
-			if (imprimir === true) {
+			if (imprimir === true && folio) {
 				document.getElementById("print-button").click();
 			}
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [totalAbonos, totalTotal]);
+	}, [totalAbonos, totalTotal, dataApartado, imprimir]);
 
 	const afterPrint = () => {
 		openNotification("success", "Apartado guardado con exito");
@@ -84,6 +91,7 @@ const ImprimirNewApartado = ({
 	};
 
 	const fechaVenceEn = () => {
+		console.log(dataApartado, dataApartado.vence, vence);
 		let fecha = moment.unix(dataApartado.vence / 1000).fromNow();
 		if (dataApartado.vence > Date.now()) {
 			fecha = `Vence ${fecha}`;
@@ -96,50 +104,71 @@ const ImprimirNewApartado = ({
 	return (
 		<>
 			<ReactToPrint
-				trigger={() => <button id='print-button'>Imprimiendo...</button>}
+				trigger={() => (
+					<button id='print-button' style={{ display: "none" }}>
+						Imprimiendo...
+					</button>
+				)}
 				content={() => imprimirNewApartado.current}
 				// onBeforePrint={() => antesDeImprimir()}
 				onAfterPrint={() => afterPrint()}
 			/>
+			{imprimir && (
+				<Card
+					style={{
+						position: "fixed",
+						marginLeft: "-28%",
+						marginTop: "20px",
+						boxShadow: "23px 23px 34px #7a7a7a, -23px -23px 34px #ffffff",
+						padding: "10px",
+					}}
+				>
+					<input
+						id='inputPrincipalPrintESC'
+						ref={inputReprint}
+						onKeyUp={pressKeyPrecio}
+						value=''
+						style={{
+							width: "100%",
+							marginBottom: 20,
+							marginTop: 10,
+							fontSize: "x-large",
+						}}
+						placeholder='Reimprimir (Enter)'
+						key='input1PrintNewApartado'
+					></input>
+					<Row justify='space-between' key='rowbtnsPrintNewApartado'>
+						<Button
+							type='primary'
+							size='large'
+							danger
+							onClick={() => navigate("/")}
+							key='botonESCPrintNewApartado'
+							style={{ marginRight: "10px" }}
+						>
+							No reimprimir (ESC)
+						</Button>
 
-			<Modal
-				visible={imprimir}
-				width='229px'
+						<Button
+							size='large'
+							type='primary'
+							onClick={() => document.getElementById("print-button").click()}
+							key='botonPrintEnterPrintNewApartado'
+						>
+							Reimprimir (Enter)
+						</Button>
+					</Row>
+				</Card>
+			)}
+			<Card
+				style={{
+					width: 200,
+					boxShadow: "23px 23px 34px #7a7a7a, -23px -23px 34px #ffffff",
+				}}
 				onCancel={() => navigate("/")}
-				onOk={() => document.getElementById("print-button").click()}
+				// onOk={() => document.getElementById("print-button").click()}
 				key='ModalPrintNewApartado'
 			>
-				{/* <input ref={inputReprint} onKeyUp={pressKeyPrecio}></input> */}
-				<input
-					id='inputPrincipalPrintESC'
-					ref={inputReprint}
-					onKeyUp={pressKeyPrecio}
-					onKeyDown={keyBlock}
-					style={{ width: "180px", marginBottom: 10 }}
-					placeholder='Reimprimir (Enter)'
-					key='input1PrintNewApartado'
-				></input>
-				<Row justify='space-around' key='rowbtnsPrintNewApartado'>
-					<Button
-						type='primary'
-						danger
-						shape='round'
-						onClick={() => navigate("/")}
-						key='botonESCPrintNewApartado'
-					>
-						ESC
-					</Button>
-
-					<Button
-						type='primary'
-						shape='round'
-						onClick={() => document.getElementById("print-button").click()}
-						key='botonPrintEnterPrintNewApartado'
-					>
-						Print(Enter)
-					</Button>
-				</Row>
-				<Divider />
 				<div
 					id='tickets'
 					className='ticket'
@@ -192,28 +221,32 @@ const ImprimirNewApartado = ({
 							{cliente}
 						</h2>
 					</Row>
-					{/* <!-- FOLIO APARTADO --> */}
-					<Row
-						justify='space-around'
-						style={{
-							padding: "0px",
-							background: "black",
-							width: "190px",
-						}}
-						key='rowfolioApartadoPrintNewApartado'
-					>
-						<h2
-							className='sutituloTicket'
-							style={{
-								background: "black",
-								color: "white",
-								padding: "0px",
-								fontWeight: "bold",
-							}}
-						>
-							Folio: {folio}
-						</h2>
-					</Row>
+					{
+						/* <!-- FOLIO APARTADO --> */
+						imprimir ? (
+							<Row
+								justify='space-around'
+								style={{
+									padding: "0px",
+									background: "black",
+									width: "190px",
+								}}
+								key='rowfolioApartadoPrintNewApartado'
+							>
+								<h2
+									className='sutituloTicket'
+									style={{
+										background: "black",
+										color: "white",
+										padding: "0px",
+										fontWeight: "bold",
+									}}
+								>
+									Folio: {folio}
+								</h2>
+							</Row>
+						) : null
+					}
 					{/* <!-- VENCE --> */}
 					<Row
 						justify='space-around'
@@ -326,7 +359,7 @@ const ImprimirNewApartado = ({
 						{pasarAFechaLL(Date.now())} <br />
 					</span>
 				</div>
-			</Modal>
+			</Card>
 		</>
 	);
 };

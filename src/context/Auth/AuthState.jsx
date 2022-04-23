@@ -2,12 +2,11 @@ import React, { useReducer, useEffect } from "react";
 import { decodeToken, removeToken } from "Utils/token";
 import Login from "Pages/Login/Container/Login";
 import { openNotification } from "Utils/openNotification";
-
 import AuthContext from "./AuthContext";
 import AuthReducer from "./AuthReducer";
 import { SET_AUTH, SET_FIRST_LOGIN } from "./types";
 
-export default function AuthState(props) {
+const AuthState = (props) => {
 	const initialState = {
 		auth: undefined,
 		firstLogin: undefined,
@@ -75,4 +74,5 @@ export default function AuthState(props) {
 			{navegateAuth()}
 		</AuthContext.Provider>
 	);
-}
+};
+export default AuthState;

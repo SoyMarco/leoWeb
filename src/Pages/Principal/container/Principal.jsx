@@ -10,7 +10,7 @@ import ShopListContext from "context/Shopping/ShopListContext";
 import "./principal.css";
 import AuthContext from "context/Auth/AuthContext";
 
-function Principal() {
+const Principal = () => {
 	const { firstLogin } = useContext(AuthContext);
 	const { shopList, clearShopList, selectedRowKeys, setselectedRowKeys } =
 		useContext(ShopListContext);
@@ -32,6 +32,7 @@ function Principal() {
 		setstateRecord(null);
 	};
 	useEffect(() => {
+		console.log("First", firstLogin);
 		if (firstLogin) {
 			return navigate(`/caja`);
 		}
@@ -121,6 +122,6 @@ function Principal() {
 			) : null}
 		</>
 	);
-}
+};
 
 export default Principal;

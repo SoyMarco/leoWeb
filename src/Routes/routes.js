@@ -19,6 +19,8 @@ import UpdateEncargo from "Pages/Encargos/update/Container/Encargo";
 import CorteB from "Mobile/CorteB/Container/CorteB";
 import Ventas from "Pages/Ventas/Container/Ventas";
 import Perfumes from "Pages/Perfumes/Container/Perfumes";
+//Context
+import NewAparadoState from "context/NewApartado/NewAparadoState";
 
 const routes = [
 	{
@@ -49,6 +51,7 @@ const routes = [
 		path: "/add",
 		layout: LayoutForm,
 		component: AddApartado,
+		context: NewAparadoState,
 		exact: true,
 	},
 	{

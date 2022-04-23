@@ -150,9 +150,7 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
 			}
 		}
 	};
-	const keyBlockCobrar = (e) => {
-		keyBlock(e);
-	};
+
 	const onChangeInput = (e) => {
 		const key = e.target.id;
 		let value = Math.round(e.target.value * 100) / 100;
@@ -251,7 +249,7 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
 						type='number'
 						prefix={<FaMoneyBillWave />}
 						onKeyUp={(e) => pressKeyPrecio(e)}
-						onKeyDown={(e) => keyBlockCobrar(e)}
+						onKeyDown={(e) => keyBlock(e)}
 						onChange={(e) => onChangeInput(e)}
 						className='InputModalCobrar'
 						id='efectivo'

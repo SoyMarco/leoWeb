@@ -256,7 +256,7 @@ const Login = () => {
 				</div>
 
 				<Footer style={{ textAlign: "center" }}>
-					Creado por MarcoASR ©2021
+					Creado por MarcoASR ©2022
 				</Footer>
 			</Layout>
 			{loadImage && (

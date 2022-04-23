@@ -174,11 +174,10 @@ export default function ProductsAddApartado({
 					onKeyUp={pressKeyEnter}
 					onKeyDown={keyNumber}
 					style={{
-						color: "green",
 						fontSize: "large",
 						fontWeight: "bold",
 						borderRadius: "50px",
-						width: "40%",
+						width: "45%",
 						padding: "0 0 0 0px",
 						border: "0 0 0 0",
 					}}
@@ -199,7 +198,7 @@ export default function ProductsAddApartado({
 						fontSize: "x-large",
 						fontWeight: "bold",
 						borderRadius: "50px",
-						maxWidth: "40%",
+						maxWidth: "45%",
 						padding: "0 0 0 0px",
 						border: "0 0 0 0",
 					}}
@@ -220,7 +219,7 @@ export default function ProductsAddApartado({
 					height: "250px",
 					borderRadius: "10px",
 					boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
-					margin: "10px",
+					margin: "10px 0px",
 				}}
 				rowSelection={rowSelection}
 				size='small'
