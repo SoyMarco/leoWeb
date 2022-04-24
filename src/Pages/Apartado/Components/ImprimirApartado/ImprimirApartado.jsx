@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { openNotification } from "Utils/openNotification";
 import { Modal, Row, Divider, Button } from "antd";
 import ReactToPrint from "react-to-print";

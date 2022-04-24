@@ -89,11 +89,5 @@ export default function Cobrar() {
 		}
 	};
 
-	return (
-		<ModalCobrar
-			saveAndPrint={saveAndPrint}
-			totalTotal={abono}
-			setIsOpen={setmodalCobrar}
-		/>
-	);
+	return <ModalCobrar saveAndPrint={saveAndPrint} totalTotal={abono} />;
 }

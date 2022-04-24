@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import ImprimirApartado from "../ImprimirApartado/ImprimirApartado";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";

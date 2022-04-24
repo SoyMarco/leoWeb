@@ -7,8 +7,8 @@ import AuthContext from "context/Auth/AuthContext";
 import { keyBlock } from "Utils";
 import "./cobrar.css";
 
-export default function ModalCobrar({ saveAndPrint, totalTotal, setIsOpen }) {
-	const { timeLogout, isLoading } = useContext(AuthContext);
+export default function ModalCobrar({ saveAndPrint, totalTotal }) {
+	const { timeLogout, isLoading, setmodalCobrar } = useContext(AuthContext);
 
 	const [cambio, setcambio] = useState(0);
 	const [inputs, setinputs] = useState({
@@ -102,7 +102,7 @@ export default function ModalCobrar({ saveAndPrint, totalTotal, setIsOpen }) {
 				</>
 			}
 			visible={true}
-			onCancel={() => setIsOpen((e) => !e)}
+			onCancel={() => setmodalCobrar((e) => !e)}
 			footer={false}
 		>
 			<div key='div1' style={{ textAlignLast: "center" }}>

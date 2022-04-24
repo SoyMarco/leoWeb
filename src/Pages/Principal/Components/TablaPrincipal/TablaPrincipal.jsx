@@ -4,8 +4,8 @@ import { MdLocalGroceryStore } from "react-icons/md";
 import ShopListContext from "context/Shopping/ShopListContext";
 import SchemaPrincipal from "./SchemaPrincipal";
 
-const TablaPrincipal = ({ setstateRecord }) => {
-	const { shopList, selectedRowKeys, setselectedRowKeys } =
+const TablaPrincipal = () => {
+	const { shopList, selectedRowKeys, setselectedRowKeys, setstateRecord } =
 		useContext(ShopListContext);
 
 	const rowSelection = {

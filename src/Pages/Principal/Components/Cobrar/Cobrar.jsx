@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useMemo, useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import ModalCobrar from "Components/ModalCobrar/Container/ModalCobrar";
 import { REGISTER_VENTA, GET_TOTAL_VENTAS_DIA } from "myGraphql/venta";
 import useService from "Components/ModalCobrar/Service/useService";
@@ -8,8 +8,9 @@ import { useMutation, useQuery } from "@apollo/client";
 import AuthContext from "context/Auth/AuthContext";
 import Imprimir from "../Imprimir/Imprimir";
 
-const Cobrar = ({ setmodalCobrar, totalTotal, initialState }) => {
-	const { shopList } = useContext(ShopListContext);
+const Cobrar = () => {
+	const { shopList, totalTotal, initialState, imprimir, setimprimir } =
+		useContext(ShopListContext);
 	const { auth, isLoading } = useContext(AuthContext);
 
 	const { dataReturn, register, keyFunc } = useService();
@@ -19,7 +20,6 @@ const Cobrar = ({ setmodalCobrar, totalTotal, initialState }) => {
 
 	const [cambioM, setcambio] = useState(0);
 	const [inputsM, setinputs] = useState(0);
-	const [imprimir, setimprimir] = useState(false);
 	const [folio, setfolio] = useState(0);
 
 	useEffect(() => {
@@ -78,30 +78,10 @@ const Cobrar = ({ setmodalCobrar, totalTotal, initialState }) => {
 		};
 	};
 
-	const memoPrint = useMemo(
-		() => (
-			<Imprimir
-				imprimir={imprimir}
-				totalTotal={totalTotal}
-				cambio={cambioM}
-				dinero={inputsM}
-				listaCompras={shopList}
-				setmodalCobrar={setmodalCobrar}
-				folio={folio}
-				initialState={initialState}
-				key='keyImprimir'
-			/>
-		),
-		[imprimir]
-	);
 	return (
 		<>
-			{memoPrint}
-			<ModalCobrar
-				saveAndPrint={saveAndPrint}
-				totalTotal={totalTotal}
-				setIsOpen={setmodalCobrar}
-			/>
+			{imprimir && <Imprimir cambio={cambioM} dinero={inputsM} folio={folio} />}
+			<ModalCobrar saveAndPrint={saveAndPrint} totalTotal={totalTotal} />
 		</>
 	);
 };
