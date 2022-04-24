@@ -1,173 +1,93 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, useRef, useMemo, useContext } from "react";
-import { Modal, Input, Button, Row } from "antd";
-import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
-import { SaveFilled, PrinterFilled } from "@ant-design/icons";
-import Imprimir from "../Imprimir/Imprimir";
-import { openNotification } from "Utils/openNotification";
-import ErrorConection from "Utils/ErrorConection";
-import { keyBlock } from "Utils";
-import { useMutation, useQuery } from "@apollo/client";
+import { useState, useMemo, useContext, useEffect } from "react";
+import ModalCobrar from "Components/ModalCobrar/Container/ModalCobrar";
 import { REGISTER_VENTA, GET_TOTAL_VENTAS_DIA } from "myGraphql/venta";
-import AuthContext from "context/Auth/AuthContext";
-import aceptar from "assets/sonido/Aceptar.wav";
-import "./cobrar.css";
+import useService from "Components/ModalCobrar/Service/useService";
 import ShopListContext from "context/Shopping/ShopListContext";
+import { useMutation, useQuery } from "@apollo/client";
+import AuthContext from "context/Auth/AuthContext";
+import Imprimir from "../Imprimir/Imprimir";
 
-const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
+const Cobrar = ({ setmodalCobrar, totalTotal, initialState }) => {
 	const { shopList } = useContext(ShopListContext);
-	const { auth, timeLogout } = useContext(AuthContext);
+	const { auth, isLoading } = useContext(AuthContext);
+
+	const { dataReturn, register, keyFunc } = useService();
 
 	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
 	const { refetch: refetchTotalVentasDia } = useQuery(GET_TOTAL_VENTAS_DIA);
-	const [cambio, setcambio] = useState(0);
+
+	const [cambioM, setcambio] = useState(0);
+	const [inputsM, setinputs] = useState(0);
 	const [imprimir, setimprimir] = useState(false);
-	const [btnLoading, setbtnLoading] = useState(false);
 	const [folio, setfolio] = useState(0);
-	const [inputs, setinputs] = useState({
-		efectivo: null,
-		tarjeta: null,
-		aCuenta: null,
-	});
-	const cobrarEfectivo = useRef();
-	const audio = new Audio(aceptar);
-	useEffect(() => {
-		setTimeout(() => {
-			cobrarEfectivo.current.select();
-		}, 50);
-		timeLogout();
-	}, []);
 
 	useEffect(() => {
-		if (modalCobrar === true) {
-			setinputs({ ...inputs, efectivo: totalTotal });
-			OnValuesChange();
-		}
-	}, [modalCobrar]);
-	useEffect(() => {
-		OnValuesChange();
-	}, [inputs]);
-	const pressKeyPrecio = (e) => {
-		// Enter
-		if (e.keyCode === 13) {
-			savePrintNewV("F1");
-		}
-		// E
-		if (e.keyCode === 69) {
-			if (inputs.aCuenta === totalTotal || inputs.tarjeta === totalTotal) {
-				setinputs({ efectivo: totalTotal });
-			}
-			cobrarEfectivo.current.select();
-		}
-		// A
-		if (e.keyCode === 65) {
-			if (inputs.efectivo === totalTotal || inputs.tarjeta === totalTotal) {
-				setinputs({ aCuenta: totalTotal });
-			}
-			document.querySelector("#aCuenta").select();
-		}
-		// T
-		if (e.keyCode === 84) {
-			if (inputs.efectivo === totalTotal || inputs.aCuenta === totalTotal) {
-				setinputs({ tarjeta: totalTotal });
-			}
-			document.querySelector("#tarjeta").select();
-		}
+		if (dataReturn) {
+			//Actualizar % barra
+			refetchTotalVentasDia();
 
-		// 	F1
-		if (e.keyCode === 112) {
-			savePrintNewV("F1");
+			if (keyFunc === "F1") {
+				setfolio(dataReturn.registerVenta.folio);
+				setimprimir(true);
+			}
+			if (keyFunc === "F2") {
+				initialState();
+			}
 		}
-		// F2
-		if (e.keyCode === 113) {
-			savePrintNewV("F2");
-		}
-	};
-
-	const OnValuesChange = () => {
-		const efectivo = parseFloat(inputs.efectivo ?? 0);
-		const tarjeta = parseFloat(inputs.tarjeta ?? 0);
-		const aCuenta = parseFloat(inputs.aCuenta ?? 0);
-		const total = parseFloat(totalTotal);
-		const sumaTodo = efectivo + tarjeta + aCuenta;
-		const resultado = sumaTodo - total;
-
-		setcambio(resultado);
-	};
+	}, [dataReturn]);
 
 	//Guardar y/o Imprimir VENTA CON GraphQL
-	const savePrintNewV = async (keyF) => {
-		if (btnLoading === false && cambio >= 0) {
-			setbtnLoading(true);
-			const listaComprasNew = shopList.map((item) => ({
-				apartado: item.apartado,
-				cantidad: item.cantidad,
-				idArray: item.key,
-				key: item.key,
-				nombre: item.nombre,
-				precio: item.precio,
-				refApartado: item.refApartado,
-				totalArticulo: item.totalArticulo,
-				idF3: item.idF3,
-			}));
+	const saveAndPrint = ({ keyF, inputs, cambio }) => {
+		if (
+			isLoading === false &&
+			cambio >= 0 &&
+			(keyF === "F1" || keyF === "F2")
+		) {
+			setcambio(cambio);
+			setinputs(inputs);
+			const dataSend = createDateSend(inputs);
 
-			const efectivo = parseFloat(inputs.efectivo ?? 0);
-			const tarjeta = parseFloat(inputs.tarjeta ?? 0);
-			const aCuenta = parseFloat(inputs.aCuenta ?? 0);
-			const total = parseFloat(totalTotal);
-			const input = {
-				productos: listaComprasNew,
-				vendedor: auth.name,
-				folio: 1,
-				total: total,
-				efectivo: efectivo,
-				tarjeta: tarjeta,
-				aCuenta: aCuenta,
-				pagoCon: 0,
-				referencia: "",
-				notas: "",
-			};
-			try {
-				const { data } = await mutateREGISTER_VENTA({
-					variables: { input },
-				});
-				if (data) {
-					//Actualizar % barra
-					refetchTotalVentasDia();
-					audio.play();
-
-					if (keyF === "F1") {
-						setfolio(data.registerVenta.folio);
-						setimprimir(true);
-					} else if (keyF === "F2") {
-						openNotification("success", "Venta guardada con exito");
-						initialState();
-					}
-				}
-			} catch (error) {
-				setbtnLoading(false);
-				ErrorConection(timeLogout);
-			}
+			register({ input: dataSend, mutate: mutateREGISTER_VENTA, keyF });
 		}
 	};
 
-	const onChangeInput = (e) => {
-		const key = e.target.id;
-		let value = Math.round(e.target.value * 100) / 100;
-		value = value > 0 ? value : null;
-		setinputs({ ...inputs, [key]: value });
+	const createDateSend = (inputs) => {
+		const listaComprasNew = shopList.map((item) => ({
+			apartado: item.apartado,
+			cantidad: item.cantidad,
+			idArray: item.key,
+			key: item.key,
+			nombre: item.nombre,
+			precio: item.precio,
+			refApartado: item.refApartado,
+			totalArticulo: item.totalArticulo,
+			idF3: item.idF3,
+		}));
+		return {
+			productos: listaComprasNew,
+			vendedor: auth.name,
+			folio: 1,
+			total: parseFloat(totalTotal),
+			efectivo: parseFloat(inputs.efectivo ?? 0),
+			tarjeta: parseFloat(inputs.tarjeta ?? 0),
+			aCuenta: parseFloat(inputs.aCuenta ?? 0),
+			pagoCon: 0,
+			referencia: "",
+			notas: "",
+		};
 	};
+
 	const memoPrint = useMemo(
 		() => (
 			<Imprimir
 				imprimir={imprimir}
 				totalTotal={totalTotal}
-				cambio={cambio}
-				dinero={inputs}
+				cambio={cambioM}
+				dinero={inputsM}
 				listaCompras={shopList}
 				setmodalCobrar={setmodalCobrar}
 				folio={folio}
-				auth={auth}
 				initialState={initialState}
 				key='keyImprimir'
 			/>
@@ -177,123 +97,11 @@ const Cobrar = ({ modalCobrar, setmodalCobrar, totalTotal, initialState }) => {
 	return (
 		<>
 			{memoPrint}
-			<Modal
-				key='keyModal'
-				style={{ top: 25 }}
-				className='ModalCobrarPrincipal'
-				title={
-					<>
-						<FaMoneyBillWave style={{ marginRight: "10px" }} />
-						Cobrar
-					</>
-				}
-				visible={modalCobrar}
-				onCancel={() => setmodalCobrar(!modalCobrar)}
-				footer={[
-					<Row justify='space-around' key='keyRowBtns'>
-						<Button
-							style={{
-								background:
-									cambio < 0 ? "grey" : "linear-gradient(#32A632,#005800)",
-								color: "white",
-								fontWeight: "bold",
-								width: 230,
-							}}
-							shape='round'
-							size='large'
-							onClick={() => savePrintNewV("F1")}
-							icon={<PrinterFilled />}
-							loading={btnLoading}
-							key='keybtnf1'
-						>
-							Imprimir F1
-						</Button>
-						<Button
-							style={{
-								background:
-									cambio < 0 ? "grey" : "linear-gradient(#3232A6,#000058)",
-								color: "white",
-								fontWeight: "bold",
-								width: 230,
-							}}
-							shape='round'
-							size='large'
-							onClick={() => savePrintNewV("F2")}
-							icon={<SaveFilled />}
-							loading={btnLoading}
-							key='keybtnf2'
-						>
-							Guardar F2
-						</Button>
-					</Row>,
-				]}
-			>
-				<div key='div1' style={{ textAlignLast: "center" }}>
-					<h1
-						key='div1h1'
-						style={{
-							fontWeight: "bold",
-							fontSize: "36px",
-							color: "green",
-							margin: 0,
-						}}
-					>
-						Total: ${totalTotal}
-					</h1>
-				</div>
-				<div key='div2'>
-					<Input
-						placeholder='Efectivo'
-						ref={cobrarEfectivo}
-						autoFocus={true}
-						type='number'
-						prefix={<FaMoneyBillWave />}
-						onKeyUp={(e) => pressKeyPrecio(e)}
-						onKeyDown={(e) => keyBlock(e)}
-						onChange={(e) => onChangeInput(e)}
-						className='InputModalCobrar'
-						id='efectivo'
-						value={inputs.efectivo}
-					></Input>
-
-					<Input
-						placeholder='Tarjeta'
-						type='number'
-						prefix={<FaCreditCard />}
-						onKeyUp={pressKeyPrecio}
-						onKeyDown={keyBlock}
-						id='tarjeta'
-						className='InputModalCobrar'
-						onChange={(e) => onChangeInput(e)}
-						value={inputs.tarjeta}
-					></Input>
-
-					<Input
-						placeholder='A cuenta'
-						type='number'
-						prefix={<FaStoreAlt />}
-						onKeyUp={pressKeyPrecio}
-						onKeyDown={keyBlock}
-						id='aCuenta'
-						className='InputModalCobrar'
-						onChange={(e) => onChangeInput(e)}
-						value={inputs.aCuenta}
-					></Input>
-				</div>
-				<div key='div3' style={{ textAlignLast: "center" }}>
-					<h1
-						key='keyh1Cambio'
-						style={{
-							fontWeight: "bold",
-							fontSize: "40px",
-							color: cambio >= 0 ? "#35B009" : "red",
-							margin: "-10px 0 0 0",
-						}}
-					>
-						{cambio >= 0 ? `Cambio: $${cambio}` : `Faltan: $${cambio}`}
-					</h1>
-				</div>
-			</Modal>
+			<ModalCobrar
+				saveAndPrint={saveAndPrint}
+				totalTotal={totalTotal}
+				setIsOpen={setmodalCobrar}
+			/>
 		</>
 	);
 };

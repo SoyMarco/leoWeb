@@ -31,7 +31,7 @@ const ImprimirApartado = ({
 			sum += productos[i]?.totalArticulo;
 		}
 		settotalTotal(sum);
-
+		console.log(abonos, dataApartado);
 		let sumAbo = 0;
 		for (const abono of abonos) {
 			if (abono.cancel !== true) {
@@ -40,7 +40,9 @@ const ImprimirApartado = ({
 		}
 
 		settotalAbonos(sumAbo);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imprimir, abonos, productos]);
+
 	useEffect(() => {
 		if (totalAbonos || totalTotal) {
 			if (imprimir === true) {

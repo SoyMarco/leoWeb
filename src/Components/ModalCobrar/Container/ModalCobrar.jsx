@@ -1,18 +1,15 @@
-import { useState, useRef } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useRef, useEffect, useContext } from "react";
 import { Modal, Input, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
+import AuthContext from "context/Auth/AuthContext";
 import { keyBlock } from "Utils";
+import "./cobrar.css";
 
-export default function ModalCobrar({
-	saveAndPrint,
-	totalTotal,
-	isOpen,
-	setIsOpen,
-}) {
-	const cobrarEfectivo = useRef();
+export default function ModalCobrar({ saveAndPrint, totalTotal, setIsOpen }) {
+	const { timeLogout, isLoading } = useContext(AuthContext);
 
-	const [btnLoading, setbtnLoading] = useState(false);
 	const [cambio, setcambio] = useState(0);
 	const [inputs, setinputs] = useState({
 		efectivo: null,
@@ -20,10 +17,24 @@ export default function ModalCobrar({
 		aCuenta: null,
 	});
 
+	const cobrarEfectivo = useRef();
+
+	useEffect(() => {
+		setinputs({ ...inputs, efectivo: totalTotal });
+		setTimeout(() => {
+			cobrarEfectivo.current.select();
+		}, 50);
+		timeLogout();
+	}, []);
+
+	useEffect(() => {
+		OnValuesChange();
+	}, [inputs]);
+
 	const pressKeyPrecio = (e) => {
 		// Enter
 		if (e.keyCode === 13) {
-			saveAndPrint("F1");
+			saveAndPrint({ keyF: "F1", inputs, cambio });
 		}
 		// E
 		if (e.keyCode === 69) {
@@ -49,11 +60,15 @@ export default function ModalCobrar({
 
 		// 	F1
 		if (e.keyCode === 112) {
-			saveAndPrint("F1");
+			saveAndPrint({ keyF: "F1", inputs, cambio });
 		}
 		// F2
 		if (e.keyCode === 113) {
-			saveAndPrint("F2");
+			saveAndPrint({ keyF: "F2", inputs, cambio });
+		}
+		// F3
+		if (e.keyCode === 114) {
+			saveAndPrint({ keyF: "F3", inputs, cambio });
 		}
 	};
 
@@ -63,6 +78,18 @@ export default function ModalCobrar({
 		value = value > 0 ? value : null;
 		setinputs({ ...inputs, [key]: value });
 	};
+
+	const OnValuesChange = () => {
+		const efectivo = parseFloat(inputs.efectivo ?? 0);
+		const tarjeta = parseFloat(inputs.tarjeta ?? 0);
+		const aCuenta = parseFloat(inputs.aCuenta ?? 0);
+		const total = parseFloat(totalTotal);
+		const sumaTodo = efectivo + tarjeta + aCuenta;
+		const resultado = sumaTodo - total;
+
+		setcambio(resultado);
+	};
+
 	return (
 		<Modal
 			key='keyModal'
@@ -74,9 +101,23 @@ export default function ModalCobrar({
 					Cobrar
 				</>
 			}
-			visible={isOpen}
-			onCancel={() => setIsOpen(!isOpen)}
+			visible={true}
+			onCancel={() => setIsOpen((e) => !e)}
+			footer={false}
 		>
+			<div key='div1' style={{ textAlignLast: "center" }}>
+				<h1
+					key='div1h1'
+					style={{
+						fontWeight: "bold",
+						fontSize: "36px",
+						color: "green",
+						margin: 0,
+					}}
+				>
+					Total: ${totalTotal}
+				</h1>
+			</div>
 			<Input
 				placeholder='Efectivo'
 				ref={cobrarEfectivo}
@@ -114,7 +155,19 @@ export default function ModalCobrar({
 				onChange={(e) => onChangeInput(e)}
 				value={inputs.aCuenta}
 			></Input>
-
+			<div key='div3' style={{ textAlignLast: "center" }}>
+				<h1
+					key='keyh1Cambio'
+					style={{
+						fontWeight: "bold",
+						fontSize: "40px",
+						color: cambio >= 0 ? "#35B009" : "red",
+						margin: "-10px 0 0 0",
+					}}
+				>
+					{cambio >= 0 ? `Cambio: $${cambio}` : `Faltan: $${cambio}`}
+				</h1>
+			</div>
 			<Row justify='space-around' key='keyRowBtns'>
 				<Button
 					style={{
@@ -126,9 +179,9 @@ export default function ModalCobrar({
 					}}
 					shape='round'
 					size='large'
-					onClick={() => saveAndPrint("F1")}
+					onClick={() => saveAndPrint({ keyF: "F1", inputs, cambio })}
 					icon={<PrinterFilled />}
-					loading={btnLoading}
+					loading={isLoading}
 					key='keybtnf1'
 				>
 					Imprimir F1
@@ -143,9 +196,9 @@ export default function ModalCobrar({
 					}}
 					shape='round'
 					size='large'
-					onClick={() => saveAndPrint("F2")}
+					onClick={() => saveAndPrint({ keyF: "F2", inputs, cambio })}
 					icon={<SaveFilled />}
-					loading={btnLoading}
+					loading={isLoading}
 					key='keybtnf2'
 				>
 					Guardar F2

@@ -1,8 +1,9 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef, useContext } from "react";
 import { useReactToPrint } from "react-to-print";
 import { openNotification } from "Utils/openNotification";
 import { Row } from "antd";
+import AuthContext from "context/Auth/AuthContext";
 import logoLeo from "Pages/Principal/Utils/images";
 import "moment/locale/es-us";
 import moment from "moment";
@@ -14,9 +15,10 @@ const Imprimir = ({
 	dinero,
 	listaCompras,
 	folio,
-	auth,
 	initialState,
 }) => {
+	const { auth } = useContext(AuthContext);
+
 	const { aCuenta, tarjeta, efectivo } = dinero;
 	const imprimirVenta = useRef();
 

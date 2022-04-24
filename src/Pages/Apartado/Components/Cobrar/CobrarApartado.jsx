@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo, useContext } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import ImprimirApartado from "../ImprimirApartado/ImprimirApartado";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
@@ -23,6 +23,8 @@ const CobrarApartado = ({
 	inputAbono,
 	dataApartado,
 }) => {
+	console.log(dataApartado);
+
 	const { auth, timeLogout } = useContext(AuthContext);
 	const { addProductShopList } = useContext(ShopListContext);
 	const navigate = useNavigate();
@@ -176,27 +178,23 @@ const CobrarApartado = ({
 		}
 		keyBlock(e);
 	};
-	const memoPrint = useMemo(
-		() => (
-			<ImprimirApartado
-				imprimir={imprimir}
-				setimprimir={setimprimir}
-				totalTotal={totalTotal}
-				listaCompras={listaCompras}
-				initialState={initialState}
-				calculateRestaria={calculateRestaria}
-				dataApartado={dataApartadoImprimir}
-				auth={auth}
-				dinero={dinero}
-				cambio={cambio}
-			/>
-		),
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[imprimir]
-	);
+
 	return (
 		<>
-			{memoPrint}
+			{imprimir && (
+				<ImprimirApartado
+					imprimir={imprimir}
+					setimprimir={setimprimir}
+					totalTotal={totalTotal}
+					listaCompras={listaCompras}
+					initialState={initialState}
+					calculateRestaria={calculateRestaria}
+					dataApartado={dataApartadoImprimir}
+					auth={auth}
+					dinero={dinero}
+					cambio={cambio}
+				/>
+			)}
 			<Modal
 				key='modalCobrarAbonoApartado'
 				style={{ top: 25 }}

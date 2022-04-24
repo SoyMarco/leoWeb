@@ -112,14 +112,13 @@ const Principal = () => {
 
 			<BarraMayorVenta />
 
-			{modalCobrar ? (
+			{modalCobrar && (
 				<Cobrar
-					modalCobrar={modalCobrar}
 					setmodalCobrar={setmodalCobrar}
 					totalTotal={totalTotal}
 					initialState={initialState}
-				></Cobrar>
-			) : null}
+				/>
+			)}
 		</>
 	);
 };

@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import ImprimirNewApartado from "../Components/ImprimirApartado/ImprimirNewApartado";
-import CobrarNewApartado from "../Components/CobrarNewApartado/CobrarNewApartado";
 import NewAparadoContext from "context/NewApartado/NewAparadoContext";
+import Cobrar from "../Components/CobrarNewApartado/Cobrar";
 import CardSteps from "../Components/StepsB/CardSteps";
 import { Row, Col } from "antd";
 import "./addApartado.css";
@@ -13,7 +13,7 @@ const AddApartado = () => {
 		<>
 			<title>{cliente ? cliente : "Nuevo Apartado"}</title>
 
-			{modalCobrar && <CobrarNewApartado />}
+			{modalCobrar && <Cobrar />}
 
 			<Row justify='space-around'>
 				{imprimir === false && (

@@ -40,7 +40,6 @@ const ImprimirNewApartado = () => {
 		settotalTotal(sum);
 		let sumAbo = 0;
 		for (let i = 0; i < abonos?.length; i++) {
-			console.log((sumAbo, sumAbo + abonos[i]?.abono));
 			sumAbo = sumAbo + abonos[i]?.abono;
 		}
 		settotalAbonos(sumAbo);
@@ -91,7 +90,6 @@ const ImprimirNewApartado = () => {
 	};
 
 	const fechaVenceEn = () => {
-		console.log(dataApartado, dataApartado.vence, vence);
 		let fecha = moment.unix(dataApartado.vence / 1000).fromNow();
 		if (dataApartado.vence > Date.now()) {
 			fecha = `Vence ${fecha}`;

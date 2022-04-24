@@ -87,10 +87,15 @@ export default function Apartado() {
 	};
 
 	useEffect(() => {
-		setdataApartado(getApartadoFolio?.getProductosFolio);
+		if (getApartadoFolio) {
+			console.log(getApartadoFolio);
+			setdataApartado(getApartadoFolio?.getProductosFolio);
+		}
 	}, [getApartadoFolio]);
 
 	useEffect(() => {
+		console.log(getApartadoFolio);
+
 		if (dataApartado) {
 			const {
 				productos: productosGet,
@@ -116,6 +121,7 @@ export default function Apartado() {
 			const cancel = cancelado[0]?.status ?? true;
 			setstatusApartado(cancel);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dataApartado]);
 
 	useEffect(() => {
@@ -217,6 +223,8 @@ export default function Apartado() {
 		}
 	};
 	const initialState = (data) => {
+		console.log(data);
+
 		setdataApartado(data.addAbono);
 		setmodalCobrar(false);
 		setabono({ abono: null });
@@ -572,7 +580,7 @@ export default function Apartado() {
 			}
 			{
 				/* MODAL REIMPRIMIR */
-				modalReimprimir ? (
+				modalReimprimir && (
 					<ImprimirApartado
 						imprimir={modalReimprimir}
 						setimprimir={setmodalReimprimir}
@@ -583,7 +591,7 @@ export default function Apartado() {
 						dataApartado={dataApartado}
 						auth={auth}
 					/>
-				) : null
+				)
 			}
 		</>
 	);

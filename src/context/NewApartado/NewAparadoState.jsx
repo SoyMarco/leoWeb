@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import NewAparadoContext from "./NewAparadoContext";
 
 const NewAparadoState = (props) => {
-	const [modalCobrar, setmodalCobrar] = useState(true);
+	const [modalCobrar, setmodalCobrar] = useState(false);
 	const [cliente, setcliente] = useState("");
 	const [abono, setabono] = useState(0);
 	const [imprimir, setimprimir] = useState(false);
