@@ -3,21 +3,17 @@ export default (state, action) => {
 	const { payload, type } = action;
 
 	const REDUCER = {
-		// Add
-		SET_AUTH: {
-			auth: payload,
+		// Set
+		COBRAR_SET: {
+			cobrar: payload,
 		},
 		// Clear
-		LOGOUT: {
-			auth: undefined,
+		COBRAR_CLEAN: {
+			cobrar: {},
 		},
-		//Set Login
-		SET_FIRST_LOGIN: {
-			firstLogin: payload,
-		},
-		//SET_IS_LOADING
-		SET_IS_LOADING: {
-			isLoading: payload,
+		//
+		MODAL_COBRAR: {
+			modalCobrar: payload,
 		},
 	};
 

@@ -10,7 +10,7 @@ import "./buscarApartados.css";
 import moment from "moment";
 import AuthContext from "context/Auth/AuthContext";
 
-export default function BuscadorApartados() {
+const BuscadorApartados = () => {
 	const { timeLogout } = useContext(AuthContext);
 	const {
 		data: dataApartados,
@@ -96,6 +96,8 @@ export default function BuscadorApartados() {
 	return (
 		<ConfigProvider renderEmpty={customizeRenderEmpty}>
 			<Select
+				value=''
+				allowClear={true}
 				id='buscarApartadoInput'
 				loading={loading || loadingEncargos}
 				showSearch
@@ -174,4 +176,5 @@ export default function BuscadorApartados() {
 			</Select>
 		</ConfigProvider>
 	);
-}
+};
+export default BuscadorApartados;

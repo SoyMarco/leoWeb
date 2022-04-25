@@ -10,15 +10,15 @@ import { useMutation } from "@apollo/client";
 import { EDIT_VENCE_APARTADO } from "myGraphql/apartado";
 import "./modalCalendar.css";
 import AuthContext from "context/Auth/AuthContext";
+import ApartadoContext from "context/Apartado/ApartadoContext";
 
-export default function ModalCalendar({
-	setmodalCalendar,
-	modalCalendar,
-	refetch,
-	dataApartado,
-}) {
+export default function ModalCalendar({ refetch }) {
+	const { setmodalCalendar, modalCalendar, dataApartado } =
+		useContext(ApartadoContext);
 	const { timeLogout } = useContext(AuthContext);
+
 	const [mutateEDIT_VENCE_APARTADO] = useMutation(EDIT_VENCE_APARTADO);
+
 	const [btnLoading, setbtnLoading] = useState(false);
 	const [newFecha, setnewFecha] = useState(null);
 

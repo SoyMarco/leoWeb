@@ -2,16 +2,17 @@ import React, { useReducer, useEffect } from "react";
 import { decodeToken, removeToken } from "Utils/token";
 import Login from "Pages/Login/Container/Login";
 import { openNotification } from "Utils/openNotification";
-
 import AuthContext from "./AuthContext";
 import AuthReducer from "./AuthReducer";
-import { SET_AUTH, SET_FIRST_LOGIN } from "./types";
+import { SET_AUTH, SET_FIRST_LOGIN, SET_IS_LOADING } from "./types";
 
-export default function AuthState(props) {
+const AuthState = (props) => {
 	const initialState = {
 		auth: undefined,
 		firstLogin: undefined,
+		isLoading: false,
 	};
+
 	const [state, dispatch] = useReducer(AuthReducer, initialState);
 	useEffect(() => {
 		timeLogout();
@@ -54,7 +55,12 @@ export default function AuthState(props) {
 			payload: size,
 		});
 	};
-
+	const setIsLoading = (isLoading) => {
+		dispatch({
+			type: SET_IS_LOADING,
+			payload: isLoading,
+		});
+	};
 	const navegateAuth = () => {
 		if (state.auth) {
 			return props.children;
@@ -70,9 +76,12 @@ export default function AuthState(props) {
 				logout,
 				timeLogout,
 				setFirstLogin,
+				isLoading: state.isLoading,
+				setIsLoading,
 			}}
 		>
 			{navegateAuth()}
 		</AuthContext.Provider>
 	);
-}
+};
+export default AuthState;

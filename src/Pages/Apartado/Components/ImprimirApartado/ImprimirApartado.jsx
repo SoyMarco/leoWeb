@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import { openNotification } from "Utils/openNotification";
 import { Modal, Row, Divider, Button } from "antd";
 import ReactToPrint from "react-to-print";
@@ -7,20 +7,24 @@ import { keyBlock } from "Utils";
 import "moment/locale/es-mx";
 import moment from "moment";
 import "./imprimir.css";
+import ApartadoContext from "context/Apartado/ApartadoContext";
+import AuthContext from "context/Auth/AuthContext";
 
 const ImprimirApartado = ({
 	imprimir,
-	dataApartado,
-	auth,
 	setimprimir,
 	dinero,
 	cambio,
-	initialState,
+	dataApartado,
 }) => {
+	const { initialState } = useContext(ApartadoContext);
+	const { auth } = useContext(AuthContext);
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
 	const [numPrint, setnumPrint] = useState(0);
+
 	const { abonos, cliente, entregado, folio, productos, vence } = dataApartado;
+	console.log("apartado", abonos);
 
 	const ReimprimirApartado = useRef();
 	const inputReprint = useRef();
@@ -31,7 +35,7 @@ const ImprimirApartado = ({
 			sum += productos[i]?.totalArticulo;
 		}
 		settotalTotal(sum);
-
+		console.log("useEffect", abonos, dataApartado);
 		let sumAbo = 0;
 		for (const abono of abonos) {
 			if (abono.cancel !== true) {
@@ -40,7 +44,9 @@ const ImprimirApartado = ({
 		}
 
 		settotalAbonos(sumAbo);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [imprimir, abonos, productos]);
+
 	useEffect(() => {
 		if (totalAbonos || totalTotal) {
 			if (imprimir === true) {

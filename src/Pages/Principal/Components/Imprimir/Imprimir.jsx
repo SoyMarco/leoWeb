@@ -1,22 +1,20 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef, useContext } from "react";
 import { useReactToPrint } from "react-to-print";
 import { openNotification } from "Utils/openNotification";
 import { Row } from "antd";
+import AuthContext from "context/Auth/AuthContext";
 import logoLeo from "Pages/Principal/Utils/images";
 import "moment/locale/es-us";
 import moment from "moment";
+import ShopListContext from "context/Shopping/ShopListContext";
 import "./imprimir.css";
-const Imprimir = ({
-	imprimir,
-	cambio,
-	totalTotal,
-	dinero,
-	listaCompras,
-	folio,
-	auth,
-	initialState,
-}) => {
+const Imprimir = ({ cambio, dinero, folio }) => {
+	const { auth } = useContext(AuthContext);
+
+	const { imprimir, totalTotal, initialState, shopList } =
+		useContext(ShopListContext);
+
 	const { aCuenta, tarjeta, efectivo } = dinero;
 	const imprimirVenta = useRef();
 
@@ -68,7 +66,7 @@ const Imprimir = ({
 				<h3 className='subtituloTicketApartado'>
 					<u> Productos</u>
 				</h3>
-				{listaCompras.map((item) => {
+				{shopList.map((item) => {
 					return (
 						<table key={`tableProcutVenta${item.key}`} className='productos'>
 							<tbody>

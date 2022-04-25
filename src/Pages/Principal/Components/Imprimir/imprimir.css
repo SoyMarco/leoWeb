@@ -36,7 +36,6 @@
 .subtituloTicketApartado {
 	padding: 0px;
 	max-width: 190px;
-
 	font-weight: bold;
-	margin-top: 15px;
+	margin: 10px 0 0;
 }

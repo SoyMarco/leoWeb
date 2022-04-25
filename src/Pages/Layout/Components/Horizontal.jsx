@@ -1,15 +1,16 @@
 import React, { useContext } from "react";
 import BuscadorApartados from "Pages/BuscadorApartados/Container/BuscadorApartados";
-import { Menu, Switch, Popconfirm, Tooltip, Avatar } from "antd";
+import { Layout, Menu, Switch, Popconfirm, Tooltip, Avatar } from "antd";
 import { FaUserAstronaut } from "react-icons/fa";
 import Estrellas from "./Estrellas/Estrellas";
 import LogoLeo from "assets/png/logo.png";
 import AuthContext from "context/Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 
-export default function Horizontal({ Header, logoutApp, swtichstate }) {
+export default function Horizontal({ logoutApp, swtichstate }) {
 	const navigate = useNavigate();
 	const { auth } = useContext(AuthContext);
+	const { Header } = Layout;
 
 	return (
 		<>
@@ -117,7 +118,6 @@ export default function Horizontal({ Header, logoutApp, swtichstate }) {
 						</Tooltip>
 					</Menu.Item>
 					<Menu.Item key='header6'>
-						{/* <h1></h1> */}
 						<Popconfirm
 							title='¿Cerrar sesión?'
 							onConfirm={() => logoutApp()}
