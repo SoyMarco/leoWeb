@@ -7,7 +7,7 @@ import { getToken } from "../Utils/token";
 const baseUrlFront = window.location;
 export const UrlFrontend = `${baseUrlFront.origin}/`;
 
-// LOCAL BACKEND
+// LOCALHOST BACKEND
 // export const UrlBackend = {
 // 	uri: "http://192.168.100.17:4000/",
 // };
