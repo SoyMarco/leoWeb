@@ -21,7 +21,7 @@ import Ventas from "Pages/Ventas/Container/Ventas";
 import Perfumes from "Pages/Perfumes/Container/Perfumes";
 //Context
 import NewAparadoState from "context/NewApartado/NewAparadoState";
-
+import ApartadoState from "context/Apartado/ApartadoState";
 const routes = [
 	{
 		path: "/",
@@ -45,6 +45,7 @@ const routes = [
 		path: "/apartado/:folio",
 		layout: LayoutForm,
 		component: Apartado,
+		context: ApartadoState,
 		exact: true,
 	},
 	{

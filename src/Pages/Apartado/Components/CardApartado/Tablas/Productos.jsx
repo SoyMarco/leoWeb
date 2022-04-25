@@ -7,7 +7,6 @@ import { FaShoppingCart } from "react-icons/fa";
 import { useMutation } from "@apollo/client";
 import moment from "moment";
 import "moment/locale/es";
-
 import {
 	Table,
 	Result,
@@ -19,27 +18,28 @@ import {
 	Tooltip,
 } from "antd";
 import "./productos.css";
-import AddProduct from "./AddProduct/AddProduct";
+import AddProduct from "../../AddProduct/AddProduct";
 import AuthContext from "context/Auth/AuthContext";
+import ApartadoContext from "context/Apartado/ApartadoContext";
 
-export default function Productos({
-	loading,
-	productos,
-	refetch,
-	setstateRecord,
-	loader,
-	setloader,
-	dataApartado,
-	totalTotal,
-	inputAbono,
-	initialState,
-}) {
+export default function Productos({ refetch, loading }) {
+	const {
+		dataApartado,
+		totalTotal,
+		productos,
+		initialState,
+		inputAbono,
+		loader,
+		setloader,
+	} = useContext(ApartadoContext);
 	const { timeLogout } = useContext(AuthContext);
+
 	const [mutateCANCELAR_PRODUCTO_APARTDO] = useMutation(
 		CANCELAR_PRODUCTO_APARTDO
 	);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [modalAddProduct, setmodalAddProduct] = useState(false);
+
 	const onSelectChange = () => {
 		setselectedRowKeys([]);
 	};
@@ -53,7 +53,6 @@ export default function Productos({
 	}, [modalAddProduct]);
 	const click = (record) => {
 		setselectedRowKeys([record.key]);
-		setstateRecord(record);
 		inputAbono.current.select();
 	};
 	const pasarAFecha = (item) => {

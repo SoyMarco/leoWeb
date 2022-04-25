@@ -17,19 +17,23 @@ import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import AuthContext from "context/Auth/AuthContext";
 import "./productos.css";
-export default function Abonos({
-	abonos,
-	loading,
-	loader,
-	setloader,
-	totalAbonos,
-	inputAbono,
-	totalTotal,
-	abono,
-	getApartadoFolio,
-}) {
+import ApartadoContext from "context/Apartado/ApartadoContext";
+
+export default function Abonos({ loading }) {
+	const {
+		totalTotal,
+		totalAbonos,
+		abonos,
+		abono,
+		loader,
+		setloader,
+		inputAbono,
+		dataApartado,
+	} = useContext(ApartadoContext);
+
 	const { timeLogout } = useContext(AuthContext);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
+
 	const [mutateBORRAR_EDITAR_ABONO] = useMutation(BORRAR_EDITAR_ABONO);
 
 	const onSelectChange = () => {
@@ -51,7 +55,6 @@ export default function Abonos({
 		return moment.unix(item / 1000).format("LLLL");
 	};
 	const borrarAbono = async (record, borrarEditar) => {
-		console.log(record, getApartadoFolio);
 		setloader(true);
 		try {
 			if (record) {
@@ -63,7 +66,7 @@ export default function Abonos({
 							borrarEditar: borrarEditar,
 							idVenta: record.idVenta,
 							idAbono: record._id,
-							idApartado: getApartadoFolio.getProductosFolio.id,
+							idApartado: dataApartado.id,
 							statusVenta: record.cancel,
 						},
 					},

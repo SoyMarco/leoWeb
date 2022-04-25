@@ -3,20 +3,21 @@ import { createUploadLink } from "apollo-upload-client";
 import { setContext } from "apollo-link-context";
 import { getToken } from "../Utils/token";
 
-/* LOCAL */
+// LOCAL BACK
 const baseUrlFront = window.location;
 export const UrlFrontend = `${baseUrlFront.origin}/`;
 
-/* LOCAL BACKEND*/
+// LOCAL BACKEND
 // export const UrlBackend = {
 // 	uri: "http://192.168.100.17:4000/",
 // };
 
-/* HEROKU */
+// HEROKU MASTER
 // export const UrlBackend = {
 // 	uri: "https://leo-gql.herokuapp.com/",
 // };
-/* HEROKU DEV*/
+
+// HEROKU DEV
 export const UrlBackend = {
 	uri: "https://leo-gql-dev.herokuapp.com/",
 };

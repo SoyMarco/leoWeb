@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import { openNotification } from "Utils/openNotification";
 import { Modal, Row, Divider, Button } from "antd";
 import ReactToPrint from "react-to-print";
@@ -7,19 +7,23 @@ import { keyBlock } from "Utils";
 import "moment/locale/es-mx";
 import moment from "moment";
 import "./imprimir.css";
+import ApartadoContext from "context/Apartado/ApartadoContext";
+import AuthContext from "context/Auth/AuthContext";
 
 const ImprimirApartado = ({
 	imprimir,
-	dataApartado,
-	auth,
 	setimprimir,
 	dinero,
 	cambio,
-	initialState,
+	dataApartado,
 }) => {
+	const { initialState } = useContext(ApartadoContext);
+	const { auth } = useContext(AuthContext);
+
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
 	const [numPrint, setnumPrint] = useState(0);
+
 	const { abonos, cliente, entregado, folio, productos, vence } = dataApartado;
 
 	const ReimprimirApartado = useRef();
