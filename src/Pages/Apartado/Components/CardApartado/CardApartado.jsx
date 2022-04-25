@@ -33,16 +33,13 @@ export default function CardApartado({ refetch, loading }) {
 					<TablaAbonos refetch={refetch} loading={loading} />
 				</Row>
 			);
-		} else {
-			return (
-				<Result
-					status='error'
-					title={`Este apartado se canceló el día ${pasarAFecha(
-						dataApartado?.cancelado[0]?.fecha
-					)}, por ${dataApartado?.cancelado[0]?.vendedor?.toUpperCase()}`}
-				/>
-			);
 		}
+		const isCanceled = dataApartado?.cancelado[0];
+		const title = `Este apartado se canceló el día ${pasarAFecha(
+			isCanceled?.fecha
+		)}, por ${isCanceled?.vendedor?.toUpperCase()}`;
+
+		return <Result status='error' title={title} />;
 	};
 	return (
 		<Card
@@ -51,26 +48,15 @@ export default function CardApartado({ refetch, loading }) {
 				<Button
 					disabled={!statusApartado}
 					shape='round'
-					style={
-						statusApartado
-							? {
-									background: colorVence,
-									marginTop: 5,
-									marginRight: 15,
-									color: "white",
-									border: 0,
-									fontSize: "large",
-									fontWeight: "bold",
-							  }
-							: {
-									background: "gray",
-									marginTop: 5,
-									marginRight: 15,
-									color: "white",
-									border: 0,
-									fontWeight: "bold",
-							  }
-					}
+					style={{
+						marginTop: 5,
+						marginRight: 15,
+						color: "white",
+						border: 0,
+						fontWeight: "bold",
+						fontSize: "large",
+						background: statusApartado ? colorVence : "gray",
+					}}
 					onClick={() => setmodalCalendar(true)}
 					icon={
 						<CalendarOutlined style={{ fontSize: "large", marginRight: 5 }} />
@@ -79,19 +65,11 @@ export default function CardApartado({ refetch, loading }) {
 					{`${venceEn}, ${pasarAFechaLL(dataApartado.vence)}`}
 				</Button>,
 				<h1
-					style={
-						calculateRestaria() >= 0
-							? {
-									color: "green",
-									fontSize: "x-large",
-									fontWeight: "bold",
-							  }
-							: {
-									color: "red",
-									fontSize: "x-large",
-									fontWeight: "bold",
-							  }
-					}
+					style={{
+						color: calculateRestaria() >= 0 ? "green" : "red",
+						fontSize: "x-large",
+						fontWeight: "bold",
+					}}
 				>
 					{abono.abono > 0 ? `Restaría $${calculateRestaria()}` : null}
 				</h1>,
@@ -102,10 +80,7 @@ export default function CardApartado({ refetch, loading }) {
 			]}
 		>
 			<Encabezado refetch={refetch} />
-			{
-				/* Tablas PRODUCTOS ABONOS*/
-				renderTablaProductosAbonos()
-			}
+			{renderTablaProductosAbonos()}
 		</Card>
 	);
 }

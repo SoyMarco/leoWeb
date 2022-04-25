@@ -1,0 +1,51 @@
+#tableApartado > .ant-table-title {
+	background: linear-gradient(#0000a6, #000066);
+	border-radius: 25px 5px 0 0;
+}
+
+#inputApartado {
+	padding: 0;
+	border: none;
+	outline: none;
+	text-align-last: center;
+	color: #000085;
+	border-radius: 50px;
+	font-size: x-large;
+	font-weight: bold;
+	padding-left: 20px;
+}
+
+.labelAddProducts {
+	border-radius: 50px;
+}
+
+#imputAddProduct > input.ant-input {
+	padding: 0;
+	border: none;
+	outline: none;
+	text-align-last: center;
+	color: blue;
+	border-radius: 50px;
+	font-size: x-large;
+	font-weight: bold;
+	padding-left: 20px;
+}
+
+h1.totalProductoApartado {
+	color: darkblue;
+	background: rgba(0, 0, 139, 0.13);
+	border-radius: 50px;
+	padding: 0 15px;
+	font-size: xx-large;
+	font-weight: revert;
+	margin-right: 20px;
+}
+h1.totalAbonosApartado {
+	color: darkgreen;
+	background: rgba(0, 100, 0, 0.096);
+	border-radius: 50px;
+	padding: 0 15px;
+	font-size: xx-large;
+	font-weight: revert;
+	margin-right: 0 20px;
+}
