@@ -12,7 +12,7 @@ import AuthContext from "context/Auth/AuthContext";
 
 const Principal = () => {
 	const { firstLogin } = useContext(AuthContext);
-	const { totalTotal, totalProductos, modalCobrar } =
+	const { totalTotal, totalProductos, modalCobrar, calcularTotales } =
 		useContext(ShopListContext);
 
 	const navigate = useNavigate();
@@ -29,6 +29,7 @@ const Principal = () => {
 		if (detectorPantalla < 600) {
 			return navigate(`mobile/venta`);
 		}
+		calcularTotales();
 		//selectInputPrecio
 		document.querySelector("#inputPrecio").select();
 	}, []);

@@ -1,5 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext } from "react";
 import ModalCobrar from "Components/ModalCobrar/Container/ModalCobrar";
 import { REGISTER_VENTA, GET_TOTAL_VENTAS_DIA } from "myGraphql/venta";
 import useService from "Components/ModalCobrar/Service/useService";
@@ -13,7 +12,7 @@ const Cobrar = () => {
 		useContext(ShopListContext);
 	const { auth, isLoading } = useContext(AuthContext);
 
-	const { dataReturn, register, keyFunc } = useService();
+	const { register } = useService();
 
 	const [mutateREGISTER_VENTA] = useMutation(REGISTER_VENTA);
 	const { refetch: refetchTotalVentasDia } = useQuery(GET_TOTAL_VENTAS_DIA);
@@ -22,23 +21,8 @@ const Cobrar = () => {
 	const [inputsM, setinputs] = useState(0);
 	const [folio, setfolio] = useState(0);
 
-	useEffect(() => {
-		if (dataReturn) {
-			//Actualizar % barra
-			refetchTotalVentasDia();
-
-			if (keyFunc === "F1") {
-				setfolio(dataReturn.registerVenta.folio);
-				setimprimir(true);
-			}
-			if (keyFunc === "F2") {
-				initialState();
-			}
-		}
-	}, [dataReturn]);
-
 	//Guardar y/o Imprimir VENTA CON GraphQL
-	const saveAndPrint = ({ keyF, inputs, cambio }) => {
+	const saveAndPrint = async ({ keyF, inputs, cambio }) => {
 		if (
 			isLoading === false &&
 			cambio >= 0 &&
@@ -46,9 +30,23 @@ const Cobrar = () => {
 		) {
 			setcambio(cambio);
 			setinputs(inputs);
-			const dataSend = createDateSend(inputs);
 
-			register({ input: dataSend, mutate: mutateREGISTER_VENTA, keyF });
+			const dataSend = createDateSend(inputs);
+			const data = await register({
+				input: dataSend,
+				mutate: mutateREGISTER_VENTA,
+				keyF,
+			});
+			if (data) {
+				refetchTotalVentasDia(); //Actualizar % barra
+				if (keyF === "F1") {
+					setfolio(data.registerVenta.folio);
+					setimprimir(true);
+				}
+				if (keyF === "F2") {
+					initialState();
+				}
+			}
 		}
 	};
 
@@ -81,7 +79,7 @@ const Cobrar = () => {
 	return (
 		<>
 			{imprimir && <Imprimir cambio={cambioM} dinero={inputsM} folio={folio} />}
-			<ModalCobrar saveAndPrint={saveAndPrint} totalTotal={totalTotal} />
+			<ModalCobrar saveAndPrint={saveAndPrint} />
 		</>
 	);
 };

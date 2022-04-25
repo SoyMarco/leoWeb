@@ -19,10 +19,17 @@ const ShopListState = (props) => {
 	const [imprimir, setimprimir] = useState(false);
 
 	useEffect(() => {
+		calcularTotales();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [shopList]);
+
+	useEffect(() => {
+		setstateRecord({ key: selectedRowKeys[0] });
+	}, [selectedRowKeys]);
+	const calcularTotales = () => {
 		if (shopList) {
 			let sum = 0;
 			let sumProd = 0;
-			console.log(shopList);
 			for (const itemComprar of shopList) {
 				sum += itemComprar?.totalArticulo;
 				sumProd += itemComprar?.cantidad;
@@ -31,12 +38,7 @@ const ShopListState = (props) => {
 			settotalProductos(sumProd);
 		}
 		selectLastRow();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [shopList]);
-	useEffect(() => {
-		setstateRecord({ key: selectedRowKeys[0] });
-	}, [selectedRowKeys]);
-
+	};
 	const selectLastRow = () => {
 		const ultimoArray = shopList.length;
 		if (ultimoArray) {
@@ -45,13 +47,11 @@ const ShopListState = (props) => {
 	};
 	//Suma uno en Cantidad del Producto
 	const addOneShopList = (ProductAdd) => {
-		console.log(shopList);
 		const currentShopList = [...shopList];
 		const shopItem = currentShopList.find((item) => item.key === ProductAdd);
 		shopItem.cantidad = shopItem.cantidad + 1;
 		shopItem.totalArticulo = shopItem.cantidad * shopItem.precio;
 		const newShopList = [...currentShopList];
-		console.log(newShopList);
 
 		setshopList(newShopList);
 	};
@@ -148,7 +148,6 @@ const ShopListState = (props) => {
 		setidArticulo(0);
 	};
 	const initialState = () => {
-		console.log("initialState");
 		setselectedRowKeys(0);
 		clearShopList();
 		settotalTotal(0);
@@ -172,6 +171,7 @@ const ShopListState = (props) => {
 				DrawerF3Visible: DrawerF3Visible,
 				eliminarProductoF3,
 				totalTotal: totalTotal,
+				settotalTotal,
 				totalProductos: totalProductos,
 				initialState,
 				setstateRecord,
@@ -180,6 +180,7 @@ const ShopListState = (props) => {
 				stateRecord,
 				imprimir,
 				setimprimir,
+				calcularTotales,
 			}}
 		>
 			{props.children}

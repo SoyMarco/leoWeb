@@ -1,13 +1,15 @@
 import { useContext } from "react";
 import ImprimirNewApartado from "../Components/ImprimirApartado/ImprimirNewApartado";
 import NewAparadoContext from "context/NewApartado/NewAparadoContext";
+import ShopListContext from "context/Shopping/ShopListContext";
 import Cobrar from "../Components/CobrarNewApartado/Cobrar";
 import CardSteps from "../Components/StepsB/CardSteps";
 import { Row, Col } from "antd";
 import "./addApartado.css";
 
 const AddApartado = () => {
-	const { modalCobrar, cliente, imprimir } = useContext(NewAparadoContext);
+	const { cliente, imprimir } = useContext(NewAparadoContext);
+	const { modalCobrar } = useContext(ShopListContext);
 
 	return (
 		<>

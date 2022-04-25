@@ -1,16 +1,16 @@
 import { useRef, useContext } from "react";
-import NewAparadoContext from "context/NewApartado/NewAparadoContext";
-import { keyBlock } from "Utils";
-import { DollarCircleOutlined } from "@ant-design/icons";
 import ProductsAddApartado from "../ProductsAddApartado/ProductsAddApartado";
-import { Card, Input, Row, AutoComplete } from "antd";
 import { GET_CLIENTS_NAMES, GET_PRODUCTS_NAME } from "myGraphql/apartado";
+import NewAparadoContext from "context/NewApartado/NewAparadoContext";
+import ShopListContext from "context/Shopping/ShopListContext";
+import { DollarCircleOutlined } from "@ant-design/icons";
+import { Card, Input, Row, AutoComplete } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
+import { keyBlock } from "Utils";
 
 const StepsB = () => {
 	const {
-		setmodalCobrar,
 		cliente,
 		setcliente,
 		abono,
@@ -25,7 +25,7 @@ const StepsB = () => {
 		prev,
 		inputAbono,
 	} = useContext(NewAparadoContext);
-
+	const { setmodalCobrar, settotalTotal } = useContext(ShopListContext);
 	const { data: getClientsNames } = useQuery(GET_CLIENTS_NAMES);
 	const { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
 
@@ -55,6 +55,11 @@ const StepsB = () => {
 				setmodalCobrar(true);
 			}
 		}
+	};
+	const totalAbono = (e) => {
+		const value = parseInt(e.target.value);
+		settotalTotal(value);
+		setabono(value);
 	};
 	return [
 		{
@@ -176,21 +181,18 @@ const StepsB = () => {
 							prefix={<DollarCircleOutlined style={{ marginLeft: "20px" }} />}
 							style={{
 								color: "blue",
-								// fontSize: 30,
 								fontSize: "xx-large",
 								fontWeight: "bold",
 								borderRadius: "50px",
 								maxWidth: "80%",
 								height: "50px",
 							}}
-							onChange={(e) => setabono(parseInt(e.target.value))}
+							onChange={(e) => totalAbono(e)}
 							value={abono}
 							ref={inputAbono}
 							onKeyUp={pressKeyEnterAbono}
 							onKeyDown={keyAbono}
 							type='number'
-							// value={precio.precio}
-							// onChange={handlePrecio}
 						/>
 					</Row>
 					<Row justify='center' style={{ margin: "30px 0 30px 0 " }}>

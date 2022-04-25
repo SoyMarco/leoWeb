@@ -1,13 +1,12 @@
-import React, { useEffect, useContext } from "react";
-import { useMutation } from "@apollo/client";
+import { useContext } from "react";
 import { REGISTER_APARTADO, REGISTER_APARTADO_F3 } from "myGraphql/apartado";
-import AuthContext from "context/Auth/AuthContext";
-import ShopListContext from "context/Shopping/ShopListContext";
-import { useNavigate } from "react-router-dom";
-import NewAparadoContext from "context/NewApartado/NewAparadoContext";
-
 import ModalCobrar from "Components/ModalCobrar/Container/ModalCobrar";
+import NewAparadoContext from "context/NewApartado/NewAparadoContext";
 import useService from "Components/ModalCobrar/Service/useService";
+import ShopListContext from "context/Shopping/ShopListContext";
+import AuthContext from "context/Auth/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
 
 export default function Cobrar() {
 	const {
@@ -15,46 +14,20 @@ export default function Cobrar() {
 		cliente,
 		abono,
 		setdataApartado,
-		setmodalCobrar,
 		setimprimir,
 		setdinero,
 	} = useContext(NewAparadoContext);
-	const { addProductShopList } = useContext(ShopListContext);
+	const { addProductShopList, setmodalCobrar } = useContext(ShopListContext);
 	const { auth, isLoading } = useContext(AuthContext);
 
-	const { dataReturn, register, keyFunc } = useService();
+	const { register } = useService();
 
 	const [mutateREGISTER_APARTADO] = useMutation(REGISTER_APARTADO);
 	const [mutateREGISTER_APARTADO_F3] = useMutation(REGISTER_APARTADO_F3);
 
 	const navigate = useNavigate();
 
-	useEffect(() => {
-		if (dataReturn) {
-			if (keyFunc === "F1") {
-				setdataApartado(dataReturn.registerApartado);
-				setimprimir(true);
-				setmodalCobrar(false);
-			} else if (keyFunc === "F2") {
-				navigate("/");
-			}
-
-			if (keyFunc === "F3") {
-				const { registerApartadoF3 } = dataReturn;
-				addProductShopList({
-					nombre: registerApartadoF3.cliente,
-					precio: parseFloat(abono),
-					apartado: registerApartadoF3.folio,
-					refApartado: registerApartadoF3.id,
-					f3: true,
-				});
-				navigate("/");
-			}
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dataReturn]);
-
-	const saveAndPrint = ({ keyF, inputs, cambio }) => {
+	const saveAndPrint = async ({ keyF, inputs, cambio }) => {
 		setdinero(inputs);
 		if (keyF === "F1" || keyF === "F2") {
 			if (cambio >= 0 && auth.name && isLoading === false) {
@@ -66,11 +39,20 @@ export default function Cobrar() {
 					ventaTarjeta: parseFloat(inputs.tarjeta),
 					ventaACuenta: parseFloat(inputs.aCuenta),
 				};
-				register({
+				const dataReturn = await register({
 					input: dataSend,
 					mutate: mutateREGISTER_APARTADO,
 					keyF,
 				});
+				if (dataReturn) {
+					if (keyF === "F1") {
+						setdataApartado(dataReturn.registerApartado);
+						setimprimir(true);
+						setmodalCobrar(false);
+					} else if (keyF === "F2") {
+						navigate("/");
+					}
+				}
 			}
 		}
 
@@ -80,14 +62,25 @@ export default function Cobrar() {
 					productos: listaCompras,
 					cliente: cliente,
 				};
-				register({
+				const dataReturn = await register({
 					input: dataSend,
 					mutate: mutateREGISTER_APARTADO_F3,
 					keyF,
 				});
+				if (keyF === "F3") {
+					const { registerApartadoF3 } = dataReturn;
+					addProductShopList({
+						nombre: registerApartadoF3.cliente,
+						precio: parseFloat(abono),
+						apartado: registerApartadoF3.folio,
+						refApartado: registerApartadoF3.id,
+						f3: true,
+					});
+					navigate("/");
+				}
 			}
 		}
 	};
 
-	return <ModalCobrar saveAndPrint={saveAndPrint} totalTotal={abono} />;
+	return <ModalCobrar saveAndPrint={saveAndPrint} />;
 }

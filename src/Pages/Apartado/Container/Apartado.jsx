@@ -552,7 +552,7 @@ export default function Apartado() {
 
 			{
 				/* MODAL APARTADO */
-				modalCobrar ? (
+				modalCobrar && (
 					<CobrarApartado
 						modalCobrar={modalCobrar}
 						setmodalCobrar={setmodalCobrar}
@@ -564,7 +564,7 @@ export default function Apartado() {
 						dataApartado={dataApartado}
 						inputAbono={inputAbono}
 					></CobrarApartado>
-				) : null
+				)
 			}
 
 			{

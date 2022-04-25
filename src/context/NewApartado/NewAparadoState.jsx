@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import NewAparadoContext from "./NewAparadoContext";
 
 const NewAparadoState = (props) => {
-	const [modalCobrar, setmodalCobrar] = useState(false);
 	const [cliente, setcliente] = useState("");
 	const [abono, setabono] = useState(0);
 	const [imprimir, setimprimir] = useState(false);
@@ -66,8 +65,6 @@ const NewAparadoState = (props) => {
 	return (
 		<NewAparadoContext.Provider
 			value={{
-				modalCobrar,
-				setmodalCobrar,
 				cliente,
 				setcliente,
 				abono,

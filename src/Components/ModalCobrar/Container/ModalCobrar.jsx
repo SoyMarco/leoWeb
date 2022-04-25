@@ -6,10 +6,11 @@ import { SaveFilled, PrinterFilled } from "@ant-design/icons";
 import AuthContext from "context/Auth/AuthContext";
 import { keyBlock } from "Utils";
 import "./cobrar.css";
+import ShopListContext from "context/Shopping/ShopListContext";
 
-export default function ModalCobrar({ saveAndPrint, totalTotal }) {
-	const { timeLogout, isLoading, setmodalCobrar } = useContext(AuthContext);
-
+export default function ModalCobrar({ saveAndPrint }) {
+	const { timeLogout, isLoading } = useContext(AuthContext);
+	const { totalTotal, setmodalCobrar } = useContext(ShopListContext);
 	const [cambio, setcambio] = useState(0);
 	const [inputs, setinputs] = useState({
 		efectivo: null,
