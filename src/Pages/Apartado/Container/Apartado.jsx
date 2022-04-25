@@ -1,6 +1,7 @@
 import { useEffect, useContext } from "react";
 import ApartadoEntregado from "../Components/ApartadoEntregado/ApartadoEntregado";
 import ModalCalendar from "Pages/Apartado/Components/ModalCalendar/ModalCalendar";
+import ImprimirApartado from "../Components/ImprimirApartado/ImprimirApartado";
 import CardApartado from "../Components/CardApartado/CardApartado";
 import ShopListContext from "context/Shopping/ShopListContext";
 import ApartadoContext from "context/Apartado/ApartadoContext";
@@ -22,6 +23,12 @@ export default function Apartado() {
 		titleWeb,
 		statusApartado,
 		modalCalendar,
+		imprimir,
+		setimprimir,
+		dataApartadoImprimir,
+		abono,
+		inputsM,
+		cambioM,
 	} = useContext(ApartadoContext);
 	const { modalCobrar } = useContext(ShopListContext);
 
@@ -72,6 +79,17 @@ export default function Apartado() {
 			{renderLoading()}
 			{modalCobrar && <Cobrar />}
 			{modalCalendar && <ModalCalendar refetch={refetch} />}
+			{console.log("princial", dataApartadoImprimir, dataApartado)}
+			{imprimir && (
+				<ImprimirApartado
+					imprimir={imprimir}
+					setimprimir={setimprimir}
+					dataApartado={dataApartado}
+					dinero={inputsM}
+					cambio={cambioM}
+					totalTotal={abono.abono}
+				/>
+			)}
 		</>
 	);
 }

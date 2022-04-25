@@ -4,7 +4,7 @@ import ApartadoContext from "./ApartadoContext";
 import moment from "moment";
 
 const ApartadoState = (props) => {
-	const { setmodalCobrar } = useContext(ShopListContext);
+	const { setmodalCobrar, modalCobrar } = useContext(ShopListContext);
 
 	const inputAbono = useRef();
 
@@ -25,6 +25,14 @@ const ApartadoState = (props) => {
 	const [imprimir, setimprimir] = useState(false);
 	const [dataApartadoImprimir, setdataApartadoImprimir] = useState([]);
 	const [modalCalendar, setmodalCalendar] = useState(false);
+	const [cambioM, setcambio] = useState(0);
+	const [inputsM, setinputs] = useState(0);
+	useEffect(() => {
+		if (modalCobrar === false && dataApartado) {
+			inputAbono.current.select();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [modalCobrar]);
 
 	useEffect(() => {
 		if (dataApartado) {
@@ -110,10 +118,7 @@ const ApartadoState = (props) => {
 	const pasarAFecha = (item) => {
 		return moment.unix(item / 1000).format("LLLL");
 	};
-	const cerrarCobrar = () => {
-		setmodalCobrar(false);
-		inputAbono.current.select();
-	};
+
 	const initialState = (data) => {
 		setdataApartado(data.addAbono);
 		setmodalCobrar(false);
@@ -152,10 +157,14 @@ const ApartadoState = (props) => {
 				setdataApartadoImprimir,
 				imprimir,
 				setimprimir,
-				cerrarCobrar,
 				pasarAFecha,
 				modalCalendar,
 				setmodalCalendar,
+				inputsM,
+				setinputs,
+				cambioM,
+				setmodalCobrar,
+				setcambio,
 			}}
 		>
 			{props.children}

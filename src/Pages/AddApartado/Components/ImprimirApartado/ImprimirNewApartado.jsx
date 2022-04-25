@@ -201,9 +201,8 @@ const ImprimirNewApartado = () => {
 						style={{
 							padding: "0px",
 							background: "black",
-							marginBottom: "5px",
 							justifyContent: "center",
-							width: "190px",
+							maxWidth: 195,
 						}}
 						key='rowNameClientPrintNewApartado'
 					>
@@ -212,8 +211,9 @@ const ImprimirNewApartado = () => {
 								background: "black",
 								color: "white",
 								textAlign: "center",
-
+								maxWidth: 195,
 								fontWeight: "bold",
+								margin: 0,
 							}}
 						>
 							{cliente}
@@ -221,13 +221,14 @@ const ImprimirNewApartado = () => {
 					</Row>
 					{
 						/* <!-- FOLIO APARTADO --> */
-						imprimir ? (
+						imprimir && (
 							<Row
-								justify='space-around'
 								style={{
 									padding: "0px",
 									background: "black",
-									width: "190px",
+									maxWidth: "195px",
+									justifyContent: "center",
+									marginTop: 5,
 								}}
 								key='rowfolioApartadoPrintNewApartado'
 							>
@@ -236,14 +237,17 @@ const ImprimirNewApartado = () => {
 									style={{
 										background: "black",
 										color: "white",
+										textAlign: "center",
 										padding: "0px",
+										maxWidth: "195px",
 										fontWeight: "bold",
+										margin: 0,
 									}}
 								>
 									Folio: {folio}
 								</h2>
 							</Row>
-						) : null
+						)
 					}
 					{/* <!-- VENCE --> */}
 					<Row
@@ -259,7 +263,7 @@ const ImprimirNewApartado = () => {
 					</Row>
 					{/* <!-- TABLA DE PRODUCTOS --> */}
 					<h3 className='subtituloTicketApartado'>
-						<u> Productos</u>
+						<u>PRODUCTOS</u>
 					</h3>
 					{productos?.map((item) => {
 						return (

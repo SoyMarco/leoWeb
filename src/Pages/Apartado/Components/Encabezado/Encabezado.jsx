@@ -13,7 +13,7 @@ import { CANCELAR_APARTADO } from "myGraphql/apartado";
 import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import useService from "Components/ModalCobrar/Service/useService";
-
+import ShopListContext from "context/Shopping/ShopListContext";
 export default function Encabezado({ refetch }) {
 	const {
 		dataApartado,
@@ -26,6 +26,7 @@ export default function Encabezado({ refetch }) {
 		statusApartado,
 	} = useContext(ApartadoContext);
 	const { isLoading } = useContext(AuthContext);
+	const { settotalTotal } = useContext(ShopListContext);
 	const { register } = useService();
 	const [mutateCANCELAR_APARTADO] = useMutation(CANCELAR_APARTADO);
 
@@ -33,6 +34,7 @@ export default function Encabezado({ refetch }) {
 
 	const pressEnter = () => {
 		if (abono.abono > 0 && calculateRestaria() >= 0) {
+			settotalTotal(abono.abono);
 			setmodalCobrar(true);
 		}
 	};

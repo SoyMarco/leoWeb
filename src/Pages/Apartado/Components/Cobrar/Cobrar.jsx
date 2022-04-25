@@ -1,6 +1,5 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import ModalCobrar from "Components/ModalCobrar/Container/ModalCobrar";
-import ImprimirApartado from "../ImprimirApartado/ImprimirApartado";
 import useService from "Components/ModalCobrar/Service/useService";
 import ApartadoContext from "context/Apartado/ApartadoContext";
 import ShopListContext from "context/Shopping/ShopListContext";
@@ -13,21 +12,15 @@ export default function Cobrar() {
 	const [mutateADD_ABONO] = useMutation(ADD_ABONO);
 
 	const { isLoading } = useContext(AuthContext);
-	const { addProductShopList } = useContext(ShopListContext);
+	const { addProductShopList, totalTotal } = useContext(ShopListContext);
 	const {
 		dataApartado,
-		totalTotal,
 		calculateRestaria,
 		setdataApartadoImprimir,
 		initialState,
-		imprimir,
-		setimprimir,
-		dataApartadoImprimir,
-		abono,
+		setcambio,
+		setinputs,
 	} = useContext(ApartadoContext);
-
-	const [cambioM, setcambio] = useState(0);
-	const [inputsM, setinputs] = useState(0);
 
 	const { register } = useService();
 	const navigate = useNavigate();
@@ -78,16 +71,6 @@ export default function Cobrar() {
 	return (
 		<>
 			<ModalCobrar saveAndPrint={saveAndPrint} />
-			{imprimir && (
-				<ImprimirApartado
-					imprimir={imprimir}
-					setimprimir={setimprimir}
-					dataApartado={dataApartadoImprimir ?? dataApartado}
-					dinero={inputsM}
-					cambio={cambioM}
-					totalTotal={abono.abono}
-				/>
-			)}
 		</>
 	);
 }
