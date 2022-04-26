@@ -1,6 +1,5 @@
 import { useState, useContext } from "react";
-// hola hola
-// import ModalCobrar from "Components/ModalCobrar/Container/ModalCobrar";
+import ModalCobrar from "Components/ModalCobrar/Container/ModalCobrar";
 import { REGISTER_VENTA, GET_TOTAL_VENTAS_DIA } from "myGraphql/venta";
 import useService from "Components/ModalCobrar/Service/useService";
 import ShopListContext from "context/Shopping/ShopListContext";
@@ -9,7 +8,6 @@ import AuthContext from "context/Auth/AuthContext";
 import Imprimir from "../Imprimir/Imprimir";
 
 const Cobrar = () => {
-	console.log("hola");
 	const { shopList, totalTotal, initialState, imprimir, setimprimir } =
 		useContext(ShopListContext);
 	const { auth, isLoading } = useContext(AuthContext);
@@ -51,7 +49,7 @@ const Cobrar = () => {
 			}
 		}
 	};
-	saveAndPrint();
+
 	const createDateSend = (inputs) => {
 		const listaComprasNew = shopList.map((item) => ({
 			apartado: item.apartado,
@@ -81,7 +79,7 @@ const Cobrar = () => {
 	return (
 		<>
 			{imprimir && <Imprimir cambio={cambioM} dinero={inputsM} folio={folio} />}
-			{/* <ModalCobrar saveAndPrint={saveAndPrint} /> */}
+			<ModalCobrar saveAndPrint={saveAndPrint} />
 		</>
 	);
 };

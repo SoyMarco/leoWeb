@@ -2535,9 +2535,9 @@ ast-types-flow@^0.0.7:
   integrity sha1-9wtzXGvKGlycItmCw+Oef+ujva0=
 
 async-validator@^4.0.2:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/async-validator/-/async-validator-4.1.0.tgz#e551fe10016a0163d07d61eb56e39b996cb1be69"
-  integrity sha512-FjmiC/asUPkfsi3taDPtpRVhxxCIiS4EWeR6OjOjppKaHsh3l4J13s7uQ++1zfl84mRaOFxjz7UDIxwy9l9zAQ==
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/async-validator/-/async-validator-4.1.1.tgz#3cd1437faa2de64743f7d56649dd904c946a18fe"
+  integrity sha512-p4DO/JXwjs8klJyJL8Q2oM4ks5fUTze/h5k10oPPKMiLe1fj3G1QMzPHNmN1Py4ycOk7WlO2DcGXv1qiESJCZA==
 
 async@^2.6.2:
   version "2.6.4"
