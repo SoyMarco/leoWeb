@@ -21,7 +21,6 @@ export default function Apartado() {
 		dataApartado,
 		setdataApartado,
 		titleWeb,
-		statusApartado,
 		modalCalendar,
 		imprimir,
 		setimprimir,
@@ -71,7 +70,7 @@ export default function Apartado() {
 		<>
 			<title>{titleWeb}</title>
 
-			{!statusApartado && dataApartado && (
+			{dataApartado?.entregado[0]?.status && (
 				<ApartadoEntregado refetch={refetch} />
 			)}
 

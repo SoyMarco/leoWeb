@@ -6,6 +6,7 @@ import ShopListContext from "context/Shopping/ShopListContext";
 import { useMutation, useQuery } from "@apollo/client";
 import AuthContext from "context/Auth/AuthContext";
 import Imprimir from "../Imprimir/Imprimir";
+import "../Imprimir/imprimir.css";
 
 const Cobrar = () => {
 	const { shopList, totalTotal, initialState, imprimir, setimprimir } =
