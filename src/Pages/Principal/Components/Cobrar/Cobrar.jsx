@@ -79,7 +79,7 @@ const Cobrar = () => {
 	return (
 		<>
 			{imprimir && <Imprimir cambio={cambioM} dinero={inputsM} folio={folio} />}
-			<ModalCobrar saveAndPrint={saveAndPrint} />
+			{/* <ModalCobrar saveAndPrint={saveAndPrint} /> */}
 		</>
 	);
 };
