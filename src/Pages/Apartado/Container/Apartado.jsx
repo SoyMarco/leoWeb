@@ -7,7 +7,6 @@ import ShopListContext from "context/Shopping/ShopListContext";
 import ApartadoContext from "context/Apartado/ApartadoContext";
 import { GET_PRODUCTOS_FOLIO } from "myGraphql/apartado";
 import AuthContext from "context/Auth/AuthContext";
-import ErrorConection from "Utils/ErrorConection";
 import Cobrar from "../Components/Cobrar/Cobrar";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
@@ -16,6 +15,7 @@ import { Skeleton } from "antd";
 import "./apartados.css";
 
 export default function Apartado() {
+	const { modalCobrar } = useContext(ShopListContext);
 	const { timeLogout } = useContext(AuthContext);
 	const {
 		dataApartado,
@@ -25,12 +25,10 @@ export default function Apartado() {
 		modalCalendar,
 		imprimir,
 		setimprimir,
-		dataApartadoImprimir,
 		abono,
 		inputsM,
 		cambioM,
 	} = useContext(ApartadoContext);
-	const { modalCobrar } = useContext(ShopListContext);
 
 	const params = useParams();
 	const urlFolio = parseInt(params.folio);
@@ -45,7 +43,7 @@ export default function Apartado() {
 		notifyOnNetworkStatusChange: true,
 	});
 	if (error) {
-		ErrorConection(timeLogout);
+		timeLogout();
 	}
 
 	useEffect(() => {
@@ -61,7 +59,7 @@ export default function Apartado() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [getApartadoFolio]);
 
-	const renderLoading = () => {
+	const renderContent = () => {
 		if (dataApartado?.id) {
 			return <CardApartado refetch={refetch} loading={loading} />;
 		} else if (loading) {
@@ -76,10 +74,11 @@ export default function Apartado() {
 			{!statusApartado && dataApartado && (
 				<ApartadoEntregado refetch={refetch} />
 			)}
-			{renderLoading()}
-			{modalCobrar && <Cobrar />}
+
+			{renderContent()}
 			{modalCalendar && <ModalCalendar refetch={refetch} />}
-			{console.log("princial", dataApartadoImprimir, dataApartado)}
+
+			{modalCobrar && <Cobrar />}
 			{imprimir && (
 				<ImprimirApartado
 					imprimir={imprimir}

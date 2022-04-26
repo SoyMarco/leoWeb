@@ -27,6 +27,8 @@ const ApartadoState = (props) => {
 	const [modalCalendar, setmodalCalendar] = useState(false);
 	const [cambioM, setcambio] = useState(0);
 	const [inputsM, setinputs] = useState(0);
+	const [modalAddProduct, setmodalAddProduct] = useState(false);
+
 	useEffect(() => {
 		if (modalCobrar === false && dataApartado) {
 			inputAbono.current.select();
@@ -165,6 +167,8 @@ const ApartadoState = (props) => {
 				cambioM,
 				setmodalCobrar,
 				setcambio,
+				modalAddProduct,
+				setmodalAddProduct,
 			}}
 		>
 			{props.children}

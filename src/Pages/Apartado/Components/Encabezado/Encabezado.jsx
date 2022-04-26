@@ -1,19 +1,20 @@
 import { useContext } from "react";
+import { Row, Input, Button, Popconfirm, Switch, Tooltip } from "antd";
+import useService from "Components/ModalCobrar/Service/useService";
+import ApartadoContext from "context/Apartado/ApartadoContext";
+import ShopListContext from "context/Shopping/ShopListContext";
+import { openNotification } from "Utils/openNotification";
+import { CANCELAR_APARTADO } from "myGraphql/apartado";
+import AuthContext from "context/Auth/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { keyBlock } from "Utils";
 import {
 	DollarCircleFilled,
 	DeleteFilled,
 	PrinterFilled,
 } from "@ant-design/icons";
-import { Row, Input, Button, Popconfirm, Switch, Tooltip } from "antd";
-import { keyBlock } from "Utils";
-import AuthContext from "context/Auth/AuthContext";
-import ApartadoContext from "context/Apartado/ApartadoContext";
-import { useNavigate } from "react-router-dom";
-import { CANCELAR_APARTADO } from "myGraphql/apartado";
-import { useMutation } from "@apollo/client";
-import { openNotification } from "Utils/openNotification";
-import useService from "Components/ModalCobrar/Service/useService";
-import ShopListContext from "context/Shopping/ShopListContext";
+
 export default function Encabezado({ refetch }) {
 	const {
 		dataApartado,
