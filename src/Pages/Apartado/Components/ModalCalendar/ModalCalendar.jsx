@@ -1,50 +1,40 @@
-import React, { useState, useContext } from "react";
-import { SaveFilled } from "@ant-design/icons";
+import { useState, useContext } from "react";
 import { Row, Button, Modal, Calendar, ConfigProvider } from "antd";
-import { openNotification } from "Utils/openNotification";
-import ErrorConection from "Utils/ErrorConection";
-import moment from "moment";
-import "moment/locale/es-us";
-import locale from "antd/lib/locale/es_ES";
-import { useMutation } from "@apollo/client";
-import { EDIT_VENCE_APARTADO } from "myGraphql/apartado";
-import "./modalCalendar.css";
-import AuthContext from "context/Auth/AuthContext";
+import useService from "Components/ModalCobrar/Service/useService";
 import ApartadoContext from "context/Apartado/ApartadoContext";
+import { openNotification } from "Utils/openNotification";
+import { EDIT_VENCE_APARTADO } from "myGraphql/apartado";
+import { SaveFilled } from "@ant-design/icons";
+import { useMutation } from "@apollo/client";
+import locale from "antd/lib/locale/es_ES";
+import "./modalCalendar.css";
+import "moment/locale/es-us";
+import moment from "moment";
 
 export default function ModalCalendar({ refetch }) {
 	const { setmodalCalendar, modalCalendar, dataApartado } =
 		useContext(ApartadoContext);
-	const { timeLogout } = useContext(AuthContext);
-
+	const { register } = useService();
 	const [mutateEDIT_VENCE_APARTADO] = useMutation(EDIT_VENCE_APARTADO);
 
 	const [btnLoading, setbtnLoading] = useState(false);
 	const [newFecha, setnewFecha] = useState(null);
 
 	const cambiarFecha = async () => {
-		setbtnLoading(true);
-		try {
-			if (dataApartado.id) {
-				const { data } = await mutateEDIT_VENCE_APARTADO({
-					// Parameters
-					variables: {
-						input: {
-							id: dataApartado.id,
-							vence: newFecha.toString(),
-						},
-					},
-				});
-				if (data) {
-					openNotification("success", `Fecha modificada con exito`);
-					refetch();
-					setbtnLoading(false);
-					setmodalCalendar(false);
-				}
+		if (dataApartado.id) {
+			const data = await register({
+				mutate: mutateEDIT_VENCE_APARTADO,
+				input: {
+					id: dataApartado.id,
+					vence: newFecha.toString(),
+				},
+			});
+			if (data) {
+				refetch();
+				openNotification("success", `Fecha modificada con exito`);
+				setbtnLoading(false);
+				setmodalCalendar(false);
 			}
-		} catch (error) {
-			setbtnLoading(false);
-			ErrorConection(timeLogout);
 		}
 	};
 	const selectFecha = (value) => {
@@ -73,10 +63,9 @@ export default function ModalCalendar({ refetch }) {
 			style={{ top: 25 }}
 			title='Cambiar fecha'
 			visible={modalCalendar}
-			// onOk={() => cambiarFecha()}
 			onCancel={() => setmodalCalendar(false)}
 			footer={[
-				<Row justify='space-around'>
+				<Row justify='space-around' key='newGuardarRow'>
 					<Button
 						style={{
 							//Boton Rojo
@@ -86,11 +75,9 @@ export default function ModalCalendar({ refetch }) {
 							width: 230,
 						}}
 						shape='round'
-						// loading={loading}
-						// disabled={cambio < 0}
 						onClick={() => setmodalCalendar(false)}
-						// icon={<PrinterFilled />}
 						loading={btnLoading}
+						key='newRojoBtn'
 					>
 						Cancelar
 					</Button>
@@ -98,7 +85,6 @@ export default function ModalCalendar({ refetch }) {
 						style={
 							newFecha
 								? {
-										//Boton Verde
 										background: "linear-gradient(#32A632,#005800)",
 										color: "white",
 										fontWeight: "bold",
@@ -116,6 +102,7 @@ export default function ModalCalendar({ refetch }) {
 						onClick={() => cambiarFecha()}
 						icon={<SaveFilled />}
 						loading={btnLoading}
+						key='newGuardarBtn'
 					>
 						{`Guardar (Enter)`}
 					</Button>
@@ -123,14 +110,16 @@ export default function ModalCalendar({ refetch }) {
 			]}
 		>
 			{dataApartado && (
-				<h2 style={{ color: "black" }}>{`${fechaVenceEn()}, ${pasarAFechaLL(
-					dataApartado.vence
-				)}`}</h2>
+				<h2
+					key='newApartadoH2'
+					style={{ color: "black" }}
+				>{`${fechaVenceEn()}, ${pasarAFechaLL(dataApartado.vence)}`}</h2>
 			)}
 			{newFecha && (
-				<h2 style={{ color: "limegreen" }}>{`Nuevo vencimiento: ${pasarAFechaLL(
-					newFecha
-				)}`}</h2>
+				<h2
+					key='newFechaH2'
+					style={{ color: "limegreen" }}
+				>{`Nuevo vencimiento: ${pasarAFechaLL(newFecha)}`}</h2>
 			)}
 
 			<ConfigProvider locale={locale}>

@@ -12,42 +12,42 @@ const layoutVertical = [
 		key: "/",
 		pathname: "/",
 		icon: <MdLocalGroceryStore />,
-		title: "Principal",
+		label: "Principal",
 	},
 	{
 		key: "/add",
 		pathname: "/add",
 		icon: <GiLargeDress />,
-		title: "Nuevo Apartado",
+		label: "Nuevo Apartado",
 	},
 	{
 		key: "/entradasSalidas",
 		pathname: "/entradasSalidas",
 		icon: <FaMoneyBillAlt />,
-		title: "Entrada/Salida",
+		label: "Entrada/Salida",
 	},
 	// {
 	// 	key: "/Perfumes",
 	// 	pathname: "/perfumes",
 	// 	icon: <GiDelicatePerfume />,
-	// 	title: "Perfumes",
+	// 	label: "Perfumes",
 	// },
 	{
 		key: "/ventas",
 		pathname: "/ventas",
 		icon: <FaFileInvoiceDollar />,
-		title: "Ventas",
+		label: "Ventas",
 	},
 	{
 		key: "/corte",
 		pathname: "/corte",
 		icon: <FaCashRegister />,
-		title: "Corte",
+		label: "Corte",
 	},
 	{
 		key: "NuevaVentana",
 		icon: <RiTerminalWindowFill />,
-		title: (
+		label: (
 			<a href='/' target='_blank' id='linkNewWindow'>
 				<span>Nueva ventana</span>
 			</a>

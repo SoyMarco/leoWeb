@@ -113,7 +113,7 @@ const LayoutForm = ({ children }) => {
 										icon={item.icon}
 										className='iconLayoutV'
 									>
-										{item.title}
+										{item.label}
 									</Menu.Item>
 								))}
 							</Menu>
