@@ -68,9 +68,5 @@ export default function Cobrar() {
 			}
 		}
 	};
-	return (
-		<>
-			<ModalCobrar saveAndPrint={saveAndPrint} />
-		</>
-	);
+	return <ModalCobrar saveAndPrint={saveAndPrint} />;
 }

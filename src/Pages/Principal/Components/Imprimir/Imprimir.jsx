@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import { useEffect, useRef, useContext } from "react";
+import { useEffect, useRef, useContext, useMemo } from "react";
 import ShopListContext from "context/Shopping/ShopListContext";
 import { openNotification } from "Utils/openNotification";
 import AuthContext from "context/Auth/AuthContext";
@@ -30,7 +30,34 @@ const Imprimir = ({ cambio, dinero, folio }) => {
 		initialState();
 		openNotification("success", "Venta guardada con exito");
 	};
-
+	const tabla = useMemo(
+		() =>
+			shopList.map((item) => (
+				<table key={`tableProcutVenta${item.key}`} className='productos'>
+					<tbody>
+						<tr>
+							<td>
+								{item.apartado > 0 ? `APARTADO ${item.apartado}` : item.nombre}
+							</td>
+							<td>
+								<h3 className={item.cantidad > 1 ? null : "finalTicket"}>
+									${item.precio}
+								</h3>
+							</td>
+						</tr>
+						{item.cantidad > 1 && (
+							<tr>
+								<td>X{item.cantidad}</td>
+								<td>
+									<h3 className='finalTicket'>${item.totalArticulo}</h3>
+								</td>
+							</tr>
+						)}
+					</tbody>
+				</table>
+			)),
+		[shopList]
+	);
 	const handlePrint = useReactToPrint({
 		content: () => imprimirVenta.current,
 		onAfterPrint: () => afterPrint(),
@@ -67,34 +94,7 @@ const Imprimir = ({ cambio, dinero, folio }) => {
 				<h3 className='subtituloTicketApartado'>
 					<u> Productos</u>
 				</h3>
-				{shopList.map((item) => {
-					return (
-						<table key={`tableProcutVenta${item.key}`} className='productos'>
-							<tbody>
-								<tr>
-									<td>
-										{item.apartado > 0
-											? `APARTADO ${item.apartado}`
-											: item.nombre}
-									</td>
-									<td>
-										<h3 className={item.cantidad > 1 ? null : "finalTicket"}>
-											${item.precio}
-										</h3>
-									</td>
-								</tr>
-								{item.cantidad > 1 ? (
-									<tr>
-										<td>X{item.cantidad}</td>
-										<td>
-											<h3 className='finalTicket'>${item.totalArticulo}</h3>
-										</td>
-									</tr>
-								) : null}
-							</tbody>
-						</table>
-					);
-				})}
+				{tabla}
 				{/* <!-- FIN TABLA DE PRODUCTOS --> */}
 
 				{/* <!-- TOTAL --> */}
