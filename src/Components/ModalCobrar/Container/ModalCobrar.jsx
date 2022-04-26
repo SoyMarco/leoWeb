@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useRef, useEffect, useContext } from "react";
-import { Modal, Input, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
+import ShopListContext from "context/Shopping/ShopListContext";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
 import AuthContext from "context/Auth/AuthContext";
+import { Modal, Input, Button, Row } from "antd";
 import { keyBlock } from "Utils";
 import "./cobrar.css";
-import ShopListContext from "context/Shopping/ShopListContext";
 
 export default function ModalCobrar({ saveAndPrint }) {
 	const { timeLogout, isLoading } = useContext(AuthContext);
