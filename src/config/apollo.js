@@ -17,10 +17,10 @@ import {
 // };
 
 // HEROKU MASTER
-const UrlBackend = {
+const UrlBack = {
 	uri: "https://leo-gql.herokuapp.com/",
 };
-const httpLink = new HttpLink(UrlBackend);
+const httpLink = new HttpLink(UrlBack);
 const authMiddleware = new ApolloLink((operation, forward) => {
 	operation.setContext(({ headers = {} }) => ({
 		headers: {
