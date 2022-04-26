@@ -1,14 +1,15 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { useEffect, useRef, useContext } from "react";
-import { useReactToPrint } from "react-to-print";
+import ShopListContext from "context/Shopping/ShopListContext";
 import { openNotification } from "Utils/openNotification";
-import { Row } from "antd";
 import AuthContext from "context/Auth/AuthContext";
 import logoLeo from "Pages/Principal/Utils/images";
+import { useReactToPrint } from "react-to-print";
 import "moment/locale/es-us";
 import moment from "moment";
-import ShopListContext from "context/Shopping/ShopListContext";
+import { Row } from "antd";
 import "./imprimir.css";
+
 const Imprimir = ({ cambio, dinero, folio }) => {
 	const { auth } = useContext(AuthContext);
 
