@@ -10,7 +10,7 @@ import { ShoppingOutlined } from "@ant-design/icons";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_F3 } from "myGraphql/f3";
 
-export default function Encabezado({ setmodalCobrar, stateRecord }) {
+export default function Encabezado() {
 	const {
 		shopList,
 		addProductShopList,
@@ -20,6 +20,8 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 		setselectedRowKeys,
 		DrawerF3Visible,
 		setDrawerF3Visible,
+		stateRecord,
+		setmodalCobrar,
 	} = useContext(ShopListContext);
 	const {
 		data: dataGET,
@@ -72,6 +74,7 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 	const addArticulo = (record) => {
 		const shopItem = shopList.find((item) => item.key === record.key);
 		if (shopList.length > 0 && shopItem.apartado === 0) {
+			console.log(record.key);
 			addOneShopList(record.key);
 		}
 	};
@@ -185,20 +188,17 @@ export default function Encabezado({ setmodalCobrar, stateRecord }) {
 				}
 			/>
 			{dataGET?.getAllF3?.length > 0 && (
-				<>
-					<Badge count={dataGET?.getAllF3?.length} className='BtnBadge'>
-						<Button
-							icon={
-								// <AiFillShopping />
-								<ShoppingOutlined style={{ fontSize: "30px", color: "blue" }} />
-							}
-							size='large'
-							shape='circle'
-							onClick={() => setDrawerF3Visible(!DrawerF3Visible)}
-						/>
-					</Badge>
-					{/* // GET VENTAS MOBILE */}
-				</>
+				<Badge count={dataGET?.getAllF3?.length} className='BtnBadge'>
+					<Button
+						icon={
+							// <AiFillShopping />
+							<ShoppingOutlined style={{ fontSize: "30px", color: "blue" }} />
+						}
+						size='large'
+						shape='circle'
+						onClick={() => setDrawerF3Visible(!DrawerF3Visible)}
+					/>
+				</Badge>
 			)}
 			<GetVentasF3 />
 		</div>

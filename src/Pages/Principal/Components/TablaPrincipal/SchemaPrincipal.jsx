@@ -19,7 +19,6 @@ export default function SchemaPrincipal() {
 			removeOneShopList(record);
 		}
 	};
-
 	return [
 		{
 			title: "",

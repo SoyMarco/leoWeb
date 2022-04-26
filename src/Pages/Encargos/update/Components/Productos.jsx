@@ -17,10 +17,7 @@ export default function Productos({
 	setstateRecord,
 	loader,
 	setloader,
-	stateRecord,
 	dataEncargo,
-	totalProductos,
-	totalTotal,
 	inputAbono,
 }) {
 	const { timeLogout } = useContext(AuthContext);
@@ -37,19 +34,17 @@ export default function Productos({
 		onChange: onSelectChange,
 	};
 
-	const click = (record, rowIndex) => {
+	const click = (record) => {
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
 		inputAbono.current.select();
 	};
 	const pasarAFecha = (item) => {
-		let fecha = moment.unix(item / 1000).format("ll");
-		return fecha;
+		return moment.unix(item / 1000).format("ll");
 	};
 
 	const pasarAFechaLLLL = (item) => {
-		let fecha = moment.unix(item / 1000).format("LLLL");
-		return fecha;
+		return moment.unix(item / 1000).format("LLLL");
 	};
 	const borrarEntregarProduct = async (item, borrarEntregar) => {
 		if (loader === false) {
@@ -114,7 +109,7 @@ export default function Productos({
 			dataIndex: "talla",
 			key: "talla",
 			ellipsis: true,
-			render: (talla, record) => (
+			render: (talla) => (
 				<Tooltip placement='top' title={talla}>
 					<h3
 						style={{
@@ -134,7 +129,7 @@ export default function Productos({
 			dataIndex: "color",
 			key: "color",
 			ellipsis: true,
-			render: (color, record) => (
+			render: (color) => (
 				<Tooltip placement='top' title={color}>
 					<h3
 						style={{
@@ -154,7 +149,7 @@ export default function Productos({
 			dataIndex: "genero",
 			key: "genero",
 			ellipsis: true,
-			render: (genero, record) => (
+			render: (genero) => (
 				<Tooltip placement='top' title={genero}>
 					<h3
 						style={{
@@ -174,7 +169,7 @@ export default function Productos({
 			dataIndex: "modelo",
 			key: "modelo",
 			ellipsis: true,
-			render: (modelo, record) => (
+			render: (modelo) => (
 				<Tooltip placement='top' title={modelo}>
 					<h3
 						style={{
@@ -231,7 +226,7 @@ export default function Productos({
 				showTitle: false,
 			},
 			width: "60px",
-			render: (totalArticulo, record) => (
+			render: (_totalArticulo, record) => (
 				<Tooltip placement='right' title='Borrar producto'>
 					<Row justify='center'>
 						<Popconfirm
@@ -283,10 +278,10 @@ export default function Productos({
 					}}
 					rowSelection={rowSelection}
 					size='small'
-					onRow={(record, rowIndex) => {
+					onRow={(record) => {
 						return {
-							onClick: (e) => {
-								click(record, rowIndex);
+							onClick: () => {
+								click(record);
 							},
 						};
 					}}

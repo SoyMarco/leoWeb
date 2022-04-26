@@ -8,10 +8,10 @@ import "./layout.css";
 import AuthContext from "context/Auth/AuthContext";
 import layoutVertical from "../Schemas/LayoutVertical";
 
-function LayoutForm({ children }) {
-	const { auth, logout } = useContext(AuthContext);
+const LayoutForm = ({ children }) => {
+	const { logout } = useContext(AuthContext);
 	const [collapsed, setcollapsed] = useState(false);
-	const { Header, Content, Footer, Sider } = Layout;
+	const { Content, Footer, Sider } = Layout;
 	const navigate = useNavigate();
 	const Location = useLocation();
 	const screenWidth = window.screen.width;
@@ -89,12 +89,7 @@ function LayoutForm({ children }) {
 				className='site-layout'
 			>
 				{/* HORIZONTAL */}
-				<Horizontal
-					Header={Header}
-					auth={auth}
-					logoutApp={logoutApp}
-					swtichstate={swtichstate}
-				/>
+				<Horizontal logoutApp={logoutApp} swtichstate={swtichstate} />
 
 				{/* VERTICAL */}
 
@@ -118,7 +113,7 @@ function LayoutForm({ children }) {
 										icon={item.icon}
 										className='iconLayoutV'
 									>
-										{item.title}
+										{item.label}
 									</Menu.Item>
 								))}
 							</Menu>
@@ -129,13 +124,13 @@ function LayoutForm({ children }) {
 						<Content style={{ margin: "5px" }}>{children}</Content>
 
 						<Footer style={{ textAlign: "center" }}>
-							Creado por MarcoASR ©2021
+							Creado por MarcoASR ©2022
 						</Footer>
 					</Layout>
 				</Layout>
 			</Layout>
 		</>
 	);
-}
+};
 
 export default LayoutForm;

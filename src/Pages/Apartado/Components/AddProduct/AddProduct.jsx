@@ -1,30 +1,32 @@
-import React, { useEffect, useState, useContext } from "react";
-import { Row, Button, Modal, Input, Form, AutoComplete } from "antd";
+import { useEffect, useState, useContext } from "react";
 import { GET_PRODUCTS_NAME, ADD_PRODUCTO } from "myGraphql/apartado";
+import { Row, Button, Modal, Input, Form, AutoComplete } from "antd";
 import { openNotification } from "Utils/openNotification";
 import { useQuery, useMutation } from "@apollo/client";
-import ErrorConection from "Utils/ErrorConection";
+import AuthContext from "context/Auth/AuthContext";
 import { FaMoneyBillWave } from "react-icons/fa";
 import { SaveFilled } from "@ant-design/icons";
 import { GiLargeDress } from "react-icons/gi";
 import { keyBlock } from "Utils";
-import AuthContext from "context/Auth/AuthContext";
+import ApartadoContext from "context/Apartado/ApartadoContext";
+import useService from "Components/ModalCobrar/Service/useService";
 
-export default function AddProduct({
-	setmodalAddProduct,
-	modalAddProduct,
-	dataApartado,
-	initialState,
-}) {
-	const { timeLogout } = useContext(AuthContext);
+export default function AddProduct() {
+	const { dataApartado, initialState, modalAddProduct, setmodalAddProduct } =
+		useContext(ApartadoContext);
+	const { isLoading } = useContext(AuthContext);
+
 	const [mutateADD_PRODUCTO] = useMutation(ADD_PRODUCTO);
 	const { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
-	const [btnLoading, setbtnLoading] = useState(false);
+
 	const [btnDisabled, setbtnDisabled] = useState(true);
 	const [idApartado, setidApartado] = useState(null);
 	const [nombre, setnombre] = useState("");
 	const [precio, setprecio] = useState(0);
+
 	const [form] = Form.useForm();
+
+	const { register } = useService();
 
 	useEffect(() => {
 		document.querySelector("#addProductNombre").select();
@@ -46,31 +48,20 @@ export default function AddProduct({
 	}, [nombre, precio]);
 
 	const addProducto = async () => {
-		setbtnLoading(true);
-		if (btnLoading === false) {
-			try {
-				if (idApartado) {
-					const { data: dataAddProd } = await mutateADD_PRODUCTO({
-						// Parameters
-						variables: {
-							input: {
-								id: idApartado,
-								nombre: nombre,
-								precio: parseFloat(precio),
-							},
-						},
-					});
-					if (dataAddProd) {
-						const data = { addAbono: dataAddProd.addProducto };
-
-						openNotification("success", `Articulo agregado con exito`);
-						initialState(data);
-						setmodalAddProduct(false);
-					}
-				}
-			} catch (error) {
-				setbtnLoading(false);
-				ErrorConection(timeLogout);
+		if (isLoading === false && idApartado) {
+			const dataAddProd = await register({
+				mutate: mutateADD_PRODUCTO,
+				input: {
+					id: idApartado,
+					nombre: nombre,
+					precio: parseFloat(precio),
+				},
+			});
+			if (dataAddProd) {
+				const data = { addAbono: dataAddProd.addProducto };
+				openNotification("success", `Articulo agregado con exito`);
+				initialState(data);
+				setmodalAddProduct(false);
 			}
 		}
 	};
@@ -112,7 +103,7 @@ export default function AddProduct({
 						}}
 						shape='round'
 						onClick={() => setmodalAddProduct(false)}
-						loading={btnLoading}
+						loading={isLoading}
 						key='btnCancelarAddProduct'
 					>
 						Cancelar
@@ -132,7 +123,7 @@ export default function AddProduct({
 						disabled={btnDisabled}
 						onClick={() => agregarProducto()}
 						icon={<SaveFilled key='iconguardarProduct' />}
-						loading={btnLoading}
+						loading={isLoading}
 						key='btnGuardarProduct'
 					>
 						Guardar (Enter)

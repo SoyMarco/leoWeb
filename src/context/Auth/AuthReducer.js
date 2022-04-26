@@ -11,9 +11,13 @@ export default (state, action) => {
 		LOGOUT: {
 			auth: undefined,
 		},
-
+		//Set Login
 		SET_FIRST_LOGIN: {
 			firstLogin: payload,
+		},
+		//SET_IS_LOADING
+		SET_IS_LOADING: {
+			isLoading: payload,
 		},
 	};
 

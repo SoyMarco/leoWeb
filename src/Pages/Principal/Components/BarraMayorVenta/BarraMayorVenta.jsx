@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from "react";
+import { useState, useEffect, memo } from "react";
 import { REGISTER_ESTRELLA, GET_ESTRELLAS_VENDEDOR } from "myGraphql/estrella";
 import { GET_VENTAS_MES, GET_TOTAL_VENTAS_DIA } from "myGraphql/venta";
 import { useQuery, useMutation } from "@apollo/client";
@@ -109,15 +109,15 @@ const BarraMayorVenta = memo(() => {
 		return "sinEstilo";
 	};
 	return (
-		<Row justify='center' style={{ marginTop: 25 }}>
-			{calculatePorcent > 0 ? (
+		<Row justify='center' style={{ marginTop: 25, width: "98%" }}>
+			{calculatePorcent > 0 && (
 				<Progress
 					strokeColor={colorBar()}
 					className={classBarr()}
 					percent={calculatePorcent}
 					status='active'
 				/>
-			) : null}
+			)}
 		</Row>
 	);
 });

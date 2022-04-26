@@ -1,0 +1,12 @@
+.ModalCobrarPrincipal .ant-modal-body {
+	padding: 0px 24px 20px;
+}
+.ant-input-affix-wrapper.InputModalCobrar {
+	width: 100%;
+	border-radius: 50px;
+	margin: 10px 0;
+}
+
+.ant-input-affix-wrapper.InputModalCobrar svg {
+	font-size: x-large;
+}

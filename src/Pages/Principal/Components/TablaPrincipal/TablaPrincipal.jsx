@@ -4,8 +4,8 @@ import { MdLocalGroceryStore } from "react-icons/md";
 import ShopListContext from "context/Shopping/ShopListContext";
 import SchemaPrincipal from "./SchemaPrincipal";
 
-export default function TablaPrincipal({ setstateRecord }) {
-	const { shopList, selectedRowKeys, setselectedRowKeys } =
+const TablaPrincipal = () => {
+	const { shopList, selectedRowKeys, setselectedRowKeys, setstateRecord } =
 		useContext(ShopListContext);
 
 	const rowSelection = {
@@ -17,9 +17,10 @@ export default function TablaPrincipal({ setstateRecord }) {
 		document.querySelector("#inputPrecio").select();
 	};
 
+	const schema = SchemaPrincipal();
 	return (
 		<Table
-			columns={SchemaPrincipal()}
+			columns={schema}
 			dataSource={shopList}
 			pagination={false}
 			bordered
@@ -54,4 +55,5 @@ export default function TablaPrincipal({ setstateRecord }) {
 			}}
 		/>
 	);
-}
+};
+export default TablaPrincipal;

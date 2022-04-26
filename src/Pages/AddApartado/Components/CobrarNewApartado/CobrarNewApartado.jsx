@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { Modal, Input, Form, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
-import ImprimirApartado from "../ImprimirApartado/ImprimirNewApartado";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import { keyBlock } from "Utils";
@@ -12,38 +11,39 @@ import AuthContext from "context/Auth/AuthContext";
 import aceptar from "assets/sonido/Aceptar.wav";
 import ShopListContext from "context/Shopping/ShopListContext";
 import { useNavigate } from "react-router-dom";
+import NewAparadoContext from "context/NewApartado/NewAparadoContext";
 
-const CobrarNewApartado = ({
-	modalCobrar,
-	cerrarCobrar,
-	totalTotal,
-	listaCompras,
-	initialState,
-	calculateRestaria,
-	inputAbono,
-	cliente,
-}) => {
+const CobrarNewApartado = () => {
+	const {
+		setmodalCobrar,
+		modalCobrar,
+		cliente,
+		abono,
+		setimprimir,
+		listaCompras,
+		dinero,
+		setdinero,
+		setdataApartado,
+		cambio,
+		setcambio,
+		inputAbono,
+	} = useContext(NewAparadoContext);
 	const { addProductShopList } = useContext(ShopListContext);
 	const { auth, timeLogout } = useContext(AuthContext);
+
 	const [mutateREGISTER_APARTADO] = useMutation(REGISTER_APARTADO);
 	const [mutateREGISTER_APARTADO_F3] = useMutation(REGISTER_APARTADO_F3);
-	const [form] = Form.useForm();
-	const [cambio, setcambio] = useState(0);
-	const [imprimir, setimprimir] = useState(false);
-	const [btnLoading, setbtnLoading] = useState(false);
-	const [dataApartado, setdataApartado] = useState([]);
-	const [dinero, setdinero] = useState({
-		aCuenta: 0,
-		tarjeta: 0,
-		efectivo: 0,
-	});
-	const navigate = useNavigate();
 
+	const [btnLoading, setbtnLoading] = useState(false);
+
+	const [form] = Form.useForm();
+	const navigate = useNavigate();
 	const audio = new Audio(aceptar);
 	const inputEfectivo = useRef();
+
 	useEffect(() => {
 		if (modalCobrar === true) {
-			form.setFieldsValue({ efectivo: totalTotal });
+			form.setFieldsValue({ efectivo: abono });
 			OnValuesChange();
 			inputEfectivo.current.select();
 		} else if (modalCobrar === false) {
@@ -51,6 +51,7 @@ const CobrarNewApartado = ({
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [modalCobrar]);
+
 	const pressKeyPrecio = (e) => {
 		// Enter
 		if (e.keyCode === 13) {
@@ -97,7 +98,7 @@ const CobrarNewApartado = ({
 		const efectivo = parseFloat(valores.efectivo);
 		const tarjeta = parseFloat(valores.tarjeta);
 		const aCuenta = parseFloat(valores.aCuenta);
-		const total = parseFloat(totalTotal);
+		const total = parseFloat(abono);
 		const sumaTodo = efectivo + tarjeta + aCuenta;
 		const resultado = sumaTodo - total;
 
@@ -122,7 +123,7 @@ const CobrarNewApartado = ({
 						input: {
 							productos: listaCompras,
 							cliente: cliente,
-							total: parseFloat(totalTotal),
+							total: parseFloat(abono),
 							ventaEfectivo: ventaEfectivo,
 							ventaTarjeta: ventaTarjeta,
 							ventaACuenta: ventaACuenta,
@@ -131,11 +132,12 @@ const CobrarNewApartado = ({
 				});
 				if (data) {
 					if (keyF === "F1") {
-						setdataApartado(await data.registerApartado);
+						setdataApartado(data.registerApartado);
 						setimprimir(true);
+						setmodalCobrar(false);
 					} else if (keyF === "F2") {
 						openNotification("success", "Apartado guardado con exito");
-						initialState();
+						navigate("/");
 						audio.play();
 					}
 					setbtnLoading(false);
@@ -163,13 +165,12 @@ const CobrarNewApartado = ({
 					const { registerApartadoF3 } = data;
 					addProductShopList({
 						nombre: registerApartadoF3.cliente,
-						precio: parseFloat(totalTotal),
+						precio: parseFloat(abono),
 						apartado: registerApartadoF3.folio,
 						refApartado: registerApartadoF3.id,
 						f3: true,
 					});
 					navigate("/");
-					initialState();
 
 					setbtnLoading(false);
 				}
@@ -179,20 +180,12 @@ const CobrarNewApartado = ({
 			}
 		}
 	};
+	const cerrarCobrar = () => {
+		setmodalCobrar(false);
+		inputAbono.current.select();
+	};
 	return (
 		<>
-			<ImprimirApartado
-				imprimir={imprimir}
-				setimprimir={setimprimir}
-				totalTotal={totalTotal}
-				listaCompras={listaCompras}
-				initialState={initialState}
-				calculateRestaria={calculateRestaria}
-				dataApartado={dataApartado}
-				auth={auth}
-				dinero={dinero}
-				cambio={cambio}
-			/>
 			<Modal
 				key='modalCobrarNewApatado'
 				style={{ top: 25 }}
@@ -270,7 +263,7 @@ const CobrarNewApartado = ({
 						}}
 						key='h1CobrarCobrarNewApatado'
 					>
-						Abono: ${totalTotal}
+						Abono: ${abono}
 					</h1>
 				</div>
 				<div key='div2' style={{ textAlignLast: "right" }}>
