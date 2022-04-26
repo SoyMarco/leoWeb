@@ -28,8 +28,8 @@ const AuthState = (props) => {
 				if (dataToken.exp > timeNow && dataToken.name) {
 					setAuth(dataToken);
 				} else {
-					openNotification("error", "Tu sesión expiro. Vuelve a ingresar");
 					logout();
+					openNotification("error", "Tu sesión expiro. Vuelve a ingresar");
 				}
 			} catch (error) {
 				console.log("timeLogout@", error);
@@ -38,7 +38,6 @@ const AuthState = (props) => {
 			logout();
 		}
 	};
-
 	const logout = () => {
 		removeToken();
 		setAuth(null);
@@ -61,12 +60,14 @@ const AuthState = (props) => {
 			payload: isLoading,
 		});
 	};
+
 	const navegateAuth = () => {
 		if (state.auth) {
 			return props.children;
 		}
 		return <Login />;
 	};
+
 	return (
 		<AuthContext.Provider
 			value={{
