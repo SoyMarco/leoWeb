@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useMemo } from "react";
 import ModalCobrar from "Components/ModalCobrar/Container/ModalCobrar";
 import { REGISTER_VENTA, GET_TOTAL_VENTAS_DIA } from "myGraphql/venta";
 import useService from "Components/ModalCobrar/Service/useService";
@@ -9,7 +9,7 @@ import Imprimir from "../Imprimir/Imprimir";
 import "../Imprimir/imprimir.css";
 
 const Cobrar = () => {
-	const { shopList, totalTotal, initialState, imprimir, setimprimir } =
+	const { shopList, totalTotal, initialState, setimprimir } =
 		useContext(ShopListContext);
 	const { auth, isLoading } = useContext(AuthContext);
 
@@ -76,10 +76,14 @@ const Cobrar = () => {
 			notas: "",
 		};
 	};
+	const useImprimir = useMemo(
+		() => <Imprimir cambio={cambioM} dinero={inputsM} folio={folio} />,
+		[cambioM, folio, inputsM]
+	);
 
 	return (
 		<>
-			{imprimir && <Imprimir cambio={cambioM} dinero={inputsM} folio={folio} />}
+			{useImprimir}
 			<ModalCobrar saveAndPrint={saveAndPrint} />
 		</>
 	);
