@@ -5,7 +5,7 @@ import { getToken } from "../Utils/token";
 
 // LOCAL BACK
 const baseUrlFront = window.location;
-/* LOCAL BACKEND*/
+// LOCAL BACKEND
 // export const UrlBackend = {
 // 	uri: "http://192.168.100.17:4000/",
 // };
