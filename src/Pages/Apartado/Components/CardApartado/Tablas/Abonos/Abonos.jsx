@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import ApartadoContext from "context/Apartado/ApartadoContext";
 import { Table, Result, Col, Row, Progress } from "antd";
 import { SmileOutlined } from "@ant-design/icons";
@@ -9,18 +9,8 @@ export default function Abonos({ loading }) {
 	const { totalTotal, totalAbonos, abonos, abono, inputAbono } =
 		useContext(ApartadoContext);
 	const { colAbonos } = useSchema({ loading });
-	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 
-	const onSelectChange = () => {
-		setselectedRowKeys([]);
-	};
-	const rowSelection = {
-		selectedRowKeys,
-		onChange: onSelectChange,
-	};
-
-	const click = (record) => {
-		setselectedRowKeys([record.key]);
+	const click = () => {
 		inputAbono.current.select();
 	};
 
@@ -36,7 +26,6 @@ export default function Abonos({ loading }) {
 	};
 	return (
 		<Col xs={24} sm={24} md={10}>
-			{/* PRODUCTOS */}
 			<Table
 				rowKey={(record) => record._id}
 				id='tableApartado'
@@ -45,8 +34,7 @@ export default function Abonos({ loading }) {
 				pagination={false}
 				loading={loading}
 				bordered
-				scroll={{ y: 190 }}
-				rowSelection={rowSelection}
+				scroll={{ y: 190, x: 400 }}
 				size='small'
 				style={{
 					height: "380px",
@@ -55,10 +43,10 @@ export default function Abonos({ loading }) {
 					margin: "10px",
 					background: "#f0f2f5",
 				}}
-				onRow={(record) => {
+				onRow={() => {
 					return {
 						onClick: () => {
-							click(record);
+							click();
 						},
 					};
 				}}

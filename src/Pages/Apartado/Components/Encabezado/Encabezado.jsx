@@ -140,6 +140,7 @@ export default function Encabezado({ refetch }) {
 						onKeyDown={keyBlock}
 						value={abono.abono}
 						onChange={(e) => setabono({ abono: e.target.value })}
+						type='number'
 					/>
 				</Tooltip>
 				<Row>

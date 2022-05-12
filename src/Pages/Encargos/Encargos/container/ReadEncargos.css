@@ -46,7 +46,7 @@
 	width: 330px;
 	margin: 10px 0 0 0;
 }
-.colAntCard .ant-card-body {
+/* .colAntCard .ant-card-body {
 	padding: 0 0 5px 0;
 }
 .colAntCard .ant-card-actions {
@@ -55,9 +55,25 @@
 	position: absolute;
 	width: 100%;
 	bottom: 0;
-}
-.divAbrir :hover {
-	background: #f0f2f5;
+} */
+.divAbrir > div:hover {
+	background: #d3e4fd;
 	color: darkblue;
-	border-radius: 10px;
+	border-radius: 50px;
+	cursor: pointer;
+}
+.divAbrir {
+	text-align: center;
+}
+.divAbrir > div {
+	text-align: center;
+	background-color: #013b6b1d;
+	border-radius: 50px;
+	padding: 0px;
+}
+
+.tableEncargos tr th {
+	border-right: white solid 0.5px;
+	background: linear-gradient(#3f698b, #013b6b);
+	color: white;
 }

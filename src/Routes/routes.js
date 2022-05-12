@@ -22,6 +22,8 @@ import Perfumes from "Pages/Perfumes/Container/Perfumes";
 //Context
 import NewAparadoState from "context/NewApartado/NewAparadoState";
 import ApartadoState from "context/Apartado/ApartadoState";
+import EncargoState from "context/Encargo/EncargoState";
+
 const routes = [
 	{
 		path: "/",
@@ -77,6 +79,7 @@ const routes = [
 		path: "/addencargo",
 		layout: LayoutForm,
 		component: AddEncargo,
+		context: EncargoState,
 		exact: true,
 	},
 	{

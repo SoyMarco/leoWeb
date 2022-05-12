@@ -5,7 +5,9 @@ import {
 	FaFileInvoiceDollar,
 } from "react-icons/fa";
 import { RiTerminalWindowFill } from "react-icons/ri";
-import { GiLargeDress } from "react-icons/gi";
+import { GiLargeDress, GiNotebook } from "react-icons/gi";
+// Logo caja
+// import { GiNotebook } from "react-icons/go";
 const layoutVertical = [
 	{
 		key: "/",
@@ -17,6 +19,12 @@ const layoutVertical = [
 		icon: <GiLargeDress style={{ fontSize: "23px" }} />,
 		label: "Nuevo Apartado",
 	},
+	{
+		key: "/addencargo",
+		icon: <GiNotebook style={{ fontSize: "23px" }} />,
+		label: "Nuevo Encargo",
+	},
+
 	{
 		key: "/entradasSalidas",
 		icon: <FaMoneyBillAlt style={{ fontSize: "23px" }} />,

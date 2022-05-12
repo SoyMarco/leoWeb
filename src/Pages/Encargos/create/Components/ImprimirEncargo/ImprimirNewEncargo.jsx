@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useState, useRef } from "react";
+import { useContext, useEffect, useState, useRef } from "react";
 import moment from "moment";
 import "moment/locale/es-us";
 import { Modal, Row, Divider, Button } from "antd";
@@ -8,14 +8,18 @@ import { useNavigate } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 import { keyBlock } from "Utils";
 import { openNotification } from "Utils/openNotification";
+import EncargoContext from "context/Encargo/context";
+import AuthContext from "context/Auth/AuthContext";
 
-const ImprimirNewEncargo = ({
-	imprimir,
-	abono,
-	auth,
-	cliente,
-	listaProductos,
-}) => {
+const ImprimirNewEncargo = () => {
+	const {
+		listaProductos,
+		abono,
+		cliente,
+		imprimirEncargo: imprimir,
+	} = useContext(EncargoContext);
+	const { auth } = useContext(AuthContext);
+
 	const [numPrint, setnumPrint] = useState(0);
 	const imprimirNewEncargo = useRef();
 	const inputReprint = useRef();

@@ -18,6 +18,7 @@ import {
 } from "myGraphql/encargo";
 import { Row, Card, Skeleton, Button, Switch, Tooltip, Result } from "antd";
 import "./Encargo.css";
+import SwitchB from "Pages/Encargos/Components/Switch/SwitchB";
 
 export default function Encargo() {
 	const { auth, timeLogout } = useContext(AuthContext);
@@ -284,6 +285,11 @@ export default function Encargo() {
 									defaultChecked
 								></Switch>
 							</Tooltip>
+							<SwitchB
+								loader={loader}
+								checked={statusEncargo}
+								onClick={guardarEncargo}
+							/>
 						</Row>
 					</Row>
 					<h1
