@@ -1,23 +1,23 @@
-import React, { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
+import { SaveFilled, PrinterFilled } from "@ant-design/icons";
+import EncargoContext from "context/Encargo/context";
 import { FaMoneyBillWave } from "react-icons/fa";
 import { Modal, Row, Button, Input } from "antd";
-import { SaveFilled, PrinterFilled } from "@ant-design/icons";
 import { keyBlock } from "Utils";
 
-export default function ModalAbonoEncargo({
-	modalAbono,
-	setmodalAbono,
-	setabono,
-	abono,
-	loader,
-	guardarEncargo,
-	setimprimirEncargo,
-}) {
+export default function ModalAbonoEncargo() {
+	const {
+		setimprimirEncargo,
+		guardarEncargo,
+		loader,
+		abono,
+		setabono,
+		modalAbono,
+		setmodalAbono,
+	} = useContext(EncargoContext);
 	const refInputAbono = useRef();
 	useEffect(() => {
-		// if (modalAbono === true) {
 		refInputAbono.current.select();
-		// }
 	}, []);
 
 	const pressKeyPrecio = (e) => {

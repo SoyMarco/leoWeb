@@ -1,21 +1,15 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { openNotification } from "Utils/openNotification";
+import layoutVertical from "../Schemas/LayoutVertical";
 import Horizontal from "../Components/Horizontal";
 import { Layout, Menu } from "antd";
-import "antd/dist/antd.min.css";
-import "./layout.css";
-import AuthContext from "context/Auth/AuthContext";
-import layoutVertical from "../Schemas/LayoutVertical";
 
 const LayoutForm = ({ children }) => {
-	const { logout } = useContext(AuthContext);
 	const [collapsed, setcollapsed] = useState(false);
 	const { Content, Footer, Sider } = Layout;
 	const navigate = useNavigate();
 	const Location = useLocation();
 	const screenWidth = window.screen.width;
-	const [swtichstate, setswtichstate] = useState(true);
 	const [currentMenu, setcurrentMenu] = useState("1");
 	const [titleWeb, settitleWeb] = useState(null);
 
@@ -56,31 +50,18 @@ const LayoutForm = ({ children }) => {
 		}
 	};
 
-	const logoutApp = () => {
-		setswtichstate(!swtichstate);
-		setTimeout(() => {
-			logout();
-			openNotification("success", "Espero verte pronto de nuevo.");
-			navigate("/");
-		}, 200);
-	};
-	const handleClick = (e) => {
-		if (e.key === "NuevaVentana") {
+	const handleClick = ({ key }) => {
+		if (key === "NuevaVentana") {
 			return;
 		}
-		setcurrentMenu(e.key);
+		setcurrentMenu(key);
+		navigate(key);
 	};
 
-	const navVertical = (item) => {
-		if (item.pathname) {
-			navigate(item.pathname);
-		}
-	};
 	return (
 		<>
 			{titleWeb ? <title>{titleWeb}</title> : null}
 
-			{/* LAYOUT ESCRITORIO */}
 			<Layout
 				style={{
 					minHeight: "100vh",
@@ -89,12 +70,11 @@ const LayoutForm = ({ children }) => {
 				className='site-layout'
 			>
 				{/* HORIZONTAL */}
-				<Horizontal logoutApp={logoutApp} swtichstate={swtichstate} />
-
-				{/* VERTICAL */}
+				<Horizontal />
 
 				<Layout>
 					{screenWidth > 900 && (
+						/* VERTICAL */
 						<Sider
 							collapsible
 							collapsed={collapsed}
@@ -105,18 +85,9 @@ const LayoutForm = ({ children }) => {
 								mode='inline'
 								onClick={(e) => handleClick(e)}
 								selectedKeys={[currentMenu]}
-							>
-								{layoutVertical.map((item) => (
-									<Menu.Item
-										key={item.key}
-										onClick={() => navVertical(item)}
-										icon={item.icon}
-										className='iconLayoutV'
-									>
-										{item.label}
-									</Menu.Item>
-								))}
-							</Menu>
+								items={layoutVertical}
+								style={{ color: "#004882", fontSize: "16px" }}
+							/>
 						</Sider>
 					)}
 					<Layout>

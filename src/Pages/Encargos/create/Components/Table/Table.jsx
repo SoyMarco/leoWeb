@@ -1,38 +1,23 @@
-import React, { useState } from "react";
+import { useContext } from "react";
 import { MdDelete, MdLocalGroceryStore } from "react-icons/md";
 import { Table, Button, Result, Row } from "antd";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
+import EncargoContext from "context/Encargo/context";
 
-export default function EncargoTable({ listaProductos, setlistaProductos }) {
-	const [selectedRowKeys, setselectedRowKeys] = useState(0);
-	const onSelectChange = () => {
-		setselectedRowKeys([]);
-	};
-	const rowSelection = {
-		selectedRowKeys,
-		onChange: onSelectChange,
-	};
+export default function EncargoTable() {
+	const { listaProductos, setlistaProductos } = useContext(EncargoContext);
+
 	const eliminarProducto = (itemX) => {
 		let i = listaProductos.indexOf(itemX);
 		if (i !== -1) {
 			let key = listaProductos.splice(i, 1);
 			setlistaProductos(listaProductos.filter((item) => item.key !== key));
-			selectLastRow();
 		} else if (itemX.key > 0) {
 			let key = itemX.key;
 			setlistaProductos(listaProductos.filter((item) => item.key !== key));
-			selectLastRow();
 		}
 	};
-	const selectLastRow = () => {
-		let ultimoArray = listaProductos.length;
-		if (ultimoArray) {
-			setselectedRowKeys([listaProductos[ultimoArray - 1].key]);
-		}
-	};
-	const click = (record, _rowIndex) => {
-		setselectedRowKeys([record.key]);
-	};
+
 	const addArticulo = (record) => {
 		if (listaProductos.length > 0) {
 			const currentShopList = [...listaProductos];
@@ -59,18 +44,9 @@ export default function EncargoTable({ listaProductos, setlistaProductos }) {
 	};
 	const columns = [
 		{
-			title: "ID",
-			dataIndex: "key",
-			key: "key",
-			sorter: (a, b) => b.key - a.key,
-			defaultSortOrder: "ascend",
-			width: "60px",
-		},
-		{
 			title: "Producto",
 			dataIndex: "nombre",
 			key: "nombre",
-			// width: "90px",
 			render: (nombre) => (
 				<h3
 					style={{
@@ -86,14 +62,11 @@ export default function EncargoTable({ listaProductos, setlistaProductos }) {
 			title: "Talla o tamaño",
 			dataIndex: "talla",
 			key: "talla",
-			ellipsis: true,
 			render: (talla) => (
 				<h3
 					style={{
-						textAlignLast: "center",
 						fontWeight: "revert",
 						fontSize: "large",
-						color: "green",
 					}}
 				>
 					{talla}
@@ -104,14 +77,11 @@ export default function EncargoTable({ listaProductos, setlistaProductos }) {
 			title: "Color o aroma",
 			dataIndex: "color",
 			key: "color",
-			ellipsis: true,
 			render: (color) => (
 				<h3
 					style={{
-						textAlignLast: "center",
 						fontWeight: "revert",
 						fontSize: "large",
-						color: "green",
 					}}
 				>
 					{color}
@@ -122,14 +92,11 @@ export default function EncargoTable({ listaProductos, setlistaProductos }) {
 			title: "Genero",
 			dataIndex: "genero",
 			key: "genero",
-			ellipsis: true,
 			render: (genero) => (
 				<h3
 					style={{
-						textAlignLast: "center",
 						fontWeight: "revert",
 						fontSize: "large",
-						color: "green",
 					}}
 				>
 					{genero}
@@ -140,14 +107,11 @@ export default function EncargoTable({ listaProductos, setlistaProductos }) {
 			title: "Modelo",
 			dataIndex: "modelo",
 			key: "modelo",
-			ellipsis: true,
 			render: (modelo) => (
 				<h3
 					style={{
-						textAlignLast: "center",
 						fontWeight: "revert",
 						fontSize: "large",
-						color: "green",
 					}}
 				>
 					{modelo}
@@ -158,6 +122,7 @@ export default function EncargoTable({ listaProductos, setlistaProductos }) {
 			title: "Cantidad",
 			dataIndex: "cantidad",
 			key: "cantidad",
+			width: "100px",
 			render: (cantidad, record) => (
 				<Row justify='space-around'>
 					<Button
@@ -204,41 +169,28 @@ export default function EncargoTable({ listaProductos, setlistaProductos }) {
 		},
 	];
 	return (
-		<>
-			<Table
-				columns={columns}
-				dataSource={listaProductos}
-				pagination={false}
-				bordered
-				style={{
-					// height: "250px",
-					borderRadius: "10px",
-					boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
-					margin: "0 10px 10px 10px",
-				}}
-				rowSelection={rowSelection}
-				size='small'
-				onRow={(record, rowIndex) => {
-					return {
-						onClick: () => {
-							click(record, rowIndex);
-						},
-					};
-				}}
-				locale={{
-					emptyText: (
-						<Result
-							icon={
-								<MdLocalGroceryStore
-									style={{ color: "blue", fontSize: "xxx-large" }}
-								/>
-							}
-							// status="500"
-							subTitle='Agrega productos'
-						/>
-					),
-				}}
-			/>
-		</>
+		<Table
+			columns={columns}
+			dataSource={listaProductos}
+			pagination={false}
+			bordered
+			size='small'
+			style={{
+				boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
+				margin: "0 10px",
+			}}
+			locale={{
+				emptyText: (
+					<Result
+						icon={
+							<MdLocalGroceryStore
+								style={{ color: "blue", fontSize: "xxx-large" }}
+							/>
+						}
+						subTitle='Agrega productos'
+					/>
+				),
+			}}
+		/>
 	);
 }

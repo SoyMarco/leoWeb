@@ -15,7 +15,6 @@ import {
 	Layout,
 	Row,
 	Switch,
-	Menu,
 	Avatar,
 	Select,
 } from "antd";
@@ -86,48 +85,16 @@ const Login = () => {
 						padding: 0,
 					}}
 				>
-					<Menu
-						mode='horizontal'
-						defaultSelectedKeys={["2"]}
-						style={{
-							background: "transparent",
-							margin: "-10px 0 0 0",
-							// height: "50px",
-							color: "white",
-							width: "100%",
-						}}
-					>
-						<Menu.Item
-							key='1'
+					<Row justify='space-between'>
+						<Avatar src={LogoLeo} size='large' />
+						<Switch
+							checked={false}
 							style={{
-								background: "transparent",
-								margin: 0,
-								color: "white",
+								background: "red",
+								margin: "10px 10px",
 							}}
-							icon={<Avatar src={LogoLeo} size='large' />}
-						>
-							Bazar Leo
-						</Menu.Item>
-						<Menu.Item key='2'></Menu.Item>
-						<Menu.Item key='3'></Menu.Item>
-						<Menu.Item
-							key='4'
-							style={{
-								display: "flex",
-								flexDirection: "column",
-								float: "right",
-								marginLeft: "auto",
-							}}
-						>
-							<Switch
-								style={{
-									background: "red",
-									// boxShadow: "5px 5px 19px #b3b3b3, -5px -5px 19px #ffffff",
-								}}
-								// onChange={logoutApp}
-							></Switch>
-						</Menu.Item>
-					</Menu>
+						></Switch>
+					</Row>
 				</Header>
 				<div
 					style={{
@@ -177,11 +144,6 @@ const Login = () => {
 											.indexOf(input.toLowerCase()) >= 0
 									}
 									style={{
-										// color: "#000058",
-										// // fontSize: 30,
-										// fontSize: "large",
-										// fontWeight: "bold",
-										// borderRadius: "50px",
 										width: "80%",
 										padding: "5",
 										border: "0 0 0 0",
@@ -222,7 +184,6 @@ const Login = () => {
 									placeholder='Contraseña'
 									style={{
 										color: "#000058",
-										// fontSize: 30,
 										fontSize: "x-large",
 										fontWeight: "bold",
 										borderRadius: "50px",

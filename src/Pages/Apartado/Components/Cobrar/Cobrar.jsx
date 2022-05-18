@@ -38,6 +38,8 @@ export default function Cobrar() {
 					f3: true,
 				});
 				navigate("/");
+				initialState([]);
+
 				return;
 			}
 
