@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Row, Select, ConfigProvider, Result } from "antd";
 import { GET_APARTADOS_BUSCADOR } from "myGraphql/apartado";
+import AuthContext from "context/Auth/AuthContext";
 import ErrorConection from "Utils/ErrorConection";
 import { SyncOutlined } from "@ant-design/icons";
 import { GET_ENCARGOS } from "myGraphql/encargo";
@@ -8,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import "./buscarApartados.css";
 import moment from "moment";
-import AuthContext from "context/Auth/AuthContext";
 
 const BuscadorApartados = () => {
 	const { timeLogout } = useContext(AuthContext);
@@ -30,6 +30,7 @@ const BuscadorApartados = () => {
 	}
 
 	const [listaBusqueda, setlistaBusqueda] = useState([]);
+	const [first, setfirst] = useState(undefined);
 	const [urlFolio, seturlFolio] = useState({ folio: 0, tipo: "" });
 	const { Option } = Select;
 	const navigate = useNavigate();
@@ -54,6 +55,7 @@ const BuscadorApartados = () => {
 		if (urlFolio?.folio > 0) {
 			navigate(`/${urlFolio.tipo}/${urlFolio.folio}`);
 		}
+		setfirst(undefined);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [urlFolio]);
 
@@ -64,6 +66,7 @@ const BuscadorApartados = () => {
 		return moment.unix(item.createAt / 1000).format("LL");
 	};
 	const selectItem = (folio, item) => {
+		setfirst(folio);
 		seturlFolio({ folio: folio, tipo: item?.children[2]?.key });
 	};
 	const onFocus = () => {
@@ -96,7 +99,7 @@ const BuscadorApartados = () => {
 	return (
 		<ConfigProvider renderEmpty={customizeRenderEmpty}>
 			<Select
-				value=''
+				value={first}
 				allowClear={true}
 				id='buscarApartadoInput'
 				loading={loading || loadingEncargos}
@@ -105,7 +108,7 @@ const BuscadorApartados = () => {
 					loading || loadingEncargos ? (
 						<SyncOutlined style={{ fontSize: 25 }} spin={true} />
 					) : (
-						"Busca Apartados y Encargos"
+						"Buscar"
 					)
 				}
 				optionFilterProp='children'
@@ -118,7 +121,7 @@ const BuscadorApartados = () => {
 					option.children[1].key.toLowerCase().indexOf(input.toLowerCase()) >= 0
 				}
 				style={{
-					width: 500,
+					width: "100%",
 					fontWeight: "bold",
 					textAlignLast: "center",
 					fontSize: "20px",

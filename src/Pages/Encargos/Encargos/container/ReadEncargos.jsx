@@ -1,14 +1,16 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useQuery, useMutation } from "@apollo/client";
+import { useState, useEffect, useContext } from "react";
 import { GET_ENCARGOS, EDIT_GUARDAR_ENCARGO } from "myGraphql/encargo";
+import TablaEncargos from "../components/Tabla/TablaEncargos";
+import { openNotification } from "Utils/openNotification";
 import { Skeleton, Card, Row, Col, Switch } from "antd";
-import { AiFillFolderOpen } from "react-icons/ai";
+import { useQuery, useMutation } from "@apollo/client";
+import AuthContext from "context/Auth/AuthContext";
+import ErrorConection from "Utils/ErrorConection";
+import { GiBoxUnpacking } from "react-icons/gi";
+import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import "./ReadEncargos.css";
-import { useNavigate } from "react-router-dom";
-import { openNotification } from "Utils/openNotification";
-import ErrorConection from "Utils/ErrorConection";
-import AuthContext from "context/Auth/AuthContext";
+import SwitchB from "Pages/Encargos/Components/Switch/SwitchB";
 
 export default function ReadEncargo() {
 	const { timeLogout } = useContext(AuthContext);
@@ -39,8 +41,7 @@ export default function ReadEncargo() {
 		}
 	}, [dataEncargos]);
 	const pasarAFechaLLLL = (item) => {
-		let fecha = moment.unix(item / 1000).format("LLLL");
-		return fecha;
+		return moment.unix(item / 1000).format("LLLL");
 	};
 	const guardarEncargo = async (e, item) => {
 		setbtnLoading(true);
@@ -67,113 +68,69 @@ export default function ReadEncargo() {
 			ErrorConection(timeLogout);
 		}
 	};
+
 	return (
 		<>
 			<Row justify='center'>
-				<h1 style={{ fontSize: "25px", fontWeight: "bold", color: "#001e36" }}>
+				<h1 style={{ fontSize: "25px", fontWeight: "bold", color: "darkBlue" }}>
 					ENCARGOS
 				</h1>
 			</Row>
 			<Skeleton loading={loadingEncargos} avatar active>
-				<Row gutter={[20, 0]}>
+				<Row gutter={[10, 10]}>
 					{encargos?.map((item) => {
+						console.log(item);
 						return (
-							<Col lg={8} xs={24} className='colAntCard'>
+							<Col lg={12} xs={24} className='colAntCard'>
 								<Card
 									style={{
 										width: "100%",
-										height: "95%",
-										marginTop: 16,
+										height: "100%",
+										marginTop: 10,
 										borderRadius: 10,
 										boxShadow: "17px 17px 35px #7a7a7a,-7px -7px 30px #ffffff",
 									}}
-									actions={[
-										widthPantalla < 700 ? null : (
-											<div className='divAbrir'>
-												<div
-													onClick={() =>
-														navigate(
-															widthPantalla < 700
-																? `/mobile/encargo/${item.folio}`
-																: `/encargo/${item.folio}`
-														)
-													}
-												>
-													<p style={{ marginBottom: 0 }}>Abrir</p>
-													<AiFillFolderOpen
-														key='abrir'
-														style={{ fontSize: "20px" }}
-													/>
-												</div>
-											</div>
-										),
-										<div className='divAbrir'>
-											<div>
-												<p style={{ marginBottom: 0 }}>Guardado</p>
-												<Switch
-													checked={item?.guardado?.status === true}
-													disabled={loadingEncargos || btnLoading}
-													loading={loadingEncargos || btnLoading}
-													onClick={(e) => guardarEncargo(e, item)}
-													style={
-														item?.guardado?.status === true
-															? { background: "limeGreen", fontSize: "20px" }
-															: { background: "gray", fontSize: "20px" }
-													}
-												/>
-											</div>
-										</div>,
-									]}
 								>
 									<Meta
 										className='titleCard'
 										title={
 											<Row justify='space-between'>
-												<h3>{item.cliente}</h3>
+												<h3 style={{ color: "darkBlue" }}>{item.cliente}</h3>
 												<h4>Folio: {item.folio}</h4>
 											</Row>
 										}
 									/>
 									<h4 style={{ marginLeft: "15px" }}>
-										{pasarAFechaLLLL(item.createAt)}
+										{`${pasarAFechaLLLL(item.createAt)} por ${item.vendedor}`}
 									</h4>
-									{/* <h4 className='h4Encargos'>Encargos:</h4> */}
-									<table className='tablaEncargos'>
-										<tr>
-											<th>Encargo</th>
-											<th>Color</th>
-											<th>Genero</th>
-										</tr>
-										{item?.productos?.map((producto) => {
-											return (
-												<>
-													<tr>
-														<td>{producto.nombre}</td>
-														<td>{producto.color}</td>
-														<td>{producto.genero}</td>
-													</tr>
-												</>
-											);
-										})}
-									</table>
-									<table className='tablaEncargos2'>
-										<tr>
-											<th>Talla</th>
-											<th>Modelo</th>
-											<th>Vendedor</th>
-										</tr>
-										{item?.productos?.map((producto) => {
-											return (
-												<>
-													<tr>
-														<td>{producto.talla}</td>
-														<td>{producto.modelo}</td>
-														<td>{producto.vendedor}</td>
-													</tr>
-												</>
-											);
-										})}
-									</table>
+									<TablaEncargos item={item} />
+									<Row className='divAbrir'>
+										<Col
+											onClick={() =>
+												navigate(
+													widthPantalla < 700
+														? `/mobile/encargo/${item.folio}`
+														: `/encargo/${item.folio}`
+												)
+											}
+											flex='50%'
+										>
+											<p style={{ marginBottom: 0 }}>Abrir</p>
+											<GiBoxUnpacking
+												key='abrir'
+												style={{ fontSize: "25px" }}
+											/>
+										</Col>
+
+										<Col flex='50%'>
+											<p style={{ marginBottom: 0 }}>Guardado</p>
+											<SwitchB
+												loader={loadingEncargos || btnLoading}
+												checked={item?.guardado?.status}
+												onClick={(e) => guardarEncargo(e, item)}
+											/>
+										</Col>
+									</Row>
 								</Card>
 							</Col>
 						);

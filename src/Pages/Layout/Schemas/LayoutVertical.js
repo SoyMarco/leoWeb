@@ -6,47 +6,48 @@ import {
 } from "react-icons/fa";
 import { RiTerminalWindowFill } from "react-icons/ri";
 import { GiLargeDress } from "react-icons/gi";
-
+// Logo caja, GiNotebook
+// import { GiNotebook } from "react-icons/go";
 const layoutVertical = [
 	{
 		key: "/",
-		pathname: "/",
-		icon: <MdLocalGroceryStore />,
+		icon: <MdLocalGroceryStore style={{ fontSize: "23px" }} />,
 		label: "Principal",
 	},
 	{
 		key: "/add",
-		pathname: "/add",
-		icon: <GiLargeDress />,
+		icon: <GiLargeDress style={{ fontSize: "23px" }} />,
 		label: "Nuevo Apartado",
 	},
+	// {
+	// 	key: "/addencargo",
+	// 	icon: <GiNotebook style={{ fontSize: "23px" }} />,
+	// 	label: "Nuevo Encargo",
+	// },
+
 	{
 		key: "/entradasSalidas",
-		pathname: "/entradasSalidas",
-		icon: <FaMoneyBillAlt />,
+		icon: <FaMoneyBillAlt style={{ fontSize: "23px" }} />,
 		label: "Entrada/Salida",
 	},
 	// {
 	// 	key: "/Perfumes",
-	// 	pathname: "/perfumes",
 	// 	icon: <GiDelicatePerfume />,
 	// 	label: "Perfumes",
 	// },
 	{
 		key: "/ventas",
-		pathname: "/ventas",
-		icon: <FaFileInvoiceDollar />,
+		icon: <FaFileInvoiceDollar style={{ fontSize: "23px" }} />,
 		label: "Ventas",
 	},
 	{
 		key: "/corte",
-		pathname: "/corte",
-		icon: <FaCashRegister />,
+		icon: <FaCashRegister style={{ fontSize: "23px" }} />,
 		label: "Corte",
 	},
 	{
 		key: "NuevaVentana",
-		icon: <RiTerminalWindowFill />,
+		icon: <RiTerminalWindowFill style={{ fontSize: "23px" }} />,
 		label: (
 			<a href='/' target='_blank' id='linkNewWindow'>
 				<span>Nueva ventana</span>

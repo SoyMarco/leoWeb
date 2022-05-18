@@ -1,13 +1,14 @@
-import { useRef, useContext } from "react";
+import { useContext } from "react";
 import ProductsAddApartado from "../ProductsAddApartado/ProductsAddApartado";
-import { GET_CLIENTS_NAMES, GET_PRODUCTS_NAME } from "myGraphql/apartado";
+import { GET_PRODUCTS_NAME } from "myGraphql/apartado";
 import NewAparadoContext from "context/NewApartado/NewAparadoContext";
 import ShopListContext from "context/Shopping/ShopListContext";
 import { DollarCircleOutlined } from "@ant-design/icons";
-import { Card, Input, Row, AutoComplete } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Card, Input, Row } from "antd";
 import { useQuery } from "@apollo/client";
 import { keyBlock } from "Utils";
+import ListClients from "Components/ListClients/ListClients";
+import { useNavigate } from "react-router-dom";
 
 const StepsB = () => {
 	const {
@@ -26,22 +27,8 @@ const StepsB = () => {
 		inputAbono,
 	} = useContext(NewAparadoContext);
 	const { setmodalCobrar, settotalTotal } = useContext(ShopListContext);
-	const { data: getClientsNames } = useQuery(GET_CLIENTS_NAMES);
 	const { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
 
-	const navigate = useNavigate();
-	const inputNameClient = useRef();
-
-	const pressKeyEnter = (e) => {
-		if (e.keyCode === 13) {
-			if (cliente) next();
-		}
-		if (e.keyCode === 27) {
-			if (!cliente) {
-				navigate("/");
-			}
-		}
-	};
 	const keyAbono = (e) => {
 		if (e.keyCode === 27) {
 			prev();
@@ -61,44 +48,35 @@ const StepsB = () => {
 		settotalTotal(value);
 		setabono(value);
 	};
+	const navigate = useNavigate();
+
+	const pressKeyEnter = (e) => {
+		if (e.keyCode === 13) {
+			if (cliente) next();
+		}
+		if (e.keyCode === 27) {
+			if (!cliente) {
+				navigate("/");
+			}
+		}
+	};
 	return [
 		{
 			title: cliente ? cliente : "Nombre cliente",
 			content: (
-				<Row justify='center'>
+				<Row justify='center' style={{ margin: "55px 10px " }}>
 					<h2
 						style={{
 							color: "blue",
 							fontSize: "xx-large",
-							margin: "55px 10px ",
 						}}
 					>
 						Cliente:
 					</h2>
-					<AutoComplete
-						defaultActiveFirstOption={false}
-						id='inputNameClient'
-						ref={inputNameClient}
-						autoFocus={true}
-						backfill={true}
-						size='large'
-						onKeyUp={pressKeyEnter}
-						style={{
-							color: "blue",
-							fontSize: "x-large",
-							fontWeight: "bold",
-							borderRadius: "50px",
-							width: "80%",
-							margin: "60px 0 ",
-						}}
-						onChange={(e) => setcliente(e.toUpperCase())}
-						value={cliente}
-						options={getClientsNames?.getClientsNames}
-						placeholder='Ingresa el nombre de cliente'
-						filterOption={(inputValue, option) =>
-							option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !==
-							-1
-						}
+					<ListClients
+						cliente={cliente}
+						setcliente={setcliente}
+						action={pressKeyEnter}
 					/>
 				</Row>
 			),
@@ -177,7 +155,7 @@ const StepsB = () => {
 							Abono:
 						</h2>
 						<Input
-							id='inputNameClient'
+							id='Abono'
 							prefix={<DollarCircleOutlined style={{ marginLeft: "20px" }} />}
 							style={{
 								color: "blue",

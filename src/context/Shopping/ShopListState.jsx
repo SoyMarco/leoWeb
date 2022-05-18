@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import ShopListContext from "./ShopListContext";
 import { REGISTER_F3 } from "myGraphql/f3";
@@ -20,8 +21,11 @@ const ShopListState = (props) => {
 
 	useEffect(() => {
 		calcularTotales();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [shopList]);
+
+	useEffect(() => {
+		selectLastRow();
+	}, [shopList.length]);
 
 	useEffect(() => {
 		setstateRecord({ key: selectedRowKeys[0] });
@@ -37,7 +41,6 @@ const ShopListState = (props) => {
 			settotalTotal(sum);
 			settotalProductos(sumProd);
 		}
-		selectLastRow();
 	};
 	const selectLastRow = () => {
 		const ultimoArray = shopList.length;
@@ -159,24 +162,24 @@ const ShopListState = (props) => {
 	return (
 		<ShopListContext.Provider
 			value={{
-				shopList: shopList,
+				shopList,
 				addProductShopList,
 				clearShopList,
 				addOneShopList,
 				removeOneShopList,
 				eliminarProducto,
 				setselectedRowKeys,
-				selectedRowKeys: selectedRowKeys,
+				selectedRowKeys,
 				setDrawerF3Visible,
-				DrawerF3Visible: DrawerF3Visible,
+				DrawerF3Visible,
 				eliminarProductoF3,
 				totalTotal: totalTotal,
 				settotalTotal,
-				totalProductos: totalProductos,
+				totalProductos,
 				initialState,
 				setstateRecord,
 				setmodalCobrar,
-				modalCobrar: modalCobrar,
+				modalCobrar,
 				stateRecord,
 				imprimir,
 				setimprimir,
