@@ -1,16 +1,16 @@
 import { useState, useEffect, useContext } from "react";
 import { GET_ENCARGOS, EDIT_GUARDAR_ENCARGO } from "myGraphql/encargo";
+import SwitchB from "Pages/Encargos/Components/Switch/SwitchB";
 import TablaEncargos from "../components/Tabla/TablaEncargos";
 import { openNotification } from "Utils/openNotification";
-import { Skeleton, Card, Row, Col } from "antd";
 import { useQuery, useMutation } from "@apollo/client";
 import AuthContext from "context/Auth/AuthContext";
 import ErrorConection from "Utils/ErrorConection";
+import { Skeleton, Card, Row, Col } from "antd";
 import { GiBoxUnpacking } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import "./ReadEncargos.css";
-import SwitchB from "Pages/Encargos/Components/Switch/SwitchB";
 
 export default function ReadEncargo() {
 	const { timeLogout } = useContext(AuthContext);

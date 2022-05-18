@@ -4,22 +4,25 @@ import ErrorConection from "Utils/ErrorConection";
 import { CANCELAR_PRODUCTO_APARTDO } from "myGraphql/apartado";
 import { MdLocalGroceryStore, MdDelete } from "react-icons/md";
 import { useMutation } from "@apollo/client";
-import moment from "moment";
 import { Table, Result, Col, Row, Button, Popconfirm, Tooltip } from "antd";
-import "./productos.css";
 import AddProduct from "./AddProduct/AddProduct";
 import AuthContext from "context/Auth/AuthContext";
+import ReadEncargoContext from "context/Encargos/ReadEcargo/context";
+import "./productos.css";
 
-export default function Productos({
-	loading,
-	productos,
-	refetch,
-	setstateRecord,
-	loader,
-	setloader,
-	dataEncargo,
-	inputAbono,
-}) {
+export default function Productos() {
+	const {
+		dataEncargo,
+		pasarAFecha,
+		productos,
+		refetch,
+		loading,
+		inputAbono,
+		setstateRecord,
+		loader,
+		setloader,
+	} = useContext(ReadEncargoContext);
+
 	const { timeLogout } = useContext(AuthContext);
 	const [mutateCANCELAR_PRODUCTO_APARTDO] = useMutation(
 		CANCELAR_PRODUCTO_APARTDO
@@ -38,13 +41,6 @@ export default function Productos({
 		setselectedRowKeys([record.key]);
 		setstateRecord(record);
 		inputAbono.current.select();
-	};
-	const pasarAFecha = (item) => {
-		return moment.unix(item / 1000).format("ll");
-	};
-
-	const pasarAFechaLLLL = (item) => {
-		return moment.unix(item / 1000).format("LLLL");
 	};
 	const borrarEntregarProduct = async (item, borrarEntregar) => {
 		if (loader === false) {
@@ -195,11 +191,13 @@ export default function Productos({
 					placement='top'
 					title={
 						record?.entregado[0]?.status === true
-							? `${pasarAFechaLLLL(
-									record?.entregado[0]?.fecha
+							? `${pasarAFecha(
+									record?.entregado[0]?.fecha,
+									"LLLL"
 							  )} por ${record?.entregado[0]?.vendedor.toUpperCase()}`
-							: `${pasarAFechaLLLL(
-									createAt
+							: `${pasarAFecha(
+									createAt,
+									"LLLL"
 							  )}  por ${record.vendedor.toUpperCase()}`
 					}
 				>
@@ -211,8 +209,8 @@ export default function Productos({
 						}}
 					>
 						{record?.entregado[0]?.status === true
-							? `${pasarAFecha(record?.entregado[0]?.fecha)}`
-							: `${pasarAFecha(createAt)}`}
+							? `${pasarAFecha(record?.entregado[0]?.fecha, "ll")}`
+							: `${pasarAFecha(createAt, "ll")}`}
 					</h1>
 				</Tooltip>
 			),
@@ -249,7 +247,7 @@ export default function Productos({
 		<>
 			<Col xs={24} sm={24} md={14}>
 				<Table
-					id='tableApartado'
+					id='tableEncargos'
 					title={() => (
 						<Row justify='space-between'>
 							<h1

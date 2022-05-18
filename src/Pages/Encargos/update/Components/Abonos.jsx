@@ -2,21 +2,23 @@ import React, { useState, useContext } from "react";
 import { Table, Result, Col, Row, Tooltip, Popconfirm, Button } from "antd";
 import { MdDelete } from "react-icons/md";
 import { SmileOutlined } from "@ant-design/icons";
-import moment from "moment";
 import { BORRAR_EDITAR_ABONO } from "myGraphql/apartado";
 import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
 import ErrorConection from "Utils/ErrorConection";
 import AuthContext from "context/Auth/AuthContext";
+import ReadEncargoContext from "context/Encargos/ReadEcargo/context";
 
-export default function Abonos({
-	abonos,
-	loading,
-	loader,
-	setloader,
-	inputAbono,
-	refetch,
-}) {
+export default function Abonos() {
+	const {
+		pasarAFecha,
+		abonos,
+		refetch,
+		loading,
+		inputAbono,
+		loader,
+		setloader,
+	} = useContext(ReadEncargoContext);
 	const { timeLogout } = useContext(AuthContext);
 	const [selectedRowKeys, setselectedRowKeys] = useState(0);
 	const [mutateBORRAR_EDITAR_ABONO] = useMutation(BORRAR_EDITAR_ABONO);
@@ -33,12 +35,7 @@ export default function Abonos({
 		setselectedRowKeys([record.key]);
 		inputAbono.current.select();
 	};
-	const pasarAFecha = (item) => {
-		return moment.unix(item / 1000).format("L");
-	};
-	const pasarAFechaLLLL = (item) => {
-		return moment.unix(item / 1000).format("LLLL");
-	};
+
 	const borrarAbono = async (record, borrarEditar) => {
 		setloader(true);
 
@@ -99,8 +96,8 @@ export default function Abonos({
 			sorter: (a, b) => b.createAt - a.createAt,
 			defaultSortOrder: "ascend",
 			render: (createAt, _record) => (
-				<Tooltip placement='top' title={`${pasarAFechaLLLL(createAt)}`}>
-					<h1>{pasarAFecha(createAt)}</h1>
+				<Tooltip placement='top' title={`${pasarAFecha(createAt, "LLLL")}`}>
+					<h1>{pasarAFecha(createAt, "L")}</h1>
 				</Tooltip>
 			),
 		},
@@ -155,7 +152,7 @@ export default function Abonos({
 			<Col xs={24} sm={24} md={10}>
 				{/* PRODUCTOS */}
 				<Table
-					id='tableApartado'
+					id='tableEncargos'
 					title={() => (
 						<Row justify='space-between'>
 							<h1

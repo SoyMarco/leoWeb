@@ -1,17 +1,17 @@
 import { useState, useContext } from "react";
-import EncargoContext from "./context";
 import useService from "Components/ModalCobrar/Service/useService";
-import { useMutation } from "@apollo/client";
-import { REGISTER_ENCARGO } from "myGraphql/encargo";
 import { openNotification } from "Utils/openNotification";
-import { useNavigate } from "react-router-dom";
+import { REGISTER_ENCARGO } from "myGraphql/encargo";
 import AuthContext from "context/Auth/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import NewEncargoContext from "./context";
 import { Form } from "antd";
 
-const EncargoState = (props) => {
+export default function NewEncargoState({ children }) {
 	const { auth } = useContext(AuthContext);
 
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 	const { register } = useService();
 	const [mutateREGISTER_ENCARGO] = useMutation(REGISTER_ENCARGO);
 	const [form] = Form.useForm();
@@ -45,9 +45,9 @@ const EncargoState = (props) => {
 		}
 	};
 	const onFinish = () => {
-		let values = form.getFieldsValue();
+		const values = form.getFieldsValue();
 		if (values.nombre && cliente) {
-			let productoEncargo = [
+			const productoEncargo = [
 				...listaProductos,
 				{
 					nombre: values.nombre,
@@ -69,13 +69,13 @@ const EncargoState = (props) => {
 		}
 	};
 	const btnAddAbono = () => {
-		let values = form.getFieldsValue();
+		const values = form.getFieldsValue();
 		if (!values.nombre && listaProductos.length > 0) {
 			setmodalAbono(true);
 		}
 	};
 	return (
-		<EncargoContext.Provider
+		<NewEncargoContext.Provider
 			value={{
 				listaProductos,
 				setlistaProductos,
@@ -94,9 +94,7 @@ const EncargoState = (props) => {
 				btnAddAbono,
 			}}
 		>
-			{props.children}
-		</EncargoContext.Provider>
+			{children}
+		</NewEncargoContext.Provider>
 	);
-};
-
-export default EncargoState;
+}

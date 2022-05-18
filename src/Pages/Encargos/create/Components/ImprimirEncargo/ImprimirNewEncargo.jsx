@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import ReactToPrint from "react-to-print";
 import { keyBlock } from "Utils";
 import { openNotification } from "Utils/openNotification";
-import EncargoContext from "context/Encargo/context";
+import EncargoContext from "context/NewEncargo/context";
 import AuthContext from "context/Auth/AuthContext";
 
 const ImprimirNewEncargo = () => {

@@ -3,7 +3,7 @@ import ImprimirNewEncargo from "../Components/ImprimirEncargo/ImprimirNewEncargo
 import EncargoTable from "Pages/Encargos/create/Components/Table/Table";
 import ModalAbonoEncargo from "../Components/ModalAbono/ModalAbono";
 import FormEncargo from "../Components/Form/FormEncargo";
-import EncargoContext from "context/Encargo/context";
+import EncargoContext from "context/NewEncargo/context";
 import { Row, Col } from "antd";
 import Botones from "../Components/Botones/Botones";
 

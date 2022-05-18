@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import Encabezado from "../..//Components/Encabezado/Encabezado";
+import Encabezado from "../../Components/Encabezado/Encabezado";
 import ApartadoContext from "context/Apartado/ApartadoContext";
 import { TablaProductos, TablaAbonos } from "./Tablas";
 import { CalendarOutlined } from "@ant-design/icons";
@@ -25,7 +25,7 @@ export default function CardApartado({ refetch, loading }) {
 		return moment.unix(item / 1000).format("LL");
 	};
 
-	const renderTablaProductosAbonos = () => {
+	const renderTablas = () => {
 		if (statusApartado) {
 			return (
 				<Row>
@@ -80,7 +80,7 @@ export default function CardApartado({ refetch, loading }) {
 			]}
 		>
 			<Encabezado refetch={refetch} />
-			{renderTablaProductosAbonos()}
+			{renderTablas()}
 		</Card>
 	);
 }

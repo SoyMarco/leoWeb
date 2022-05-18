@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { MdDelete, MdLocalGroceryStore } from "react-icons/md";
 import { Table, Button, Result, Row } from "antd";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
-import EncargoContext from "context/Encargo/context";
+import EncargoContext from "context/NewEncargo/context";
 
 export default function EncargoTable() {
 	const { listaProductos, setlistaProductos } = useContext(EncargoContext);
