@@ -18,7 +18,8 @@ const EncargoState = (props) => {
 
 	const [listaProductos, setlistaProductos] = useState([]);
 	const [imprimirEncargo, setimprimirEncargo] = useState(false);
-	const [loader, setloader] = useState(false);
+	// Descomentar depues
+	// const [loader, setloader] = useState(false);
 	const [abono, setabono] = useState(0);
 	const [cliente, setcliente] = useState("");
 	const [modalAbono, setmodalAbono] = useState(null);
@@ -81,7 +82,7 @@ const EncargoState = (props) => {
 				imprimirEncargo,
 				setimprimirEncargo,
 				guardarEncargo,
-				loader,
+				// loader,
 				abono,
 				setabono,
 				cliente,
