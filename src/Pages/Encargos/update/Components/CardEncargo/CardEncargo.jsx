@@ -1,22 +1,13 @@
 import { useContext } from "react";
 import ReadEncargoContext from "context/Encargos/ReadEcargo/context";
-import { TablaProductos, TablaAbonos } from "../../Components";
-import { CalendarOutlined } from "@ant-design/icons";
+import { TablaProductos, TablaAbonos } from "../Tablas";
 import Encabezado from "../Encabezado/Encabezado";
-import { Row, Card, Button, Result } from "antd";
+import { Row, Card, Result } from "antd";
+import Footer from "../Footer/Footer";
+import "./encargo.css";
 
 export default function CardEncargo() {
-	const {
-		abono,
-		calculateRestaria,
-		totalProductos,
-		totalTotal,
-		totalAbonos,
-		statusEncargo,
-		dataEncargo,
-		pasarAFecha,
-		colorVence,
-	} = useContext(ReadEncargoContext);
+	const { dataEncargo, pasarAFecha } = useContext(ReadEncargoContext);
 
 	const renderTablas = () => {
 		const isCanceled = dataEncargo?.cancelado[0];
@@ -31,54 +22,17 @@ export default function CardEncargo() {
 
 		return (
 			<Row>
-				<Row>
-					<TablaProductos />
-					<TablaAbonos />
-				</Row>
+				<TablaProductos />
+				<TablaAbonos />
 			</Row>
 		);
 	};
 	return (
-		<Card
-			actions={[
-				<Button
-					disabled={!statusEncargo}
-					shape='round'
-					style={{
-						background: statusEncargo ? colorVence : "gray",
-						marginTop: 5,
-						marginRight: 15,
-						color: "white",
-						border: 0,
-						fontSize: "large",
-						fontWeight: "bold",
-					}}
-					// onClick={() => setmodalCalendar(true)}
-					icon={
-						<CalendarOutlined style={{ fontSize: "large", marginRight: 5 }} />
-					}
-				>
-					{pasarAFecha(dataEncargo?.createAt, "LL")}
-				</Button>,
-
-				<h1
-					style={{
-						color: calculateRestaria() >= 0 ? "green" : "red",
-						fontSize: "x-large",
-						fontWeight: "bold",
-					}}
-				>
-					{abono?.abono > 0 ? `Restaría $${calculateRestaria()}` : null}
-				</h1>,
-
-				<h1 className='totalRestaEncargo'>
-					{totalProductos ? `Resta $${totalTotal - totalAbonos}` : null}
-				</h1>,
-			]}
-		>
+		<Card>
 			<Encabezado />
-			<h1 className='nameClient'>{`Cliente:  ${dataEncargo?.cliente}`}</h1>
+			<h1 className='nameClientEncargo'>{`Encargó:  ${dataEncargo?.cliente}`}</h1>
 			{renderTablas()}
+			<Footer />
 		</Card>
 	);
 }

@@ -1,11 +1,8 @@
 #tableApartado > .ant-table-title {
-	background: linear-gradient(#000066, #000058, #000036);
+	background: linear-gradient(#0000a6, #000066);
 	border-radius: 25px 5px 0 0;
 }
-#tableEncargos > .ant-table-title {
-	background: #1873b9;
-	border-radius: 25px 5px 0 0;
-}
+
 #inputApartado {
 	padding: 0;
 	border: none;
@@ -32,4 +29,24 @@
 	font-size: x-large;
 	font-weight: bold;
 	padding-left: 20px;
+}
+h1.numeroAbonosApartado {
+	color: darkblue;
+	background: rgba(0, 0, 139, 0.13);
+	border-radius: 50px;
+	padding: 0 15px;
+	font-size: 25px;
+	font-weight: revert;
+	align-self: center;
+	margin: 0px;
+}
+h1.totalAbonosApartado {
+	color: darkgreen;
+	background: rgba(0, 100, 0, 0.096);
+	border-radius: 50px;
+	padding: 0 15px;
+	font-size: 40px;
+	font-weight: revert;
+	align-self: center;
+	margin: 0px;
 }

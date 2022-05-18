@@ -62,37 +62,36 @@ export default function Encabezado() {
 					type='number'
 				/>
 			</Tooltip>
-			<Row>
-				<Button
-					disabled={!statusEncargo || loader}
-					loading={loader}
-					shape='round'
-					style={{
-						background: statusEncargo
-							? "linear-gradient(#2196F3,#0000E6)"
-							: "gray",
-						marginTop: 5,
-						marginRight: 15,
-						color: "white",
-						border: 0,
-						fontWeight: "bold",
-					}}
-					onClick={() => setmodalReimprimir(true)}
-					icon={<PrinterFilled style={{ fontSize: "large", marginRight: 5 }} />}
-				>
-					Reimprimir
-				</Button>
 
-				<SwitchB
-					loader={loader}
-					checked={statusEncargo}
-					onClick={guardarEncargo}
-					// style={{
-					// 	marginTop: 10,
-					// 	marginRight: 5,
-					// }}
-				/>
-			</Row>
+			<Button
+				disabled={!statusEncargo || loader}
+				loading={loader}
+				shape='round'
+				style={{
+					background: statusEncargo
+						? "linear-gradient(#2196F3,#0000E6)"
+						: "gray",
+					marginTop: 5,
+					marginRight: 15,
+					color: "white",
+					border: 0,
+					fontWeight: "bold",
+				}}
+				onClick={() => setmodalReimprimir(true)}
+				icon={<PrinterFilled style={{ fontSize: "large", marginRight: 5 }} />}
+			>
+				Reimprimir
+			</Button>
+
+			<SwitchB
+				loader={loader}
+				checked={statusEncargo}
+				onClick={guardarEncargo}
+				// style={{
+				// 	marginTop: 10,
+				// 	marginRight: 5,
+				// }}
+			/>
 		</Row>
 	);
 }

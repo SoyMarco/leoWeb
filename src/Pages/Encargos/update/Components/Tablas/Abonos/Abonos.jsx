@@ -1,19 +1,18 @@
 import { useContext } from "react";
-import ApartadoContext from "context/Apartado/ApartadoContext";
-import { Table, Result, Col, Row, Progress } from "antd";
+import ReadEncargoContext from "context/Encargos/ReadEcargo/context";
 import { SmileOutlined } from "@ant-design/icons";
+import { Table, Result, Col, Row, Progress } from "antd";
 import useSchema from "./useSchema";
-import "./abonos.css";
 
-export default function Abonos({ loading }) {
-	const { totalTotal, totalAbonos, abonos, abono, inputAbono } =
-		useContext(ApartadoContext);
-	const { colAbonos } = useSchema({ loading });
+export default function Abonos() {
+	const { abonos, loading, inputAbono, abono, totalAbonos, totalTotal } =
+		useContext(ReadEncargoContext);
+
+	const { colAbonos } = useSchema();
 
 	const click = () => {
 		inputAbono.current.select();
 	};
-
 	const calculatePorcent = () => {
 		let addAbono = 0;
 		if (parseInt(abono.abono) > 0) {
@@ -27,29 +26,7 @@ export default function Abonos({ loading }) {
 	return (
 		<Col xs={24} sm={24} md={10}>
 			<Table
-				rowKey={(record) => record._id}
-				id='tableApartado'
-				columns={colAbonos}
-				dataSource={abonos}
-				pagination={false}
-				loading={loading}
-				bordered
-				scroll={{ y: 190, x: 400 }}
-				size='small'
-				style={{
-					height: "380px",
-					borderRadius: "10px",
-					boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
-					margin: "10px",
-					background: "#f0f2f5",
-				}}
-				onRow={() => {
-					return {
-						onClick: () => {
-							click();
-						},
-					};
-				}}
+				id='tableEncargos'
 				title={() => (
 					<Row justify='space-between'>
 						<h1
@@ -64,6 +41,26 @@ export default function Abonos({ loading }) {
 						</h1>
 					</Row>
 				)}
+				columns={colAbonos}
+				dataSource={abonos}
+				pagination={false}
+				loading={loading}
+				bordered
+				scroll={{ y: 210 }}
+				size='small'
+				style={{
+					height: "380px",
+					borderRadius: "10px",
+					boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
+					margin: "10px",
+				}}
+				onRow={() => {
+					return {
+						onClick: () => {
+							click();
+						},
+					};
+				}}
 				locale={{
 					emptyText: (
 						<Result

@@ -1,44 +1,19 @@
-import React, { useState, useContext } from "react";
-import { Table, Result, Col, Row, Tooltip, Popconfirm, Button } from "antd";
-import { MdDelete } from "react-icons/md";
-import { SmileOutlined } from "@ant-design/icons";
-import { BORRAR_EDITAR_ABONO } from "myGraphql/apartado";
-import { useMutation } from "@apollo/client";
-import { openNotification } from "Utils/openNotification";
-import ErrorConection from "Utils/ErrorConection";
-import AuthContext from "context/Auth/AuthContext";
+import { useContext } from "react";
 import ReadEncargoContext from "context/Encargos/ReadEcargo/context";
+import { openNotification } from "Utils/openNotification";
+import { BORRAR_EDITAR_ABONO } from "myGraphql/apartado";
+import { Row, Tooltip, Popconfirm, Button } from "antd";
+import { useMutation } from "@apollo/client";
+import { MdDelete } from "react-icons/md";
 
-export default function Abonos() {
-	const {
-		pasarAFecha,
-		abonos,
-		refetch,
-		loading,
-		inputAbono,
-		loader,
-		setloader,
-	} = useContext(ReadEncargoContext);
-	const { timeLogout } = useContext(AuthContext);
-	const [selectedRowKeys, setselectedRowKeys] = useState(0);
+export default function useSchema() {
+	const { pasarAFecha, refetch, loading, loader, setloader } =
+		useContext(ReadEncargoContext);
+
 	const [mutateBORRAR_EDITAR_ABONO] = useMutation(BORRAR_EDITAR_ABONO);
-
-	const onSelectChange = () => {
-		setselectedRowKeys([]);
-	};
-	const rowSelection = {
-		selectedRowKeys,
-		onChange: onSelectChange,
-	};
-
-	const click = (record, _rowIndex) => {
-		setselectedRowKeys([record.key]);
-		inputAbono.current.select();
-	};
 
 	const borrarAbono = async (record, borrarEditar) => {
 		setloader(true);
-
 		try {
 			if (record._id) {
 				const { data } = await mutateBORRAR_EDITAR_ABONO({
@@ -61,10 +36,9 @@ export default function Abonos() {
 			}
 		} catch (error) {
 			setloader(false);
-			ErrorConection(timeLogout);
 		}
 	};
-	/* COLUMNAS ABONOS */
+
 	const colAbonos = [
 		{
 			title: "ID",
@@ -146,59 +120,5 @@ export default function Abonos() {
 			),
 		},
 	];
-
-	return (
-		<>
-			<Col xs={24} sm={24} md={10}>
-				{/* PRODUCTOS */}
-				<Table
-					id='tableEncargos'
-					title={() => (
-						<Row justify='space-between'>
-							<h1
-								style={{
-									color: "white",
-									fontSize: "large",
-									fontWeight: "revert",
-									margin: "10px 0 5px 10px",
-								}}
-							>
-								Abonos: {abonos.length}
-							</h1>
-						</Row>
-					)}
-					columns={colAbonos}
-					dataSource={abonos}
-					pagination={false}
-					loading={loading}
-					bordered
-					scroll={{ y: 210 }}
-					rowSelection={rowSelection}
-					size='small'
-					style={{
-						height: "280px",
-						borderRadius: "10px",
-						boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
-						margin: "10px",
-					}}
-					onRow={(record, rowIndex) => {
-						return {
-							onClick: () => {
-								click(record, rowIndex);
-							},
-						};
-					}}
-					locale={{
-						emptyText: (
-							<Result
-								icon={<SmileOutlined />}
-								// status="500"
-								subTitle='Selecciona un apartado'
-							/>
-						),
-					}}
-				/>
-			</Col>
-		</>
-	);
+	return { colAbonos };
 }

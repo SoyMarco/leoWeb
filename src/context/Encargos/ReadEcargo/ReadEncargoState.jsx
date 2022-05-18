@@ -54,6 +54,7 @@ export default function ReadEncargoState({ children }) {
 				cliente,
 				guardado,
 			} = data?.getEncargoFolio[0];
+			console.log("@@@@@productosSet", productosSet);
 
 			const listaAbonos = abonoSet.map((item) => {
 				return { ...item, key: item._id };
@@ -71,7 +72,7 @@ export default function ReadEncargoState({ children }) {
 		let sumProd = 0;
 
 		for (let iterator of productos) {
-			sum += iterator.totalArticulo;
+			sum += iterator.totalArticulo ?? 0;
 			sumProd += iterator.cantidad;
 		}
 		settotalTotal(sum);

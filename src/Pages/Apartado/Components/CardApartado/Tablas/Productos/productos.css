@@ -30,22 +30,23 @@
 	font-weight: bold;
 	padding-left: 20px;
 }
-
-h1.totalProductoApartado {
+h1.numeroProductoApartado {
 	color: darkblue;
 	background: rgba(0, 0, 139, 0.13);
 	border-radius: 50px;
 	padding: 0 15px;
-	font-size: xx-large;
+	font-size: 25px;
 	font-weight: revert;
-	margin-right: 20px;
+	align-self: center;
+	margin: 0px;
 }
-h1.totalAbonosApartado {
+h1.totalProductoApartado {
 	color: darkgreen;
 	background: rgba(0, 100, 0, 0.096);
 	border-radius: 50px;
 	padding: 0 15px;
-	font-size: xx-large;
+	font-size: 40px;
 	font-weight: revert;
-	margin-right: 0 20px;
+	align-self: center;
+	margin: 0px;
 }

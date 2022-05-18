@@ -1,47 +1,20 @@
-import React, { useState, useContext } from "react";
-import { openNotification } from "Utils/openNotification";
-import ErrorConection from "Utils/ErrorConection";
-import { CANCELAR_PRODUCTO_APARTDO } from "myGraphql/apartado";
-import { MdLocalGroceryStore, MdDelete } from "react-icons/md";
-import { useMutation } from "@apollo/client";
-import { Table, Result, Col, Row, Button, Popconfirm, Tooltip } from "antd";
-import AddProduct from "./AddProduct/AddProduct";
-import AuthContext from "context/Auth/AuthContext";
+import { useContext } from "react";
 import ReadEncargoContext from "context/Encargos/ReadEcargo/context";
-import "./productos.css";
+import { CANCELAR_PRODUCTO_APARTDO } from "myGraphql/apartado";
+import { openNotification } from "Utils/openNotification";
+import { Row, Button, Popconfirm, Tooltip } from "antd";
+import { useMutation } from "@apollo/client";
+import { MdDelete } from "react-icons/md";
+import "moment/locale/es";
 
-export default function Productos() {
-	const {
-		dataEncargo,
-		pasarAFecha,
-		productos,
-		refetch,
-		loading,
-		inputAbono,
-		setstateRecord,
-		loader,
-		setloader,
-	} = useContext(ReadEncargoContext);
+export default function useSchema() {
+	const { pasarAFecha, refetch, loader, setloader } =
+		useContext(ReadEncargoContext);
 
-	const { timeLogout } = useContext(AuthContext);
 	const [mutateCANCELAR_PRODUCTO_APARTDO] = useMutation(
 		CANCELAR_PRODUCTO_APARTDO
 	);
-	const [selectedRowKeys, setselectedRowKeys] = useState(0);
-	const [modalAddProduct, setmodalAddProduct] = useState(false);
-	const onSelectChange = () => {
-		setselectedRowKeys([]);
-	};
-	const rowSelection = {
-		selectedRowKeys,
-		onChange: onSelectChange,
-	};
 
-	const click = (record) => {
-		setselectedRowKeys([record.key]);
-		setstateRecord(record);
-		inputAbono.current.select();
-	};
 	const borrarEntregarProduct = async (item, borrarEntregar) => {
 		if (loader === false) {
 			setloader(true);
@@ -75,18 +48,16 @@ export default function Productos() {
 				}
 			} catch (error) {
 				setloader(false);
-				ErrorConection(timeLogout);
 			}
 		}
 	};
-
-	/* COLUMNAS VENTAS */
 	const colProductos = [
 		{
 			title: "Encargo",
 			dataIndex: "nombre",
 			key: "nombre",
 			ellipsis: true,
+			fixed: "left",
 			render: (nombre) => (
 				<Tooltip placement='top' title={nombre}>
 					<h3
@@ -104,18 +75,9 @@ export default function Productos() {
 			title: "Talla",
 			dataIndex: "talla",
 			key: "talla",
-			ellipsis: true,
 			render: (talla) => (
 				<Tooltip placement='top' title={talla}>
-					<h3
-						style={{
-							textAlignLast: "center",
-							fontWeight: "revert",
-							fontSize: "large",
-						}}
-					>
-						{talla}
-					</h3>
+					{talla}
 				</Tooltip>
 			),
 		},
@@ -124,18 +86,9 @@ export default function Productos() {
 			title: "Color",
 			dataIndex: "color",
 			key: "color",
-			ellipsis: true,
 			render: (color) => (
 				<Tooltip placement='top' title={color}>
-					<h3
-						style={{
-							textAlignLast: "center",
-							fontWeight: "revert",
-							fontSize: "large",
-						}}
-					>
-						{color}
-					</h3>
+					{color}
 				</Tooltip>
 			),
 		},
@@ -144,18 +97,9 @@ export default function Productos() {
 			title: "Genero",
 			dataIndex: "genero",
 			key: "genero",
-			ellipsis: true,
 			render: (genero) => (
 				<Tooltip placement='top' title={genero}>
-					<h3
-						style={{
-							textAlignLast: "center",
-							fontWeight: "revert",
-							fontSize: "large",
-						}}
-					>
-						{genero}
-					</h3>
+					{genero}
 				</Tooltip>
 			),
 		},
@@ -164,18 +108,9 @@ export default function Productos() {
 			title: "Modelo",
 			dataIndex: "modelo",
 			key: "modelo",
-			ellipsis: true,
 			render: (modelo) => (
 				<Tooltip placement='top' title={modelo}>
-					<h3
-						style={{
-							textAlignLast: "center",
-							fontWeight: "revert",
-							fontSize: "large",
-						}}
-					>
-						{modelo}
-					</h3>
+					{modelo}
 				</Tooltip>
 			),
 		},
@@ -217,13 +152,14 @@ export default function Productos() {
 		},
 
 		{
-			title: "Delete",
+			title: "Borrar",
 			dataIndex: "totalArticulo",
 			key: "totalArticulo",
 			ellipsis: {
 				showTitle: false,
 			},
 			width: "60px",
+			fixed: "right",
 			render: (_totalArticulo, record) => (
 				<Tooltip placement='right' title='Borrar producto'>
 					<Row justify='center'>
@@ -242,70 +178,5 @@ export default function Productos() {
 			),
 		},
 	];
-
-	return (
-		<>
-			<Col xs={24} sm={24} md={14}>
-				<Table
-					id='tableEncargos'
-					title={() => (
-						<Row justify='space-between'>
-							<h1
-								style={{
-									color: "white",
-									fontSize: "large",
-									fontWeight: "revert",
-									margin: "10px 0 5px 10px",
-								}}
-							>
-								Encargos: {productos.length}
-							</h1>
-						</Row>
-					)}
-					columns={colProductos}
-					dataSource={productos}
-					pagination={false}
-					bordered
-					loading={loading}
-					scroll={{ y: 210 }}
-					style={{
-						height: "280px",
-						borderRadius: "10px",
-						boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
-						margin: "10px",
-					}}
-					rowSelection={rowSelection}
-					size='small'
-					onRow={(record) => {
-						return {
-							onClick: () => {
-								click(record);
-							},
-						};
-					}}
-					locale={{
-						emptyText: (
-							<Result
-								icon={
-									<MdLocalGroceryStore
-										style={{ color: "red", fontSize: "xxx-large" }}
-									/>
-								}
-								subTitle='Apartado sin productos'
-							/>
-						),
-					}}
-				/>
-			</Col>
-
-			{modalAddProduct && (
-				<AddProduct
-					setmodalAddProduct={setmodalAddProduct}
-					modalAddProduct={modalAddProduct}
-					refetch={refetch}
-					dataEncargo={dataEncargo}
-				/>
-			)}
-		</>
-	);
+	return { colProductos };
 }

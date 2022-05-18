@@ -1,7 +1,7 @@
 import { useEffect, useContext } from "react";
-import { Table, Result, Col, Row, Button, Tooltip } from "antd";
 import ApartadoContext from "context/Apartado/ApartadoContext";
 import AddProduct from "../../../AddProduct/AddProduct";
+import { Table, Result, Col, Row, Button } from "antd";
 import { MdLocalGroceryStore } from "react-icons/md";
 import { FaShoppingCart } from "react-icons/fa";
 import useSchema from "./useSchema";
@@ -34,29 +34,28 @@ export default function Productos({ refetch, loading }) {
 						color: "white",
 						fontSize: "large",
 						fontWeight: "revert",
-						margin: "10px 0 0 10px",
+						margin: "0px",
 					}}
 				>
-					Productos: {productos.length}
+					Productos
 				</h1>
-				<Tooltip placement='top' title='Agregar producto'>
-					<Button
-						shape='round'
-						style={{
-							background: "linear-gradient(#2196F3,#0000E6)",
-							marginTop: 5,
-							marginRight: 10,
-							color: "white",
-							border: 0,
-							// fontSize: "large",
-							fontWeight: "bold",
-						}}
-						onClick={() => setmodalAddProduct(true)}
-					>
-						<FaShoppingCart style={{ fontSize: "large", marginRight: 5 }} />
-						Agregar
-					</Button>
-				</Tooltip>
+
+				<Button
+					shape='round'
+					style={{
+						background: "linear-gradient(#2196F3,#0000E6)",
+						// marginTop: 5,
+						marginRight: 10,
+						color: "white",
+						border: 0,
+						// fontSize: "large",
+						fontWeight: "bold",
+					}}
+					onClick={() => setmodalAddProduct(true)}
+				>
+					<FaShoppingCart style={{ fontSize: "large", marginRight: 5 }} />
+					Agregar producto
+				</Button>
 			</Row>
 		);
 	};
@@ -100,8 +99,11 @@ export default function Productos({ refetch, loading }) {
 						),
 					}}
 					footer={() => (
-						<Row justify='end'>
-							<h1 className='totalProductoApartado'>Productos ${totalTotal}</h1>
+						<Row justify='space-around'>
+							<h1 className='numeroProductoApartado'>
+								Productos {productos?.length}
+							</h1>
+							<h1 className='totalProductoApartado'>${totalTotal}</h1>
 						</Row>
 					)}
 				/>
