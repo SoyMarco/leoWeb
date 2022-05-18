@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { GET_ENCARGOS, EDIT_GUARDAR_ENCARGO } from "myGraphql/encargo";
 import TablaEncargos from "../components/Tabla/TablaEncargos";
 import { openNotification } from "Utils/openNotification";
-import { Skeleton, Card, Row, Col, Switch } from "antd";
+import { Skeleton, Card, Row, Col } from "antd";
 import { useQuery, useMutation } from "@apollo/client";
 import AuthContext from "context/Auth/AuthContext";
 import ErrorConection from "Utils/ErrorConection";
