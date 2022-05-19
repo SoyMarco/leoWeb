@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import useService from "Components/ModalCobrar/Service/useService";
+import useService from "Hooks/Service/useService";
 import ApartadoContext from "context/Apartado/ApartadoContext";
 import { openNotification } from "Utils/openNotification";
 import { BORRAR_EDITAR_ABONO } from "myGraphql/apartado";

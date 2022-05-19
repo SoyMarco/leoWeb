@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import useService from "Components/ModalCobrar/Service/useService";
+import useService from "Hooks/Service/useService";
 import { openNotification } from "Utils/openNotification";
 import { REGISTER_ENCARGO } from "myGraphql/encargo";
 import AuthContext from "context/Auth/AuthContext";

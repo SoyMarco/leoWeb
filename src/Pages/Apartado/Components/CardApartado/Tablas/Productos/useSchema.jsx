@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import useService from "Components/ModalCobrar/Service/useService";
+import useService from "Hooks/Service/useService";
 import { Row, Button, Popconfirm, Switch, Tooltip } from "antd";
 import { CANCELAR_PRODUCTO_APARTDO } from "myGraphql/apartado";
 import { openNotification } from "Utils/openNotification";

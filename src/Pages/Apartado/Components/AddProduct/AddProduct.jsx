@@ -9,7 +9,7 @@ import { SaveFilled } from "@ant-design/icons";
 import { GiLargeDress } from "react-icons/gi";
 import { keyBlock } from "Utils";
 import ApartadoContext from "context/Apartado/ApartadoContext";
-import useService from "Components/ModalCobrar/Service/useService";
+import useService from "Hooks/Service/useService";
 
 export default function AddProduct() {
 	const { dataApartado, initialState, modalAddProduct, setmodalAddProduct } =

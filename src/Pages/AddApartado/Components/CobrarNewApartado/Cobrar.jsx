@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { REGISTER_APARTADO, REGISTER_APARTADO_F3 } from "myGraphql/apartado";
 import ModalCobrar from "Components/ModalCobrar/Container/ModalCobrar";
 import NewAparadoContext from "context/NewApartado/NewAparadoContext";
-import useService from "Components/ModalCobrar/Service/useService";
+import useService from "Hooks/Service/useService";
 import ShopListContext from "context/Shopping/ShopListContext";
 import AuthContext from "context/Auth/AuthContext";
 import { useNavigate } from "react-router-dom";

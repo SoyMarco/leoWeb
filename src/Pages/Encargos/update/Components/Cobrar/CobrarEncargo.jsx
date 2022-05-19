@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Modal, Input, Form, Button, Row } from "antd";
 import { FaMoneyBillWave, FaCreditCard, FaStoreAlt } from "react-icons/fa";
 import { SaveFilled, PrinterFilled } from "@ant-design/icons";
-import ImprimirApartado from "../ImprimirEncargo/ImprimirEncargo";
+import ImprimirEncargo from "../ImprimirEncargo/ImprimirEncargo";
 import { keyBlock } from "Utils";
 import ReadEncargoContext from "context/Encargos/ReadEcargo/context";
 
@@ -74,7 +74,7 @@ const CobrarApartado = () => {
 	return (
 		<>
 			{/* {imprimir ? ( */}
-			<ImprimirApartado
+			<ImprimirEncargo
 				imprimir={imprimir}
 				setimprimir={setimprimir}
 				totalTotal={totalTotal}
