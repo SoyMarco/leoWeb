@@ -30,7 +30,7 @@ export default function CardEncargo() {
 	return (
 		<Card>
 			<Encabezado />
-			<h1 className='nameClientEncargo'>{`Encargó:  ${dataEncargo?.cliente}`}</h1>
+			<h1 className='nameClientEncargo'>{`ENCARGÓ:  ${dataEncargo?.cliente}`}</h1>
 			{renderTablas()}
 			<Footer />
 		</Card>

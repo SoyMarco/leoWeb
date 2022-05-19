@@ -24,7 +24,6 @@ const ImprimirApartado = ({
 	const [numPrint, setnumPrint] = useState(0);
 
 	const { abonos, cliente, entregado, folio, productos, vence } = dataApartado;
-	console.log("apartado", abonos);
 
 	const ReimprimirApartado = useRef();
 	const inputReprint = useRef();
@@ -35,7 +34,6 @@ const ImprimirApartado = ({
 			sum += productos[i]?.totalArticulo;
 		}
 		settotalTotal(sum);
-		console.log("useEffect", abonos, dataApartado);
 		let sumAbo = 0;
 		for (const abono of abonos) {
 			if (abono.cancel !== true) {

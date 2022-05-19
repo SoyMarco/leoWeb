@@ -1,43 +1,11 @@
 import { useContext } from "react";
 import ReadEncargoContext from "context/Encargos/ReadEcargo/context";
-import { openNotification } from "Utils/openNotification";
-import { BORRAR_EDITAR_ABONO } from "myGraphql/apartado";
 import { Row, Tooltip, Popconfirm, Button } from "antd";
-import { useMutation } from "@apollo/client";
 import { MdDelete } from "react-icons/md";
 
 export default function useSchema() {
-	const { pasarAFecha, refetch, loading, loader, setloader } =
+	const { pasarAFecha, loading, loader, borrarAbono } =
 		useContext(ReadEncargoContext);
-
-	const [mutateBORRAR_EDITAR_ABONO] = useMutation(BORRAR_EDITAR_ABONO);
-
-	const borrarAbono = async (record, borrarEditar) => {
-		setloader(true);
-		try {
-			if (record._id) {
-				const { data } = await mutateBORRAR_EDITAR_ABONO({
-					// Parameters
-					variables: {
-						input: {
-							_id: record._id,
-							abono: 0,
-							borrarEditar: borrarEditar,
-							idVenta: record.idVenta,
-							statusVenta: true,
-						},
-					},
-				});
-				if (data) {
-					openNotification("success", `Abono borrado`);
-					setloader(false);
-					refetch();
-				}
-			}
-		} catch (error) {
-			setloader(false);
-		}
-	};
 
 	const colAbonos = [
 		{

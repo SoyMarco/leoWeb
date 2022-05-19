@@ -15,7 +15,7 @@ export default function Footer() {
 		pasarAFecha,
 		colorVence,
 	} = useContext(ReadEncargoContext);
-	console.log("@@@@@", totalTotal, totalAbonos);
+
 	return (
 		<Row justify='space-around'>
 			<Button

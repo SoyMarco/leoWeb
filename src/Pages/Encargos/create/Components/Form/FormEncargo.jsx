@@ -35,7 +35,6 @@ export default function FormEncargo() {
 	};
 
 	const pressKeyEnter = (e) => {
-		console.log(e.keyCode, cliente, e);
 		if (e.keyCode === 13 && cliente) {
 			refProducto.current.select();
 		}

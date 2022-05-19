@@ -61,7 +61,6 @@ export default function SchemaPerfumes() {
 						defaultValue={size.stok ?? 0}
 						formatter={(value) => parseInt(value)}
 						parser={(value) => {
-							console.log(value);
 							return value > 50 || !value ? 0 : value;
 						}}
 					/>

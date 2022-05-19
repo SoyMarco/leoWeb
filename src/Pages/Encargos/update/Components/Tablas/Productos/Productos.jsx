@@ -80,7 +80,7 @@ export default function Productos() {
 					footer={() => (
 						<Row justify='space-around'>
 							<h1 className='numeroProductoApartado'>
-								Productos {productos?.length}
+								Encargos {productos?.length}
 							</h1>
 							<h1 className='totalProductoApartado'>${totalTotal}</h1>
 						</Row>
