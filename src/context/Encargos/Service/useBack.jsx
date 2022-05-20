@@ -20,7 +20,7 @@ import {
 	EDIT_VENCE_APARTADO,
 } from "myGraphql/apartado";
 
-export default function useBack({ dataChange }) {
+export default function useBack({ dataChange, dataEncargo }) {
 	const params = useParams();
 	const urlFolio = parseInt(params.folio);
 	const { data, loading, refetch } = useQuery(GET_ENCARGO_FOLIO, {
@@ -53,14 +53,13 @@ export default function useBack({ dataChange }) {
 	}, []);
 
 	useEffect(() => {
-		console.log("holaaaa", data);
 		if (data?.getEncargoFolio) {
 			dataChange(data?.getEncargoFolio);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data]);
 
-	const guardarEncargo = async ({ dataEncargo }) => {
+	const guardarEncargo = async () => {
 		const dataEditGuardar = await register({
 			input: {
 				id: dataEncargo.id,
@@ -74,7 +73,7 @@ export default function useBack({ dataChange }) {
 			openNotification("success", `Se modificó con exito`);
 		}
 	};
-	const cancelEntrega = async ({ keyF, dataEncargo }) => {
+	const cancelEntrega = async ({ keyF }) => {
 		console.log(keyF);
 		const status = dataEncargo?.entregado[0]?.status ?? false;
 		const dataCancelEntrega = await register({
@@ -137,7 +136,6 @@ export default function useBack({ dataChange }) {
 	const savePrintAbono = async ({
 		keyF,
 		dataVenta,
-		dataEncargo,
 		totalTotal,
 		calculateRestaria,
 		initialState,
@@ -164,13 +162,7 @@ export default function useBack({ dataChange }) {
 		}
 	};
 	//Guardar y/o Imprimir VENTA CON GraphQL
-	const savePrintNewV = async ({
-		keyF,
-		dinero,
-		totalTotal,
-		cambio,
-		dataEncargo,
-	}) => {
+	const savePrintNewV = async ({ keyF, dinero, totalTotal, cambio }) => {
 		let efectivo = parseFloat(dinero.efectivo);
 		let tarjeta = parseFloat(dinero.tarjeta);
 		let aCuenta = parseFloat(dinero.aCuenta);
@@ -235,7 +227,7 @@ export default function useBack({ dataChange }) {
 			}
 		}
 	};
-	const cambiarFecha = async ({ dataEncargo, newFecha, setmodalCalendar }) => {
+	const cambiarFecha = async ({ newFecha, setmodalCalendar }) => {
 		if (dataEncargo.id) {
 			const dataEditVA = await register({
 				input: {
@@ -252,7 +244,8 @@ export default function useBack({ dataChange }) {
 			}
 		}
 	};
-	// /////////////////////////////
+
+	///////////////////////////////
 	const updateProductosEncargo = async ({
 		form,
 		encargoSelect,
@@ -261,6 +254,10 @@ export default function useBack({ dataChange }) {
 		const newProducto = form.getFieldsValue();
 		delete newProducto.cliente;
 		newProducto.precio = parseInt(newProducto.precio);
+
+		const newCantidad = parseInt(newProducto.cantidad);
+		newProducto.cantidad = newCantidad > 0 ? newCantidad : 1;
+
 		const input = {
 			id: encargoSelect._id,
 			producto: newProducto,
@@ -275,11 +272,13 @@ export default function useBack({ dataChange }) {
 			closeModal();
 		}
 	};
-	const addProductosEncargo = async ({ form, dataEncargo, closeModal }) => {
+	const addProductosEncargo = async ({ form, closeModal }) => {
 		const newProducto = form.getFieldsValue();
 		delete newProducto.cliente;
 		newProducto.precio = parseInt(newProducto.precio);
-		newProducto.cantidad = parseInt(newProducto.cantidad);
+
+		const newCantidad = parseInt(newProducto.cantidad);
+		newProducto.cantidad = newCantidad > 0 ? newCantidad : 1;
 		const input = {
 			id: dataEncargo.id,
 			producto: newProducto,
@@ -294,6 +293,7 @@ export default function useBack({ dataChange }) {
 			closeModal();
 		}
 	};
+
 	return {
 		updateProductosEncargo,
 		borrarEntregarProduct,

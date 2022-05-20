@@ -57,7 +57,7 @@ export default function ReadEncargo() {
 					},
 				});
 				if (data) {
-					setencargos(data.editGuararEncargo);
+					setencargos(data.editGuardarEncargo);
 					openNotification("success", `Se modificó con exito`);
 					setbtnLoading(false);
 				}

@@ -70,8 +70,8 @@ export const GET_ENCARGOS = gql`
 	}
 `;
 export const EDIT_GUARDAR_ENCARGO = gql`
-	mutation editGuararEncargo($input: CancelarApartadoInput) {
-		editGuararEncargo(input: $input) ${typeEncargo}
+	mutation editGuardarEncargo($input: CancelarApartadoInput) {
+		editGuardarEncargo(input: $input) ${typeEncargo}
 	}
 `;
 

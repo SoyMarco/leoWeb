@@ -122,9 +122,9 @@ export default function ReadEncargoState({ children }) {
 			allBACK.updateProductosEncargo({ form, encargoSelect, closeModal });
 			return;
 		}
-		allBACK.addProductosEncargo({ form, dataEncargo, closeModal });
+		allBACK.addProductosEncargo({ form, closeModal });
 	};
-	const { refetch, ...allBACK } = useBack({ dataChange });
+	const { refetch, ...allBACK } = useBack({ dataChange, dataEncargo });
 	return (
 		<ReadEncargoContext.Provider
 			value={{
