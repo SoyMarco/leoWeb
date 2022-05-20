@@ -1,28 +1,29 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import ReadEncargoContext from "context/Encargos/ReadEcargo/context";
 import { MdLocalGroceryStore } from "react-icons/md";
-import AddProduct from "../../AddProduct/AddProduct";
-import { Table, Result, Col, Row } from "antd";
+import { Table, Result, Col, Row, Button } from "antd";
 import useSchema from "./useSchema";
 import "../encargo.css";
+import UpdateProducto from "./UpdateProduct/UpdateProducto";
 
 export default function Productos() {
 	const {
-		dataEncargo,
 		productos,
-		refetch,
 		loading,
 		inputAbono,
-		setstateRecord,
-		totalTotal,
+		totalProductos,
+		cantidadProductos,
+		setencargoSelect,
+		openModal,
+		setopenModal,
 	} = useContext(ReadEncargoContext);
 
 	const { colProductos } = useSchema();
 
-	const [modalAddProduct, setmodalAddProduct] = useState(false);
-
 	const click = (record) => {
-		setstateRecord(record);
+		console.log(record);
+		setencargoSelect(record);
+		setopenModal("UPDATE");
 		inputAbono.current.select();
 	};
 
@@ -31,6 +32,7 @@ export default function Productos() {
 			<Col xs={24} sm={24} md={14}>
 				<Table
 					id='tableEncargos'
+					rowKey={(record) => record._id}
 					title={() => (
 						<Row justify='space-between'>
 							<h1
@@ -43,6 +45,14 @@ export default function Productos() {
 							>
 								Encargos
 							</h1>
+
+							<Button
+								onClick={() => {
+									setopenModal("NEW");
+								}}
+							>
+								Agregar producto
+							</Button>
 						</Row>
 					)}
 					columns={colProductos}
@@ -79,23 +89,14 @@ export default function Productos() {
 					}}
 					footer={() => (
 						<Row justify='space-around'>
-							<h1 className='numeroProductoApartado'>
-								Encargos {productos?.length}
-							</h1>
-							<h1 className='totalProductoApartado'>${totalTotal}</h1>
+							<h1 className='conteoEncargo'>Encargos {cantidadProductos}</h1>
+							<h1 className='totalProductoApartado'>${totalProductos}</h1>
 						</Row>
 					)}
 				/>
 			</Col>
 
-			{modalAddProduct && (
-				<AddProduct
-					setmodalAddProduct={setmodalAddProduct}
-					modalAddProduct={modalAddProduct}
-					refetch={refetch}
-					dataEncargo={dataEncargo}
-				/>
-			)}
+			{openModal && <UpdateProducto />}
 		</>
 	);
 }

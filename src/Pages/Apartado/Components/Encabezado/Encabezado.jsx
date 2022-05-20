@@ -100,100 +100,93 @@ export default function Encabezado({ refetch }) {
 		}
 	};
 	return (
-		<>
-			<Row
-				justify='space-around'
+		<Row
+			justify='space-around'
+			style={{
+				background: "linear-gradient(#000066, #000058, #000036)",
+				padding: "7px",
+				borderRadius: "25px 5px 0 0",
+			}}
+		>
+			<h1
 				style={{
-					background: "linear-gradient(#000066, #000058, #000036)",
-					padding: "7px",
-					borderRadius: "25px 5px 0 0",
+					color: "white",
+					fontSize: "x-large",
+					fontWeight: "bold",
 				}}
-			>
-				<h1
-					style={{
-						color: "white",
-						fontSize: "x-large",
-						fontWeight: "bold",
-					}}
-				>{`Folio: ${dataApartado.folio}`}</h1>
-				<Tooltip
-					placement='top'
-					title={`
+			>{`Folio: ${dataApartado.folio}`}</h1>
+			<Tooltip
+				placement='top'
+				title={`
 							(F1)Imprimir
 							  (F12)ENTREGAR`}
+			>
+				<Input
+					ref={inputAbono}
+					placeholder='Abono'
+					disabled={!statusApartado}
+					style={{
+						color: "green",
+						fontSize: "x-large",
+						fontWeight: "bold",
+						borderRadius: "50px",
+						maxWidth: "60%",
+						padding: "0 0 0 0px",
+						border: "0 0 0 0",
+					}}
+					prefix={<DollarCircleFilled style={{ marginLeft: "10px" }} />}
+					onKeyUp={pressKeyAbono}
+					onKeyDown={keyBlock}
+					value={abono.abono}
+					onChange={(e) => setabono({ abono: e.target.value })}
+					type='number'
+				/>
+			</Tooltip>
+			<Row>
+				<Button
+					disabled={!statusApartado || isLoading}
+					loading={isLoading}
+					shape='round'
+					style={{
+						background: statusApartado
+							? "linear-gradient(#2196F3,#0000E6)"
+							: "gray",
+						marginTop: 5,
+						marginRight: 15,
+						color: "white",
+						border: 0,
+						fontWeight: "bold",
+					}}
+					onClick={() => setimprimir(true)}
+					icon={<PrinterFilled style={{ fontSize: "large", marginRight: 5 }} />}
 				>
-					<Input
-						ref={inputAbono}
-						placeholder='Abono'
-						disabled={!statusApartado}
-						style={{
-							color: "green",
-							fontSize: "x-large",
-							fontWeight: "bold",
-							borderRadius: "50px",
-							maxWidth: "60%",
-							padding: "0 0 0 0px",
-							border: "0 0 0 0",
-						}}
-						prefix={<DollarCircleFilled style={{ marginLeft: "10px" }} />}
-						onKeyUp={pressKeyAbono}
-						onKeyDown={keyBlock}
-						value={abono.abono}
-						onChange={(e) => setabono({ abono: e.target.value })}
-						type='number'
-					/>
-				</Tooltip>
-				<Row>
-					<Button
-						disabled={!statusApartado || isLoading}
-						loading={isLoading}
-						shape='round'
-						style={{
-							background: statusApartado
-								? "linear-gradient(#2196F3,#0000E6)"
-								: "gray",
-							marginTop: 5,
-							marginRight: 15,
-							color: "white",
-							border: 0,
-							fontWeight: "bold",
-						}}
-						onClick={() => setimprimir(true)}
-						icon={
-							<PrinterFilled style={{ fontSize: "large", marginRight: 5 }} />
-						}
-					>
-						Reimprimir
-					</Button>
+					Reimprimir
+				</Button>
 
-					<Tooltip placement='top' title={() => titleTooltip()}>
-						<Popconfirm
-							title={() => titlePopconfirm()}
-							onConfirm={() => cancelarApartado()}
-							icon={
-								<DeleteFilled style={{ color: "red", fontSize: "large" }} />
-							}
+				<Tooltip placement='top' title={() => titleTooltip()}>
+					<Popconfirm
+						title={() => titlePopconfirm()}
+						onConfirm={() => cancelarApartado()}
+						icon={<DeleteFilled style={{ color: "red", fontSize: "large" }} />}
+						loading={isLoading}
+						disabled={isLoading}
+					>
+						<Switch
 							loading={isLoading}
-							disabled={isLoading}
-						>
-							<Switch
-								loading={isLoading}
-								checked={statusApartado}
-								style={{
-									marginTop: 10,
-									marginRight: 5,
-									background: statusApartado ? "limegreen" : "red",
-									boxShadow: statusApartado
-										? "5px 5px 29px #b3b3b3, -5px -5px 29px #ffffff"
-										: null,
-								}}
-								defaultChecked
-							></Switch>
-						</Popconfirm>
-					</Tooltip>
-				</Row>
+							checked={statusApartado}
+							style={{
+								marginTop: 10,
+								marginRight: 5,
+								background: statusApartado ? "limegreen" : "red",
+								boxShadow: statusApartado
+									? "5px 5px 29px #b3b3b3, -5px -5px 29px #ffffff"
+									: null,
+							}}
+							defaultChecked
+						></Switch>
+					</Popconfirm>
+				</Tooltip>
 			</Row>
-			<h1 className='nameClient'>{`Cliente:  ${dataApartado?.cliente}`}</h1>
-		</>
+		</Row>
 	);
 }

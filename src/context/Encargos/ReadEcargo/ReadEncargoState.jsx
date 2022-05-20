@@ -1,151 +1,100 @@
-import { useState, useEffect, useRef } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect, useRef, useContext } from "react";
+import AuthContext from "context/Auth/AuthContext";
 import ReadEncargoContext from "./context";
 import moment from "moment";
 import { Form } from "antd";
 import useBack from "../Service/useBack";
 
 export default function ReadEncargoState({ children }) {
-	const {
-		guardarEncargo,
-		cancelEntrega,
-		borrarAbono,
-		borrarEntregarProduct,
-		savePrintNewV,
-		cambiarFecha,
-		data,
-		loading,
-		refetch,
-		btnLoading,
-		dataApartadoImprimir,
-		dataEncargo,
-		setdataEncargo,
-		cambio,
-		setcambio,
-		initialState,
-		abono,
-		modalCobrar,
-		setmodalCobrar,
-		inputAbono,
-		totalTotal,
-		settotalTotal,
-		calculateRestaria,
-		totalAbonos,
-		settotalAbonos,
-		dinero,
-		setdinero,
-		newFecha,
-		setnewFecha,
-		modalCalendar,
-		setmodalCalendar,
-	} = useBack();
+	const { isLoading } = useContext(AuthContext);
 
-	const [totalProductos, settotalProductos] = useState(0);
+	const [cantidadProductos, setcantidadProductos] = useState(0);
 	const [abonos, setabonos] = useState([]);
 	const [productos, setproductos] = useState([]);
+	const [restaria, setrestaria] = useState(0);
+	const [resta, setresta] = useState(0);
 	const [titleWeb, settitleWeb] = useState("Encargo");
 	const [statusEncargo, setstatusEncargo] = useState(false);
 	const [modalReimprimir, setmodalReimprimir] = useState(false);
+	const [dataEncargo, setdataEncargo] = useState(undefined);
+	const [newAbono, setnewAbono] = useState(null);
+	const [modalCobrar, setmodalCobrar] = useState(false);
+	const [totalProductos, settotalProductos] = useState(0);
+	const [modalCalendar, setmodalCalendar] = useState(false);
+	const [totalAbonos, settotalAbonos] = useState(0);
+	const [encargoSelect, setencargoSelect] = useState(undefined);
+	const [newFecha, setnewFecha] = useState(null);
+	const [openModal, setopenModal] = useState(false);
 	const [colorVence, setcolorVence] = useState(
 		"linear-gradient(#2196F3,#0000E6)"
 	);
 
-	const [form] = Form.useForm();
+	const inputAbono = useRef();
 	const cobrarEfectivo = useRef();
-
-	useEffect(() => {
-		if (data?.getEncargoFolio[0]) {
-			dataChange(data?.getEncargoFolio[0]);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [data]);
-
-	useEffect(() => {
-		if (modalCobrar === true) {
-			form.setFieldsValue({ efectivo: totalTotal });
-			OnValuesChange();
-			cobrarEfectivo.current.select();
-		} else if (modalCobrar === false) {
-			inputAbono.current.select();
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [modalCobrar]);
+	const [form] = Form.useForm();
 
 	const selectFecha = (value) => {
 		setnewFecha(value.unix() * 1000);
 	};
 
-	const OnValuesChange = () => {
-		let valores = form.getFieldsValue();
-		if (!valores.efectivo) {
-			valores.efectivo = 0;
-		}
-		if (!valores.tarjeta) {
-			valores.tarjeta = 0;
-		}
-		if (!valores.aCuenta) {
-			valores.aCuenta = 0;
-		}
-		let efectivo = parseFloat(valores.efectivo);
-		let tarjeta = parseFloat(valores.tarjeta);
-		let aCuenta = parseFloat(valores.aCuenta);
-		let total = parseFloat(totalTotal);
-		let sumaTodo = efectivo + tarjeta + aCuenta;
-		let resultado = sumaTodo - total;
-
-		setdinero({
-			aCuenta: aCuenta,
-			tarjeta: tarjeta,
-			efectivo: efectivo,
-		});
-		setcambio(resultado);
-	};
-
 	const dataChange = (newData) => {
-		setdataEncargo(newData);
-		if (newData?.vence) {
-			fechaVenceEn();
-		}
 		const {
 			productos: productosSet,
 			abonos: abonoSet,
 			cliente,
 			guardado,
+			vence,
 		} = newData;
 
-		const listaAbonos = abonoSet.map((item) => {
-			return { ...item, key: item._id };
-		});
-		setabonos(listaAbonos);
+		setabonos(abonoSet);
 		setproductos(productosSet);
+		setdataEncargo(newData);
+		fechaVenceEn(vence);
 		settitleWeb(cliente);
-		setstatusEncargo(guardado.status);
+		setstatusEncargo(guardado?.status);
+	};
+	useEffect(() => {
+		operacionesPrincipales();
+	}, [productos, abonos]);
+	useEffect(() => {
+		calcularRestaria();
+	}, [newAbono]);
 
+	const operacionesPrincipales = () => {
 		let sum = 0;
 		let sumProd = 0;
 		for (let iterator of productos) {
-			sum += iterator.totalArticulo ?? 0;
+			sum += iterator.precio * iterator.cantidad ?? 0;
 			sumProd += iterator.cantidad;
 		}
-		settotalTotal(sum);
-		settotalProductos(sumProd);
+		settotalProductos(sum);
+		setcantidadProductos(sumProd);
 
 		let sumAbo = 0;
 		for (let iterator of abonos) {
 			sumAbo += iterator.abono;
 		}
 		settotalAbonos(sumAbo);
+
+		setresta(parseInt(sum - sumAbo) ?? 0);
+	};
+	const calcularRestaria = () => {
+		let addAbono = 0;
+		if (parseInt(newAbono) > 0) {
+			addAbono = parseInt(newAbono);
+		}
+		setrestaria(parseInt(totalProductos - (totalAbonos + addAbono)) ?? 0);
 	};
 
-	const fechaVenceEn = () => {
-		let fecha = moment.unix(dataEncargo.vence / 1000).fromNow();
-		if (dataEncargo.vence > Date.now()) {
+	const fechaVenceEn = (vence) => {
+		if (vence > Date.now()) {
 			//Color azul
 			setcolorVence("linear-gradient(#2196F3,#0000E6)");
 		} else {
 			//Color rojo
 			setcolorVence("linear-gradient(#F53636,#D32F2F,#8B0000)");
 		}
-		return fecha;
 	};
 
 	const cerrarCobrar = () => {
@@ -156,48 +105,65 @@ export default function ReadEncargoState({ children }) {
 	const pasarAFecha = (item, L) => {
 		return moment.unix(item / 1000).format(L);
 	};
-
+	const initialState = () => {
+		refetch();
+		setmodalCobrar(false);
+		setnewAbono(null);
+		inputAbono.current.select();
+	};
+	const closeModal = () => {
+		setencargoSelect(false);
+		setopenModal(false);
+		form.resetFields();
+		inputAbono.current.select();
+	};
+	const onFinish = () => {
+		if (openModal === "UPDATE") {
+			allBACK.updateProductosEncargo({ form, encargoSelect, closeModal });
+			return;
+		}
+		allBACK.addProductosEncargo({ form, dataEncargo, closeModal });
+	};
+	const { refetch, ...allBACK } = useBack({ dataChange });
 	return (
 		<ReadEncargoContext.Provider
 			value={{
 				dataEncargo,
-				totalTotal,
+				totalProductos,
 				totalAbonos,
-				refetch,
-				loading,
-				calculateRestaria,
+				resta,
+				restaria,
 				inputAbono,
-				abono,
+				newAbono,
+				setnewAbono,
 				modalCobrar,
 				setmodalCobrar,
 				initialState,
-				guardarEncargo,
-				cancelEntrega,
-				btnLoading,
-				borrarAbono,
-				borrarEntregarProduct,
-				savePrintNewV,
-				dataApartadoImprimir,
-				cambio,
-				dinero,
 				modalCalendar,
 				setmodalCalendar,
-				cambiarFecha,
 				newFecha,
 				abonos,
 				productos,
 				titleWeb,
 				statusEncargo,
-				totalProductos,
+				cantidadProductos,
 				colorVence,
 				cerrarCobrar,
 				modalReimprimir,
 				setmodalReimprimir,
 				pasarAFecha,
 				cobrarEfectivo,
-				OnValuesChange,
 				form,
 				selectFecha,
+				encargoSelect,
+				setencargoSelect,
+				openModal,
+				setopenModal,
+				dataChange,
+				closeModal,
+				onFinish,
+				isLoading,
+				...allBACK,
 			}}
 		>
 			{children}

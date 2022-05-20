@@ -29,6 +29,12 @@ export default function useSchema() {
 			),
 		},
 		{
+			title: "Precio",
+			dataIndex: "precio",
+			key: "precio",
+			render: (precio) => <h1>${precio}</h1>,
+		},
+		{
 			title: "Talla",
 			dataIndex: "talla",
 			key: "talla",

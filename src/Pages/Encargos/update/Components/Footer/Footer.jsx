@@ -5,11 +5,8 @@ import { Row, Button } from "antd";
 
 export default function Footer() {
 	const {
-		abono,
-		calculateRestaria,
-		totalProductos,
-		totalTotal,
-		totalAbonos,
+		resta,
+		restaria,
 		statusEncargo,
 		dataEncargo,
 		pasarAFecha,
@@ -37,16 +34,14 @@ export default function Footer() {
 			</Button>
 			<h1
 				style={{
-					color: calculateRestaria() >= 0 ? "green" : "red",
+					color: restaria >= 0 ? "green" : "red",
 					fontSize: "x-large",
 					fontWeight: "bold",
 				}}
 			>
-				{abono?.abono > 0 ? `Restaría $${calculateRestaria()}` : null}
+				{restaria !== 0 && `Restaría $${restaria}`}
 			</h1>
-			<h1 className='totalRestaApartado'>
-				{totalProductos ? `Resta $${totalTotal - totalAbonos}` : null}
-			</h1>
+			<h1 className='totalRestaApartado'>{resta !== 0 && `Resta $${resta}`}</h1>
 		</Row>
 	);
 }

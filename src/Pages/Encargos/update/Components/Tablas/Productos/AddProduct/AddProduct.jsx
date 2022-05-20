@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { SaveFilled } from "@ant-design/icons";
 import { GiLargeDress } from "react-icons/gi";
 import { FaMoneyBillWave } from "react-icons/fa";
@@ -9,13 +9,11 @@ import ErrorConection from "Utils/ErrorConection";
 import { useQuery, useMutation } from "@apollo/client";
 import { GET_PRODUCTS_NAME, ADD_PRODUCTO } from "myGraphql/apartado";
 import AuthContext from "context/Auth/AuthContext";
+import ReadEncargoContext from "context/Encargos/ReadEcargo/context";
 
-export default function AddProduct({
-	setmodalAddProduct,
-	modalAddProduct,
-	refetch,
-	dataApartado,
-}) {
+export default function AddProduct() {
+	const { encargoSelect, setencargoSelect, dataApartado, refetch } =
+		useContext(ReadEncargoContext);
 	const { timeLogout } = useContext(AuthContext);
 	const [mutateADD_PRODUCTO] = useMutation(ADD_PRODUCTO);
 	const { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
@@ -65,7 +63,7 @@ export default function AddProduct({
 						openNotification("success", `Articulo agregado con exito`);
 						refetch();
 						setbtnLoading(false);
-						setmodalAddProduct(false);
+						setencargoSelect(undefined);
 					}
 				}
 			} catch (error) {
@@ -96,9 +94,9 @@ export default function AddProduct({
 	return (
 		<Modal
 			title='Agregar producto'
-			visible={modalAddProduct}
+			visible={encargoSelect}
 			onOk={() => agregarProducto()}
-			onCancel={() => setmodalAddProduct(false)}
+			onCancel={() => setencargoSelect(false)}
 			footer={[
 				<Row justify='space-around'>
 					<Button
@@ -112,7 +110,7 @@ export default function AddProduct({
 						shape='round'
 						// loading={loading}
 						// disabled={cambio < 0}
-						onClick={() => setmodalAddProduct(false)}
+						onClick={() => setencargoSelect(false)}
 						// icon={<PrinterFilled />}
 						loading={btnLoading}
 					>

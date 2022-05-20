@@ -12,8 +12,8 @@ export default function Encabezado() {
 		guardarEncargo,
 		loader,
 		inputAbono,
-		abono,
-		setabono,
+		newAbono,
+		setnewAbono,
 		setmodalReimprimir,
 	} = useContext(ReadEncargoContext);
 
@@ -44,7 +44,7 @@ export default function Encabezado() {
 				<Input
 					ref={inputAbono}
 					placeholder='Abono'
-					disabled={!statusEncargo}
+					disabled={statusEncargo}
 					style={{
 						color: "green",
 						fontSize: "x-large",
@@ -57,8 +57,8 @@ export default function Encabezado() {
 					prefix={<DollarCircleFilled style={{ marginLeft: "10px" }} />}
 					// onKeyUp={pressKeyAbono}
 					onKeyDown={keyBlock}
-					value={abono.abono}
-					onChange={(e) => setabono({ abono: e.target.value })}
+					value={newAbono}
+					onChange={(e) => setnewAbono(e.target.value)}
 					type='number'
 				/>
 			</Tooltip>

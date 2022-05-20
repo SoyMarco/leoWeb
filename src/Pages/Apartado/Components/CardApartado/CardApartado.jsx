@@ -28,6 +28,7 @@ export default function CardApartado({ refetch, loading }) {
 	return (
 		<Card disabled={true}>
 			<Encabezado refetch={refetch} />
+			<h1 className='nameClient'>{`Cliente:  ${dataApartado?.cliente}`}</h1>
 			{renderTablas()}
 			<Footer />
 		</Card>

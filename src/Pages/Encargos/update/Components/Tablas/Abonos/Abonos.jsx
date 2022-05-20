@@ -5,7 +5,7 @@ import { Table, Result, Col, Row, Progress } from "antd";
 import useSchema from "./useSchema";
 
 export default function Abonos() {
-	const { abonos, loading, inputAbono, abono, totalAbonos, totalTotal } =
+	const { abonos, loading, inputAbono, newAbono, totalAbonos, totalTotal } =
 		useContext(ReadEncargoContext);
 
 	const { colAbonos } = useSchema();
@@ -15,8 +15,8 @@ export default function Abonos() {
 	};
 	const calculatePorcent = () => {
 		let addAbono = 0;
-		if (parseInt(abono.abono) > 0) {
-			addAbono = parseInt(abono.abono);
+		if (parseInt(newAbono) > 0) {
+			addAbono = parseInt(newAbono);
 		}
 		let porcent = 0;
 		porcent = ((totalAbonos + addAbono) * 100) / totalTotal ?? 0;
@@ -27,6 +27,7 @@ export default function Abonos() {
 		<Col xs={24} sm={24} md={10}>
 			<Table
 				id='tableEncargos'
+				rowKey={(record) => record._id}
 				title={() => (
 					<Row justify='space-between'>
 						<h1
@@ -73,7 +74,7 @@ export default function Abonos() {
 				footer={() => (
 					<>
 						<Row justify='space-around'>
-							<h1 className='numeroAbonosApartado'>Abonos {abonos?.length}</h1>
+							<h1 className='conteoEncargo'>Abonos {abonos?.length}</h1>
 							<h1 className='totalAbonosApartado'>${totalAbonos}</h1>
 						</Row>
 						<Progress
