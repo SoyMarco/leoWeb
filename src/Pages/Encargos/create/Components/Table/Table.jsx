@@ -119,6 +119,21 @@ export default function EncargoTable() {
 			),
 		},
 		{
+			title: "Precio",
+			dataIndex: "precio",
+			key: "precio",
+			render: (precio) => (
+				<h3
+					style={{
+						fontWeight: "revert",
+						fontSize: "large",
+					}}
+				>
+					${precio}
+				</h3>
+			),
+		},
+		{
 			title: "Cantidad",
 			dataIndex: "cantidad",
 			key: "cantidad",

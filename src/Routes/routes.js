@@ -13,7 +13,7 @@ import Caja from "Pages/Caja/Container/Caja";
 import EntradasSalidas from "Pages/EntradasSalidas/Container/EntradasSalidas";
 import CorteMobile from "Mobile/Corte/Container/Corte";
 import VentaMobile from "Mobile/Ventas/Container/Ventas";
-import AddEncargo from "Pages/Encargos/create/Container/Encargo";
+import AddEncargo from "Pages/Encargos/create/Container/NewEncargo";
 import ReadEncargos from "Pages/Encargos/Encargos/container/ReadEncargos";
 import UpdateEncargo from "Pages/Encargos/update/Container/Encargo";
 import CorteB from "Mobile/CorteB/Container/CorteB";

@@ -15,6 +15,7 @@ export default function Encabezado() {
 		newAbono,
 		setnewAbono,
 		setmodalReimprimir,
+		pressKeyAbono,
 	} = useContext(ReadEncargoContext);
 
 	return (
@@ -55,7 +56,7 @@ export default function Encabezado() {
 						border: "0 0 0 0",
 					}}
 					prefix={<DollarCircleFilled style={{ marginLeft: "10px" }} />}
-					// onKeyUp={pressKeyAbono}
+					onKeyUp={pressKeyAbono}
 					onKeyDown={keyBlock}
 					value={newAbono}
 					onChange={(e) => setnewAbono(e.target.value)}
@@ -82,16 +83,18 @@ export default function Encabezado() {
 			>
 				Reimprimir
 			</Button>
-
-			<SwitchB
-				loader={loader}
-				checked={statusEncargo}
-				onClick={guardarEncargo}
-				// style={{
-				// 	marginTop: 10,
-				// 	marginRight: 5,
-				// }}
-			/>
+			<div
+				style={{
+					marginTop: 10,
+					marginRight: 5,
+				}}
+			>
+				<SwitchB
+					loader={loader}
+					checked={statusEncargo}
+					onClick={guardarEncargo}
+				/>
+			</div>
 		</Row>
 	);
 }

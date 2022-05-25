@@ -79,7 +79,7 @@ export default function ReadEncargo() {
 			<Skeleton loading={loadingEncargos} avatar active>
 				<Row gutter={[10, 10]}>
 					{encargos?.map((item) => (
-						<Col lg={12} xs={24} className='colAntCard'>
+						<Col lg={12} xs={24} className='colAntCard' key={item.folio}>
 							<Card
 								style={{
 									width: "100%",

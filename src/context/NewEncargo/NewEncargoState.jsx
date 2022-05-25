@@ -1,15 +1,16 @@
 import { useState, useContext } from "react";
 import useService from "Hooks/Service/useService";
-import { openNotification } from "Utils/openNotification";
 import { REGISTER_ENCARGO } from "myGraphql/encargo";
 import AuthContext from "context/Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import NewEncargoContext from "./context";
 import { Form } from "antd";
+import ShopListContext from "context/Shopping/ShopListContext";
 
 export default function NewEncargoState({ children }) {
 	const { auth } = useContext(AuthContext);
+	const { addProductShopList } = useContext(ShopListContext);
 
 	const navigate = useNavigate();
 	const { register } = useService();
@@ -24,14 +25,24 @@ export default function NewEncargoState({ children }) {
 	const [cliente, setcliente] = useState("");
 	const [modalAbono, setmodalAbono] = useState(null);
 	const [keyCount, setkeyCount] = useState(0);
+	const [modalCobrar, setmodalCobrar] = useState(false);
+	const [dataEncargoBack, setdataEncargoBack] = useState(undefined);
 
-	const guardarEncargo = async () => {
+	const guardarEncargo = async ({
+		keyF,
+		inputs = { efectivo: 0, tarjeta: 0, aCuenta: 0 },
+	}) => {
+		let newAbono = abono;
+		if (keyF === "F3") {
+			newAbono = 0;
+		}
 		const dataSend = {
 			productos: listaProductos,
-			abonos: [{ abono: abono, vendedor: auth.name }],
 			cliente: cliente,
-			vendedor: auth.name,
-			guardado: { vendedor: auth.name },
+			total: newAbono,
+			ventaEfectivo: inputs.efectivo,
+			ventaTarjeta: inputs.tarjeta,
+			ventaACuenta: inputs.aCuenta,
 		};
 		const data = await register({
 			input: dataSend,
@@ -39,8 +50,20 @@ export default function NewEncargoState({ children }) {
 			// keyF,
 		});
 
-		if (data.registerEncargo === true) {
-			openNotification("success", `Encargo guardado `);
+		if (data) {
+			const { registerEncargo } = data;
+			setdataEncargoBack(registerEncargo);
+			if (keyF === "F1") setimprimirEncargo(true);
+
+			if (keyF === "F3") {
+				addProductShopList({
+					nombre: registerEncargo.cliente,
+					precio: parseFloat(abono),
+					apartado: registerEncargo.folio,
+					refApartado: registerEncargo.id,
+					f3: true,
+				});
+			}
 			navigate("/");
 		}
 	};
@@ -51,11 +74,12 @@ export default function NewEncargoState({ children }) {
 				...listaProductos,
 				{
 					nombre: values.nombre,
+					precio: values.precio > 0 ? parseInt(values.cantidad) : 0,
 					talla: values.talla,
 					color: values.color,
 					genero: values.genero,
 					modelo: values.modelo,
-					cantidad: 1,
+					cantidad: values.cantidad > 0 ? parseInt(values.cantidad) : 1,
 					key: keyCount,
 					vendedor: auth.name,
 				},
@@ -92,6 +116,9 @@ export default function NewEncargoState({ children }) {
 				onFinish,
 				form,
 				btnAddAbono,
+				modalCobrar,
+				setmodalCobrar,
+				dataEncargoBack,
 			}}
 		>
 			{children}

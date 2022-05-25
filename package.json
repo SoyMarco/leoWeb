@@ -2,6 +2,8 @@
 	"name": "leo",
 	"version": "3.0.0",
 	"private": true,
+	"description": "Front Leo",
+	"author": "Marco Antonio Salazar Ramirez",
 	"dependencies": {
 		"@ant-design/icons": "4.7.0",
 		"@apollo/client": "3.5.10",

@@ -68,18 +68,16 @@ export default function Encabezado({ refetch }) {
 		}
 	};
 	const titlePopconfirm = () => {
-		let title = "¿Deseas  RECUPERAR este apartado?";
 		if (statusApartado) {
-			title = "¿Deseas  DESACTIVAR este apartado?";
+			return "¿Deseas  DESACTIVAR este apartado?";
 		}
-		return title;
+		return "¿Deseas  RECUPERAR este apartado?";
 	};
 	const titleTooltip = () => {
-		let title = "APARTADO INACTIVO";
 		if (statusApartado) {
-			title = "APARTADO ACTIVO";
+			return "APARTADO ACTIVO";
 		}
-		return title;
+		return "APARTADO INACTIVO";
 	};
 	const cancelarApartado = async () => {
 		if (dataApartado.id) {

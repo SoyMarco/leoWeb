@@ -22,13 +22,13 @@ export default function Botones() {
 						size='large'
 						shape='round'
 						style={{
-							margin: 10,
+							margin: "1%",
 							background: "linear-gradient(#32A632,#005800)",
 							color: "white",
 							fontWeight: "bold",
-							width: "90%",
+							width: "48%",
 						}}
-						icon={<FaMoneyBillAlt style={{ margin: "5px 10px 0 0" }} />}
+						icon={<FaMoneyBillAlt />}
 						onClick={btnAddAbono}
 					>
 						Agregar abono (Enter)
@@ -37,13 +37,13 @@ export default function Botones() {
 						size='large'
 						shape='round'
 						style={{
-							margin: 10,
+							margin: 5,
 							background: "linear-gradient(#3232A6,#000058)",
 							color: "white",
 							fontWeight: "bold",
-							width: "90%",
+							width: "48%",
 						}}
-						icon={<PrinterFilled style={{ margin: "5px 10px 0 0" }} />}
+						icon={<PrinterFilled />}
 						onClick={() => setimprimirEncargo(true)}
 					>
 						Imprimir encargo (F1)
@@ -52,13 +52,13 @@ export default function Botones() {
 						size='large'
 						shape='round'
 						style={{
-							margin: 10,
+							margin: 5,
 							background: "linear-gradient(#3232A6,#000058)",
 							color: "white",
 							fontWeight: "bold",
-							width: "90%",
+							width: "48%",
 						}}
-						icon={<SaveFilled style={{ margin: "5px 10px 0 0" }} />}
+						icon={<SaveFilled />}
 						onClick={guardarEncargo}
 					>
 						Guardar encargo (F2)
@@ -67,15 +67,15 @@ export default function Botones() {
 			)}
 			<Button
 				style={{
-					margin: 10,
+					margin: 5,
 					fontWeight: "bold",
-					width: "90%",
+					width: "48%",
 				}}
 				shape='round'
 				type='primary'
 				size='large'
 				onClick={onFinish}
-				icon={<BiAddToQueue style={{ margin: "5px 10px 0 0" }} />}
+				icon={<BiAddToQueue />}
 			>
 				Añadir producto (F12)
 			</Button>

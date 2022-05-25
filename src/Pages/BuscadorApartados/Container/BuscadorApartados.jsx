@@ -1,8 +1,6 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState } from "react";
 import { Row, Select, ConfigProvider, Result } from "antd";
 import { GET_APARTADOS_BUSCADOR } from "myGraphql/apartado";
-import AuthContext from "context/Auth/AuthContext";
-import ErrorConection from "Utils/ErrorConection";
 import { SyncOutlined } from "@ant-design/icons";
 import { GET_ENCARGOS } from "myGraphql/encargo";
 import { useNavigate } from "react-router-dom";
@@ -11,22 +9,21 @@ import "./buscarApartados.css";
 import moment from "moment";
 
 const BuscadorApartados = () => {
-	const { timeLogout } = useContext(AuthContext);
 	const {
 		data: dataApartados,
 		loading,
 		error: errorApartados,
 		refetch,
-	} = useQuery(GET_APARTADOS_BUSCADOR);
+	} = useQuery(GET_APARTADOS_BUSCADOR); //Apartados
 	const {
 		data: dataEncargos,
 		loading: loadingEncargos,
 		error: errorEncargos,
 		refetch: refetchEncargos,
-	} = useQuery(GET_ENCARGOS);
+	} = useQuery(GET_ENCARGOS); //Encargos
 
 	if (errorEncargos || errorApartados) {
-		ErrorConection(timeLogout);
+		console.log(errorEncargos, errorApartados);
 	}
 
 	const [listaBusqueda, setlistaBusqueda] = useState([]);
@@ -39,16 +36,7 @@ const BuscadorApartados = () => {
 		if (dataApartados && dataEncargos) {
 			const { getApartados } = dataApartados;
 			const { getEncargos } = dataEncargos;
-
-			const listaApartadosMap = getApartados.map((item) => {
-				return { ...item, tipo: "apartado" };
-			});
-
-			const listaEncargosMap = getEncargos.map((item) => {
-				return { ...item, tipo: "encargo" };
-			});
-
-			setlistaBusqueda([...listaApartadosMap, ...listaEncargosMap]);
+			setlistaBusqueda([...getApartados, ...getEncargos]);
 		}
 	}, [dataApartados, dataEncargos]);
 	useEffect(() => {

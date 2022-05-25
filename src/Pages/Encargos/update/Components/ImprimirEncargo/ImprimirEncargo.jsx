@@ -10,7 +10,7 @@ import { openNotification } from "Utils/openNotification";
 import ReadEncargoContext from "context/Encargos/ReadEcargo/context";
 import AuthContext from "context/Auth/AuthContext";
 
-const ImprimirApartado = () => {
+const ImprimirEncargo = () => {
 	const {
 		dataEncargo,
 		initialState,
@@ -315,4 +315,4 @@ const ImprimirApartado = () => {
 		</>
 	);
 };
-export default ImprimirApartado;
+export default ImprimirEncargo;

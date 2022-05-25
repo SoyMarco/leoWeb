@@ -21,6 +21,8 @@ export default function FormEncargo() {
 	const refGenero = useRef();
 	const refProducto = useRef();
 	const refModelo = useRef();
+	const refPrecio = useRef();
+	const refCantidad = useRef();
 
 	useEffect(() => {
 		if (modalAbono === false) {
@@ -54,19 +56,25 @@ export default function FormEncargo() {
 	};
 
 	const onValuesChange = (e) => {
-		let keys = Object.keys(e);
-		let [key] = keys;
-		let value = e[key].toUpperCase();
+		const keys = Object.keys(e);
+		const [key] = keys;
+		const value = e[key].toUpperCase();
 		form.setFieldsValue({ [key]: value });
 	};
 	const pressKeyEnterEncargo = async (e) => {
 		let values = form.getFieldsValue();
 		if (e.keyCode === 13) {
 			if (e.target.id === "nombre" && values.nombre) {
-				refTalla.current.select();
+				refPrecio.current.select();
 			}
 			if (!values.nombre && listaProductos.length > 0) {
 				setmodalAbono(true);
+			}
+			if (e.target.id === "precio") {
+				refCantidad.current.select();
+			}
+			if (e.target.id === "cantidad") {
+				refTalla.current.select();
 			}
 			if (e.target.id === "talla") {
 				refColor.current.select();
@@ -85,10 +93,10 @@ export default function FormEncargo() {
 			}
 		}
 		if (e.keyCode === 112 && listaProductos.length > 0) {
-			setmodalAbono(true);
+			guardarEncargo({ keyF: "F1" });
 		}
 		if (e.keyCode === 113 && listaProductos.length > 0) {
-			guardarEncargo();
+			guardarEncargo({ keyF: "F2" });
 		}
 		if (e.keyCode === 123 && cliente) {
 			if (!values.nombre) {
@@ -130,7 +138,22 @@ export default function FormEncargo() {
 					reference={refProducto}
 					onKeyUp={pressKeyEnterEncargo}
 				/>
-
+				<InputForm
+					label='Precio'
+					name='precio'
+					tooltip='Precio aproximado'
+					reference={refPrecio}
+					onKeyUp={pressKeyEnterEncargo}
+					type='number'
+				/>
+				<InputForm
+					label='Cantidad'
+					name='cantidad'
+					tooltip='Cantidad aproximado'
+					reference={refCantidad}
+					onKeyUp={pressKeyEnterEncargo}
+					type='number'
+				/>
 				<InputForm
 					label='Talla o Tamaño'
 					name='talla'
@@ -138,7 +161,6 @@ export default function FormEncargo() {
 					reference={refTalla}
 					onKeyUp={pressKeyEnterEncargo}
 				/>
-
 				<InputForm
 					label='Color o Aroma'
 					name='color'
@@ -146,7 +168,6 @@ export default function FormEncargo() {
 					reference={refColor}
 					onKeyUp={pressKeyEnterEncargo}
 				/>
-
 				<InputForm
 					label='Genero'
 					name='genero'
@@ -154,7 +175,6 @@ export default function FormEncargo() {
 					reference={refGenero}
 					onKeyUp={pressKeyEnterEncargo}
 				/>
-
 				<InputForm
 					label='Modelo y/o Marca'
 					name='modelo'

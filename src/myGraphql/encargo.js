@@ -1,67 +1,9 @@
 import gql from "graphql-tag";
-const typeEncargo = `{
-			id
-			cliente
-			folio
-			vendedor
-			createAt
-			guardado {
-				status
-				fecha
-				vendedor
-			}
-			entregado {
-				status
-				fecha
-				vendedor
-			}
-			cancelado {
-				status
-				fecha
-				vendedor
-			}
-			productos {
-				nombre
-				talla
-				color
-				genero
-				modelo
-				cantidad
-				key
-				idUnico
-				vendedor
-				_id
-				createAt
-				precio
-				entregado {
-					status
-					fecha
-					vendedor
-				}
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-			abonos {
-				_id
-				idVenta
-				folioVenta
-				abono
-				vendedor
-				createAt
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-		}`;
+import { typeEncargo } from "./Types/encargo";
 
 export const REGISTER_ENCARGO = gql`
 	mutation registerEncargo($input: EncargoInput) {
-		registerEncargo(input: $input)
+		registerEncargo(input: $input) ${typeEncargo}
 	}
 `;
 export const GET_ENCARGOS = gql`
@@ -98,5 +40,10 @@ export const EDIT_PRODUCTO_ENCARGO = gql`
 export const ADD_PRODUCTO_ENCARGO = gql`
 	mutation addProductoEncargo($input: EditProductEncargoInput) {
 		addProductoEncargo(input: $input) ${typeEncargo}
+	}
+`;
+export const ADD_ABONO_ENCARGO = gql`
+	mutation addAbonoEncargo($input: AbonoEncargoInput) {
+		addAbonoEncargo(input: $input) ${typeEncargo}
 	}
 `;

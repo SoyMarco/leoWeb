@@ -50,6 +50,7 @@ export default function Cobrar() {
 						setimprimir(true);
 						setmodalCobrar(false);
 					} else if (keyF === "F2") {
+						setmodalCobrar(false);
 						navigate("/");
 					}
 				}
@@ -76,6 +77,7 @@ export default function Cobrar() {
 						refApartado: registerApartadoF3.id,
 						f3: true,
 					});
+					setmodalCobrar(false);
 					navigate("/");
 				}
 			}

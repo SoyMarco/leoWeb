@@ -5,9 +5,13 @@ import ReadEncargoContext from "./context";
 import moment from "moment";
 import { Form } from "antd";
 import useBack from "../Service/useBack";
+import { useNavigate } from "react-router-dom";
+import ShopListContext from "context/Shopping/ShopListContext";
 
 export default function ReadEncargoState({ children }) {
 	const { isLoading } = useContext(AuthContext);
+	const { settotalTotal, setmodalCobrar, modalCobrar } =
+		useContext(ShopListContext);
 
 	const [cantidadProductos, setcantidadProductos] = useState(0);
 	const [abonos, setabonos] = useState([]);
@@ -19,13 +23,16 @@ export default function ReadEncargoState({ children }) {
 	const [modalReimprimir, setmodalReimprimir] = useState(false);
 	const [dataEncargo, setdataEncargo] = useState(undefined);
 	const [newAbono, setnewAbono] = useState(null);
-	const [modalCobrar, setmodalCobrar] = useState(false);
 	const [totalProductos, settotalProductos] = useState(0);
 	const [modalCalendar, setmodalCalendar] = useState(false);
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [encargoSelect, setencargoSelect] = useState(undefined);
 	const [newFecha, setnewFecha] = useState(null);
 	const [openModal, setopenModal] = useState(false);
+	const [imprimir, setimprimir] = useState(false);
+	const [cambio, setcambio] = useState(0);
+	const [inputs, setinputs] = useState({});
+	const [dataImprimir, setdataImprimir] = useState(false);
 	const [colorVence, setcolorVence] = useState(
 		"linear-gradient(#2196F3,#0000E6)"
 	);
@@ -33,6 +40,7 @@ export default function ReadEncargoState({ children }) {
 	const inputAbono = useRef();
 	const cobrarEfectivo = useRef();
 	const [form] = Form.useForm();
+	const navigate = useNavigate();
 
 	const selectFecha = (value) => {
 		setnewFecha(value.unix() * 1000);
@@ -124,6 +132,40 @@ export default function ReadEncargoState({ children }) {
 		}
 		allBACK.addProductosEncargo({ form, closeModal });
 	};
+	const pressEnter = () => {
+		if (newAbono > 0 && restaria >= 0) {
+			settotalTotal(newAbono);
+			setmodalCobrar(true);
+		}
+	};
+	const pressKeyAbono = (e) => {
+		if (e.keyCode === 13) {
+			pressEnter();
+		}
+		// ESC
+		if (e.keyCode === 27) {
+			if (newAbono > 0) {
+				setnewAbono(null);
+			} else {
+				navigate("/");
+			}
+		}
+		// Reimprimir
+		if (e.keyCode === 112) {
+			setdataImprimir(dataEncargo);
+		}
+		if (e.keyCode === 123) {
+			pressEnter();
+		}
+		// F6 abrir ventana
+		if (e.keyCode === 117) {
+			document.getElementById("linkNewWindow").click();
+		}
+		// Cuenta
+		if (e.keyCode === 67) {
+			navigate("/");
+		}
+	};
 	const { refetch, ...allBACK } = useBack({ dataChange, dataEncargo });
 	return (
 		<ReadEncargoContext.Provider
@@ -162,8 +204,16 @@ export default function ReadEncargoState({ children }) {
 				dataChange,
 				closeModal,
 				onFinish,
+				pressKeyAbono,
 				isLoading,
+				imprimir,
 				...allBACK,
+				cambio,
+				setcambio,
+				inputs,
+				setinputs,
+				dataImprimir,
+				setdataImprimir,
 			}}
 		>
 			{children}

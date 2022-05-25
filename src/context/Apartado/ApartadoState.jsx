@@ -122,7 +122,7 @@ const ApartadoState = (props) => {
 	};
 
 	const initialState = (data) => {
-		setdataApartado(data.addAbono);
+		setdataApartado(data?.addAbono);
 		setmodalCobrar(false);
 		setabono({ abono: null });
 		inputAbono.current.select();
