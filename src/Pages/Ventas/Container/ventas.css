@@ -27,3 +27,10 @@
 	text-rendering: auto;
 	color: white;
 }
+
+h1.tituloVentas {
+	font-size: x-large;
+	font-weight: bold;
+	color: darkblue;
+	text-align: center;
+}
