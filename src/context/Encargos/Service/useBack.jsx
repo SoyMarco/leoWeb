@@ -199,9 +199,8 @@ export default function useBack({ dataChange, dataEncargo }) {
 					queryF3 = { ventaF3: [ventaF123] };
 				} else {
 					let arrayNew = [];
-					for (let i = 0; i < queryF3.ventaF3.length; i++) {
-						const element = queryF3.ventaF3[i];
-						arrayNew.push(element);
+					for (const iterator of queryF3.ventaF3) {
+						arrayNew.push(iterator);
 					}
 					arrayNew.push(ventaF123);
 					queryF3 = { ventaF3: arrayNew };

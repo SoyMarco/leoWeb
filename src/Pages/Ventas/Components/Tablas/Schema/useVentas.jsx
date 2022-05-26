@@ -14,7 +14,7 @@ const useVentas = () => {
 		}
 
 		const typeVenta = record?.referencia?.toLowerCase();
-		if (typeVenta === "apartado") return "darkblue";
+		if (typeVenta === "apartado") return "rgb(0, 0, 102)";
 		if (typeVenta === "encargo") return "#1873b9";
 
 		return "green";
