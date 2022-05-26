@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import ModalCobrar from "Components/ModalCobrar/Container/ModalCobrar";
-import useService from "Components/ModalCobrar/Service/useService";
+import useService from "Hooks/Service/useService";
 import ApartadoContext from "context/Apartado/ApartadoContext";
 import ShopListContext from "context/Shopping/ShopListContext";
 import AuthContext from "context/Auth/AuthContext";

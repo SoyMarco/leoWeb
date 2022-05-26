@@ -153,6 +153,7 @@ export const GET_APARTADOS_BUSCADOR = gql`
 			cliente
 			folio
 			vence
+			tipo
 			entregado {
 				status
 				fecha

@@ -1,17 +1,19 @@
 import { useState, useContext } from "react";
-import EncargoContext from "./context";
-import useService from "Components/ModalCobrar/Service/useService";
-import { useMutation } from "@apollo/client";
+import useService from "Hooks/Service/useService";
 import { REGISTER_ENCARGO } from "myGraphql/encargo";
-import { openNotification } from "Utils/openNotification";
-import { useNavigate } from "react-router-dom";
 import AuthContext from "context/Auth/AuthContext";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import NewEncargoContext from "./context";
 import { Form } from "antd";
+import ShopListContext from "context/Shopping/ShopListContext";
 
-const EncargoState = (props) => {
+export default function NewEncargoState({ children }) {
 	const { auth } = useContext(AuthContext);
+	const { addProductShopList, setmodalCobrar, modalCobrar } =
+		useContext(ShopListContext);
 
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 	const { register } = useService();
 	const [mutateREGISTER_ENCARGO] = useMutation(REGISTER_ENCARGO);
 	const [form] = Form.useForm();
@@ -24,14 +26,20 @@ const EncargoState = (props) => {
 	const [cliente, setcliente] = useState("");
 	const [modalAbono, setmodalAbono] = useState(null);
 	const [keyCount, setkeyCount] = useState(0);
+	const [dataEncargoBack, setdataEncargoBack] = useState(undefined);
 
-	const guardarEncargo = async () => {
+	const guardarEncargo = async ({ keyF, inputs }) => {
+		let newAbono = abono;
+		if (keyF === "F3") {
+			newAbono = 0;
+		}
 		const dataSend = {
 			productos: listaProductos,
-			abonos: [{ abono: abono, vendedor: auth.name }],
 			cliente: cliente,
-			vendedor: auth.name,
-			guardado: { vendedor: auth.name },
+			total: newAbono,
+			ventaEfectivo: inputs?.efectivo ?? 0,
+			ventaTarjeta: inputs?.tarjeta ?? 0,
+			ventaACuenta: inputs?.aCuenta ?? 0,
 		};
 		const data = await register({
 			input: dataSend,
@@ -39,23 +47,40 @@ const EncargoState = (props) => {
 			// keyF,
 		});
 
-		if (data.registerEncargo === true) {
-			openNotification("success", `Encargo guardado `);
+		if (data) {
+			const { registerEncargo } = data;
+			setmodalCobrar(false);
+			if (keyF === "F1") {
+				setdataEncargoBack(registerEncargo);
+				setimprimirEncargo(true);
+				return;
+			}
+
+			if (keyF === "F3") {
+				addProductShopList({
+					nombre: registerEncargo.cliente,
+					precio: parseFloat(abono),
+					apartado: registerEncargo.folio,
+					refApartado: registerEncargo.id,
+					f3: true,
+				});
+			}
 			navigate("/");
 		}
 	};
 	const onFinish = () => {
-		let values = form.getFieldsValue();
+		const values = form.getFieldsValue();
 		if (values.nombre && cliente) {
-			let productoEncargo = [
+			const productoEncargo = [
 				...listaProductos,
 				{
 					nombre: values.nombre,
+					precio: values.precio > 0 ? parseInt(values.cantidad) : 0,
 					talla: values.talla,
 					color: values.color,
 					genero: values.genero,
 					modelo: values.modelo,
-					cantidad: 1,
+					cantidad: values.cantidad > 0 ? parseInt(values.cantidad) : 1,
 					key: keyCount,
 					vendedor: auth.name,
 				},
@@ -69,13 +94,13 @@ const EncargoState = (props) => {
 		}
 	};
 	const btnAddAbono = () => {
-		let values = form.getFieldsValue();
+		const values = form.getFieldsValue();
 		if (!values.nombre && listaProductos.length > 0) {
 			setmodalAbono(true);
 		}
 	};
 	return (
-		<EncargoContext.Provider
+		<NewEncargoContext.Provider
 			value={{
 				listaProductos,
 				setlistaProductos,
@@ -92,11 +117,12 @@ const EncargoState = (props) => {
 				onFinish,
 				form,
 				btnAddAbono,
+				modalCobrar,
+				setmodalCobrar,
+				dataEncargoBack,
 			}}
 		>
-			{props.children}
-		</EncargoContext.Provider>
+			{children}
+		</NewEncargoContext.Provider>
 	);
-};
-
-export default EncargoState;
+}

@@ -16,7 +16,11 @@ const AddApartado = () => {
 			<title>{cliente ? cliente : "Nuevo Apartado"}</title>
 
 			{modalCobrar && <Cobrar />}
-
+			<Row justify='center'>
+				<h1 style={{ fontSize: "25px", fontWeight: "bold", color: "#001e36" }}>
+					NUEVO APARTADO
+				</h1>
+			</Row>
 			<Row justify='space-around'>
 				{imprimir === false && (
 					<Col flex='70%'>

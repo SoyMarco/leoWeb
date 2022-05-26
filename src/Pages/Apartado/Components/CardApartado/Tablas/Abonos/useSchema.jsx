@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import useService from "Components/ModalCobrar/Service/useService";
+import useService from "Hooks/Service/useService";
 import ApartadoContext from "context/Apartado/ApartadoContext";
 import { openNotification } from "Utils/openNotification";
 import { BORRAR_EDITAR_ABONO } from "myGraphql/apartado";
@@ -7,7 +7,7 @@ import { Row, Tooltip, Switch, Popconfirm } from "antd";
 import AuthContext from "context/Auth/AuthContext";
 import { useMutation } from "@apollo/client";
 import moment from "moment";
-import "./productos.css";
+import "./abonos.css";
 
 export default function useSchema({ loading }) {
 	const { dataApartado } = useContext(ApartadoContext);
@@ -61,10 +61,10 @@ export default function useSchema({ loading }) {
 			dataIndex: "vendedor",
 			key: "vendedor",
 			ellipsis: true,
-			render: (vendedor, record) => (
+			render: (vendedor, _record) => (
 				<h3
 					style={{
-						color: colorRow(record),
+						// color: colorRow(record),
 						fontSize: "large",
 					}}
 				>
@@ -78,9 +78,11 @@ export default function useSchema({ loading }) {
 			key: "createAt",
 			sorter: (a, b) => b.createAt - a.createAt,
 			defaultSortOrder: "ascend",
-			render: (createAt, record) => (
+			render: (createAt, _record) => (
 				<Tooltip placement='top' title={`${pasarAFecha(createAt, "LLLL")}`}>
-					<h1 style={{ color: colorRow(record) }}>
+					<h1
+					// style={{ color: colorRow(record) }}
+					>
 						{pasarAFecha(createAt, "L")}
 					</h1>
 				</Tooltip>

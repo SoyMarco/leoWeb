@@ -1,7 +1,7 @@
 import { useState, useContext, useMemo } from "react";
 import ModalCobrar from "Components/ModalCobrar/Container/ModalCobrar";
 import { REGISTER_VENTA, GET_TOTAL_VENTAS_DIA } from "myGraphql/venta";
-import useService from "Components/ModalCobrar/Service/useService";
+import useService from "Hooks/Service/useService";
 import ShopListContext from "context/Shopping/ShopListContext";
 import { useMutation, useQuery } from "@apollo/client";
 import AuthContext from "context/Auth/AuthContext";

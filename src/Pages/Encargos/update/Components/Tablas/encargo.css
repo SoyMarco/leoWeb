@@ -1,0 +1,14 @@
+#tableEncargos > .ant-table-title {
+	background: #1873b9;
+	border-radius: 25px 5px 0 0;
+}
+h1.conteoEncargo {
+	border-radius: 50px;
+	padding: 0 15px;
+	font-size: 25px;
+	font-weight: revert;
+	align-self: center;
+	margin: 0px;
+	color: #1873b9;
+	background: #1873b934;
+}

@@ -117,12 +117,12 @@ const ApartadoState = (props) => {
 		restaría = parseInt(totalTotal - (totalAbonos + addAbono)) ?? 0;
 		return restaría;
 	};
-	const pasarAFecha = (item) => {
-		return moment.unix(item / 1000).format("LLLL");
+	const pasarAFecha = (item, L = "LLLL") => {
+		return moment.unix(item / 1000).format(L);
 	};
 
 	const initialState = (data) => {
-		setdataApartado(data.addAbono);
+		setdataApartado(data?.addAbono);
 		setmodalCobrar(false);
 		setabono({ abono: null });
 		inputAbono.current.select();

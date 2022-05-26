@@ -1,0 +1,9 @@
+h1.nameClientEncargo {
+	font-size: x-large;
+	font-weight: bold;
+	border-radius: 30px;
+	text-align: center;
+	margin: 5px 20px 0 20px;
+	color: #1873b9;
+	background: #1873b934;
+}

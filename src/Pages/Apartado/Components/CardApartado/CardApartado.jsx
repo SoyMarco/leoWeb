@@ -1,31 +1,15 @@
 import { useContext } from "react";
-import Encabezado from "../..//Components/Encabezado/Encabezado";
+import Encabezado from "../../Components/Encabezado/Encabezado";
 import ApartadoContext from "context/Apartado/ApartadoContext";
 import { TablaProductos, TablaAbonos } from "./Tablas";
-import { CalendarOutlined } from "@ant-design/icons";
-import { Row, Card, Button, Result } from "antd";
-import moment from "moment";
+import { Row, Card, Result } from "antd";
+import Footer from "../Footer/Footer";
 
 export default function CardApartado({ refetch, loading }) {
-	const {
-		dataApartado,
-		calculateRestaria,
-		abono,
-		totalAbonos,
-		totalProductos,
-		totalTotal,
-		venceEn,
-		colorVence,
-		pasarAFecha,
-		statusApartado,
-		setmodalCalendar,
-	} = useContext(ApartadoContext);
+	const { dataApartado, pasarAFecha, statusApartado } =
+		useContext(ApartadoContext);
 
-	const pasarAFechaLL = (item) => {
-		return moment.unix(item / 1000).format("LL");
-	};
-
-	const renderTablaProductosAbonos = () => {
+	const renderTablas = () => {
 		if (statusApartado) {
 			return (
 				<Row>
@@ -42,45 +26,11 @@ export default function CardApartado({ refetch, loading }) {
 		return <Result status='error' title={title} />;
 	};
 	return (
-		<Card
-			disabled={true}
-			actions={[
-				<Button
-					disabled={!statusApartado}
-					shape='round'
-					style={{
-						marginTop: 5,
-						marginRight: 15,
-						color: "white",
-						border: 0,
-						fontWeight: "bold",
-						fontSize: "large",
-						background: statusApartado ? colorVence : "gray",
-					}}
-					onClick={() => setmodalCalendar(true)}
-					icon={
-						<CalendarOutlined style={{ fontSize: "large", marginRight: 5 }} />
-					}
-				>
-					{`${venceEn}, ${pasarAFechaLL(dataApartado.vence)}`}
-				</Button>,
-				<h1
-					style={{
-						color: calculateRestaria() >= 0 ? "green" : "red",
-						fontSize: "x-large",
-						fontWeight: "bold",
-					}}
-				>
-					{abono.abono > 0 ? `Restaría $${calculateRestaria()}` : null}
-				</h1>,
-
-				<h1 className='totalRestaApartado'>
-					{totalProductos ? `Resta $${totalTotal - totalAbonos}` : null}
-				</h1>,
-			]}
-		>
+		<Card disabled={true}>
 			<Encabezado refetch={refetch} />
-			{renderTablaProductosAbonos()}
+			<h1 className='nameClient'>{`Cliente:  ${dataApartado?.cliente}`}</h1>
+			{renderTablas()}
+			<Footer />
 		</Card>
 	);
 }

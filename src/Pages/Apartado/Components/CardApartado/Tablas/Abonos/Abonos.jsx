@@ -3,7 +3,7 @@ import ApartadoContext from "context/Apartado/ApartadoContext";
 import { Table, Result, Col, Row, Progress } from "antd";
 import { SmileOutlined } from "@ant-design/icons";
 import useSchema from "./useSchema";
-import "./productos.css";
+import "./abonos.css";
 
 export default function Abonos({ loading }) {
 	const { totalTotal, totalAbonos, abonos, abono, inputAbono } =
@@ -57,10 +57,10 @@ export default function Abonos({ loading }) {
 								color: "white",
 								fontSize: "large",
 								fontWeight: "revert",
-								margin: "10px 0 0 10px",
+								margin: "0px",
 							}}
 						>
-							Abonos: {abonos.length}
+							Abonos
 						</h1>
 					</Row>
 				)}
@@ -75,27 +75,26 @@ export default function Abonos({ loading }) {
 				}}
 				footer={() => (
 					<>
-						<Row justify='end'>
-							<h1 className='totalAbonosApartado'>Abonos ${totalAbonos}</h1>
+						<Row justify='space-around'>
+							<h1 className='numeroAbonosApartado'>Abonos {abonos?.length}</h1>
+							<h1 className='totalAbonosApartado'>${totalAbonos}</h1>
 						</Row>
-						<Row justify='center'>
-							<Progress
-								strokeColor={
-									calculatePorcent() > 100
-										? {
-												from: "red",
-												to: "limegreen",
-										  }
-										: {
-												from: "dodgerblue",
-												to: "limegreen",
-										  }
-								}
-								percent={parseInt(calculatePorcent())}
-								status='active'
-								// style={{ width: "90%" }}
-							/>
-						</Row>
+						<Progress
+							strokeColor={
+								calculatePorcent() > 100
+									? {
+											from: "red",
+											to: "limegreen",
+									  }
+									: {
+											from: "dodgerblue",
+											to: "limegreen",
+									  }
+							}
+							percent={parseInt(calculatePorcent())}
+							status='active'
+							// style={{ width: "90%" }}
+						/>
 					</>
 				)}
 			/>

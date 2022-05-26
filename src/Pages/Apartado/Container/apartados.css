@@ -34,6 +34,7 @@ h1.nameClient {
 	color: darkblue;
 	background: rgba(0, 0, 139, 0.185);
 }
+
 h1.totalRestaApartado {
 	color: darkgreen;
 	background: rgba(0, 100, 0, 0.178);
@@ -41,5 +42,46 @@ h1.totalRestaApartado {
 	padding: 0 15px;
 	font-size: 50px !important;
 	font-weight: revert;
-	margin: -10px 20px 0;
+	align-self: center;
+}
+h1.restariaStyle {
+	border-radius: 50px;
+	font-size: x-large;
+	font-weight: bold;
+	align-self: center;
+	padding: 0 15px;
+}
+
+h1.restariaRojo {
+	color: red;
+	animation: blink 2s infinite;
+}
+@keyframes blink {
+	0% {
+		background: rgba(255, 0, 0, 0.15);
+	}
+	50% {
+		background: rgba(255, 0, 0, 0.529);
+	}
+}
+
+h1.restariaVerde {
+	color: green;
+	background: rgba(0, 100, 0, 0.178);
+}
+
+button.btnFecha {
+	background: gray !important;
+	color: white !important;
+	font-size: large;
+	align-self: center;
+	font-weight: bold;
+}
+button.btn_addProduct {
+	background: linear-gradient(#2196f3, #0000e6);
+	margin-right: 10;
+	color: white;
+	border: 0;
+	font-weight: bold;
+	border-radius: 50px;
 }

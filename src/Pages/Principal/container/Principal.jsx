@@ -54,7 +54,7 @@ const Principal = () => {
 		<>
 			<title>{titleWeb}</title>
 
-			<Card actions={[]} style={{ zIndex: 1 }}>
+			<Card style={{ zIndex: 1 }}>
 				<Encabezado />
 				<TablaPrincipal />
 				<Row align='space-around'>

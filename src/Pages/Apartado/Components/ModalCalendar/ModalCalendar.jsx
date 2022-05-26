@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { Row, Button, Modal, Calendar, ConfigProvider } from "antd";
-import useService from "Components/ModalCobrar/Service/useService";
+import useService from "Hooks/Service/useService";
 import ApartadoContext from "context/Apartado/ApartadoContext";
 import { openNotification } from "Utils/openNotification";
 import { EDIT_VENCE_APARTADO } from "myGraphql/apartado";

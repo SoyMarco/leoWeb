@@ -13,7 +13,7 @@ import Caja from "Pages/Caja/Container/Caja";
 import EntradasSalidas from "Pages/EntradasSalidas/Container/EntradasSalidas";
 import CorteMobile from "Mobile/Corte/Container/Corte";
 import VentaMobile from "Mobile/Ventas/Container/Ventas";
-import AddEncargo from "Pages/Encargos/create/Container/Encargo";
+import AddEncargo from "Pages/Encargos/create/Container/NewEncargo";
 import ReadEncargos from "Pages/Encargos/Encargos/container/ReadEncargos";
 import UpdateEncargo from "Pages/Encargos/update/Container/Encargo";
 import CorteB from "Mobile/CorteB/Container/CorteB";
@@ -22,7 +22,8 @@ import Perfumes from "Pages/Perfumes/Container/Perfumes";
 //Context
 import NewAparadoState from "context/NewApartado/NewAparadoState";
 import ApartadoState from "context/Apartado/ApartadoState";
-import EncargoState from "context/Encargo/EncargoState";
+import NewEncargoState from "context/NewEncargo/NewEncargoState";
+import ReadEncargoState from "context/Encargos/ReadEcargo/ReadEncargoState";
 
 const routes = [
 	{
@@ -79,7 +80,7 @@ const routes = [
 		path: "/addencargo",
 		layout: LayoutForm,
 		component: AddEncargo,
-		context: EncargoState,
+		context: NewEncargoState,
 		exact: true,
 	},
 	{
@@ -98,6 +99,7 @@ const routes = [
 		path: "/encargo/:folio",
 		layout: LayoutForm,
 		component: UpdateEncargo,
+		context: ReadEncargoState,
 		exact: true,
 	},
 	// Mobiles
