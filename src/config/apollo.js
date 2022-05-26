@@ -4,9 +4,9 @@ import { setContext } from "apollo-link-context";
 import { getToken } from "../Utils/token";
 
 // LOCALHOST BACKEND
-const UrlBackend = {
-	uri: "http://192.168.100.17:4000/",
-};
+// const UrlBackend = {
+// 	uri: "http://192.168.100.17:4000/",
+// };
 
 // HEROKU MASTER
 //  const UrlBackend = {
@@ -14,9 +14,9 @@ const UrlBackend = {
 // };
 
 // HEROKU DEV
-// const UrlBackend = {
-// 	uri: "https://leo-gql-dev.herokuapp.com/",
-// };
+const UrlBackend = {
+	uri: "https://leo-gql-dev.herokuapp.com/",
+};
 
 const httpLik = createUploadLink(UrlBackend);
 const authLink = setContext((_, { headers }) => {
