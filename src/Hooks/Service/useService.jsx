@@ -30,5 +30,5 @@ export default function useService() {
 		}
 	};
 
-	return { register };
+	return { register, isLoading };
 }

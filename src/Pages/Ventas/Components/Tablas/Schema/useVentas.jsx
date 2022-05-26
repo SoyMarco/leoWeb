@@ -1,32 +1,29 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Row, Tooltip, Button, Switch } from "antd";
 import moment from "moment";
 import { AiFillPrinter } from "react-icons/ai";
-import ErrorConection from "Utils/ErrorConection";
-import { openNotification } from "Utils/openNotification";
-import { CANCELAR_VENTA } from "myGraphql/venta";
-import { useMutation } from "@apollo/client";
-import AuthContext from "context/Auth/AuthContext";
+import VentasContext from "Pages/Ventas/Context/context";
 
-const SchemaVentas = (setimprimir) => {
-	const { timeLogout } = useContext(AuthContext);
-
-	const [mutateCANCELAR_VENTA, { loading }] = useMutation(CANCELAR_VENTA);
+const useVentas = () => {
+	const { cancelVenta, loadCancelVenta, setimprimir } =
+		useContext(VentasContext);
 
 	const colorRow = (record) => {
 		if (record.cancelado === true) {
 			return "red";
 		}
 
-		for (const item of record?.productos) {
-			if (item.apartado > 0) return "darkblue";
-		}
+		const typeVenta = record?.referencia?.toLowerCase();
+		if (typeVenta === "apartado") return "rgb(0, 0, 102)";
+		if (typeVenta === "encargo") return "#1873b9";
 
 		return "green";
 	};
+
 	const pasarAFecha = (item) => {
 		return moment.unix(item / 1000).format("LTS");
 	};
+
 	const cantidadProductos = (record) => {
 		if (record?.productos?.length > 0) {
 			let numProd = 0;
@@ -37,35 +34,15 @@ const SchemaVentas = (setimprimir) => {
 		}
 		return 0;
 	};
+
 	const tooltipStatusAbono = (record) => {
 		if (record.cancelado === true) {
 			return "Desactivada";
 		}
 		return "Activa";
 	};
-	const cancelVenta = async (item) => {
-		if (loading === false) {
-			try {
-				const { data } = await mutateCANCELAR_VENTA({
-					variables: {
-						input: {
-							id: item.id,
-							status: item.cancelado,
-						},
-					},
-				});
-				if (data) {
-					openNotification(
-						"success",
-						`Venta ${item.cancelado ? "recuperada" : "cancelada"} con exito`
-					);
-				}
-			} catch (error) {
-				ErrorConection(timeLogout);
-			}
-		}
-	};
-	return [
+
+	const columnsVentas = [
 		{
 			title: "Folio",
 			dataIndex: "folio",
@@ -85,6 +62,25 @@ const SchemaVentas = (setimprimir) => {
 					{folio}
 				</h3>
 			),
+		},
+		{
+			title: "Tipo Venta",
+			dataIndex: "referencia",
+			key: "referencia",
+			ellipsis: true,
+			render: (referencia, record) => {
+				return (
+					<h3
+						style={{
+							fontWeight: "bold",
+							textAlignLast: "center",
+							color: colorRow(record),
+						}}
+					>
+						{referencia ? referencia : "Venta"}
+					</h3>
+				);
+			},
 		},
 		{
 			title: "Hora",
@@ -203,7 +199,7 @@ const SchemaVentas = (setimprimir) => {
 				<Row justify='center'>
 					<Tooltip placement='left' title={"Reimprimir"}>
 						<Button
-							loading={loading}
+							loading={loadCancelVenta}
 							icon={<AiFillPrinter style={{ fontSize: "30px" }} />}
 							ghost
 							size='large'
@@ -228,7 +224,7 @@ const SchemaVentas = (setimprimir) => {
 				<Row justify='center'>
 					<Tooltip placement='top' title={() => tooltipStatusAbono(record)}>
 						<Switch
-							loading={loading}
+							loading={loadCancelVenta}
 							checked={!record.cancelado}
 							size='small'
 							style={{
@@ -242,6 +238,7 @@ const SchemaVentas = (setimprimir) => {
 			),
 		},
 	];
+	return { columnsVentas };
 };
 
-export default SchemaVentas;
+export default useVentas;

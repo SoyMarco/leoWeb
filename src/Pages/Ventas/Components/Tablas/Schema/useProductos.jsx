@@ -1,70 +1,40 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { Row, Tooltip, Switch } from "antd";
 import { Link } from "react-router-dom";
-import ErrorConection from "Utils/ErrorConection";
-import { openNotification } from "Utils/openNotification";
-import AuthContext from "context/Auth/AuthContext";
-import { CANCELAR_PRODUCTO_VENTA } from "myGraphql/venta";
-import { useMutation } from "@apollo/client";
+import VentasContext from "Pages/Ventas/Context/context";
 
-const SchemaProductos = (stateRecord) => {
-	const { timeLogout } = useContext(AuthContext);
+const useProductos = () => {
+	const { stateRecord, loadCPV, cancelarProductoVenta } =
+		useContext(VentasContext);
 
-	const [mutateCANCELAR_PRODUCTO_VENTA, { loading }] = useMutation(
-		CANCELAR_PRODUCTO_VENTA
-	);
-	const cancelarProductoVenta = async (record) => {
-		try {
-			if (record) {
-				let { data } = await mutateCANCELAR_PRODUCTO_VENTA({
-					// Parameters
-					variables: {
-						input: {
-							refApartado: record.refApartado,
-							apartado: record.apartado,
-							idVenta: stateRecord.id,
-							idArticulo: record._id,
-							status: record.cancelado,
-							totalArticulo: record.totalArticulo,
-						},
-					},
-				});
-				if (data.cancelProductVenta) {
-					openNotification("success", `Venta modificada`);
-				}
-			}
-		} catch (error) {
-			ErrorConection(timeLogout);
-			console.log("error", error);
-		}
-	};
 	const colorRow = (record) => {
 		if (stateRecord.cancelado === true || record.cancelado === true) {
 			return "red";
 		}
-
 		if (record.apartado > 0) return "darkblue";
 
 		return "green";
 	};
+
 	const tooltipStatusAbono = (record) => {
 		if (record.cancelado === true) {
 			return "Desactivado";
 		}
 		return "Activado";
 	};
-	return [
+
+	const columnsProductos = [
 		{
 			title: "Apartado",
 			dataIndex: "idArray",
 			key: "idArray",
 			width: "80px",
 			ellipsis: true,
-			render: (key, record) =>
+			render: (_key, record) =>
 				record.apartado > 0 && (
 					<Link
 						to={{
-							pathname: `/apartado/${record.apartado}`,
+							pathname: `/${stateRecord.referencia}/${record.apartado}`,
 						}}
 					>
 						<h3
@@ -169,12 +139,12 @@ const SchemaProductos = (stateRecord) => {
 				showTitle: false,
 			},
 			width: "60px",
-			render: (totalArticulo, record) => (
+			render: (_totalArticulo, record) => (
 				<Row justify='center'>
 					<Tooltip placement='right' title={() => tooltipStatusAbono(record)}>
 						<Switch
 							disabled={stateRecord?.cancelado === true}
-							loading={loading}
+							loading={loadCPV}
 							checked={!record.cancelado}
 							size='small'
 							style={{
@@ -188,5 +158,6 @@ const SchemaProductos = (stateRecord) => {
 			),
 		},
 	];
+	return { columnsProductos };
 };
-export default SchemaProductos;
+export default useProductos;

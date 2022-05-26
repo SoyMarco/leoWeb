@@ -35,9 +35,9 @@ export default function Cobrar() {
 					productos: listaCompras,
 					cliente: cliente,
 					total: parseFloat(abono),
-					ventaEfectivo: parseFloat(inputs.efectivo),
-					ventaTarjeta: parseFloat(inputs.tarjeta),
-					ventaACuenta: parseFloat(inputs.aCuenta),
+					ventaEfectivo: parseFloat(inputs?.efectivo ?? 0),
+					ventaTarjeta: parseFloat(inputs?.tarjeta ?? 0),
+					ventaACuenta: parseFloat(inputs?.aCuenta ?? 0),
 				};
 				const dataReturn = await register({
 					input: dataSend,

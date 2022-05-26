@@ -1,28 +1,29 @@
-import React, { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Table, Result, Row, Tooltip, Button, Modal, Switch, Col } from "antd";
 import { SmileOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { AiFillPrinter } from "react-icons/ai";
-import SchemaProductos from "../Schema/SchemaProductos";
-import { CANCELAR_VENTA } from "myGraphql/venta";
-import { useMutation } from "@apollo/client";
-import ErrorConection from "Utils/ErrorConection";
-import { openNotification } from "Utils/openNotification";
-import AuthContext from "context/Auth/AuthContext";
+import useProductos from "./Schema/useProductos";
 
-export default function Productos({
-	stateRecord,
-	modalProductos,
-	setmodalProductos,
-	setimprimir,
-}) {
-	const { timeLogout } = useContext(AuthContext);
-	const [mutateCANCELAR_VENTA, { loading }] = useMutation(CANCELAR_VENTA);
+import VentasContext from "Pages/Ventas/Context/context";
 
-	const [selectedRowKeys, setselectedRowKeys] = useState(0);
+export default function TablaProductos() {
+	const {
+		stateRecord,
+		setmodalProductos,
+		modalProductos,
+		setimprimir,
+		cancelVenta,
+		loadCancelVenta,
+		getVentas,
+	} = useContext(VentasContext);
+
+	const { columnsProductos } = useProductos();
+
 	const [cantidadProductos, setcantidadProductos] = useState(0);
 	const [sumaProductos, setsumaProductos] = useState(0);
 	const [generalColor, setgeneralColor] = useState("green");
+
 	useEffect(() => {
 		if (stateRecord?.productos?.length > 0) {
 			let numProd = 0;
@@ -49,19 +50,7 @@ export default function Productos({
 			}
 			setgeneralColor("green");
 		}
-	}, [stateRecord]);
-
-	const onSelectChange = () => {
-		setselectedRowKeys([]);
-	};
-	const rowSelection = {
-		selectedRowKeys,
-		onChange: onSelectChange,
-	};
-
-	const click = (record, rowIndex) => {
-		setselectedRowKeys([record.key]);
-	};
+	}, [stateRecord, getVentas]);
 
 	const tooltipStatusAbono = (record) => {
 		if (record.cancelado === true) {
@@ -78,30 +67,6 @@ export default function Productos({
 		setmodalProductos(false);
 	};
 
-	const cancelVenta = async () => {
-		if (loading === false) {
-			try {
-				const { data } = await mutateCANCELAR_VENTA({
-					variables: {
-						input: {
-							id: stateRecord.id,
-							status: stateRecord.cancelado,
-						},
-					},
-				});
-				if (data) {
-					openNotification(
-						"success",
-						`Venta ${
-							stateRecord.cancelado ? "recuperada" : "cancelada"
-						} con exito`
-					);
-				}
-			} catch (error) {
-				ErrorConection(timeLogout);
-			}
-		}
-	};
 	return (
 		<Modal
 			visible={modalProductos}
@@ -149,7 +114,7 @@ export default function Productos({
 						title={() => tooltipStatusAbono(stateRecord)}
 					>
 						<Switch
-							loading={loading}
+							loading={loadCancelVenta}
 							checked={!stateRecord?.cancelado}
 							style={{
 								background: generalColor,
@@ -163,11 +128,10 @@ export default function Productos({
 			{/* PRODUCTOS */}
 			<Table
 				rowKey={(record) => record._id}
-				columns={SchemaProductos(stateRecord)}
+				columns={columnsProductos}
 				dataSource={stateRecord?.productos}
 				pagination={false}
 				bordered
-				rowSelection={rowSelection}
 				size='small'
 				scroll={{ y: 350 }}
 				style={{
@@ -175,13 +139,13 @@ export default function Productos({
 					boxShadow: "6px 6px 20px #8b8b8b, -6px -6px 20px #ffffff",
 					marginTop: "10px",
 				}}
-				onRow={(record, rowIndex) => {
-					return {
-						onClick: (e) => {
-							click(record, rowIndex);
-						},
-					};
-				}}
+				// onRow={(record, rowIndex) => {
+				// 	return {
+				// 		onClick: () => {
+				// 			click(record, rowIndex);
+				// 		},
+				// 	};
+				// }}
 				locale={{
 					emptyText: (
 						<Result

@@ -1,81 +1,23 @@
-import React, { useState, useContext, useEffect } from "react";
-import { TablaProductos, TablaVentas } from "../Components";
-import ErrorConection from "Utils/ErrorConection";
-import { Row } from "antd";
-import { GET_CORTE } from "myGraphql/venta";
-import { useQuery } from "@apollo/client";
-import AuthContext from "context/Auth/AuthContext";
-import Imprimir from "../Components/Imprimir/Imprimir";
+import { useContext, useEffect } from "react";
+import { TablaProductos, TablaVentas, ImprimirVenta } from "../Components";
+import VentasContext from "Pages/Ventas/Context/context";
 import "./ventas.css";
 
 export default function Ventas() {
-	const { auth, timeLogout } = useContext(AuthContext);
-
-	const {
-		data: getCorteData,
-		error,
-		refetch,
-	} = useQuery(GET_CORTE, {
-		notifyOnNetworkStatusChange: true,
-	});
-	if (error) {
-		ErrorConection(timeLogout);
-	}
-
-	const [imprimir, setimprimir] = useState(false);
-	const [stateRecord, setstateRecord] = useState(null);
-	const [getVentas, setgetVentas] = useState([]);
-	const [modalProductos, setmodalProductos] = useState(false);
+	const { refetch, imprimir } = useContext(VentasContext);
 
 	useEffect(() => {
 		refetch();
-		timeLogout();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	useEffect(() => {
-		if (getCorteData) {
-			refetchCorte(getCorteData.getCorte);
-		}
-	}, [getCorteData]);
-
-	const refetchCorte = (getData) => {
-		const { ventas } = getData;
-		setgetVentas(ventas);
-	};
-
 	return (
-		<div>
-			<Row justify='center'>
-				<h1
-					style={{ fontSize: "x-large", fontWeight: "bold", color: "darkblue" }}
-				>
-					Ventas
-				</h1>
-			</Row>
-			<Row>
-				<TablaVentas
-					getVentas={getVentas}
-					setstateRecord={setstateRecord}
-					stateRecord={stateRecord}
-					setmodalProductos={setmodalProductos}
-					setimprimir={setimprimir}
-				/>
-			</Row>
-			<TablaProductos
-				stateRecord={stateRecord}
-				modalProductos={modalProductos}
-				setmodalProductos={setmodalProductos}
-				setimprimir={setimprimir}
-			/>
-			{imprimir ? (
-				<Imprimir
-					imprimir={imprimir}
-					setimprimir={setimprimir}
-					stateRecord={stateRecord}
-					auth={auth}
-				/>
-			) : null}
-		</div>
+		<>
+			<h1 className='tituloVentas'>Ventas</h1>
+			<TablaVentas />
+
+			<TablaProductos />
+			{imprimir && <ImprimirVenta />}
+		</>
 	);
 }

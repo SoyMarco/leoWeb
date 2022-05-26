@@ -1,13 +1,18 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useState, useRef } from "react";
-import moment from "moment";
-import "moment/locale/es-us";
-import { Modal, Row } from "antd";
-import "./imprimir.css";
-import ReactToPrint from "react-to-print";
+import { useEffect, useState, useRef, useContext } from "react";
 import { openNotification } from "Utils/openNotification";
+import VentasContext from "Pages/Ventas/Context/context";
+import AuthContext from "context/Auth/AuthContext";
+import ReactToPrint from "react-to-print";
+import { Modal, Row } from "antd";
+import "moment/locale/es-us";
+import moment from "moment";
+import "./imprimir.css";
 
-const Imprimir = ({ imprimir, setimprimir, stateRecord, auth }) => {
+const Imprimir = () => {
+	const { imprimir, setimprimir, stateRecord } = useContext(VentasContext);
+	const { auth } = useContext(AuthContext);
+
 	const {
 		createAt,
 		aCuenta,
@@ -46,7 +51,7 @@ const Imprimir = ({ imprimir, setimprimir, stateRecord, auth }) => {
 		<>
 			<Modal visible={imprimir} width='229px'>
 				<ReactToPrint
-					trigger={(e) => <button id='print-button'>Imprimiendo...</button>}
+					trigger={() => <button id='print-button'>Imprimiendo...</button>}
 					content={() => imprimirVenta.current}
 					// onBeforePrint={() => antesDeImprimir()}
 					onAfterPrint={() => afterPrint()}

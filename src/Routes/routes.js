@@ -19,11 +19,12 @@ import UpdateEncargo from "Pages/Encargos/update/Container/Encargo";
 import CorteB from "Mobile/CorteB/Container/CorteB";
 import Ventas from "Pages/Ventas/Container/Ventas";
 import Perfumes from "Pages/Perfumes/Container/Perfumes";
-//Context
+//Contexts
 import NewAparadoState from "context/NewApartado/NewAparadoState";
 import ApartadoState from "context/Apartado/ApartadoState";
 import NewEncargoState from "context/NewEncargo/NewEncargoState";
 import ReadEncargoState from "context/Encargos/ReadEcargo/ReadEncargoState";
+import VentasState from "Pages/Ventas/Context/VentasState";
 
 const routes = [
 	{
@@ -87,6 +88,7 @@ const routes = [
 		path: "/ventas",
 		layout: LayoutForm,
 		component: Ventas,
+		context: VentasState,
 		exact: true,
 	},
 	{

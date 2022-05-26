@@ -130,6 +130,8 @@ const getCorteType = `ventas {
 				tarjeta
 				aCuenta
 				pagoCon
+				referencia
+				notas
 				productos {
 					_id
 					idArray
