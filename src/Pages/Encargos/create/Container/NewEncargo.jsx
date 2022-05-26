@@ -10,7 +10,8 @@ import ModalCobrar from "Components/ModalCobrar/Container/ModalCobrar";
 import ShopListContext from "context/Shopping/ShopListContext";
 
 export default function NewEncargo() {
-	const { modalAbono, guardarEncargo } = useContext(EncargoContext);
+	const { modalAbono, guardarEncargo, imprimirEncargo } =
+		useContext(EncargoContext);
 	const { modalCobrar } = useContext(ShopListContext);
 
 	return (
@@ -21,16 +22,18 @@ export default function NewEncargo() {
 				</h1>
 			</Row>
 			<Row justify='space-around' align='middle'>
-				<Col flex='70%'>
-					{modalAbono ? <ModalAbonoEncargo /> : <FormEncargo />}
-					<Botones />
-				</Col>
+				{imprimirEncargo === false && (
+					<Col flex='70%'>
+						{modalAbono ? <ModalAbonoEncargo /> : <FormEncargo />}
+						<Botones />
+					</Col>
+				)}
 				<Col>
 					<ImprimirNewEncargo />
 				</Col>
 			</Row>
 
-			<EncargoTable />
+			{imprimirEncargo === false && <EncargoTable />}
 
 			{modalCobrar && <ModalCobrar saveAndPrint={guardarEncargo} />}
 		</>

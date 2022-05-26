@@ -12,7 +12,8 @@ export default function Cobrar() {
 	const [mutateADD_ABONO_ENCARGO] = useMutation(ADD_ABONO_ENCARGO);
 
 	const { isLoading } = useContext(AuthContext);
-	const { addProductShopList, totalTotal } = useContext(ShopListContext);
+	const { addProductShopList, totalTotal, setmodalCobrar } =
+		useContext(ShopListContext);
 	const {
 		dataEncargo,
 		initialState,
@@ -20,6 +21,9 @@ export default function Cobrar() {
 		setinputs,
 		newAbono,
 		restaria,
+		setmodalReimprimir,
+		setdataEncargo,
+		setnewAbono,
 	} = useContext(ReadEncargoContext);
 
 	const { register } = useService();
@@ -37,20 +41,20 @@ export default function Cobrar() {
 					refApartado: dataEncargo.id,
 					f3: true,
 				});
-				navigate("/");
 				initialState();
+				navigate("/");
 				return;
 			}
 			const input = {
 				id: dataEncargo.id,
 				abono: newAbono,
 				resta: restaria,
-				ventaEfectivo: inputs.efectivo,
-				ventaTarjeta: inputs.tarjeta,
-				ventaACuenta: inputs.aCuenta,
+				ventaEfectivo: inputs?.efectivo ?? 0,
+				ventaTarjeta: inputs?.tarjeta ?? 0,
+				ventaACuenta: inputs?.aCuenta ?? 0,
 				folioEncargo: dataEncargo.folio,
-				idEncargo: 1,
-				nombreCliente: 1,
+				idEncargo: dataEncargo.id,
+				nombreCliente: dataEncargo.cliente,
 			};
 			const data = await register({
 				input,
@@ -58,13 +62,15 @@ export default function Cobrar() {
 				keyF,
 			});
 			if (data) {
-				console.log(data);
-				// keys fs
-				// if (keyF === "F1") {
-				// 	setdataImprimir(data.addAbono);
-				// } else if (keyF === "F2") {
-				// 	initialState();
-				// }
+				console.log("daaaaaaaaaa@@@@", data);
+				const { addAbonoEncargo } = data;
+				setnewAbono(null);
+				setdataEncargo(addAbonoEncargo);
+				setmodalCobrar(false);
+				if (keyF === "F1") {
+					setmodalReimprimir(true);
+					return;
+				}
 			}
 		}
 	};

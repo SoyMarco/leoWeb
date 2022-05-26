@@ -10,7 +10,8 @@ import ShopListContext from "context/Shopping/ShopListContext";
 
 export default function NewEncargoState({ children }) {
 	const { auth } = useContext(AuthContext);
-	const { addProductShopList } = useContext(ShopListContext);
+	const { addProductShopList, setmodalCobrar, modalCobrar } =
+		useContext(ShopListContext);
 
 	const navigate = useNavigate();
 	const { register } = useService();
@@ -25,13 +26,9 @@ export default function NewEncargoState({ children }) {
 	const [cliente, setcliente] = useState("");
 	const [modalAbono, setmodalAbono] = useState(null);
 	const [keyCount, setkeyCount] = useState(0);
-	const [modalCobrar, setmodalCobrar] = useState(false);
 	const [dataEncargoBack, setdataEncargoBack] = useState(undefined);
 
-	const guardarEncargo = async ({
-		keyF,
-		inputs = { efectivo: 0, tarjeta: 0, aCuenta: 0 },
-	}) => {
+	const guardarEncargo = async ({ keyF, inputs }) => {
 		let newAbono = abono;
 		if (keyF === "F3") {
 			newAbono = 0;
@@ -40,9 +37,9 @@ export default function NewEncargoState({ children }) {
 			productos: listaProductos,
 			cliente: cliente,
 			total: newAbono,
-			ventaEfectivo: inputs.efectivo,
-			ventaTarjeta: inputs.tarjeta,
-			ventaACuenta: inputs.aCuenta,
+			ventaEfectivo: inputs?.efectivo ?? 0,
+			ventaTarjeta: inputs?.tarjeta ?? 0,
+			ventaACuenta: inputs?.aCuenta ?? 0,
 		};
 		const data = await register({
 			input: dataSend,
@@ -52,8 +49,12 @@ export default function NewEncargoState({ children }) {
 
 		if (data) {
 			const { registerEncargo } = data;
-			setdataEncargoBack(registerEncargo);
-			if (keyF === "F1") setimprimirEncargo(true);
+			setmodalCobrar(false);
+			if (keyF === "F1") {
+				setdataEncargoBack(registerEncargo);
+				setimprimirEncargo(true);
+				return;
+			}
 
 			if (keyF === "F3") {
 				addProductShopList({

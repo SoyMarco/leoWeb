@@ -1,9 +1,10 @@
-import { useContext } from "react";
-import { Row, Input, Button, Tooltip } from "antd";
-import { keyBlock } from "Utils";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useContext, useEffect } from "react";
 import { DollarCircleFilled, PrinterFilled } from "@ant-design/icons";
 import ReadEncargoContext from "context/Encargos/ReadEcargo/context";
 import SwitchB from "Pages/Encargos/Components/Switch/SwitchB";
+import { Row, Input, Button, Tooltip } from "antd";
+import { keyBlock } from "Utils";
 
 export default function Encabezado() {
 	const {
@@ -16,7 +17,14 @@ export default function Encabezado() {
 		setnewAbono,
 		setmodalReimprimir,
 		pressKeyAbono,
+		modalCobrar,
 	} = useContext(ReadEncargoContext);
+
+	useEffect(() => {
+		if (modalCobrar === false) {
+			inputAbono.current.select();
+		}
+	}, [modalCobrar]);
 
 	return (
 		<Row
@@ -38,8 +46,7 @@ export default function Encabezado() {
 			</h1>
 			<Tooltip
 				placement='top'
-				title={`
-							(F1)Imprimir
+				title={`(F1)Imprimir
 							  (F12)ENTREGAR`}
 			>
 				<Input
@@ -59,7 +66,7 @@ export default function Encabezado() {
 					onKeyUp={pressKeyAbono}
 					onKeyDown={keyBlock}
 					value={newAbono}
-					onChange={(e) => setnewAbono(e.target.value)}
+					onChange={(e) => setnewAbono(parseInt(e.target.value))}
 					type='number'
 				/>
 			</Tooltip>

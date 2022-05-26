@@ -55,7 +55,6 @@ const typeEncargo = `{
 			}
 			abonos {
 				_id
-				id
 				idVenta
 				folioVenta
 				abono

@@ -26,35 +26,38 @@ export default function Productos() {
 		setopenModal("UPDATE");
 		inputAbono.current.select();
 	};
+	const rowTitle = () => {
+		return (
+			<Row justify='space-between'>
+				<h1
+					style={{
+						color: "white",
+						fontSize: "large",
+						fontWeight: "revert",
+						margin: "0px",
+					}}
+				>
+					Encargos
+				</h1>
 
+				<Button
+					onClick={() => {
+						setopenModal("NEW");
+					}}
+					className='btn_addProduct'
+				>
+					Agregar producto
+				</Button>
+			</Row>
+		);
+	};
 	return (
 		<>
 			<Col xs={24} sm={24} md={14}>
 				<Table
 					id='tableEncargos'
 					rowKey={(record) => record._id}
-					title={() => (
-						<Row justify='space-between'>
-							<h1
-								style={{
-									color: "white",
-									fontSize: "large",
-									fontWeight: "revert",
-									margin: "0px",
-								}}
-							>
-								Encargos
-							</h1>
-
-							<Button
-								onClick={() => {
-									setopenModal("NEW");
-								}}
-							>
-								Agregar producto
-							</Button>
-						</Row>
-					)}
+					title={() => rowTitle()}
 					columns={colProductos}
 					dataSource={productos}
 					pagination={false}

@@ -1,15 +1,14 @@
 /* eslint-disable jsx-a11y/alt-text */
 import { useContext, useEffect, useState, useRef } from "react";
-import moment from "moment";
-import "moment/locale/es-us";
-import { Modal, Row, Divider, Button, Card } from "antd";
-import "./imprimir.css";
-import { useNavigate } from "react-router-dom";
-import ReactToPrint from "react-to-print";
-import { keyBlock } from "Utils";
 import { openNotification } from "Utils/openNotification";
 import EncargoContext from "context/NewEncargo/context";
 import AuthContext from "context/Auth/AuthContext";
+import { useNavigate } from "react-router-dom";
+import ReactToPrint from "react-to-print";
+import { Row, Button, Card } from "antd";
+import "moment/locale/es-us";
+import moment from "moment";
+import "./imprimir.css";
 
 const ImprimirNewEncargo = () => {
 	const {
@@ -43,13 +42,13 @@ const ImprimirNewEncargo = () => {
 		}
 	};
 	const pressKeyPrecio = (e) => {
-		// Enter
-		if (e.keyCode === 13) {
+		// Enter // F1
+		if (e.keyCode === 13 || e.keyCode === 112) {
 			document.getElementById("print-button").click();
 		}
-		// 	F1
-		if (e.keyCode === 112) {
-			document.getElementById("print-button").click();
+		// ESC
+		if (e.keyCode === 27) {
+			navigate("/");
 		}
 	};
 	const pasarAFechaLL = (item) => {
@@ -73,12 +72,59 @@ const ImprimirNewEncargo = () => {
 				// onBeforePrint={() => antesDeImprimir()}
 				onAfterPrint={() => afterPrint()}
 			/>
+			{imprimir && (
+				<Card
+					style={{
+						position: "fixed",
+						marginLeft: "-28%",
+						marginTop: "20px",
+						boxShadow: "23px 23px 34px #7a7a7a, -23px -23px 34px #ffffff",
+						padding: "10px",
+					}}
+				>
+					<input
+						id='inputPrincipalPrintESC'
+						ref={inputReprint}
+						onKeyUp={pressKeyPrecio}
+						value=''
+						style={{
+							width: "100%",
+							marginBottom: 20,
+							marginTop: 10,
+							fontSize: "x-large",
+						}}
+						placeholder='Reimprimir (Enter)'
+						key='input1PrintNewApartado'
+					></input>
+					<Row justify='space-between' key='rowbtnsPrintNewApartado'>
+						<Button
+							type='primary'
+							size='large'
+							danger
+							onClick={() => navigate("/")}
+							key='botonESCPrintNewApartado'
+							style={{ marginRight: "10px" }}
+						>
+							No reimprimir (ESC)
+						</Button>
+
+						<Button
+							size='large'
+							type='primary'
+							onClick={() => document.getElementById("print-button").click()}
+							key='botonPrintEnterPrintNewApartado'
+						>
+							Reimprimir (Enter)
+						</Button>
+					</Row>
+				</Card>
+			)}
 			<Card
 				style={{
-					width: 200,
+					width: 210,
 					boxShadow: "23px 23px 34px #7a7a7a, -23px -23px 34px #ffffff",
+					padding: 0,
 				}}
-				onCancel={() => navigate("/")}
 				key='ModalPrintNewApartado'
 			>
 				<div
@@ -86,6 +132,9 @@ const ImprimirNewEncargo = () => {
 					className='ticket'
 					name='tickets'
 					ref={imprimirNewEncargo}
+					style={{
+						width: 200,
+					}}
 				>
 					<span
 						style={{
@@ -173,35 +222,4 @@ const ImprimirNewEncargo = () => {
 		</>
 	);
 };
-// eslint-disable-next-line no-lone-blocks
-{
-	/* 
-// algo añadido
-<input
-				id='inputPrincipalPrintESC'
-				ref={inputReprint}
-				onKeyUp={pressKeyPrecio}
-				onKeyDown={keyBlock}
-				style={{ width: "180px", marginBottom: 10 }}
-			></input>
-			<Row justify='space-around'>
-				<Button
-					type='primary'
-					danger
-					shape='round'
-					onClick={() => navigate("/")}
-				>
-					ESC
-				</Button>
-
-				<Button
-					type='primary'
-					shape='round'
-					onClick={() => document.getElementById("print-button").click()}
-				>
-					Print(Enter)
-				</Button>
-			</Row>
-			<Divider /> */
-}
 export default ImprimirNewEncargo;

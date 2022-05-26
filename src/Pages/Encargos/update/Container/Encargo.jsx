@@ -44,13 +44,11 @@ export default function Encargo() {
 				/>
 			)}
 
-			{modalCobrar && <CobrarEncargo />}
-
-			{modalCalendar && <ModalCalendar />}
-
-			{modalReimprimir && <ImprimirEncargo />}
-
 			<CardEncargo />
+
+			{modalCobrar && <CobrarEncargo />}
+			{modalCalendar && <ModalCalendar />}
+			{modalReimprimir && <ImprimirEncargo />}
 		</>
 	);
 }

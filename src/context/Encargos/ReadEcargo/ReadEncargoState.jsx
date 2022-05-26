@@ -29,7 +29,6 @@ export default function ReadEncargoState({ children }) {
 	const [encargoSelect, setencargoSelect] = useState(undefined);
 	const [newFecha, setnewFecha] = useState(null);
 	const [openModal, setopenModal] = useState(false);
-	const [imprimir, setimprimir] = useState(false);
 	const [cambio, setcambio] = useState(0);
 	const [inputs, setinputs] = useState({});
 	const [dataImprimir, setdataImprimir] = useState(false);
@@ -65,9 +64,10 @@ export default function ReadEncargoState({ children }) {
 	useEffect(() => {
 		operacionesPrincipales();
 	}, [productos, abonos]);
+
 	useEffect(() => {
 		calcularRestaria();
-	}, [newAbono]);
+	}, [newAbono, resta]);
 
 	const operacionesPrincipales = () => {
 		let sum = 0;
@@ -88,11 +88,8 @@ export default function ReadEncargoState({ children }) {
 		setresta(parseInt(sum - sumAbo) ?? 0);
 	};
 	const calcularRestaria = () => {
-		let addAbono = 0;
-		if (parseInt(newAbono) > 0) {
-			addAbono = parseInt(newAbono);
-		}
-		setrestaria(parseInt(totalProductos - (totalAbonos + addAbono)) ?? 0);
+		const addAbono = parseInt(newAbono > 0 ? newAbono : 0);
+		setrestaria(resta - addAbono);
 	};
 
 	const fechaVenceEn = (vence) => {
@@ -154,6 +151,7 @@ export default function ReadEncargoState({ children }) {
 		if (e.keyCode === 112) {
 			setdataImprimir(dataEncargo);
 		}
+		// F2
 		if (e.keyCode === 123) {
 			pressEnter();
 		}
@@ -171,6 +169,7 @@ export default function ReadEncargoState({ children }) {
 		<ReadEncargoContext.Provider
 			value={{
 				dataEncargo,
+				setdataEncargo,
 				totalProductos,
 				totalAbonos,
 				resta,
@@ -206,14 +205,13 @@ export default function ReadEncargoState({ children }) {
 				onFinish,
 				pressKeyAbono,
 				isLoading,
-				imprimir,
-				...allBACK,
 				cambio,
 				setcambio,
 				inputs,
 				setinputs,
 				dataImprimir,
 				setdataImprimir,
+				...allBACK,
 			}}
 		>
 			{children}

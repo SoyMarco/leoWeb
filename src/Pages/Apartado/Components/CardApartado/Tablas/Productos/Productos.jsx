@@ -41,16 +41,7 @@ export default function Productos({ refetch, loading }) {
 				</h1>
 
 				<Button
-					shape='round'
-					style={{
-						background: "linear-gradient(#2196F3,#0000E6)",
-						// marginTop: 5,
-						marginRight: 10,
-						color: "white",
-						border: 0,
-						// fontSize: "large",
-						fontWeight: "bold",
-					}}
+					className='btn_addProduct'
 					onClick={() => setmodalAddProduct(true)}
 				>
 					<FaShoppingCart style={{ fontSize: "large", marginRight: 5 }} />
