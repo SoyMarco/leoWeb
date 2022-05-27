@@ -75,7 +75,7 @@ export default function NewEncargoState({ children }) {
 				...listaProductos,
 				{
 					nombre: values.nombre,
-					precio: values.precio > 0 ? parseInt(values.cantidad) : 0,
+					precio: values.precio > 0 ? parseInt(values.precio) : 0,
 					talla: values.talla,
 					color: values.color,
 					genero: values.genero,

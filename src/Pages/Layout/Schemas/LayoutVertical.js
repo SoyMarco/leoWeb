@@ -24,12 +24,11 @@ const layoutVertical = [
 		icon: <GiNotebook style={{ fontSize: "23px" }} />,
 		label: "Nuevo Encargo",
 	},
-	{
-		key: "/encargos",
-		icon: <GiNotebook style={{ fontSize: "23px" }} />,
-		label: "Ver Encargos",
-	},
-
+	// {
+	// 	key: "/encargos",
+	// 	icon: <GiNotebook style={{ fontSize: "23px" }} />,
+	// 	label: "Ver Encargos",
+	// },
 	{
 		key: "/entradasSalidas",
 		icon: <FaMoneyBillAlt style={{ fontSize: "23px" }} />,

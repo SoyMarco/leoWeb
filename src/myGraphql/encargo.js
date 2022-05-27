@@ -47,3 +47,8 @@ export const ADD_ABONO_ENCARGO = gql`
 		addAbonoEncargo(input: $input) ${typeEncargo}
 	}
 `;
+export const BORRAR_EDITAR_ABONO_ENCARGO = gql`
+	mutation borrarEditarAbonoEncargo($input: AbonoApartadoInput) {
+		borrarEditarAbonoEncargo(input: $input)
+	}
+`;

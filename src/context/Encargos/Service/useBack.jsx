@@ -12,9 +12,9 @@ import {
 	EDIT_GUARDAR_ENCARGO,
 	EDIT_PRODUCTO_ENCARGO,
 	ADD_PRODUCTO_ENCARGO,
+	BORRAR_EDITAR_ABONO_ENCARGO,
 } from "myGraphql/encargo";
 import {
-	BORRAR_EDITAR_ABONO,
 	CANCELAR_PRODUCTO_APARTDO,
 	ADD_ABONO,
 	EDIT_VENCE_APARTADO,
@@ -29,7 +29,9 @@ export default function useBack({ dataChange, dataEncargo }) {
 	});
 	const [mutateEDIT_GUARDAR_ENCARGO] = useMutation(EDIT_GUARDAR_ENCARGO);
 	const [mutateCANCEL_ENTREGA] = useMutation(CANCEL_ENTREGA);
-	const [mutateBORRAR_EDITAR_ABONO] = useMutation(BORRAR_EDITAR_ABONO);
+	const [mutateBORRAR_EDITAR_ABONO_ENCARGO] = useMutation(
+		BORRAR_EDITAR_ABONO_ENCARGO
+	);
 	const [mutateCANCELAR_PRODUCTO_APARTDO] = useMutation(
 		CANCELAR_PRODUCTO_APARTDO
 	);
@@ -93,20 +95,23 @@ export default function useBack({ dataChange, dataEncargo }) {
 		}
 	};
 	const borrarAbono = async (record, borrarEditar) => {
-		const dataBEA = await register({
-			input: {
-				_id: record._id,
-				abono: 0,
-				borrarEditar: borrarEditar,
-				idVenta: record.idVenta,
-				statusVenta: true,
-			},
-			mutate: mutateBORRAR_EDITAR_ABONO,
-			// keyF,
-		});
-		if (dataBEA) {
-			openNotification("success", `Abono borrado`);
-			refetch();
+		if (record) {
+			const dataBEA = await register({
+				mutate: mutateBORRAR_EDITAR_ABONO_ENCARGO,
+				input: {
+					abono: record.abono,
+					borrarEditar: borrarEditar,
+					idVenta: record.idVenta,
+					idAbono: record._id,
+					idApartado: dataEncargo.id,
+					statusVenta: record.cancel,
+				},
+			});
+
+			if (dataBEA) {
+				openNotification("success", `Abono borrado`);
+				refetch();
+			}
 		}
 	};
 	const borrarEntregarProduct = async (item, borrarEntregar) => {
