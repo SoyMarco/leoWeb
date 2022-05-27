@@ -1,4 +1,5 @@
 import gql from "graphql-tag";
+import { typeApartado } from "./Types/apartado";
 
 export const GET_FOLIO_MAX_APARTADO = gql`
 	mutation getFolioMaxApartado($input: BasicInput) {
@@ -7,145 +8,13 @@ export const GET_FOLIO_MAX_APARTADO = gql`
 		}
 	}
 `;
-const apartadoFolioType = `{
-			id
-			vendedor
-			cliente
-			folio
-			total
-			referencia
-			notas
-			createAt
-			vence
-			productos {
-				vendedor
-				nombre
-				precio
-				cantidad
-				totalArticulo
-				idArray
-				_id
-				createAt
-				entregado {
-					status
-					fecha
-					vendedor
-				}
-				sacado {
-					status
-					fecha
-					vendedor
-				}
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-			abonos {
-				_id
-				idVenta
-				folioVenta
-				abono
-				vendedor
-				createAt
-				cancel
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-			entregado {
-				status
-				fecha
-				vendedor
-			}
-			sacado {
-				status
-				fecha
-				vendedor
-			}
-			cancelado {
-				status
-				fecha
-				vendedor
-			}
-		}`;
+
 export const GET_PRODUCTOS_FOLIO = gql`
 	query getProductosFolio($folio: Float) {
-		getProductosFolio(folio: $folio) ${apartadoFolioType}
+		getProductosFolio(folio: $folio) ${typeApartado}
 	}
 `;
-export const GET_APARTADOS = gql`
-	query getApartados {
-		getApartados {
-			id
-			cliente
-			folio
-			total
-			referencia
-			notas
-			vence
-			vendedor
-			createAt
-			entregado {
-				status
-				fecha
-				vendedor
-			}
-			sacado {
-				status
-				fecha
-				vendedor
-			}
-			cancelado {
-				status
-				fecha
-				vendedor
-			}
-			productos {
-				vendedor
-				nombre
-				precio
-				cantidad
-				totalArticulo
-				idArray
-				_id
-				createAt
-				entregado {
-					status
-					fecha
-					vendedor
-				}
-				sacado {
-					status
-					fecha
-					vendedor
-				}
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-			abonos {
-				_id
-				idVenta
-				folioVenta
-				abono
-				vendedor
-				createAt
-				cancel
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-		}
-	}
-`;
+
 export const GET_APARTADOS_BUSCADOR = gql`
 	query getApartados {
 		getApartados {
@@ -153,6 +22,7 @@ export const GET_APARTADOS_BUSCADOR = gql`
 			cliente
 			folio
 			vence
+			tipo
 			entregado {
 				status
 				fecha
@@ -173,140 +43,12 @@ export const GET_APARTADOS_BUSCADOR = gql`
 `;
 export const ADD_ABONO = gql`
 	mutation addAbono($input: AbonoApartadoInput) {
-		addAbono(input: $input) {
-			id
-			vendedor
-			cliente
-			folio
-			total
-			referencia
-			notas
-			createAt
-			vence
-			productos {
-				vendedor
-				nombre
-				precio
-				cantidad
-				totalArticulo
-				idArray
-				_id
-				createAt
-				entregado {
-					status
-					fecha
-					vendedor
-				}
-				sacado {
-					status
-					fecha
-					vendedor
-				}
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-			abonos {
-				_id
-				idVenta
-				folioVenta
-				abono
-				vendedor
-				createAt
-				cancel
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-			entregado {
-				status
-				fecha
-				vendedor
-			}
-			sacado {
-				status
-				fecha
-				vendedor
-			}
-			cancelado {
-				status
-				fecha
-				vendedor
-			}
-		}
+		addAbono(input: $input) ${typeApartado}
 	}
 `;
 export const ADD_PRODUCTO = gql`
 	mutation addProducto($input: ProductoApartadoInput) {
-		addProducto(input: $input) {
-			id
-			vendedor
-			cliente
-			folio
-			total
-			referencia
-			notas
-			createAt
-			vence
-			productos {
-				vendedor
-				nombre
-				precio
-				cantidad
-				totalArticulo
-				idArray
-				_id
-				createAt
-				entregado {
-					status
-					fecha
-					vendedor
-				}
-				sacado {
-					status
-					fecha
-					vendedor
-				}
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-			abonos {
-				_id
-				idVenta
-				folioVenta
-				abono
-				vendedor
-				createAt
-				cancel
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-			entregado {
-				status
-				fecha
-				vendedor
-			}
-			sacado {
-				status
-				fecha
-				vendedor
-			}
-			cancelado {
-				status
-				fecha
-				vendedor
-			}
-		}
+		addProducto(input: $input)${typeApartado}
 	}
 `;
 export const CANCEL_ENTREGA = gql`
@@ -330,7 +72,7 @@ export const EDIT_VENCE_APARTADO = gql`
 `;
 export const BORRAR_EDITAR_ABONO = gql`
 	mutation borrarEditarAbono($input: AbonoApartadoInput) {
-		borrarEditarAbono(input: $input) ${apartadoFolioType}
+		borrarEditarAbono(input: $input) ${typeApartado}
 	}
 `;
 export const CANCELAR_APARTADO = gql`
@@ -350,71 +92,7 @@ export const SEARCH_APARTADO = gql`
 `;
 export const REGISTER_APARTADO = gql`
 	mutation registerApartado($input: ApartadoInput) {
-		registerApartado(input: $input) {
-			id
-			vendedor
-			cliente
-			folio
-			total
-			referencia
-			notas
-			createAt
-			vence
-			productos {
-				vendedor
-				nombre
-				precio
-				cantidad
-				totalArticulo
-				idArray
-				_id
-				createAt
-				entregado {
-					status
-					fecha
-					vendedor
-				}
-				sacado {
-					status
-					fecha
-					vendedor
-				}
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-			abonos {
-				_id
-				idVenta
-				folioVenta
-				abono
-				vendedor
-				createAt
-				cancel
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-			entregado {
-				status
-				fecha
-				vendedor
-			}
-			sacado {
-				status
-				fecha
-				vendedor
-			}
-			cancelado {
-				status
-				fecha
-				vendedor
-			}
-		}
+		registerApartado(input: $input) ${typeApartado}
 	}
 `;
 export const GET_PRODUCTS_NAME = gql`
@@ -436,70 +114,6 @@ export const GET_CLIENTS_NAMES = gql`
 
 export const REGISTER_APARTADO_F3 = gql`
 	mutation registerApartadoF3($input: ApartadoInput) {
-		registerApartadoF3(input: $input) {
-			id
-			vendedor
-			cliente
-			folio
-			total
-			referencia
-			notas
-			createAt
-			vence
-			productos {
-				vendedor
-				nombre
-				precio
-				cantidad
-				totalArticulo
-				idArray
-				_id
-				createAt
-				entregado {
-					status
-					fecha
-					vendedor
-				}
-				sacado {
-					status
-					fecha
-					vendedor
-				}
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-			abonos {
-				_id
-				idVenta
-				folioVenta
-				abono
-				vendedor
-				createAt
-				cancel
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-			entregado {
-				status
-				fecha
-				vendedor
-			}
-			sacado {
-				status
-				fecha
-				vendedor
-			}
-			cancelado {
-				status
-				fecha
-				vendedor
-			}
-		}
+		registerApartadoF3(input: $input) ${typeApartado}
 	}
 `;

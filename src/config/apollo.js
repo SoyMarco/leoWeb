@@ -4,7 +4,7 @@ import { setContext } from "apollo-link-context";
 import { getToken } from "../Utils/token";
 
 // LOCALHOST BACKEND
-//  const UrlBackend = {
+// const UrlBackend = {
 // 	uri: "http://192.168.100.17:4000/",
 // };
 

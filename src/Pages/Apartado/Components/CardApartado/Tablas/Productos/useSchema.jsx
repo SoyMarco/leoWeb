@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import useService from "Components/ModalCobrar/Service/useService";
+import useService from "Hooks/Service/useService";
 import { Row, Button, Popconfirm, Switch, Tooltip } from "antd";
 import { CANCELAR_PRODUCTO_APARTDO } from "myGraphql/apartado";
 import { openNotification } from "Utils/openNotification";
@@ -89,10 +89,7 @@ export default function useSchema({ refetch }) {
 			sorter: (a, b) => b.createAt - a.createAt,
 			defaultSortOrder: "ascend",
 			render: (createAt, record) => (
-				<Tooltip
-					placement='top'
-					title={titleFecha(createAt, record?.entregado[0])}
-				>
+				<Tooltip placement='top' title={titleFecha(createAt, record)}>
 					<h1
 						style={{
 							textAlignLast: "center",

@@ -1,21 +1,17 @@
 import { useContext, useEffect, useRef } from "react";
-import { SaveFilled, PrinterFilled } from "@ant-design/icons";
-import EncargoContext from "context/Encargo/context";
+import EncargoContext from "context/NewEncargo/context";
 import { FaMoneyBillWave } from "react-icons/fa";
-import { Modal, Row, Button, Input } from "antd";
+import { Input } from "antd";
 import { keyBlock } from "Utils";
+import ShopListContext from "context/Shopping/ShopListContext";
 
 export default function ModalAbonoEncargo() {
-	const {
-		setimprimirEncargo,
-		guardarEncargo,
-		loader,
-		abono,
-		setabono,
-		modalAbono,
-		setmodalAbono,
-	} = useContext(EncargoContext);
+	const { guardarEncargo, abono, setabono, setmodalAbono } =
+		useContext(EncargoContext);
+	const { settotalTotal, setmodalCobrar } = useContext(ShopListContext);
+
 	const refInputAbono = useRef();
+
 	useEffect(() => {
 		refInputAbono.current.select();
 	}, []);
@@ -24,85 +20,26 @@ export default function ModalAbonoEncargo() {
 		if (abono > 0) {
 			// Enter
 			if (e.keyCode === 13) {
-				setimprimirEncargo(true);
+				settotalTotal(abono);
+				setmodalCobrar(true);
 			}
 			// 	F1
 			if (e.keyCode === 112) {
-				setimprimirEncargo(true);
+				guardarEncargo({ keyF: "F1" });
 			}
 			// F2
 			if (e.keyCode === 113) {
-				guardarEncargo();
+				guardarEncargo({ keyF: "F2" });
 			}
+		}
+		// ESC
+		if (e.keyCode === 27) {
+			setmodalAbono(false);
+			setabono(0);
 		}
 	};
 	return (
-		<Modal
-			key='modalEncargoKey'
-			visible={modalAbono}
-			onCancel={() => setmodalAbono(false)}
-			style={{ top: 85 }}
-			title={
-				<>
-					<FaMoneyBillWave style={{ marginRight: "10px" }} />
-					Abono de encargo
-				</>
-			}
-			footer={[
-				<Row justify='space-around' key='rowFooterEncargo'>
-					<Button
-						style={
-							abono < 1
-								? {
-										background: "grey",
-										color: "white",
-										fontWeight: "bold",
-										width: 230,
-								  }
-								: {
-										background: "linear-gradient(#32A632,#005800)",
-										color: "white",
-										fontWeight: "bold",
-										width: 230,
-								  }
-						}
-						key='btn1encargo'
-						shape='round'
-						disabled={abono < 1}
-						icon={<PrinterFilled />}
-						loading={loader}
-						onClick={() => setimprimirEncargo(true)}
-					>
-						Imprimir (F1)
-					</Button>
-					<Button
-						style={
-							abono < 1
-								? {
-										background: "grey",
-										color: "white",
-										fontWeight: "bold",
-										width: 230,
-								  }
-								: {
-										background: "linear-gradient(#3232A6,#000058)",
-										color: "white",
-										fontWeight: "bold",
-										width: 230,
-								  }
-						}
-						key='btn2encargo'
-						shape='round'
-						disabled={abono < 1}
-						icon={<SaveFilled />}
-						loading={loader}
-						onClick={() => guardarEncargo()}
-					>
-						Guardar (F2)
-					</Button>
-				</Row>,
-			]}
-		>
+		<>
 			<h3 key='h3Abono'>Abono:</h3>
 			<Input
 				id='abonoEncargo'
@@ -116,7 +53,8 @@ export default function ModalAbonoEncargo() {
 				onKeyDown={keyBlock}
 				onChange={(e) => setabono(Math.round(e.target.value * 100) / 100)}
 				value={abono}
-			></Input>
-		</Modal>
+				style={{ marginBottom: "60px" }}
+			/>
+		</>
 	);
 }

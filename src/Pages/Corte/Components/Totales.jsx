@@ -135,46 +135,6 @@ export default function TotalesCorte({ loading, getTotales, refetch }) {
 								</Row>
 							</Col>
 						</Row>
-
-						{/* <Row justify='end'>
-							<Col xs={17} style={{ textAlignLast: "center" }}>
-								<h3>Dinero en efectivo que hay en caja</h3>
-								<InputNumber
-									ref={inputPrecio}
-									type='number'
-									style={{
-										width: "50%",
-										height: "35px",
-										margin: "20px 0",
-										borderRadius: "50px",
-										fontSize: "x-large",
-										textAlignLast: "center",
-										fontWeight: "bold",
-									}}
-									onKeyUp={pressKeyPrecio}
-									value={precio}
-									onChange={handlePrecio}
-								></InputNumber>
-							</Col>
-							<Col xs={7} style={{ textAlignLast: "end" }}>
-								<h4>$1000</h4>
-								<h4>$500</h4>
-								<h4>$200</h4>
-								<h4>$100</h4>
-								<h4>$50</h4>
-								<h4>$20</h4>
-								<h4>$10</h4>
-								<h4>$5</h4>
-								<h4>$2</h4>
-								<h4>$1</h4>
-								<h4>$0.50</h4>
-
-								<h3 style={{ borderTop: "solid", fontWeight: "bold" }}>
-									0000000000
-								</h3>
-							</Col>
-						</Row>
-					 */}
 					</Col>
 				</Row>
 			</Card>

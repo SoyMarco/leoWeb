@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/alt-text */
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import moment from "moment";
 import "moment/locale/es-us";
 import { Modal, Row, Divider, Button } from "antd";
@@ -7,16 +7,20 @@ import "./imprimir.css";
 import { keyBlock } from "Utils";
 import ReactToPrint from "react-to-print";
 import { openNotification } from "Utils/openNotification";
+import ReadEncargoContext from "context/Encargos/ReadEcargo/context";
+import AuthContext from "context/Auth/AuthContext";
 
-const ImprimirApartado = ({
-	imprimir,
-	dataApartado,
-	auth,
-	setimprimir,
-	dinero,
-	cambio,
-	initialState,
-}) => {
+const ImprimirEncargo = () => {
+	const {
+		dataEncargo,
+		initialState,
+		modalReimprimir,
+		setmodalReimprimir,
+		dinero,
+		cambio,
+	} = useContext(ReadEncargoContext);
+	const { auth } = useContext(AuthContext);
+
 	const [totalAbonos, settotalAbonos] = useState(0);
 	const [totalTotal, settotalTotal] = useState(0);
 	const [numPrint, setnumPrint] = useState(0);
@@ -35,7 +39,7 @@ const ImprimirApartado = ({
 		// sacado,
 		vence,
 		// vendedor,
-	} = dataApartado;
+	} = dataEncargo;
 
 	const ReimprimirApartado = useRef();
 	const inputReprint = useRef();
@@ -53,11 +57,11 @@ const ImprimirApartado = ({
 		}
 		settotalAbonos(sumAbo);
 
-		if (imprimir === true) {
+		if (modalReimprimir === true) {
 			document.getElementById("print-button2").click();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [imprimir]);
+	}, [modalReimprimir]);
 
 	const afterPrint = () => {
 		openNotification("success", "Reimpreso con exito");
@@ -92,8 +96,8 @@ const ImprimirApartado = ({
 	};
 
 	const fechaVenceEn = () => {
-		let fecha = moment.unix(dataApartado.vence / 1000).fromNow();
-		if (dataApartado.vence > Date.now()) {
+		let fecha = moment.unix(dataEncargo.vence / 1000).fromNow();
+		if (dataEncargo.vence > Date.now()) {
 			fecha = `Vence ${fecha}`;
 		} else {
 			fecha = `Venció ${fecha}`;
@@ -102,18 +106,18 @@ const ImprimirApartado = ({
 	};
 	const initialStateImprimir = () => {
 		initialState();
-		setimprimir(false);
+		setmodalReimprimir(false);
 	};
 	return (
 		<>
 			<ReactToPrint
-				trigger={(e) => <button id='print-button2'>Imprimiendo...</button>}
+				trigger={() => <button id='print-button2'>Imprimiendo...</button>}
 				content={() => ReimprimirApartado.current}
 				// onBeforePrint={() => antesDeImprimir()}
 				onAfterPrint={() => afterPrint()}
 			/>
 			<Modal
-				visible={imprimir}
+				visible={modalReimprimir}
 				width='229px'
 				onCancel={() => initialStateImprimir()}
 			>
@@ -311,4 +315,4 @@ const ImprimirApartado = ({
 		</>
 	);
 };
-export default ImprimirApartado;
+export default ImprimirEncargo;

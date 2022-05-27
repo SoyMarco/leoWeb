@@ -1,42 +1,31 @@
-import React, { useState, useEffect } from "react";
-// import useAuth from "hooks/useAuth";
-// import { useNavigate } from "react-router-dom";
-// import ModalAbonoEncargo from "../Components/ModalAbonoEncargo";
-// import aceptar from "assets/sonido/Aceptar.wav";
-// import ImprimirNewEncargo from "../Components/ImprimirEncargo/ImprimirNewEncargo";
-import moment from "moment";
+import { useState, useEffect } from "react";
+import { GET_ENCARGO_FOLIO } from "myGraphql/encargo";
 import { Card, Row, Col, Switch } from "antd";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import { GET_ENCARGO_FOLIO } from "myGraphql/encargo";
+import moment from "moment";
+
 export default function ReadEncargo() {
 	const params = useParams();
-	let urlFolio = parseInt(params.folio);
-	let {
-		data: dataEncargo,
-		// loading,
-		// error,
-		// refetch,
-	} = useQuery(GET_ENCARGO_FOLIO, {
+	const urlFolio = parseInt(params.folio);
+	const { data: dataEncargo } = useQuery(GET_ENCARGO_FOLIO, {
 		variables: { folio: urlFolio },
 		notifyOnNetworkStatusChange: true,
 	});
+
 	const [EncargoFolio, setEncargoFolio] = useState({});
+	const { Meta } = Card;
+
 	useEffect(() => {
 		if (dataEncargo) {
 			setEncargoFolio(dataEncargo?.getEncargoFolio[0]);
 		}
 	}, [dataEncargo]);
-	// const audio = new Audio(aceptar);
-	const { Meta } = Card;
-
-	// let navigate = useNavigate();
-	// const { auth, logout } = useAuth();
 
 	const pasarAFechaLLLL = (item) => {
-		let fecha = moment.unix(item / 1000).format("LLLL");
-		return fecha;
+		return moment.unix(item / 1000).format("LLLL");
 	};
+
 	return (
 		<>
 			<Row justify='center'>
@@ -44,7 +33,6 @@ export default function ReadEncargo() {
 					ENCARGO
 				</h1>
 			</Row>
-
 			<Col lg={24} xs={24} className='colAntCard'>
 				<Card
 					style={{
@@ -57,12 +45,9 @@ export default function ReadEncargo() {
 					actions={[
 						<div className='divAbrir'>
 							<div>
-								<p style={{ marginBottom: 0 }}>Guardado</p>
+								<p style={{ marginBottom: 0 }}>Guardadoo</p>
 								<Switch
 									checked={EncargoFolio?.guardado?.status === true}
-									// disabled={loadingEncargos || btnLoading}
-									// loading={loadingEncargos || btnLoading}
-									// onClick={(e) => guardarEncargo(e, EncargoFolio)}
 									style={
 										EncargoFolio?.guardado?.status === true
 											? { background: "limeGreen", fontSize: "20px" }

@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { MdDelete, MdLocalGroceryStore } from "react-icons/md";
 import { Table, Button, Result, Row } from "antd";
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons";
-import EncargoContext from "context/Encargo/context";
+import EncargoContext from "context/NewEncargo/context";
 
 export default function EncargoTable() {
 	const { listaProductos, setlistaProductos } = useContext(EncargoContext);
@@ -119,6 +119,21 @@ export default function EncargoTable() {
 			),
 		},
 		{
+			title: "Precio",
+			dataIndex: "precio",
+			key: "precio",
+			render: (precio) => (
+				<h3
+					style={{
+						fontWeight: "revert",
+						fontSize: "large",
+					}}
+				>
+					${precio}
+				</h3>
+			),
+		},
+		{
 			title: "Cantidad",
 			dataIndex: "cantidad",
 			key: "cantidad",
@@ -168,6 +183,7 @@ export default function EncargoTable() {
 			),
 		},
 	];
+	console.log(listaProductos);
 	return (
 		<Table
 			columns={columns}

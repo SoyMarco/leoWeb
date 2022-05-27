@@ -38,7 +38,6 @@ export default function TablaEncargos({ item }) {
 			title: "Vendedor",
 			dataIndex: "vendedor",
 			key: "vendedor",
-			// fixed: "right",
 		},
 	];
 	return (

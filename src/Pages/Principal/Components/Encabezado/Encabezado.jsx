@@ -74,7 +74,6 @@ export default function Encabezado() {
 	const addArticulo = (record) => {
 		const shopItem = shopList.find((item) => item.key === record.key);
 		if (shopList.length > 0 && shopItem.apartado === 0) {
-			console.log(record.key);
 			addOneShopList(record.key);
 		}
 	};

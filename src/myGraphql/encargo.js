@@ -1,194 +1,25 @@
 import gql from "graphql-tag";
+import { typeEncargo } from "./Types/encargo";
 
 export const REGISTER_ENCARGO = gql`
 	mutation registerEncargo($input: EncargoInput) {
-		registerEncargo(input: $input)
+		registerEncargo(input: $input) ${typeEncargo}
 	}
 `;
 export const GET_ENCARGOS = gql`
 	query getEncargos {
-		getEncargos {
-			id
-			cliente
-			folio
-			vendedor
-			createAt
-			guardado {
-				status
-				fecha
-				vendedor
-			}
-			entregado {
-				status
-				fecha
-				vendedor
-			}
-			cancelado {
-				status
-				fecha
-				vendedor
-			}
-			productos {
-				nombre
-				talla
-				color
-				genero
-				modelo
-				cantidad
-				key
-				idUnico
-				vendedor
-				_id
-				createAt
-				entregado {
-					status
-					fecha
-					vendedor
-				}
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-			abonos {
-				_id
-				idVenta
-				folioVenta
-				abono
-				vendedor
-				createAt
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-		}
+		getEncargos ${typeEncargo}
 	}
 `;
 export const EDIT_GUARDAR_ENCARGO = gql`
-	mutation editGuararEncargo($input: CancelarApartadoInput) {
-		editGuararEncargo(input: $input) {
-			id
-			cliente
-			folio
-			vendedor
-			createAt
-			guardado {
-				status
-				fecha
-				vendedor
-			}
-			entregado {
-				status
-				fecha
-				vendedor
-			}
-			cancelado {
-				status
-				fecha
-				vendedor
-			}
-			productos {
-				nombre
-				talla
-				color
-				genero
-				modelo
-				cantidad
-				key
-				idUnico
-				vendedor
-				_id
-				createAt
-				entregado {
-					status
-					fecha
-					vendedor
-				}
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-			abonos {
-				_id
-				idVenta
-				folioVenta
-				abono
-				vendedor
-				createAt
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-		}
+	mutation editGuardarEncargo($input: CancelarApartadoInput) {
+		editGuardarEncargo(input: $input) ${typeEncargo}
 	}
 `;
+
 export const GET_ENCARGO_FOLIO = gql`
 	query getEncargoFolio($folio: Float) {
-		getEncargoFolio(folio: $folio) {
-			id
-			cliente
-			folio
-			vendedor
-			createAt
-			guardado {
-				status
-				fecha
-				vendedor
-			}
-			entregado {
-				status
-				fecha
-				vendedor
-			}
-			cancelado {
-				status
-				fecha
-				vendedor
-			}
-			productos {
-				nombre
-				talla
-				color
-				genero
-				modelo
-				cantidad
-				key
-				idUnico
-				vendedor
-				_id
-				createAt
-				entregado {
-					status
-					fecha
-					vendedor
-				}
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-			abonos {
-				_id
-				idVenta
-				folioVenta
-				abono
-				vendedor
-				createAt
-				cancelado {
-					status
-					fecha
-					vendedor
-				}
-			}
-		}
+		getEncargoFolio(folio: $folio) ${typeEncargo}
 	}
 `;
 export const CANCELAR_ENCARGO = gql`
@@ -199,5 +30,25 @@ export const CANCELAR_ENCARGO = gql`
 export const CANCEL_ENTREGA = gql`
 	mutation cancelEntrega($input: cancelEntregaInput) {
 		cancelEntrega(input: $input)
+	}
+`;
+export const EDIT_PRODUCTO_ENCARGO = gql`
+	mutation editProductoEncargo($input: EditProductEncargoInput) {
+		editProductoEncargo(input: $input) ${typeEncargo}
+	}
+`;
+export const ADD_PRODUCTO_ENCARGO = gql`
+	mutation addProductoEncargo($input: EditProductEncargoInput) {
+		addProductoEncargo(input: $input) ${typeEncargo}
+	}
+`;
+export const ADD_ABONO_ENCARGO = gql`
+	mutation addAbonoEncargo($input: AbonoEncargoInput) {
+		addAbonoEncargo(input: $input) ${typeEncargo}
+	}
+`;
+export const BORRAR_EDITAR_ABONO_ENCARGO = gql`
+	mutation borrarEditarAbonoEncargo($input: AbonoApartadoInput) {
+		borrarEditarAbonoEncargo(input: $input)
 	}
 `;

@@ -8,6 +8,7 @@ export default function InputForm({
 	reference,
 	onKeyUp,
 	tooltip,
+	type,
 }) {
 	return (
 		<Form.Item
@@ -21,7 +22,13 @@ export default function InputForm({
 				},
 			]}
 		>
-			<Input ref={reference} onKeyUp={onKeyUp} onKeyDown={keyBlockFs} />
+			<Input
+				ref={reference}
+				onKeyUp={onKeyUp}
+				onKeyDown={keyBlockFs}
+				type={type}
+				style={{ width: "95%" }}
+			/>
 		</Form.Item>
 	);
 }

@@ -1,5 +1,5 @@
 import gql from "graphql-tag";
-
+import { getCorteType } from "./Types/venta";
 export const REGISTER_VENTA = gql`
 	mutation registerVenta($input: VentaInput) {
 		registerVenta(input: $input) {
@@ -119,46 +119,6 @@ export const GET_TOTAL_VENTAS_DIA = gql`
 	}
 `;
 
-const getCorteType = `ventas {
-				key
-				id
-				createAt
-				folio
-				cancelado
-				total
-				efectivo
-				tarjeta
-				aCuenta
-				pagoCon
-				productos {
-					_id
-					idArray
-					key
-					nombre
-					precio
-					cantidad
-					cancelado
-					totalArticulo
-					apartado
-					refApartado
-				}
-			}
-			totales {
-				key
-				inicioCaja
-				ventasEfectivo
-				totalEfectivo
-				efectivoFinalCaja
-				entSal
-				entradas
-				salidas
-				efectivo
-				tarjeta
-				aCuenta
-				total
-				finCaja
-				recargas
-			}`;
 export const GET_CORTE = gql`
 	query getCorte {
 		getCorte {

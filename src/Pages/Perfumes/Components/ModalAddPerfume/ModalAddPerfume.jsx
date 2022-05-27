@@ -31,7 +31,7 @@ function ModalAddPerfume({ modalAddVisible, setmodalAddVisible }) {
 				genero: generoValues,
 				tipo: typeValues,
 			};
-			console.log(input);
+
 			const { data } = await mutateREGISTER_PERFUME({
 				variables: { input },
 			});

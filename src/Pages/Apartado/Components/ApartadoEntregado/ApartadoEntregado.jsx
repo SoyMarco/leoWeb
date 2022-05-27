@@ -4,7 +4,7 @@ import { useMutation } from "@apollo/client";
 import { CANCEL_ENTREGA } from "myGraphql/apartado";
 import { Button, Result } from "antd";
 import ApartadoContext from "context/Apartado/ApartadoContext";
-import useService from "Components/ModalCobrar/Service/useService";
+import useService from "Hooks/Service/useService";
 import AuthContext from "context/Auth/AuthContext";
 
 export default function ApartadoEntregado({ refetch }) {

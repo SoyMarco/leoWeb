@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import ModalCobrar from "Components/ModalCobrar/Container/ModalCobrar";
-import useService from "Components/ModalCobrar/Service/useService";
+import useService from "Hooks/Service/useService";
 import ApartadoContext from "context/Apartado/ApartadoContext";
 import ShopListContext from "context/Shopping/ShopListContext";
 import AuthContext from "context/Auth/AuthContext";
@@ -47,9 +47,9 @@ export default function Cobrar() {
 				id: dataApartado.id,
 				abono: parseFloat(totalTotal),
 				resta: parseFloat(calculateRestaria()),
-				ventaEfectivo: parseFloat(inputs.efectivo),
-				ventaTarjeta: parseFloat(inputs.tarjeta),
-				ventaACuenta: parseFloat(inputs.aCuenta),
+				ventaEfectivo: parseFloat(inputs?.efectivo ?? 0),
+				ventaTarjeta: parseFloat(inputs?.tarjeta ?? 0),
+				ventaACuenta: parseFloat(inputs?.aCuenta ?? 0),
 				folioApartado: dataApartado.folio,
 				idApartado: dataApartado.id,
 				nombreCliente: dataApartado.cliente,
