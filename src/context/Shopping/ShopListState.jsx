@@ -30,6 +30,7 @@ const ShopListState = (props) => {
 	useEffect(() => {
 		setstateRecord({ key: selectedRowKeys[0] });
 	}, [selectedRowKeys]);
+
 	const calcularTotales = () => {
 		if (shopList) {
 			let sum = 0;

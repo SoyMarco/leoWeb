@@ -1,7 +1,7 @@
 import routes from "./routes";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-const NavToken = () => {
+export default function NavToken() {
 	const hasContext = (route) => {
 		if (route.context) {
 			return (
@@ -12,6 +12,7 @@ const NavToken = () => {
 		}
 		return <route.component />;
 	};
+
 	return (
 		<BrowserRouter>
 			<Routes>
@@ -26,5 +27,4 @@ const NavToken = () => {
 			</Routes>
 		</BrowserRouter>
 	);
-};
-export default NavToken;
+}
