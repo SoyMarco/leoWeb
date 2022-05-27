@@ -1,49 +1,30 @@
-const typeEncargo = `{
+const typeApartado = `{
 			id
 			vendedor
 			cliente
 			folio
 			total
 			referencia
+			notas
 			createAt
+			vence
 			tipo
-			guardado {
-				status
-				fecha
-				vendedor
-			}
-			entregado {
-				status
-				fecha
-				vendedor
-			}
-			cancelado {
-				status
-				fecha
-				vendedor
-			}
-			notas{
-				nota
-				fecha
-				vendedor
-				idUnico
-			}
 			productos {
 				vendedor
 				nombre
 				precio
 				cantidad
 				totalArticulo
-				talla
-				color
-				genero
-				modelo
-				key
-				idUnico
+				idArray
 				_id
 				createAt
 				tipo
 				entregado {
+					status
+					fecha
+					vendedor
+				}
+				sacado {
 					status
 					fecha
 					vendedor
@@ -69,6 +50,21 @@ const typeEncargo = `{
 					vendedor
 				}
 			}
+			entregado {
+				status
+				fecha
+				vendedor
+			}
+			sacado {
+				status
+				fecha
+				vendedor
+			}
+			cancelado {
+				status
+				fecha
+				vendedor
+			}
 		}`;
 
-export { typeEncargo };
+export { typeApartado };

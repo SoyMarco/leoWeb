@@ -183,6 +183,7 @@ export default function EncargoTable() {
 			),
 		},
 	];
+	console.log(listaProductos);
 	return (
 		<Table
 			columns={columns}

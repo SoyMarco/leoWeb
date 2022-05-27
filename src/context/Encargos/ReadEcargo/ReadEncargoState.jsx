@@ -53,8 +53,8 @@ export default function ReadEncargoState({ children }) {
 			guardado,
 			vence,
 		} = newData;
-
-		setabonos(abonoSet);
+		const sinBorrados = abonoSet.filter((abn) => abn.cancel !== true);
+		setabonos(sinBorrados);
 		setproductos(productosSet);
 		setdataEncargo(newData);
 		fechaVenceEn(vence);

@@ -54,6 +54,7 @@ export default function useBack() {
 		}
 	};
 	const cancelarProductoVenta = async (record) => {
+		console.log(record);
 		const dataCPV = await register({
 			input: {
 				refApartado: record.refApartado,
@@ -62,6 +63,7 @@ export default function useBack() {
 				idArticulo: record._id,
 				status: record.cancelado,
 				totalArticulo: record.totalArticulo,
+				tipo: record.tipo,
 			},
 			mutate: mutateCANCELAR_PRODUCTO_VENTA,
 			// keyF,
