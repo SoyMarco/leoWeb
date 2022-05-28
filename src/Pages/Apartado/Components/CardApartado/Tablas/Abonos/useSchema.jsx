@@ -1,25 +1,11 @@
 import { useContext } from "react";
-import useService from "Hooks/Service/useService";
 import ApartadoContext from "context/Apartado/ApartadoContext";
-import { openNotification } from "Utils/openNotification";
-import { BORRAR_EDITAR_ABONO } from "myGraphql/apartado";
 import { Row, Tooltip, Switch, Popconfirm } from "antd";
-import AuthContext from "context/Auth/AuthContext";
-import { useMutation } from "@apollo/client";
-import moment from "moment";
 import "./abonos.css";
 
-export default function useSchema({ loading }) {
-	const { dataApartado } = useContext(ApartadoContext);
-	const { isLoading } = useContext(AuthContext);
+export default function useSchema() {
+	const { isLoading, borrarAbono, pasarAFecha } = useContext(ApartadoContext);
 
-	const { register } = useService();
-
-	const [mutateBORRAR_EDITAR_ABONO] = useMutation(BORRAR_EDITAR_ABONO);
-
-	const pasarAFecha = (item, format) => {
-		return moment.unix(item / 1000).format(format);
-	};
 	const colorRow = (record) => {
 		if (record.cancel === true) return "red";
 		return "darkgreen";
@@ -27,24 +13,6 @@ export default function useSchema({ loading }) {
 	const tooltipStatusAbono = (record) => {
 		if (record.cancelado === true) return "Desactivado";
 		return "Activado";
-	};
-
-	const borrarAbono = async (record, borrarEditar) => {
-		if (record) {
-			const data = await register({
-				mutate: mutateBORRAR_EDITAR_ABONO,
-				input: {
-					abono: record.abono,
-					borrarEditar: borrarEditar,
-					idVenta: record.idVenta,
-					idAbono: record._id,
-					idApartado: dataApartado.id,
-					statusVenta: record.cancel,
-				},
-			});
-
-			if (data) openNotification("success", `Abono borrado`);
-		}
 	};
 
 	/* COLUMNAS ABONOS */
@@ -119,12 +87,12 @@ export default function useSchema({ loading }) {
 				<Row justify='center'>
 					<Tooltip placement='right' title={() => tooltipStatusAbono(record)}>
 						<Popconfirm
-							disabled={isLoading || loading}
+							disabled={isLoading}
 							title='¿Deseas eliminarlo?'
 							onConfirm={() => borrarAbono(record, "borrar")}
 						>
 							<Switch
-								loading={loading}
+								loading={isLoading}
 								checked={!record.cancel}
 								size='small'
 								style={{

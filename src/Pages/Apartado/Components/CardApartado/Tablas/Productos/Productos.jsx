@@ -8,16 +8,17 @@ import useSchema from "./useSchema";
 import "moment/locale/es";
 import "./productos.css";
 
-export default function Productos({ refetch, loading }) {
+export default function Productos() {
 	const {
 		totalTotal,
 		productos,
 		inputAbono,
 		modalAddProduct,
 		setmodalAddProduct,
+		isLoading,
 	} = useContext(ApartadoContext);
 
-	const { colProductos } = useSchema({ refetch });
+	const { colProductos } = useSchema();
 
 	useEffect(() => {
 		if (modalAddProduct === false) inputAbono.current.select();
@@ -60,7 +61,7 @@ export default function Productos({ refetch, loading }) {
 					dataSource={productos}
 					pagination={false}
 					bordered
-					loading={loading}
+					loading={isLoading}
 					scroll={{ y: 210, x: 500 }}
 					style={{
 						height: "380px",

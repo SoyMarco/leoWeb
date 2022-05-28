@@ -1,11 +1,12 @@
-import { useContext } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useContext, useMemo } from "react";
 import Encabezado from "../../Components/Encabezado/Encabezado";
 import ApartadoContext from "context/Apartado/ApartadoContext";
 import { TablaProductos, TablaAbonos } from "./Tablas";
 import { Row, Card, Result } from "antd";
 import Footer from "../Footer/Footer";
 
-export default function CardApartado({ refetch, loading }) {
+export default function CardApartado() {
 	const { dataApartado, pasarAFecha, statusApartado } =
 		useContext(ApartadoContext);
 
@@ -13,8 +14,8 @@ export default function CardApartado({ refetch, loading }) {
 		if (statusApartado) {
 			return (
 				<Row>
-					<TablaProductos refetch={refetch} loading={loading} />
-					<TablaAbonos refetch={refetch} loading={loading} />
+					<TablaProductos />
+					<TablaAbonos />
 				</Row>
 			);
 		}
@@ -25,11 +26,13 @@ export default function CardApartado({ refetch, loading }) {
 
 		return <Result status='error' title={title} />;
 	};
+	const contentTables = useMemo(() => renderTablas(), [statusApartado]);
+
 	return (
 		<Card disabled={true}>
-			<Encabezado refetch={refetch} />
+			<Encabezado />
 			<h1 className='nameClient'>{`Cliente:  ${dataApartado?.cliente}`}</h1>
-			{renderTablas()}
+			{contentTables}
 			<Footer />
 		</Card>
 	);

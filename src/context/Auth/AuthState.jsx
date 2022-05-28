@@ -33,13 +33,13 @@ const AuthState = (props) => {
 				}
 			} catch (error) {
 				console.log("timeLogout@@@@@", error);
+				openNotification("error", "Tu sesión expiro. Vuelve a ingresar");
 			}
 		} else {
 			logout();
 		}
 	};
 	const logout = () => {
-		openNotification("error", "Tu sesión expiro. Vuelve a ingresar");
 		removeToken();
 		setAuth(null);
 	};
@@ -63,10 +63,10 @@ const AuthState = (props) => {
 		});
 	};
 	const navegateAuth = () => {
-		const token = localStorage.token;
 		if (state.auth) {
 			return props.children;
 		}
+		const token = localStorage.token;
 		if (token) {
 			return (
 				<Skeleton

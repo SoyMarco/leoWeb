@@ -1,14 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useRef, useEffect, useContext } from "react";
 import ShopListContext from "context/Shopping/ShopListContext";
 import ApartadoContext from "./ApartadoContext";
 import moment from "moment";
+import useBack from "./Services/useBack";
 
 const ApartadoState = (props) => {
 	const { setmodalCobrar, modalCobrar } = useContext(ShopListContext);
 
 	const inputAbono = useRef();
 
-	const [dataApartado, setdataApartado] = useState(null);
 	const [abono, setabono] = useState({ abono: null });
 	const [totalTotal, settotalTotal] = useState(0);
 	const [totalAbonos, settotalAbonos] = useState(0);
@@ -24,10 +25,8 @@ const ApartadoState = (props) => {
 	);
 	const [imprimir, setimprimir] = useState(false);
 	const [dataApartadoImprimir, setdataApartadoImprimir] = useState([]);
-	const [modalCalendar, setmodalCalendar] = useState(false);
-	const [cambioM, setcambio] = useState(0);
-	const [inputsM, setinputs] = useState(0);
-	const [modalAddProduct, setmodalAddProduct] = useState(false);
+	const [dataApartado, setdataApartado] = useState(undefined);
+	const [porcentBar, setporcentBar] = useState(0);
 
 	useEffect(() => {
 		if (modalCobrar === false && dataApartado) {
@@ -66,8 +65,12 @@ const ApartadoState = (props) => {
 			fechaVenceEn();
 			inputAbono.current.select();
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dataApartado]);
+
+	useEffect(() => {
+		calculatePorcent();
+	}, [abono, totalAbonos, totalTotal]);
+
 	useEffect(() => {
 		if (dataApartadoImprimir?.folio > 0) {
 			setimprimir(true);
@@ -121,18 +124,35 @@ const ApartadoState = (props) => {
 		return moment.unix(item / 1000).format(L);
 	};
 
-	const initialState = (data) => {
-		setdataApartado(data?.addAbono);
+	const initialState = () => {
 		setmodalCobrar(false);
 		setabono({ abono: null });
 		inputAbono.current.select();
 	};
 
+	const calculatePorcent = () => {
+		let addAbono = 0;
+		if (parseInt(abono.abono) > 0) {
+			addAbono = parseInt(abono.abono);
+		}
+		let porcent = 0;
+		porcent = ((totalAbonos + addAbono) * 100) / totalTotal ?? 0;
+
+		setporcentBar(porcent);
+	};
+	const allBack = useBack({
+		dataApartado,
+		setdataApartado,
+		statusApartado,
+		initialState,
+		calculateRestaria,
+		setdataApartadoImprimir,
+	});
 	return (
 		<ApartadoContext.Provider
 			value={{
+				...allBack,
 				dataApartado,
-				setdataApartado,
 				inputAbono,
 				calculateRestaria,
 				abono,
@@ -160,15 +180,8 @@ const ApartadoState = (props) => {
 				imprimir,
 				setimprimir,
 				pasarAFecha,
-				modalCalendar,
-				setmodalCalendar,
-				inputsM,
-				setinputs,
-				cambioM,
 				setmodalCobrar,
-				setcambio,
-				modalAddProduct,
-				setmodalAddProduct,
+				porcentBar,
 			}}
 		>
 			{props.children}

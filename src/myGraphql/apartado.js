@@ -48,7 +48,7 @@ export const ADD_ABONO = gql`
 `;
 export const ADD_PRODUCTO = gql`
 	mutation addProducto($input: ProductoApartadoInput) {
-		addProducto(input: $input)${typeApartado}
+		addProducto(input: $input) ${typeApartado}
 	}
 `;
 export const CANCEL_ENTREGA = gql`
@@ -58,16 +58,12 @@ export const CANCEL_ENTREGA = gql`
 `;
 export const CANCELAR_PRODUCTO_APARTDO = gql`
 	mutation cancelarProductoApartado($input: productoESCinput) {
-		cancelarProductoApartado(input: $input) {
-			id
-		}
+		cancelarProductoApartado(input: $input) ${typeApartado}
 	}
 `;
 export const EDIT_VENCE_APARTADO = gql`
 	mutation editVenceApartado($input: editVenceApartadoInput) {
-		editVenceApartado(input: $input) {
-			id
-		}
+		editVenceApartado(input: $input) ${typeApartado}
 	}
 `;
 export const BORRAR_EDITAR_ABONO = gql`
@@ -77,7 +73,7 @@ export const BORRAR_EDITAR_ABONO = gql`
 `;
 export const CANCELAR_APARTADO = gql`
 	mutation cancelarApartado($input: CancelarApartadoInput) {
-		cancelarApartado(input: $input)
+		cancelarApartado(input: $input) ${typeApartado}
 	}
 `;
 export const SEARCH_APARTADO = gql`

@@ -30,25 +30,32 @@ const useProductos = () => {
 			key: "idArray",
 			width: "80px",
 			ellipsis: true,
-			render: (_key, record) =>
-				record.apartado > 0 && (
-					<Link
-						to={{
-							pathname: `/${stateRecord.referencia}/${record.apartado}`,
-						}}
-					>
-						<h3
-							style={{
-								textAlignLast: "center",
-								fontWeight: "revert",
-								fontSize: "large",
-								color: "#1890ff",
+			render: (_key, record) => {
+				console.log("1", record);
+				console.log("2", stateRecord);
+				return (
+					record.apartado > 0 && (
+						<Link
+							to={{
+								pathname: `/${stateRecord.referencia ?? "apartado"}/${
+									record.apartado
+								}`,
 							}}
 						>
-							{record.apartado}
-						</h3>
-					</Link>
-				),
+							<h3
+								style={{
+									textAlignLast: "center",
+									fontWeight: "revert",
+									fontSize: "large",
+									color: "#1890ff",
+								}}
+							>
+								{record.apartado}
+							</h3>
+						</Link>
+					)
+				);
+			},
 		},
 		{
 			title: "Nombre",

@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useRef, useContext } from "react";
-import AuthContext from "context/Auth/AuthContext";
 import ReadEncargoContext from "./context";
 import moment from "moment";
 import { Form } from "antd";
@@ -9,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import ShopListContext from "context/Shopping/ShopListContext";
 
 export default function ReadEncargoState({ children }) {
-	const { isLoading } = useContext(AuthContext);
 	const { settotalTotal, setmodalCobrar, modalCobrar } =
 		useContext(ShopListContext);
 
@@ -204,7 +202,6 @@ export default function ReadEncargoState({ children }) {
 				closeModal,
 				onFinish,
 				pressKeyAbono,
-				isLoading,
 				cambio,
 				setcambio,
 				inputs,

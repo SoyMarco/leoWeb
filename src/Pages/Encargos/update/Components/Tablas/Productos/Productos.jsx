@@ -9,23 +9,15 @@ import UpdateProducto from "./UpdateProduct/UpdateProducto";
 export default function Productos() {
 	const {
 		productos,
-		loading,
-		inputAbono,
+		isLoading,
 		totalProductos,
 		cantidadProductos,
-		setencargoSelect,
 		openModal,
 		setopenModal,
 	} = useContext(ReadEncargoContext);
 
 	const { colProductos } = useSchema();
 
-	const click = (record) => {
-		console.log(record);
-		setencargoSelect(record);
-		setopenModal("UPDATE");
-		inputAbono.current.select();
-	};
 	const rowTitle = () => {
 		return (
 			<Row justify='space-between'>
@@ -62,7 +54,7 @@ export default function Productos() {
 					dataSource={productos}
 					pagination={false}
 					bordered
-					loading={loading}
+					loading={isLoading}
 					scroll={{ y: 210, x: 720 }}
 					style={{
 						height: "380px",
@@ -71,13 +63,6 @@ export default function Productos() {
 						margin: "10px",
 					}}
 					size='small'
-					onRow={(record) => {
-						return {
-							onClick: () => {
-								click(record);
-							},
-						};
-					}}
 					locale={{
 						emptyText: (
 							<Result

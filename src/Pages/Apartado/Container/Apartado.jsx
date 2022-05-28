@@ -1,15 +1,14 @@
-import { useEffect, useContext } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useContext, useMemo } from "react";
 import ApartadoEntregado from "../Components/ApartadoEntregado/ApartadoEntregado";
 import ModalCalendar from "Pages/Apartado/Components/ModalCalendar/ModalCalendar";
 import ImprimirApartado from "../Components/ImprimirApartado/ImprimirApartado";
 import CardApartado from "../Components/CardApartado/CardApartado";
 import ShopListContext from "context/Shopping/ShopListContext";
 import ApartadoContext from "context/Apartado/ApartadoContext";
-import { GET_PRODUCTOS_FOLIO } from "myGraphql/apartado";
 import AuthContext from "context/Auth/AuthContext";
 import Cobrar from "../Components/Cobrar/Cobrar";
-import { useParams } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+
 import ErrorPage from "Pages/Error/Error";
 import { Skeleton } from "antd";
 import "./apartados.css";
@@ -19,7 +18,6 @@ export default function Apartado() {
 	const { timeLogout } = useContext(AuthContext);
 	const {
 		dataApartado,
-		setdataApartado,
 		titleWeb,
 		modalCalendar,
 		imprimir,
@@ -27,23 +25,9 @@ export default function Apartado() {
 		abono,
 		inputsM,
 		cambioM,
-	} = useContext(ApartadoContext);
-
-	const params = useParams();
-	const urlFolio = parseInt(params.folio);
-
-	const {
-		data: getApartadoFolio,
-		loading,
-		error,
 		refetch,
-	} = useQuery(GET_PRODUCTOS_FOLIO, {
-		variables: { folio: urlFolio },
-		notifyOnNetworkStatusChange: true,
-	});
-	if (error) {
-		timeLogout();
-	}
+		loading,
+	} = useContext(ApartadoContext);
 
 	useEffect(() => {
 		refetch();
@@ -51,31 +35,22 @@ export default function Apartado() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	useEffect(() => {
-		if (getApartadoFolio) {
-			setdataApartado(getApartadoFolio?.getProductosFolio);
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [getApartadoFolio]);
-
-	const renderContent = () => {
+	const contentApartado = useMemo(() => {
 		if (dataApartado?.id) {
-			return <CardApartado refetch={refetch} loading={loading} />;
+			return <CardApartado />;
 		} else if (loading) {
 			return <Skeleton active />;
 		}
 		return <ErrorPage />;
-	};
+	}, [dataApartado]);
 	return (
 		<>
 			<title>{titleWeb}</title>
 
-			{dataApartado?.entregado[0]?.status && (
-				<ApartadoEntregado refetch={refetch} />
-			)}
+			{dataApartado?.entregado[0]?.status && <ApartadoEntregado />}
 
-			{renderContent()}
-			{modalCalendar && <ModalCalendar refetch={refetch} />}
+			{contentApartado}
+			{modalCalendar && <ModalCalendar />}
 
 			{modalCobrar && <Cobrar />}
 			{imprimir && (

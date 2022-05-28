@@ -5,25 +5,16 @@ import { SmileOutlined } from "@ant-design/icons";
 import useSchema from "./useSchema";
 import "./abonos.css";
 
-export default function Abonos({ loading }) {
-	const { totalTotal, totalAbonos, abonos, abono, inputAbono } =
+export default function Abonos() {
+	const { totalAbonos, abonos, inputAbono, isLoading, porcentBar } =
 		useContext(ApartadoContext);
-	const { colAbonos } = useSchema({ loading });
+
+	const { colAbonos } = useSchema();
 
 	const click = () => {
 		inputAbono.current.select();
 	};
 
-	const calculatePorcent = () => {
-		let addAbono = 0;
-		if (parseInt(abono.abono) > 0) {
-			addAbono = parseInt(abono.abono);
-		}
-		let porcent = 0;
-		porcent = ((totalAbonos + addAbono) * 100) / totalTotal ?? 0;
-
-		return porcent;
-	};
 	return (
 		<Col xs={24} sm={24} md={10}>
 			<Table
@@ -32,7 +23,7 @@ export default function Abonos({ loading }) {
 				columns={colAbonos}
 				dataSource={abonos}
 				pagination={false}
-				loading={loading}
+				loading={isLoading}
 				bordered
 				scroll={{ y: 190, x: 400 }}
 				size='small'
@@ -81,7 +72,7 @@ export default function Abonos({ loading }) {
 						</Row>
 						<Progress
 							strokeColor={
-								calculatePorcent() > 100
+								porcentBar > 100
 									? {
 											from: "red",
 											to: "limegreen",
@@ -91,7 +82,7 @@ export default function Abonos({ loading }) {
 											to: "limegreen",
 									  }
 							}
-							percent={parseInt(calculatePorcent())}
+							percent={parseInt(porcentBar)}
 							status='active'
 							// style={{ width: "90%" }}
 						/>

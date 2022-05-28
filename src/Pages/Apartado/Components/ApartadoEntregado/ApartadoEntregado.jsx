@@ -7,8 +7,8 @@ import ApartadoContext from "context/Apartado/ApartadoContext";
 import useService from "Hooks/Service/useService";
 import AuthContext from "context/Auth/AuthContext";
 
-export default function ApartadoEntregado({ refetch }) {
-	const { dataApartado, pasarAFecha, statusApartado } =
+export default function ApartadoEntregado() {
+	const { dataApartado, pasarAFecha, statusApartado, refetch } =
 		useContext(ApartadoContext);
 	const { isLoading } = useContext(AuthContext);
 

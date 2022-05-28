@@ -1,6 +1,12 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
-import { createUploadLink } from "apollo-upload-client";
-import { setContext } from "apollo-link-context";
+import {
+	ApolloClient,
+	HttpLink,
+	ApolloLink,
+	InMemoryCache,
+	from,
+} from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
+import { removeToken } from "Utils/token";
 
 // LOCALHOST BACKEND
 const UrlBackend = {
@@ -17,22 +23,30 @@ const UrlBackend = {
 // 	uri: "https://leo-gql-dev.herokuapp.com/",
 // };
 
-const httpLink = createUploadLink(UrlBackend);
+const httpLink = new HttpLink(UrlBackend);
 
-const authLink = setContext((_, { headers }) => {
+const authMiddleware = new ApolloLink((operation, forward) => {
 	const token = localStorage.token;
-	return {
+	operation.setContext(({ headers = {} }) => ({
 		headers: {
 			...headers,
-			Authorization: token ? `Bearer ${token}` : "",
+			authorization: token ? `Bearer ${token}` : "",
 		},
-	};
+	}));
+
+	return forward(operation);
+});
+const logoutLink = onError(({ networkError }) => {
+	console.log(networkError.statusCode);
+	if (networkError.statusCode === 500) {
+		removeToken();
+	}
 });
 
 const client = new ApolloClient({
 	connectToDevTools: true,
 	cache: new InMemoryCache(),
-	link: authLink.concat(httpLink),
+	link: from([authMiddleware, logoutLink, httpLink]),
 });
 
 export default client;

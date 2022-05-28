@@ -3,7 +3,6 @@ import ModalCobrar from "Components/ModalCobrar/Container/ModalCobrar";
 import useService from "Hooks/Service/useService";
 import ReadEncargoContext from "context/Encargos/ReadEcargo/context";
 import ShopListContext from "context/Shopping/ShopListContext";
-import AuthContext from "context/Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { ADD_ABONO_ENCARGO } from "myGraphql/encargo";
@@ -11,7 +10,6 @@ import { ADD_ABONO_ENCARGO } from "myGraphql/encargo";
 export default function Cobrar() {
 	const [mutateADD_ABONO_ENCARGO] = useMutation(ADD_ABONO_ENCARGO);
 
-	const { isLoading } = useContext(AuthContext);
 	const { addProductShopList, totalTotal, setmodalCobrar } =
 		useContext(ShopListContext);
 	const {
@@ -22,11 +20,10 @@ export default function Cobrar() {
 		newAbono,
 		restaria,
 		setmodalReimprimir,
-		setdataEncargo,
 		setnewAbono,
 	} = useContext(ReadEncargoContext);
 
-	const { register } = useService();
+	const { register, isLoading } = useService();
 	const navigate = useNavigate();
 
 	const saveAndPrint = async ({ keyF, inputs, cambio }) => {
@@ -56,16 +53,13 @@ export default function Cobrar() {
 				idEncargo: dataEncargo.id,
 				nombreCliente: dataEncargo.cliente,
 			};
-			const data = await register({
+			const dataAAE = await register({
 				input,
 				mutate: mutateADD_ABONO_ENCARGO,
 				keyF,
 			});
-			if (data) {
-				console.log("daaaaaaaaaa@@@@", data);
-				const { addAbonoEncargo } = data;
+			if (dataAAE) {
 				setnewAbono(null);
-				setdataEncargo(addAbonoEncargo);
 				setmodalCobrar(false);
 				if (keyF === "F1") {
 					setmodalReimprimir(true);

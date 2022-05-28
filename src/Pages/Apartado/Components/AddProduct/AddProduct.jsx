@@ -1,36 +1,39 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, useContext } from "react";
-import { GET_PRODUCTS_NAME, ADD_PRODUCTO } from "myGraphql/apartado";
+import { GET_PRODUCTS_NAME } from "myGraphql/apartado";
 import { Row, Button, Modal, Input, Form, AutoComplete } from "antd";
-import { openNotification } from "Utils/openNotification";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import AuthContext from "context/Auth/AuthContext";
 import { FaMoneyBillWave } from "react-icons/fa";
 import { SaveFilled } from "@ant-design/icons";
 import { GiLargeDress } from "react-icons/gi";
 import { keyBlock } from "Utils";
 import ApartadoContext from "context/Apartado/ApartadoContext";
-import useService from "Hooks/Service/useService";
 
 export default function AddProduct() {
-	const { dataApartado, initialState, modalAddProduct, setmodalAddProduct } =
-		useContext(ApartadoContext);
+	const {
+		addProducto,
+		modalAddProduct,
+		setmodalAddProduct,
+		precio,
+		setprecio,
+		nombre,
+		setnombre,
+	} = useContext(ApartadoContext);
 	const { isLoading } = useContext(AuthContext);
 
-	const [mutateADD_PRODUCTO] = useMutation(ADD_PRODUCTO);
 	const { data: getProductsName } = useQuery(GET_PRODUCTS_NAME);
 
 	const [btnDisabled, setbtnDisabled] = useState(true);
-	const [idApartado, setidApartado] = useState(null);
-	const [nombre, setnombre] = useState("");
-	const [precio, setprecio] = useState(0);
 
 	const [form] = Form.useForm();
 
-	const { register } = useService();
-
 	useEffect(() => {
 		document.querySelector("#addProductNombre").select();
+		setnombre("");
+		setprecio(0);
 	}, []);
+
 	useEffect(() => {
 		if (nombre && precio > 0) {
 			setbtnDisabled(false);
@@ -40,31 +43,9 @@ export default function AddProduct() {
 		form.setFieldsValue({
 			Articulo: nombre,
 		});
-		if (dataApartado) {
-			const id = dataApartado.id;
-			setidApartado(id);
-		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [nombre, precio]);
 
-	const addProducto = async () => {
-		if (isLoading === false && idApartado) {
-			const dataAddProd = await register({
-				mutate: mutateADD_PRODUCTO,
-				input: {
-					id: idApartado,
-					nombre: nombre,
-					precio: parseFloat(precio),
-				},
-			});
-			if (dataAddProd) {
-				const data = { addAbono: dataAddProd.addProducto };
-				openNotification("success", `Articulo agregado con exito`);
-				initialState(data);
-				setmodalAddProduct(false);
-			}
-		}
-	};
 	const agregarProducto = () => {
 		if (precio > 0 && nombre) {
 			addProducto();

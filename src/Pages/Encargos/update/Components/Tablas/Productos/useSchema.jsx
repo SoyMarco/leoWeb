@@ -2,12 +2,23 @@ import { useContext } from "react";
 import ReadEncargoContext from "context/Encargos/ReadEcargo/context";
 import { Row, Button, Popconfirm, Tooltip } from "antd";
 import { MdDelete } from "react-icons/md";
+import { FaEdit } from "react-icons/fa";
 import "moment/locale/es";
 
 export default function useSchema() {
-	const { pasarAFecha, loader, borrarEntregarProduct } =
-		useContext(ReadEncargoContext);
-
+	const {
+		pasarAFecha,
+		loader,
+		borrarEntregarProduct,
+		setopenModal,
+		setencargoSelect,
+		inputAbono,
+	} = useContext(ReadEncargoContext);
+	const click = (record) => {
+		setencargoSelect(record);
+		setopenModal("UPDATE");
+		inputAbono.current.select();
+	};
 	const colProductos = [
 		{
 			title: "Encargo",
@@ -119,7 +130,6 @@ export default function useSchema() {
 				</Tooltip>
 			),
 		},
-
 		{
 			title: "Borrar",
 			dataIndex: "totalArticulo",
@@ -130,7 +140,7 @@ export default function useSchema() {
 			width: "60px",
 			fixed: "right",
 			render: (_totalArticulo, record) => (
-				<Tooltip placement='right' title='Borrar producto'>
+				<Tooltip placement='left' title='Borrar producto'>
 					<Row justify='center'>
 						<Popconfirm
 							title='¿Deseas eliminar?'
@@ -142,6 +152,28 @@ export default function useSchema() {
 								icon={<MdDelete style={{ color: "#c5221f" }} size='25px' />}
 							></Button>
 						</Popconfirm>
+					</Row>
+				</Tooltip>
+			),
+		},
+		{
+			title: "Editar",
+			dataIndex: "totalArticulo",
+			key: "totalArticulo",
+			ellipsis: {
+				showTitle: false,
+			},
+			width: "60px",
+			fixed: "right",
+			render: (_totalArticulo, record) => (
+				<Tooltip placement='right' title='Editar producto'>
+					<Row justify='center'>
+						<Button
+							loading={loader}
+							shape='circle'
+							icon={<FaEdit style={{ color: "orange" }} size='25px' />}
+							onClick={() => click(record)}
+						></Button>
 					</Row>
 				</Tooltip>
 			),

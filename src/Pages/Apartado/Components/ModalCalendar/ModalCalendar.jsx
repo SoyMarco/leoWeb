@@ -1,48 +1,28 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { Row, Button, Modal, Calendar, ConfigProvider } from "antd";
-import useService from "Hooks/Service/useService";
 import ApartadoContext from "context/Apartado/ApartadoContext";
-import { openNotification } from "Utils/openNotification";
-import { EDIT_VENCE_APARTADO } from "myGraphql/apartado";
 import { SaveFilled } from "@ant-design/icons";
-import { useMutation } from "@apollo/client";
 import locale from "antd/lib/locale/es_ES";
 import "./modalCalendar.css";
 import "moment/locale/es-us";
 import moment from "moment";
 
-export default function ModalCalendar({ refetch }) {
-	const { setmodalCalendar, modalCalendar, dataApartado } =
-		useContext(ApartadoContext);
-	const { register } = useService();
-	const [mutateEDIT_VENCE_APARTADO] = useMutation(EDIT_VENCE_APARTADO);
+export default function ModalCalendar() {
+	const {
+		setmodalCalendar,
+		modalCalendar,
+		dataApartado,
+		setnewFecha,
+		newFecha,
+		cambiarFecha,
+		isLoading,
+		pasarAFecha,
+	} = useContext(ApartadoContext);
 
-	const [btnLoading, setbtnLoading] = useState(false);
-	const [newFecha, setnewFecha] = useState(null);
-
-	const cambiarFecha = async () => {
-		if (dataApartado.id) {
-			const data = await register({
-				mutate: mutateEDIT_VENCE_APARTADO,
-				input: {
-					id: dataApartado.id,
-					vence: newFecha.toString(),
-				},
-			});
-			if (data) {
-				refetch();
-				openNotification("success", `Fecha modificada con exito`);
-				setbtnLoading(false);
-				setmodalCalendar(false);
-			}
-		}
-	};
 	const selectFecha = (value) => {
 		setnewFecha(value.unix() * 1000);
 	};
-	const pasarAFechaLL = (item) => {
-		return moment.unix(item / 1000).format("LL");
-	};
+
 	const selectVence = () => {
 		let fechhhh = moment.unix(dataApartado?.vence / 1000).format("YYYY-MM-DD");
 		fechhhh = moment(fechhhh);
@@ -76,32 +56,25 @@ export default function ModalCalendar({ refetch }) {
 						}}
 						shape='round'
 						onClick={() => setmodalCalendar(false)}
-						loading={btnLoading}
+						loading={isLoading}
 						key='newRojoBtn'
 					>
 						Cancelar
 					</Button>
 					<Button
-						style={
-							newFecha
-								? {
-										background: "linear-gradient(#32A632,#005800)",
-										color: "white",
-										fontWeight: "bold",
-										width: 230,
-								  }
-								: {
-										background: "grey",
-										color: "white",
-										fontWeight: "bold",
-										width: 230,
-								  }
-						}
+						style={{
+							background: newFecha
+								? "linear-gradient(#32A632,#005800)"
+								: "grey",
+							color: "white",
+							fontWeight: "bold",
+							width: 230,
+						}}
 						shape='round'
 						disabled={!newFecha}
 						onClick={() => cambiarFecha()}
 						icon={<SaveFilled />}
-						loading={btnLoading}
+						loading={isLoading}
 						key='newGuardarBtn'
 					>
 						{`Guardar (Enter)`}
@@ -113,13 +86,13 @@ export default function ModalCalendar({ refetch }) {
 				<h2
 					key='newApartadoH2'
 					style={{ color: "black" }}
-				>{`${fechaVenceEn()}, ${pasarAFechaLL(dataApartado.vence)}`}</h2>
+				>{`${fechaVenceEn()}, ${pasarAFecha(dataApartado.vence, "LL")}`}</h2>
 			)}
 			{newFecha && (
 				<h2
 					key='newFechaH2'
 					style={{ color: "limegreen" }}
-				>{`Nuevo vencimiento: ${pasarAFechaLL(newFecha)}`}</h2>
+				>{`Nuevo vencimiento: ${pasarAFecha(newFecha, "LL")}`}</h2>
 			)}
 
 			<ConfigProvider locale={locale}>

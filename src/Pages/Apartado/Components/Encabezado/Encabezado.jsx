@@ -1,13 +1,8 @@
 import { useContext } from "react";
 import { Row, Input, Button, Popconfirm, Switch, Tooltip } from "antd";
-import useService from "Hooks/Service/useService";
 import ApartadoContext from "context/Apartado/ApartadoContext";
 import ShopListContext from "context/Shopping/ShopListContext";
-import { openNotification } from "Utils/openNotification";
-import { CANCELAR_APARTADO } from "myGraphql/apartado";
-import AuthContext from "context/Auth/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { useMutation } from "@apollo/client";
 import { keyBlock } from "Utils";
 import {
 	DollarCircleFilled,
@@ -15,7 +10,7 @@ import {
 	PrinterFilled,
 } from "@ant-design/icons";
 
-export default function Encabezado({ refetch }) {
+export default function Encabezado() {
 	const {
 		dataApartado,
 		inputAbono,
@@ -25,11 +20,10 @@ export default function Encabezado({ refetch }) {
 		setabono,
 		setimprimir,
 		statusApartado,
+		cancelarApartado,
+		isLoading,
 	} = useContext(ApartadoContext);
-	const { isLoading } = useContext(AuthContext);
 	const { settotalTotal } = useContext(ShopListContext);
-	const { register } = useService();
-	const [mutateCANCELAR_APARTADO] = useMutation(CANCELAR_APARTADO);
 
 	const navigate = useNavigate();
 
@@ -79,24 +73,7 @@ export default function Encabezado({ refetch }) {
 		}
 		return "APARTADO INACTIVO";
 	};
-	const cancelarApartado = async () => {
-		if (dataApartado.id) {
-			const isCanceled = await register({
-				mutate: mutateCANCELAR_APARTADO,
-				input: {
-					id: dataApartado.id,
-					status: !statusApartado,
-				},
-			});
-			if (isCanceled) {
-				refetch();
-				openNotification(
-					"success",
-					`Apartado ${statusApartado ? "CANCELADO" : "REACTIVADO"}`
-				);
-			}
-		}
-	};
+
 	return (
 		<Row
 			justify='space-around'

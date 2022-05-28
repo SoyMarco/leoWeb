@@ -4,10 +4,10 @@ import ShopListContext from "./ShopListContext";
 import { REGISTER_F3 } from "myGraphql/f3";
 import { useMutation } from "@apollo/client";
 import { openNotification } from "Utils/openNotification";
-
+import useService from "Hooks/Service/useService";
 const ShopListState = (props) => {
 	const [shopList, setshopList] = useState([]);
-
+	const { register } = useService();
 	const [mutateREGISTER_F3] = useMutation(REGISTER_F3);
 	const [DrawerF3Visible, setDrawerF3Visible] = useState(true);
 
@@ -53,6 +53,7 @@ const ShopListState = (props) => {
 	const addOneShopList = (ProductAdd) => {
 		const currentShopList = [...shopList];
 		const shopItem = currentShopList.find((item) => item.key === ProductAdd);
+
 		shopItem.cantidad = shopItem.cantidad + 1;
 		shopItem.totalArticulo = shopItem.cantidad * shopItem.precio;
 		const newShopList = [...currentShopList];
@@ -64,6 +65,7 @@ const ShopListState = (props) => {
 	const removeOneShopList = (record) => {
 		const currentShopList = [...shopList];
 		const shopItem = currentShopList.find((item) => item.key === record.key);
+
 		if (shopItem.cantidad > 1) {
 			shopItem.cantidad = shopItem.cantidad - 1;
 			shopItem.totalArticulo = shopItem.cantidad * shopItem.precio;
@@ -109,6 +111,7 @@ const ShopListState = (props) => {
 		refApartado = "0",
 		f3 = false,
 		idF3,
+		tipo = "apartado",
 	}) => {
 		const venta = {
 			key: idArticulo + 1,
@@ -119,20 +122,16 @@ const ShopListState = (props) => {
 			refApartado: refApartado,
 			totalArticulo: Math.round(precio * 100) / 100,
 			idF3: idF3,
+			tipo,
 		};
 		if (f3 === true) {
-			try {
-				const { data } = await mutateREGISTER_F3({
-					variables: {
-						input: venta,
-					},
-				});
-				if (data) {
-					openNotification("success", "F3 guardado");
-					venta.idF3 = data.registerF3._id;
-				}
-			} catch (error) {
-				console.log(error);
+			const dataF3 = await register({
+				input: venta,
+				mutate: mutateREGISTER_F3,
+			});
+			if (dataF3) {
+				openNotification("success", "F3 guardado");
+				venta.idF3 = dataF3.registerF3._id;
 			}
 		}
 		const currentShopList = [...shopList];

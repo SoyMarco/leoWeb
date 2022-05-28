@@ -1,68 +1,26 @@
 import { useContext } from "react";
-import useService from "Hooks/Service/useService";
 import { Row, Button, Popconfirm, Switch, Tooltip } from "antd";
-import { CANCELAR_PRODUCTO_APARTDO } from "myGraphql/apartado";
-import { openNotification } from "Utils/openNotification";
-import AuthContext from "context/Auth/AuthContext";
-import { useMutation } from "@apollo/client";
+import ApartadoContext from "context/Apartado/ApartadoContext";
 import { MdDelete } from "react-icons/md";
-import moment from "moment";
-import "moment/locale/es";
 import "./productos.css";
 
-export default function useSchema({ refetch }) {
-	const { isLoading } = useContext(AuthContext);
+export default function useSchema() {
+	const { pasarAFecha, isLoading, borrarEntregarProduct } =
+		useContext(ApartadoContext);
 
-	const { register } = useService();
-
-	const [mutateCANCELAR_PRODUCTO_APARTDO] = useMutation(
-		CANCELAR_PRODUCTO_APARTDO
-	);
-
-	const pasarAFecha = (item) => {
-		moment.locale("es");
-		return moment.unix(item / 1000).format("ll");
-	};
-
-	const pasarAFechaLLLL = (item) => {
-		return moment.unix(item / 1000).format("LLLL");
-	};
-	const borrarEntregarProduct = async (item, borrarEntregar) => {
-		if (isLoading === false) {
-			const isEntregado = item.entregado[0];
-			let status = true;
-			if (isEntregado && isEntregado.status) {
-				status = !isEntregado.status;
-			}
-			const data = await register({
-				mutate: mutateCANCELAR_PRODUCTO_APARTDO,
-				input: {
-					_id: item._id,
-					status: status,
-					borrarEntregar: borrarEntregar,
-				},
-			});
-
-			if (data) {
-				refetch();
-				if (borrarEntregar === "borrar") {
-					openNotification("success", `Articulo borrado con exito`);
-					return;
-				}
-				openNotification("success", `Articulo modificado con exito`);
-			}
-		}
-	};
 	const titleFecha = (createAt, record) => {
 		if (record?.status === true) {
-			return `${pasarAFechaLLLL(
-				record?.fecha
+			return `${pasarAFecha(
+				record?.fecha,
+				"LLLL"
 			)} por ${record?.vendedor?.toUpperCase()}`;
 		}
-		return `${pasarAFechaLLLL(
-			createAt
+		return `${pasarAFecha(
+			createAt,
+			"LLLL"
 		)}  por ${record?.vendedor?.toUpperCase()}`;
 	};
+
 	/* COLUMNAS VENTAS */
 	const colProductos = [
 		{
@@ -96,8 +54,8 @@ export default function useSchema({ refetch }) {
 						}}
 					>
 						{record?.entregado[0]?.status === true
-							? `${pasarAFecha(record?.entregado[0]?.fecha)}`
-							: `${pasarAFecha(createAt)}`}
+							? `${pasarAFecha(record?.entregado[0]?.fecha, "ll")}`
+							: `${pasarAFecha(createAt, "ll")}`}
 					</h1>
 				</Tooltip>
 			),

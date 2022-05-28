@@ -5,7 +5,7 @@ import { Table, Result, Col, Row, Progress } from "antd";
 import useSchema from "./useSchema";
 
 export default function Abonos() {
-	const { abonos, loading, inputAbono, newAbono, totalAbonos, totalTotal } =
+	const { abonos, isLoading, inputAbono, newAbono, totalAbonos, totalTotal } =
 		useContext(ReadEncargoContext);
 
 	const { colAbonos } = useSchema();
@@ -45,7 +45,7 @@ export default function Abonos() {
 				columns={colAbonos}
 				dataSource={abonos}
 				pagination={false}
-				loading={loading}
+				loading={isLoading}
 				bordered
 				scroll={{ y: 210 }}
 				size='small'
